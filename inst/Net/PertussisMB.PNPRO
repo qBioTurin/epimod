@@ -1,0 +1,1979 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This project file has been saved by the New GreatSPN Editor, v.100 --><project name="New project" version="121">
+  <gspn name="ReteSIVAX_per_cpp" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="50">
+    <nodes>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" name="S" x="27.0" y="81.0"/>
+      <transition delay="FN:Born" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" rotation="3.141592653589793" type="GEN" x="20.55" y="81.0"/>
+      <transition delay="FN:Death" guard-x="-2.0" guard-y="-1.5" name="deltaS" rotation="1.5707963267948966" type="GEN" x="27.55" y="76.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" name="Ip" x="47.0" y="81.0"/>
+      <transition delay="FN:Death" guard-y="-1.5" label-y="-3.0" name="deltaIp" rotation="4.71238898038469" type="GEN" x="47.55" y="76.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="87.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="87.0"/>
+      <transition delay="FN:D:lambda" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" rotation="3.141592653589793" type="GEN" x="37.55" y="81.0"/>
+      <place domain="AxV" label-x="3.0" label-y="-1.0" name="Is" x="78.0" y="81.0"/>
+      <transition delay="FN:Death" name="deltaIs" rotation="4.71238898038469" type="GEN" x="78.55" y="76.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="78.55" y="88.0"/>
+      <transition delay="FN:D:lambda" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" type="GEN" x="67.55" y="81.0"/>
+      <place domain="AxVxL" label-x="-6.0" label-y="-0.5" name="R" x="47.0" y="107.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3 &amp;&amp; v in NV" guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" rotation="1.5707963267948966" type="GEN" x="41.55" y="102.0"/>
+      <transition delay="FN:Death" name="deltaR" rotation="1.5707963267948966" type="GEN" x="47.55" y="102.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="113.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="113.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" rotation="3.141592653589793" type="GEN" x="67.55" y="88.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" type="GEN" x="67.55" y="107.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" type="GEN" x="67.55" y="102.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" type="GEN" x="26.55" y="118.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" type="GEN" x="37.55" y="118.0"/>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="58.0" y="71.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="15.0" y="9.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="15.0625" y="7.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="15.3125" y="11.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="35.25" y="6.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="15.125" y="13.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="13.0" y="4.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="32.0" y="3.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="34.0" y="9.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="34.875" y="11.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="34.875" y="13.0"/>
+      <place domain="AxVxL" label-x="-7.0" label-y="0.5" name="V" x="47.0" y="49.0"/>
+      <transition delay="FN:D:vaccine" guard="a in Y &amp;&amp; v in V1 &amp;&amp; l in L1" guard-y="2.5" label-y="1.5" name="ThetaStoV1_Vacc" type="GEN" x="30.55" y="55.0"/>
+      <transition delay="FN:Death" guard-y="-1.0" label-y="-2.0" name="deltaV" rotation="1.5707963267948966" type="GEN" x="47.55" y="44.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O " guard-x="-0.5" guard-y="2.5" label-x="-0.5" label-y="1.5" name="PsiVitoVi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="44.55" y="55.0"/>
+      <transition delay="FN:D:vaccine" guard="( v in V1 || v in V2) &amp;&amp; l !in L0 &amp;&amp; ((l in L3 &amp;&amp; m in L3) || (l !in L3 &amp;&amp; m == l++) ) &amp;&amp; a in Y" guard-x="-0.5" guard-y="-1.0" label-y="-2.0" name="ThetaVitoViiVacc" rotation="1.5707963267948966" type="GEN" x="57.55" y="40.0"/>
+      <transition delay="tau" guard="l !in L3" guard-x="5.0" guard-y="1.0" label-x="4.0" label-y="0.0" name="tauLiitoLi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="54.55" y="54.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IstoIs" type="GEN" x="67.55" y="44.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IptoIs" type="GEN" x="67.55" y="54.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IptoVii" type="GEN" x="30.55" y="41.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IstoVii" type="GEN" x="18.55" y="41.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaV_Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="39.55" y="44.0"/>
+      <place domain="Vaccine" label-x="-4.5" label-y="-1.0" name="VaccinatedCount" x="12.0" y="56.0"/>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="74.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="75.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="97.0625" y="13.0"/>
+      <color-var domain="Age" name="a" x="81.1875" y="18.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="16.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="75.0625" y="8.0"/>
+      <color-class definition="Age*Level" name="AxL" x="77.125" y="13.0"/>
+      <color-var domain="Level" name="l" x="72.4375" y="18.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="20.0"/>
+      <color-var domain="Vaccine" name="v" x="72.25" y="16.0"/>
+      <color-var domain="Vaccine" name="w" x="72.0625" y="20.0"/>
+      <color-class definition="Age*Vaccine*Level" name="AxVxL" x="97.125" y="15.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaRitoR3Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="25.55" y="103.0"/>
+      <place name="BirthCount" x="8.0" y="81.0"/>
+      <place label-y="-2.0" name="VaccineFailureCount" x="54.0" y="26.0"/>
+      <transition delay="FN:D:vaccine_failure" guard="( v in V1 || v in V2) &amp;&amp; a in Y &amp;&amp; m in L0" guard-y="2.0" name="ThetaVitoV0Vacc" rotation="-0.0" type="GEN" x="54.55" y="35.0"/>
+      <transition delay="FN:D:vaccine_failure" guard="a in Y &amp;&amp; v in V1 &amp;&amp; l in L0" name="ThetaStoV1_VaccFailure" type="GEN" x="30.55" y="62.0"/>
+      <transition delay="FN:D:vaccine" guard="( v in V1 || v in V2) &amp;&amp; l in L0 &amp;&amp; a in Y" guard-x="-0.5" guard-y="-1.0" label-y="-2.0" name="ThetaV0toV0Vacc" rotation="1.5707963267948966" type="GEN" x="57.55" y="43.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="82.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="45.0" y="85.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="51.0" y="85.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="85.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="31.0" y="85.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="81.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="83.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a,v&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="76.0" y="86.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++,v&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="82.0" y="86.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="85.0"/>
+        <point x="38.0" y="92.0"/>
+        <point x="53.0" y="92.0"/>
+        <point x="55.5" y="82.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b,v&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="86.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.09912109375" mult-x="1.6683580919962537" mult-y="0.23299566485380296" tail="R">
+        <point x="45.0" y="111.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="1.0260742187499998" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR">
+        <point x="51.0" y="111.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="56.0" y="111.0"/>
+        <point x="50.5" y="110.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="116.5"/>
+        <point x="56.0" y="116.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="89.0"/>
+        <point x="62.5" y="97.5"/>
+        <point x="52.0" y="97.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="107.0"/>
+        <point x="63.0" y="107.0"/>
+        <point x="63.0" y="103.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="112.5"/>
+        <point x="30.5" y="119.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="119.0"/>
+        <point x="24.0" y="111.5"/>
+        <point x="30.5" y="111.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="112.5"/>
+        <point x="41.5" y="119.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="119.0"/>
+        <point x="35.0" y="111.5"/>
+        <point x="41.5" y="111.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="86.5"/>
+        <point x="87.5" y="108.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;+&lt;a,v&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="108.0"/>
+        <point x="87.5" y="86.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="103.0"/>
+        <point x="75.5" y="93.0"/>
+        <point x="61.0" y="93.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="93.0"/>
+        <point x="75.5" y="93.0"/>
+        <point x="75.5" y="103.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="86.5"/>
+        <point x="34.0" y="119.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="119.0"/>
+        <point x="34.0" y="86.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="123.0"/>
+        <point x="93.5" y="123.0"/>
+        <point x="93.5" y="82.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="82.0"/>
+        <point x="93.5" y="123.0"/>
+        <point x="30.5" y="123.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="103.0"/>
+        <point x="85.0" y="86.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="108.0"/>
+        <point x="89.0" y="85.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="86.0" y="103.0"/>
+        <point x="86.0" y="84.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="72.0"/>
+      </arc>
+      <arc head="ThetaStoV1_Vacc" kind="INPUT" mult="&lt;a&gt;" mult-k="1.37900390625" mult-y="-0.8269505331753635" tail="S">
+        <point x="24.5" y="78.0"/>
+        <point x="24.5" y="56.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.43544921875" mult-x="-0.3983398437499943" mult-y="-0.5" tail="ThetaStoV1_Vacc">
+        <point x="37.5" y="56.0"/>
+      </arc>
+      <arc head="deltaV" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.5713867187500001" mult-x="-1.5" mult-y="-0.64306640625" tail="V"/>
+      <arc head="PsiVitoVi" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.1700195312499995" mult-x="-1.5129443125581759" mult-y="0.47039997260577593" tail="V">
+        <point x="45.0" y="52.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="0.49658203125" mult-x="1.1293787765888013" mult-y="0.801694810033375" tail="PsiVitoVi">
+        <point x="48.0" y="54.5"/>
+      </arc>
+      <arc head="ThetaVitoViiVacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.8405273437499998" mult-x="0.9072178188777258" mult-y="0.5498250892853207" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="41.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.42333984375" mult-x="2.003667975998269E-4" mult-y="-0.5" tail="ThetaVitoViiVacc">
+        <point x="58.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="1.16201171875" mult-x="-1.8796297712512455" mult-y="0.993966029793171" tail="tauLiitoLi">
+        <point x="55.0" y="52.5"/>
+        <point x="51.5" y="52.5"/>
+      </arc>
+      <arc head="tauLiitoLi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.65380859375" mult-x="0.9997618140243958" tail="V">
+        <point x="51.0" y="58.0"/>
+        <point x="55.0" y="58.0"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.5844726562500001" mult-x="1.0791015625" mult-y="0.14013671875" tail="Ip">
+        <point x="62.0" y="75.0"/>
+        <point x="62.0" y="55.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.36201171875" mult-x="1.5" mult-y="0.4999677169421517" tail="V">
+        <point x="51.5" y="49.0"/>
+        <point x="62.0" y="49.0"/>
+        <point x="62.0" y="45.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;b,w&gt;" mult-k="2.2506835937500003" mult-x="3.533854303583439E-4" mult-y="-1.0" tail="Is">
+        <point x="86.0" y="73.5"/>
+        <point x="86.0" y="45.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;+&lt;a,v&gt;" mult-k="2.44013671875" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="78.0" y="45.0"/>
+        <point x="78.0" y="47.5"/>
+        <point x="86.0" y="47.5"/>
+        <point x="86.0" y="73.5"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.85205078125" mult-x="2.5198407432469594E-4" mult-y="0.5" tail="V">
+        <point x="51.5" y="51.0"/>
+        <point x="62.0" y="51.0"/>
+        <point x="62.0" y="55.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" mult-k="0.49990234375" tail="lambdaV1_IptoIs">
+        <point x="86.0" y="55.0"/>
+        <point x="86.0" y="73.5"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="1.6670025663503765" mult-y="0.38007619886074906" tail="V">
+        <point x="34.5" y="48.0"/>
+        <point x="34.5" y="43.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.0" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IptoVii">
+        <point x="27.5" y="42.0"/>
+        <point x="27.5" y="48.0"/>
+        <point x="34.5" y="48.0"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;b&gt;" mult-k="0.6510742187500002" mult-x="0.9139419476188237" mult-y="0.7203113297611878" tail="Ip">
+        <point x="42.5" y="66.5"/>
+        <point x="23.5" y="66.5"/>
+        <point x="23.5" y="42.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.7110351562499995" mult-x="-0.5000968491735591" mult-y="-1.0" tail="lambdaVi_IptoVii">
+        <point x="28.5" y="42.0"/>
+        <point x="23.5" y="42.0"/>
+        <point x="23.5" y="66.5"/>
+        <point x="42.5" y="66.5"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="-1.2972879432080013" mult-y="0.4314413531419099" tail="V">
+        <point x="22.5" y="48.0"/>
+        <point x="22.5" y="43.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.5" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IstoVii">
+        <point x="15.5" y="42.0"/>
+        <point x="15.5" y="50.0"/>
+        <point x="22.0" y="50.0"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;b,w&gt;" mult-k="0.58310546875" tail="Is">
+        <point x="93.5" y="74.5"/>
+        <point x="93.5" y="33.5"/>
+        <point x="19.0" y="33.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;" mult-k="0.6971679687500001" mult-x="1.5" mult-y="-2.049743370946544E-5" tail="lambdaVi_IstoVii">
+        <point x="19.0" y="33.5"/>
+        <point x="93.5" y="33.5"/>
+        <point x="93.5" y="74.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.1481445312499998" mult-x="0.7892578124999972" mult-y="0.65380859375" tail="lambdaV1_IptoIs">
+        <point x="62.0" y="55.0"/>
+        <point x="62.0" y="75.0"/>
+      </arc>
+      <arc head="OmegaV_Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.3387695312500001" mult-x="-0.23297340058225302" mult-y="0.530957453486792" tail="V"/>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaV_Recall">
+        <point x="43.0" y="45.0"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.15361328125" tail="lambdaV1_IptoIs"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.48173828124999996" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="74.5" y="52.5"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="ThetaVitoViiVacc">
+        <point x="58.0" y="32.5"/>
+        <point x="9.0" y="32.501953125"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v&gt;" mult-k="1.24072265625" mult-x="-8.703771702940344E-4" mult-y="0.5" tail="ThetaStoV1_Vacc">
+        <point x="31.0" y="53.5"/>
+        <point x="16.5" y="53.5"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="OmegaV_Recall">
+        <point x="40.0" y="34.5"/>
+        <point x="12.0" y="34.501953125"/>
+        <point x="12.0" y="54.0"/>
+      </arc>
+      <arc head="OmegaRitoR3Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.92685546875" mult-x="-0.07496450609676586" mult-y="-0.46420535213417224" tail="R">
+        <point x="26.0" y="108.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.04990234375" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaRitoR3Recall">
+        <point x="29.0" y="104.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.9098632812499998" tail="OmegaRitoR3Recall">
+        <point x="26.0" y="97.5"/>
+        <point x="13.0" y="97.5"/>
+      </arc>
+      <arc head="BirthCount" kind="OUTPUT" tail="betatoSNewBorn"/>
+      <arc head="ThetaVitoV0Vacc" kind="INPUT" mult="&lt;a,v,l&gt;" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="36.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="0.9489257812499999" mult-x="2.186265552112104" mult-y="-0.186859685581247" tail="ThetaVitoV0Vacc">
+        <point x="60.0" y="36.0"/>
+        <point x="60.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="VaccineFailureCount" kind="OUTPUT" tail="ThetaVitoV0Vacc"/>
+      <arc head="ThetaStoV1_VaccFailure" kind="INPUT" mult="&lt;a&gt;" mult-k="1.5983398437499998" mult-x="-1.0" mult-y="-7.81822763940454E-4" tail="S">
+        <point x="24.5" y="78.0"/>
+        <point x="24.5" y="63.0"/>
+        <point x="30.5" y="63.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-x="-0.7797775359519505" mult-y="-0.5" tail="ThetaStoV1_VaccFailure">
+        <point x="37.5" y="63.0"/>
+        <point x="37.5" y="56.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v&gt;" mult-k="1.2848632812499998" mult-x="0.49912068700302825" mult-y="-0.5" tail="ThetaStoV1_VaccFailure">
+        <point x="31.0" y="60.0"/>
+        <point x="17.0" y="60.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.18466796875" mult-x="0.49689063276180434" mult-y="-0.5" tail="ThetaVitoV0Vacc">
+        <point x="55.0" y="32.5"/>
+        <point x="9.0" y="32.5"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+      <arc head="VaccineFailureCount" kind="OUTPUT" tail="ThetaStoV1_VaccFailure">
+        <point x="31.0" y="60.0"/>
+        <point x="0.5" y="60.0"/>
+        <point x="0.5" y="27.0"/>
+      </arc>
+      <arc head="ThetaV0toV0Vacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.36904296875" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="44.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,l&gt;" tail="ThetaV0toV0Vacc">
+        <point x="60.0" y="44.0"/>
+        <point x="60.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" tail="ThetaV0toV0Vacc">
+        <point x="58.0" y="32.5"/>
+        <point x="9.0" y="32.5"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+    </edges>
+  </gspn>
+  <gspn name="ReteNOVAX_per_cpp" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="50">
+    <nodes>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="72.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="73.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="95.0625" y="14.0"/>
+      <color-var domain="Age" name="a" x="73.1875" y="19.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="17.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" marking="430823&lt;a1&gt;+7354153&lt;a2&gt;+20552601&lt;a3&gt;" name="S" x="27.0" y="34.0"/>
+      <transition delay="FN:Born" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" rotation="3.141592653589793" type="GEN" x="20.55" y="34.0"/>
+      <transition delay="FN:Death" guard-x="-2.0" guard-y="-1.5" name="deltaS" rotation="1.5707963267948966" type="GEN" x="27.55" y="29.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="73.0625" y="8.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="33&lt;a1&gt;+ 159 &lt;a2&gt;+6&lt;a3&gt;" name="Ip" x="47.0" y="34.0"/>
+      <transition delay="FN:Death" guard-y="-1.5" label-y="-3.0" name="deltaIp" rotation="4.71238898038469" type="GEN" x="47.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="40.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="40.0"/>
+      <transition delay="FN:D:lambda" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" rotation="3.141592653589793" type="GEN" x="37.55" y="34.0"/>
+      <color-class definition="Age*Level" name="AxL" x="75.125" y="14.0"/>
+      <color-var domain="Level" name="l" x="73.4375" y="21.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="32&lt;a1&gt;+ 190 &lt;a2&gt;+6&lt;a3&gt;" name="Is" x="78.0" y="34.0"/>
+      <transition delay="FN:Death" name="deltaIs" rotation="4.71238898038469" type="GEN" x="78.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="78.55" y="41.0"/>
+      <transition delay="FN:lambda" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" type="GEN" x="67.55" y="34.0"/>
+      <place domain="AxL" label-x="-6.0" label-y="-0.5" marking="433922&lt;a1,l1&gt;+ 436&lt;a1,l2&gt;+ 471 &lt;a1,l3&gt;+ 426 &lt;a1,l4&gt;+  7370523&lt;a2,l1&gt;+ 2340 &lt;a2,l2&gt;+2516 &lt;a2,l3&gt;+2252&lt;a2,l4&gt;+  19955505&lt;a3,l1&gt;+ 83&lt;a3,l2&gt;+ 92 &lt;a3,l3&gt;+83&lt;a3,l4&gt;" name="R" x="47.0" y="60.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3 " guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" rotation="1.5707963267948966" type="GEN" x="41.55" y="55.0"/>
+      <transition delay="FN:Death" name="deltaR" rotation="1.5707963267948966" type="GEN" x="47.55" y="55.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="66.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="66.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" rotation="3.141592653589793" type="GEN" x="67.55" y="41.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="21.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" type="GEN" x="67.55" y="60.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" type="GEN" x="67.55" y="55.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" type="GEN" x="26.55" y="71.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" type="GEN" x="37.55" y="71.0"/>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="58.0" y="24.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="15.0" y="9.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="15.0625" y="7.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="15.3125" y="11.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="35.25" y="6.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="15.125" y="13.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="13.0" y="4.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="32.0" y="3.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="34.0" y="9.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="34.875" y="11.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="34.875" y="13.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="35.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="45.0" y="38.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="51.0" y="38.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="38.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="31.0" y="38.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="34.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="36.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="76.0" y="39.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="82.0" y="39.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="38.0"/>
+        <point x="38.0" y="45.0"/>
+        <point x="53.0" y="45.0"/>
+        <point x="55.5" y="35.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="39.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.09912109375" mult-x="1.6683580919962537" mult-y="0.23299566485380296" tail="R">
+        <point x="45.0" y="64.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,l&gt;" mult-k="1.0260742187499998" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR">
+        <point x="51.0" y="64.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="56.0" y="64.0"/>
+        <point x="50.5" y="63.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="69.5"/>
+        <point x="56.0" y="69.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="42.0"/>
+        <point x="62.5" y="50.5"/>
+        <point x="52.0" y="50.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="60.0"/>
+        <point x="63.0" y="60.0"/>
+        <point x="63.0" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="65.5"/>
+        <point x="30.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="72.0"/>
+        <point x="24.0" y="64.5"/>
+        <point x="30.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="65.5"/>
+        <point x="41.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="72.0"/>
+        <point x="35.0" y="64.5"/>
+        <point x="41.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="39.5"/>
+        <point x="87.5" y="61.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;+&lt;a&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="61.0"/>
+        <point x="87.5" y="39.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="56.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="61.0" y="46.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="46.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="75.5" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="39.5"/>
+        <point x="34.0" y="72.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="72.0"/>
+        <point x="34.0" y="39.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="76.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="93.5" y="35.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="35.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="30.0" y="76.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="56.0"/>
+        <point x="85.0" y="39.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="61.0"/>
+        <point x="89.0" y="38.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="86.0" y="56.0"/>
+        <point x="86.0" y="37.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="25.0"/>
+      </arc>
+    </edges>
+  </gspn>
+  <gspn name="ReteSIVAX_per_cppVersionePREBMC" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false">
+    <nodes>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" name="S" x="27.0" y="81.0"/>
+      <transition delay="FN:Born" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" rotation="3.141592653589793" type="GEN" x="20.55" y="81.0"/>
+      <transition delay="FN:Death" guard-x="-2.0" guard-y="-1.5" name="deltaS" rotation="1.5707963267948966" type="GEN" x="27.55" y="76.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" name="Ip" x="47.0" y="81.0"/>
+      <transition delay="FN:D:Death" guard-y="-1.5" label-y="-3.0" name="deltaIp" rotation="4.71238898038469" type="GEN" x="47.55" y="76.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="87.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="87.0"/>
+      <transition delay="FN:D:lambda" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" rotation="3.141592653589793" type="GEN" x="37.55" y="81.0"/>
+      <place domain="AxV" label-x="3.0" label-y="-1.0" name="Is" x="78.0" y="81.0"/>
+      <transition delay="FN:D:Death" name="deltaIs" rotation="4.71238898038469" type="GEN" x="78.55" y="76.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="78.55" y="88.0"/>
+      <transition delay="FN:D:lambda" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" type="GEN" x="67.55" y="81.0"/>
+      <place domain="AxVxL" label-x="-6.0" label-y="-0.5" name="R" x="47.0" y="107.0"/>
+      <transition delay="gamma" guard="l in L3 &amp;&amp; v in NV" guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="41.55" y="102.0"/>
+      <transition delay="FN:Death" name="deltaR" rotation="1.5707963267948966" type="GEN" x="47.55" y="102.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="113.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="113.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" rotation="3.141592653589793" type="GEN" x="67.55" y="88.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" type="GEN" x="67.55" y="107.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" type="GEN" x="67.55" y="102.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" type="GEN" x="26.55" y="118.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" type="GEN" x="37.55" y="118.0"/>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="58.0" y="71.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="15.0" y="9.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="15.0625" y="7.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="15.3125" y="11.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="35.25" y="6.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="15.125" y="13.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="13.0" y="4.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="32.0" y="3.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="34.0" y="9.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="34.875" y="11.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="34.875" y="13.0"/>
+      <place domain="AxVxL" label-x="-7.0" label-y="0.5" name="V" x="47.0" y="49.0"/>
+      <transition delay="FN:vaccine" guard="a in Y &amp;&amp; v in V1 &amp;&amp; l in L1" guard-y="2.5" label-y="1.5" name="ThetaStoV1_Vacc" type="GEN" x="30.55" y="55.0"/>
+      <transition delay="FN:Death" guard-y="-1.0" label-y="-2.0" name="deltaV" rotation="1.5707963267948966" type="GEN" x="47.55" y="44.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O " guard-x="-0.5" guard-y="2.5" label-x="-0.5" label-y="1.5" name="PsiVitoVi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="44.55" y="55.0"/>
+      <transition delay="FN:vaccine" guard="( v in V1 || v in V2) &amp;&amp; l !in L0 &amp;&amp; ((l in L3 &amp;&amp; m in L3) || (l !in L3 &amp;&amp; m == l++) ) &amp;&amp; a in Y" guard-x="-0.5" guard-y="-1.0" label-y="-2.0" name="ThetaVitoViiVacc" rotation="1.5707963267948966" type="GEN" x="57.55" y="40.0"/>
+      <transition delay="tau" guard="l !in L3" guard-x="5.0" guard-y="1.0" label-x="4.0" label-y="0.0" name="tauLiitoLi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="54.55" y="54.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IstoIs" type="GEN" x="67.55" y="44.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IptoIs" type="GEN" x="67.55" y="54.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IptoVii" type="GEN" x="30.55" y="41.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IstoVii" type="GEN" x="18.55" y="41.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaV_Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="39.55" y="44.0"/>
+      <place domain="Vaccine" label-x="-4.5" label-y="-1.0" name="VaccinatedCount" x="12.0" y="56.0"/>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="74.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="75.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="97.0625" y="13.0"/>
+      <color-var domain="Age" name="a" x="81.1875" y="18.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="16.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="75.0625" y="8.0"/>
+      <color-class definition="Age*Level" name="AxL" x="77.125" y="13.0"/>
+      <color-var domain="Level" name="l" x="72.4375" y="18.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="20.0"/>
+      <color-var domain="Vaccine" name="v" x="72.25" y="16.0"/>
+      <color-var domain="Vaccine" name="w" x="72.0625" y="20.0"/>
+      <color-class definition="Age*Vaccine*Level" name="AxVxL" x="97.125" y="15.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaRitoR3Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="25.55" y="103.0"/>
+      <place name="BirthCount" x="8.0" y="81.0"/>
+      <place label-y="-2.0" name="VaccineFailureCount" x="54.0" y="26.0"/>
+      <transition delay="FN:vaccine_failure" guard="( v in V1 || v in V2) &amp;&amp; a in Y &amp;&amp; m in L0" guard-y="2.0" name="ThetaVitoV0Vacc" rotation="-0.0" type="GEN" x="54.55" y="35.0"/>
+      <transition delay="FN:vaccine_failure" guard="a in Y &amp;&amp; v in V1 &amp;&amp; l in L0" name="ThetaStoV1_VaccFailure" type="GEN" x="30.55" y="62.0"/>
+      <transition delay="FN:vaccine" guard="( v in V1 || v in V2) &amp;&amp; l in L0 &amp;&amp; a in Y" guard-x="-0.5" guard-y="-1.0" label-y="-2.0" name="ThetaV0toV0Vacc" rotation="1.5707963267948966" type="GEN" x="57.55" y="43.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="82.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="45.0" y="85.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="51.0" y="85.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="85.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="31.0" y="85.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="81.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="83.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a,v&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="76.0" y="86.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++,v&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="82.0" y="86.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="85.0"/>
+        <point x="38.0" y="92.0"/>
+        <point x="53.0" y="92.0"/>
+        <point x="55.5" y="82.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b,v&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="86.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.09912109375" mult-x="1.6683580919962537" mult-y="0.23299566485380296" tail="R">
+        <point x="45.0" y="111.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="1.0260742187499998" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR">
+        <point x="51.0" y="111.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="56.0" y="111.0"/>
+        <point x="50.5" y="110.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="116.5"/>
+        <point x="56.0" y="116.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="89.0"/>
+        <point x="62.5" y="97.5"/>
+        <point x="52.0" y="97.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="107.0"/>
+        <point x="63.0" y="107.0"/>
+        <point x="63.0" y="103.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="112.5"/>
+        <point x="30.5" y="119.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="119.0"/>
+        <point x="24.0" y="111.5"/>
+        <point x="30.5" y="111.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="112.5"/>
+        <point x="41.5" y="119.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="119.0"/>
+        <point x="35.0" y="111.5"/>
+        <point x="41.5" y="111.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="86.5"/>
+        <point x="87.5" y="108.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;+&lt;a,v&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="108.0"/>
+        <point x="87.5" y="86.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="103.0"/>
+        <point x="75.5" y="93.0"/>
+        <point x="61.0" y="93.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="93.0"/>
+        <point x="75.5" y="93.0"/>
+        <point x="75.5" y="103.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="86.5"/>
+        <point x="34.0" y="119.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="119.0"/>
+        <point x="34.0" y="86.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="123.0"/>
+        <point x="93.5" y="123.0"/>
+        <point x="93.5" y="82.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="82.0"/>
+        <point x="93.5" y="123.0"/>
+        <point x="30.5" y="123.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="103.0"/>
+        <point x="85.0" y="86.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="108.0"/>
+        <point x="89.0" y="85.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="86.0" y="103.0"/>
+        <point x="86.0" y="84.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="72.0"/>
+      </arc>
+      <arc head="ThetaStoV1_Vacc" kind="INPUT" mult="&lt;a&gt;" mult-k="1.37900390625" mult-y="-0.8269505331753635" tail="S">
+        <point x="24.5" y="78.0"/>
+        <point x="24.5" y="56.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.43544921875" mult-x="-0.3983398437499943" mult-y="-0.5" tail="ThetaStoV1_Vacc">
+        <point x="37.5" y="56.0"/>
+      </arc>
+      <arc head="deltaV" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.5713867187500001" mult-x="-1.5" mult-y="-0.64306640625" tail="V"/>
+      <arc head="PsiVitoVi" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.1700195312499995" mult-x="-1.5129443125581759" mult-y="0.47039997260577593" tail="V">
+        <point x="45.0" y="52.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="0.49658203125" mult-x="1.1293787765888013" mult-y="0.801694810033375" tail="PsiVitoVi">
+        <point x="48.0" y="54.5"/>
+      </arc>
+      <arc head="ThetaVitoViiVacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.8405273437499998" mult-x="0.9072178188777258" mult-y="0.5498250892853207" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="41.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.42333984375" mult-x="2.003667975998269E-4" mult-y="-0.5" tail="ThetaVitoViiVacc">
+        <point x="58.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="1.16201171875" mult-x="-1.8796297712512455" mult-y="0.993966029793171" tail="tauLiitoLi">
+        <point x="55.0" y="52.5"/>
+        <point x="51.5" y="52.5"/>
+      </arc>
+      <arc head="tauLiitoLi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.65380859375" mult-x="0.9997618140243958" tail="V">
+        <point x="51.0" y="58.0"/>
+        <point x="55.0" y="58.0"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.5844726562500001" mult-x="1.0791015625" mult-y="0.14013671875" tail="Ip">
+        <point x="62.0" y="75.0"/>
+        <point x="62.0" y="55.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.36201171875" mult-x="1.5" mult-y="0.4999677169421517" tail="V">
+        <point x="51.5" y="49.0"/>
+        <point x="62.0" y="49.0"/>
+        <point x="62.0" y="45.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;b,w&gt;" mult-k="2.2506835937500003" mult-x="3.533854303583439E-4" mult-y="-1.0" tail="Is">
+        <point x="86.0" y="73.5"/>
+        <point x="86.0" y="45.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;+&lt;a,v&gt;" mult-k="2.44013671875" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="78.0" y="45.0"/>
+        <point x="78.0" y="47.5"/>
+        <point x="86.0" y="47.5"/>
+        <point x="86.0" y="73.5"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.85205078125" mult-x="2.5198407432469594E-4" mult-y="0.5" tail="V">
+        <point x="51.5" y="51.0"/>
+        <point x="62.0" y="51.0"/>
+        <point x="62.0" y="55.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" mult-k="0.49990234375" tail="lambdaV1_IptoIs">
+        <point x="86.0" y="55.0"/>
+        <point x="86.0" y="73.5"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="1.6670025663503765" mult-y="0.38007619886074906" tail="V">
+        <point x="34.5" y="48.0"/>
+        <point x="34.5" y="43.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.0" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IptoVii">
+        <point x="27.5" y="42.0"/>
+        <point x="27.5" y="48.0"/>
+        <point x="34.5" y="48.0"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;b&gt;" mult-k="0.6510742187500002" mult-x="0.9139419476188237" mult-y="0.7203113297611878" tail="Ip">
+        <point x="42.5" y="66.5"/>
+        <point x="23.5" y="66.5"/>
+        <point x="23.5" y="42.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.7110351562499995" mult-x="-0.5000968491735591" mult-y="-1.0" tail="lambdaVi_IptoVii">
+        <point x="28.5" y="42.0"/>
+        <point x="23.5" y="42.0"/>
+        <point x="23.5" y="66.5"/>
+        <point x="42.5" y="66.5"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="-1.2972879432080013" mult-y="0.4314413531419099" tail="V">
+        <point x="22.5" y="48.0"/>
+        <point x="22.5" y="43.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.5" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IstoVii">
+        <point x="15.5" y="42.0"/>
+        <point x="15.5" y="50.0"/>
+        <point x="22.0" y="50.0"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;b,w&gt;" mult-k="0.58310546875" tail="Is">
+        <point x="93.5" y="74.5"/>
+        <point x="93.5" y="33.5"/>
+        <point x="19.0" y="33.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;" mult-k="0.6971679687500001" mult-x="1.5" mult-y="-2.049743370946544E-5" tail="lambdaVi_IstoVii">
+        <point x="19.0" y="33.5"/>
+        <point x="93.5" y="33.5"/>
+        <point x="93.5" y="74.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.1481445312499998" mult-x="0.7892578124999972" mult-y="0.65380859375" tail="lambdaV1_IptoIs">
+        <point x="62.0" y="55.0"/>
+        <point x="62.0" y="75.0"/>
+      </arc>
+      <arc head="OmegaV_Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.3387695312500001" mult-x="-0.23297340058225302" mult-y="0.530957453486792" tail="V"/>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaV_Recall">
+        <point x="43.0" y="45.0"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.15361328125" tail="lambdaV1_IptoIs"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.48173828124999996" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="74.5" y="52.5"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="ThetaVitoViiVacc">
+        <point x="58.0" y="32.5"/>
+        <point x="9.0" y="32.501953125"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v&gt;" mult-k="1.24072265625" mult-x="-8.703771702940344E-4" mult-y="0.5" tail="ThetaStoV1_Vacc">
+        <point x="31.0" y="53.5"/>
+        <point x="16.5" y="53.5"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="OmegaV_Recall">
+        <point x="40.0" y="34.5"/>
+        <point x="12.0" y="34.501953125"/>
+        <point x="12.0" y="54.0"/>
+      </arc>
+      <arc head="OmegaRitoR3Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.92685546875" mult-x="-0.07496450609676586" mult-y="-0.46420535213417224" tail="R">
+        <point x="26.0" y="108.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.04990234375" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaRitoR3Recall">
+        <point x="29.0" y="104.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.9098632812499998" tail="OmegaRitoR3Recall">
+        <point x="26.0" y="97.5"/>
+        <point x="13.0" y="97.5"/>
+      </arc>
+      <arc head="BirthCount" kind="OUTPUT" tail="betatoSNewBorn"/>
+      <arc head="ThetaVitoV0Vacc" kind="INPUT" mult="&lt;a,v,l&gt;" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="36.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="0.9489257812499999" mult-x="2.186265552112104" mult-y="-0.186859685581247" tail="ThetaVitoV0Vacc">
+        <point x="60.0" y="36.0"/>
+        <point x="60.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="VaccineFailureCount" kind="OUTPUT" tail="ThetaVitoV0Vacc"/>
+      <arc head="ThetaStoV1_VaccFailure" kind="INPUT" mult="&lt;a&gt;" mult-k="1.5983398437499998" mult-x="-1.0" mult-y="-7.81822763940454E-4" tail="S">
+        <point x="24.5" y="78.0"/>
+        <point x="24.5" y="63.0"/>
+        <point x="30.5" y="63.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-x="-0.7797775359519505" mult-y="-0.5" tail="ThetaStoV1_VaccFailure">
+        <point x="37.5" y="63.0"/>
+        <point x="37.5" y="56.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v&gt;" mult-k="1.2848632812499998" mult-x="0.49912068700302825" mult-y="-0.5" tail="ThetaStoV1_VaccFailure">
+        <point x="31.0" y="60.0"/>
+        <point x="17.0" y="60.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.18466796875" mult-x="0.49689063276180434" mult-y="-0.5" tail="ThetaVitoV0Vacc">
+        <point x="55.0" y="32.5"/>
+        <point x="9.0" y="32.5"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+      <arc head="VaccineFailureCount" kind="OUTPUT" tail="ThetaStoV1_VaccFailure">
+        <point x="31.0" y="60.0"/>
+        <point x="0.5" y="60.0"/>
+        <point x="0.5" y="27.0"/>
+      </arc>
+      <arc head="ThetaV0toV0Vacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.36904296875" tail="V">
+        <point x="51.0" y="46.5"/>
+        <point x="51.0" y="44.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,l&gt;" tail="ThetaV0toV0Vacc">
+        <point x="60.0" y="44.0"/>
+        <point x="60.0" y="48.0"/>
+        <point x="51.5" y="48.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" tail="ThetaV0toV0Vacc">
+        <point x="58.0" y="32.5"/>
+        <point x="9.0" y="32.5"/>
+        <point x="9.0" y="52.0"/>
+      </arc>
+    </edges>
+  </gspn>
+  <gspn name="ReteSIVAX_per_R" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="125">
+    <nodes>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="10.25" name="copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="45.75" y="4.75">Population rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.75" name="copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.75" x="116.75" y="0.75">Contact rates (\lambda)</text-box>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="72.0" y="2.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="73.5625" y="6.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="95.0625" y="9.0"/>
+      <color-var domain="Age" name="a" x="79.1875" y="14.0"/>
+      <constant consttype="REAL" name="beta_a1" value="0" x="48.0625" y="7.0"/>
+      <constant consttype="REAL" name="delta_a1" value="0" x="48.0625" y="9.0"/>
+      <constant consttype="REAL" name="delta_a2" value="0" x="48.0625" y="11.0"/>
+      <constant consttype="REAL" name="delta_a3" value="0" x="48.0625" y="13.0"/>
+      <color-var domain="Age" name="b" x="79.25" y="12.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="17.921875" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="68.96875" y="0.0390625">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" name="S" x="35.0" y="66.0"/>
+      <transition delay="beta_a1" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="28.55" y="66.0"/>
+      <transition delay="If[a == a1, delta_a1, If[a == a2,delta_a2,delta_a3]]" guard-x="-2.0" guard-y="-1.5" name="deltaS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="35.55" y="61.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="73.0625" y="4.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" name="Ip" x="55.0" y="66.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" guard-y="-1.5" label-y="-3.0" name="deltaIp" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="55.55" y="61.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="72.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="35.55" y="72.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_S_a1_a1, If[ a in Y &amp;&amp; b in N , lambda_S_a1_a2, If[ a in N &amp;&amp; b in Y, lambda_S_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_S_a1_a3, If[a in O &amp;&amp; b in Y,lambda_S_a3_a1, If[ a in N &amp;&amp; b in N, lambda_S_a2_a2, If[ a in N &amp;&amp; b in O ,lambda_S_a2_a3, If[a in O &amp;&amp; b in N,lambda_S_a3_a2,lambda_S_a3_a3]]]]]]]]" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="45.55" y="66.0"/>
+      <color-class definition="Age*Level" name="AxL" x="75.125" y="9.0"/>
+      <color-var domain="Level" name="l" x="70.4375" y="14.0"/>
+      <place domain="AxV" label-x="-3.0" label-y="-1.0" name="Is" x="86.0" y="66.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" name="deltaIs" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="86.55" y="61.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="86.55" y="73.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_S_a1_a1, If[ a in Y &amp;&amp; b in N , lambda_S_a1_a2, If[ a in N &amp;&amp; b in Y, lambda_S_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_S_a1_a3, If[a in O &amp;&amp; b in Y,lambda_S_a3_a1, If[ a in N &amp;&amp; b in N, lambda_S_a2_a2, If[ a in N &amp;&amp; b in O ,lambda_S_a2_a3, If[a in O &amp;&amp; b in N,lambda_S_a3_a2,lambda_S_a3_a3]]]]]]]]" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" nservers-x="0.5" type="EXP" x="75.55" y="66.0"/>
+      <place domain="AxVxL" label-x="-6.0" label-y="-0.5" name="R" x="55.0" y="92.0"/>
+      <transition delay="gamma" guard="l in L3  &amp;&amp; v in NV" guard-x="-4.0" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="49.55" y="87.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" name="deltaR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="87.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="98.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="63.55" y="98.0"/>
+      <transition delay="gamma" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="75.55" y="73.0"/>
+      <color-var domain="Level" name="m" x="78.9375" y="16.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N ,lambda_L1_a1_a2, If[ a in N &amp;&amp; b in Y,lambda_L1_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_L1_a1_a3, If[ a in O &amp;&amp; b in Y,lambda_L1_a3_a1, If[ a in N &amp;&amp; b in N,lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O, lambda_L1_a2_a3, If[ a in O &amp;&amp; b in N, lambda_L1_a3_a2, lambda_L1_a3_a3]]]]]]]]" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" nservers-x="0.5" type="EXP" x="75.55" y="92.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N ,lambda_L1_a1_a2, If[ a in N &amp;&amp; b in Y,lambda_L1_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_L1_a1_a3, If[ a in O &amp;&amp; b in Y,lambda_L1_a3_a1, If[ a in N &amp;&amp; b in N,lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O, lambda_L1_a2_a3, If[ a in O &amp;&amp; b in N, lambda_L1_a3_a2, lambda_L1_a3_a3]]]]]]]]" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" nservers-x="0.5" type="EXP" x="75.55" y="87.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[ a in Y &amp;&amp; b in N ,Lambda_a1_a2, If[ a in N &amp;&amp; b in Y,Lambda_a2_a1, If[ a in Y &amp;&amp; b in O ,Lambda_a1_a3, If[ a in O &amp;&amp; b in Y,Lambda_a3_a1, If[ a in N &amp;&amp; b in N,Lambda_a2_a2, If[ a in N &amp;&amp; b in O, Lambda_a2_a3, If[ a in O &amp;&amp; b in N, Lambda_a3_a2, Lambda_a3_a3]]]]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" nservers-x="0.5" type="EXP" x="34.55" y="103.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[ a in Y &amp;&amp; b in N ,Lambda_a1_a2, If[ a in N &amp;&amp; b in Y,Lambda_a2_a1, If[ a in Y &amp;&amp; b in O ,Lambda_a1_a3, If[ a in O &amp;&amp; b in Y,Lambda_a3_a1, If[ a in N &amp;&amp; b in N,Lambda_a2_a2, If[ a in N &amp;&amp; b in O, Lambda_a2_a3, If[ a in O &amp;&amp; b in N, Lambda_a3_a2, Lambda_a3_a3]]]]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" nservers-x="0.5" type="EXP" x="45.55" y="103.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a1" value="0.2136752137" x="118.625" y="3.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a2" value="0.5586592171" x="118.75" y="5.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a3" value="0.1438848921" x="118.625" y="7.0"/>
+      <constant consttype="REAL" name="Lambda_a2_a2" value="0.0205212395" x="118.75" y="9.0"/>
+      <constant consttype="REAL" name="Lambda_a2_a3" value="0.03640335" x="118.75" y="11.0"/>
+      <constant consttype="REAL" name="Lambda_a3_a3" value="0.0063743" x="118.75" y="13.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a1" value="0.2136752137" x="118.6875" y="25.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a2" value="0.5586592171" x="118.6875" y="27.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a3" value="0.1438848921" x="118.6875" y="29.0"/>
+      <constant consttype="REAL" name="lambda_S_a2_a2" value="0.0205212395" x="118.6875" y="31.0"/>
+      <constant consttype="REAL" name="lambda_S_a2_a3" value="0.03640335" x="118.6875" y="33.0"/>
+      <constant consttype="REAL" name="lambda_S_a3_a3" value="0.0063743" x="118.6875" y="35.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="20.625" name="copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.5" x="117.0" y="22.875">Contact rates S \rightarrow \left\lbrace Ip,  Is \right\rbrace</text-box>
+      <constant consttype="REAL" name="lambda_L1_a1_a1" value="0.2136752137" x="118.6875" y="47.0"/>
+      <constant consttype="REAL" name="lambda_L1_a1_a2" value="0.5586592171" x="118.6875" y="49.0"/>
+      <constant consttype="REAL" name="lambda_L1_a1_a3" value="0.1438848921" x="118.6875" y="51.0"/>
+      <constant consttype="REAL" name="lambda_L1_a2_a2" value="0.0205212395" x="118.6875" y="53.0"/>
+      <constant consttype="REAL" name="lambda_L1_a2_a3" value="0.03640335" x="118.6875" y="55.0"/>
+      <constant consttype="REAL" name="lambda_L1_a3_a3" value="0.0063743" x="118.5" y="57.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.625" name="copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.75" x="116.625" y="44.875">Contact rates L1 \rightarrow \left\lbrace Ip,  Is \right\rbrace</text-box>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="75.0" y="56.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="9.0" y="10.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="9.0625" y="8.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="9.3125" y="12.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="29.25" y="7.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="9.125" y="14.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="7.0" y="5.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="26.0" y="4.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="28.0" y="10.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="28.875" y="12.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="28.875" y="14.0"/>
+      <place domain="AxVxL" label-x="-7.0" label-y="0.5" name="V" x="55.0" y="35.0"/>
+      <transition delay="Theta" guard="a in Y &amp;&amp; v in V1 &amp;&amp; l in L1" guard-y="2.5" label-y="1.5" name="ThetaStoV1_Vacc" nservers-x="0.5" type="EXP" x="38.55" y="41.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" guard-y="-1.0" label-y="-2.0" name="deltaV" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="30.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O " guard-x="-0.5" guard-y="2.5" label-x="-0.5" label-y="1.5" name="PsiVitoVi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="52.55" y="41.0"/>
+      <transition delay="Theta" guard="( v in V1 || v in V2) &amp;&amp; ((l in L3 &amp;&amp; m in L3) || (l !in L3 &amp;&amp; m == l++) ) &amp;&amp; a in Y" guard-x="-0.5" guard-y="-1.0" label-y="-2.0" name="ThetaVitoViiVacc" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="65.55" y="26.0"/>
+      <transition delay="tau" guard="l !in L3 " guard-x="5.0" guard-y="1.0" label-x="4.0" label-y="0.0" name="tauLiitoLi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="62.55" y="40.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N ,lambda_L1_a1_a2, If[ a in N &amp;&amp; b in Y,lambda_L1_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_L1_a1_a3, If[ a in O &amp;&amp; b in Y,lambda_L1_a3_a1, If[ a in N &amp;&amp; b in N,lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O, lambda_L1_a2_a3, If[ a in O &amp;&amp; b in N, lambda_L1_a3_a2, lambda_L1_a3_a3]]]]]]]]" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IstoIs" nservers-x="0.5" type="EXP" x="75.55" y="30.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N ,lambda_L1_a1_a2, If[ a in N &amp;&amp; b in Y,lambda_L1_a2_a1, If[ a in Y &amp;&amp; b in O ,lambda_L1_a1_a3, If[ a in O &amp;&amp; b in Y,lambda_L1_a3_a1, If[ a in N &amp;&amp; b in N,lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O, lambda_L1_a2_a3, If[ a in O &amp;&amp; b in N, lambda_L1_a3_a2, lambda_L1_a3_a3]]]]]]]]" guard="l in L0 " guard-y="-1.5" label-y="-2.5" name="lambdaV1_IptoIs" nservers-x="0.5" type="EXP" x="75.55" y="40.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[ a in Y &amp;&amp; b in N ,Lambda_a1_a2, If[ a in N &amp;&amp; b in Y,Lambda_a2_a1, If[ a in Y &amp;&amp; b in O ,Lambda_a1_a3, If[ a in O &amp;&amp; b in Y,Lambda_a3_a1, If[ a in N &amp;&amp; b in N,Lambda_a2_a2, If[ a in N &amp;&amp; b in O, Lambda_a2_a3, If[ a in O &amp;&amp; b in N, Lambda_a3_a2, Lambda_a3_a3]]]]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IptoVii" nservers-x="0.5" type="EXP" x="38.55" y="27.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[ a in Y &amp;&amp; b in N ,Lambda_a1_a2, If[ a in N &amp;&amp; b in Y,Lambda_a2_a1, If[ a in Y &amp;&amp; b in O ,Lambda_a1_a3, If[ a in O &amp;&amp; b in Y,Lambda_a3_a1, If[ a in N &amp;&amp; b in N,Lambda_a2_a2, If[ a in N &amp;&amp; b in O, Lambda_a2_a3, If[ a in O &amp;&amp; b in N, Lambda_a3_a2, Lambda_a3_a3]]]]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaVi_IstoVii" nservers-x="0.5" type="EXP" x="26.55" y="27.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaV_Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="47.55" y="30.0"/>
+      <color-var domain="Vaccine" name="v" x="70.25" y="12.0"/>
+      <color-var domain="Vaccine" name="w" x="70.0625" y="16.0"/>
+      <color-class definition="Age*Vaccine*Level" name="AxVxL" x="95.125" y="11.0"/>
+      <place domain="Vaccine" label-x="-4.5" label-y="-1.0" name="VaccinatedCount" x="20.0" y="42.0"/>
+      <transition delay="Theta" guard="(v in NV || v in V1 || v in V2) &amp;&amp; ((l in L3 &amp;&amp; m in L3) || (l !in L3 &amp;&amp; m == l++) ) &amp;&amp; a in Y" guard-x="-0.5" guard-y="-2.5" label-x="-0.5" label-y="-3.5" name="ThetaRitoRii_Vacc" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="65.55" y="86.0"/>
+      <transition delay="Omega" guard="(v in V3 || v in V4) &amp;&amp; m in L3 &amp;&amp; a in N" guard-y="-2.0" label-y="-3.0" name="OmegaRitoR3Recall" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="34.55" y="89.0"/>
+      <constant consttype="REAL" name="lambda_S_a2_a1" value="0.5586592171" x="118.6875" y="37.0"/>
+      <constant consttype="REAL" name="lambda_S_a3_a1" value="0.1438848921" x="118.6875" y="39.0"/>
+      <constant consttype="REAL" name="lambda_S_a3_a2" value="0.03640335" x="118.8125" y="41.0"/>
+      <constant consttype="REAL" name="lambda_L1_a2_a1" value="0.5586592171" x="118.4375" y="59.0"/>
+      <constant consttype="REAL" name="lambda_L1_a3_a1" value="0.1438848921" x="118.4375" y="61.0"/>
+      <constant consttype="REAL" name="lambda_L1_a3_a2" value="0.03640335" x="118.4375" y="63.0"/>
+      <constant consttype="REAL" name="Lambda_a2_a1" value="0.5586592171" x="118.625" y="15.0"/>
+      <constant consttype="REAL" name="Lambda_a3_a1" value="0.1438848921" x="118.625" y="17.0"/>
+      <constant consttype="REAL" name="Lambda_a3_a2" value="0.03640335" x="118.625" y="19.0"/>
+      <place name="BirthCount" x="10.0" y="66.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="30.18740234375" y="67.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="53.0" y="70.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="59.0" y="70.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="33.0" y="70.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="39.0" y="70.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="51.0" y="66.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="51.0" y="68.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a,v&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="84.0" y="71.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++,v&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="90.0" y="71.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="43.5" y="70.0"/>
+        <point x="46.0" y="77.0"/>
+        <point x="61.0" y="77.0"/>
+        <point x="63.5" y="67.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b,v&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="50.0" y="71.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.09912109375" mult-x="1.6683580919962537" mult-y="0.23299566485380296" tail="R">
+        <point x="53.0" y="96.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="1.0260742187499998" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR">
+        <point x="59.0" y="96.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="64.0" y="96.0"/>
+        <point x="58.5" y="95.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="60.0" y="101.5"/>
+        <point x="64.0" y="101.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a,v&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="70.5" y="74.0"/>
+        <point x="70.5" y="82.5"/>
+        <point x="60.0" y="82.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="60.5" y="92.0"/>
+        <point x="71.0" y="92.0"/>
+        <point x="71.0" y="88.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="38.5" y="97.5"/>
+        <point x="38.5" y="104.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="32.0" y="104.0"/>
+        <point x="32.0" y="96.5"/>
+        <point x="38.5" y="96.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="49.5" y="97.5"/>
+        <point x="49.5" y="104.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="43.0" y="104.0"/>
+        <point x="43.0" y="96.5"/>
+        <point x="49.5" y="96.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="95.5" y="71.5"/>
+        <point x="95.5" y="93.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;+&lt;a,v&gt;" tail="lambdaR1_IstoIs">
+        <point x="95.5" y="93.0"/>
+        <point x="95.5" y="71.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="83.5" y="88.0"/>
+        <point x="83.5" y="78.0"/>
+        <point x="69.0" y="78.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="69.0" y="78.0"/>
+        <point x="83.5" y="78.0"/>
+        <point x="83.5" y="88.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="42.0" y="71.5"/>
+        <point x="42.0" y="104.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="42.0" y="104.0"/>
+        <point x="42.0" y="71.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,v&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="38.5" y="108.0"/>
+        <point x="101.5" y="108.0"/>
+        <point x="101.5" y="67.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b,v&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="101.5" y="67.0"/>
+        <point x="101.5" y="108.0"/>
+        <point x="38.5" y="108.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" tail="lambdaR1_IptoIs">
+        <point x="93.0" y="88.0"/>
+        <point x="93.0" y="71.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="97.0" y="93.0"/>
+        <point x="97.0" y="70.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="94.0" y="88.0"/>
+        <point x="94.0" y="69.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="46.0" y="57.0"/>
+      </arc>
+      <arc head="ThetaStoV1_Vacc" kind="INPUT" mult="&lt;a&gt;" mult-k="1.37900390625" mult-y="-0.8269505331753635" tail="S">
+        <point x="32.5" y="64.0"/>
+        <point x="32.5" y="42.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="0.43544921875" mult-x="-0.3983398437499943" mult-y="-0.5" tail="ThetaStoV1_Vacc">
+        <point x="45.5" y="42.0"/>
+      </arc>
+      <arc head="deltaV" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.5713867187500001" mult-x="-1.5" mult-y="-0.64306640625" tail="V"/>
+      <arc head="PsiVitoVi" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.1700195312499995" mult-x="-1.5129443125581759" mult-y="0.47039997260577593" tail="V">
+        <point x="53.0" y="38.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a++,v,l&gt;" mult-k="0.49658203125" mult-x="1.1293787765888013" mult-y="0.801694810033375" tail="PsiVitoVi">
+        <point x="56.0" y="40.5"/>
+      </arc>
+      <arc head="ThetaVitoViiVacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.8405273437499998" mult-x="0.9072178188777258" mult-y="0.5498250892853207" tail="V">
+        <point x="59.0" y="32.5"/>
+        <point x="59.0" y="27.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.42333984375" mult-x="2.003667975998269E-4" mult-y="-0.5" tail="ThetaVitoViiVacc">
+        <point x="66.0" y="34.0"/>
+        <point x="59.5" y="34.0"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l&gt;" mult-k="1.16201171875" mult-x="-1.8796297712512455" mult-y="0.993966029793171" tail="tauLiitoLi">
+        <point x="63.0" y="38.5"/>
+        <point x="59.5" y="38.5"/>
+      </arc>
+      <arc head="tauLiitoLi" kind="INPUT" mult="&lt;a,v,l++&gt;" mult-k="1.65380859375" mult-x="0.9997618140243958" tail="V">
+        <point x="59.0" y="44.0"/>
+        <point x="63.0" y="44.0"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.5844726562500001" mult-x="1.0791015625" mult-y="0.14013671875" tail="Ip">
+        <point x="70.0" y="61.0"/>
+        <point x="70.0" y="41.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.36201171875" mult-x="-1.5" mult-y="0.4999677169421517" tail="V">
+        <point x="59.5" y="35.0"/>
+        <point x="70.0" y="35.0"/>
+        <point x="70.0" y="31.0"/>
+      </arc>
+      <arc head="lambdaV1_IstoIs" kind="INPUT" mult="&lt;b,w&gt;" mult-k="2.2506835937500003" mult-x="3.533854303583439E-4" mult-y="-1.0" tail="Is">
+        <point x="94.0" y="59.5"/>
+        <point x="94.0" y="31.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;+&lt;a,v&gt;" mult-k="2.44013671875" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="86.0" y="31.0"/>
+        <point x="86.0" y="33.5"/>
+        <point x="94.0" y="33.5"/>
+        <point x="94.0" y="59.5"/>
+      </arc>
+      <arc head="lambdaV1_IptoIs" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="1.85205078125" mult-x="2.5198407432469594E-4" mult-y="0.5" tail="V">
+        <point x="59.5" y="37.0"/>
+        <point x="70.0" y="37.0"/>
+        <point x="70.0" y="41.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a,v&gt;" mult-k="0.49990234375" tail="lambdaV1_IptoIs">
+        <point x="94.0" y="41.0"/>
+        <point x="94.0" y="59.5"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="1.6670025663503765" mult-y="0.38007619886074906" tail="V">
+        <point x="42.5" y="34.0"/>
+        <point x="42.5" y="29.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.0" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IptoVii">
+        <point x="35.5" y="28.0"/>
+        <point x="35.5" y="34.0"/>
+        <point x="42.5" y="34.0"/>
+      </arc>
+      <arc head="lambdaVi_IptoVii" kind="INPUT" mult="&lt;b&gt;" mult-k="0.6510742187500002" mult-x="0.9139419476188237" mult-y="0.7203113297611878" tail="Ip">
+        <point x="50.5" y="52.5"/>
+        <point x="31.5" y="52.5"/>
+        <point x="31.5" y="28.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.7110351562499995" mult-x="-0.5000968491735591" mult-y="-1.0" tail="lambdaVi_IptoVii">
+        <point x="36.5" y="28.0"/>
+        <point x="31.5" y="28.0"/>
+        <point x="31.5" y="52.5"/>
+        <point x="50.5" y="52.5"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="2.03154296875" mult-x="-1.2972879432080013" mult-y="0.4314413531419099" tail="V">
+        <point x="30.5" y="34.0"/>
+        <point x="30.5" y="29.5"/>
+      </arc>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v,l++&gt;" mult-k="1.5569335937499997" mult-x="2.5" mult-y="-2.3280201342146256E-4" tail="lambdaVi_IstoVii">
+        <point x="23.5" y="28.0"/>
+        <point x="23.5" y="36.0"/>
+        <point x="30.0" y="36.0"/>
+      </arc>
+      <arc head="lambdaVi_IstoVii" kind="INPUT" mult="&lt;b,w&gt;" mult-k="0.58310546875" tail="Is">
+        <point x="101.5" y="60.5"/>
+        <point x="101.5" y="19.5"/>
+        <point x="27.0" y="19.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b,w&gt;" mult-k="0.6971679687500001" mult-x="1.5" mult-y="-2.049743370946544E-5" tail="lambdaVi_IstoVii">
+        <point x="27.0" y="19.5"/>
+        <point x="101.5" y="19.5"/>
+        <point x="101.5" y="60.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.1481445312499998" mult-x="0.7892578124999972" mult-y="0.65380859375" tail="lambdaV1_IptoIs">
+        <point x="70.0" y="41.0"/>
+        <point x="70.0" y="61.0"/>
+      </arc>
+      <arc head="OmegaV_Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.3387695312500001" mult-x="-0.23297340058225302" mult-y="0.530957453486792" tail="V"/>
+      <arc head="V" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaV_Recall">
+        <point x="51.0" y="31.0"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.15361328125" tail="lambdaV1_IptoIs"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.48173828124999996" mult-x="1.0008742658937422" mult-y="-1.0" tail="lambdaV1_IstoIs">
+        <point x="82.5" y="38.5"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="ThetaVitoViiVacc">
+        <point x="66.0" y="18.5"/>
+        <point x="17.0" y="18.501953125"/>
+        <point x="17.0" y="38.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v&gt;" mult-k="1.24072265625" mult-x="-8.703771702940344E-4" mult-y="0.5" tail="ThetaStoV1_Vacc">
+        <point x="39.0" y="39.5"/>
+        <point x="24.5" y="39.5"/>
+      </arc>
+      <arc head="ThetaRitoRii_Vacc" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.62373046875" mult-x="1.6032687198547109" mult-y="0.24182820036322994" tail="R">
+        <point x="61.0" y="85.5"/>
+        <point x="66.0" y="85.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-k="1.42333984375" mult-x="2.003667975998269E-4" mult-y="-1.0" tail="ThetaRitoRii_Vacc">
+        <point x="66.0" y="91.0"/>
+        <point x="61.0" y="91.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.9098632812499998" tail="ThetaRitoRii_Vacc">
+        <point x="66.0" y="80.0"/>
+        <point x="21.0" y="80.0"/>
+      </arc>
+      <arc head="OmegaRitoR3Recall" kind="INPUT" mult="&lt;a,v,l&gt;" mult-k="0.92685546875" mult-x="-0.23297340058225302" mult-y="0.530957453486792" tail="R">
+        <point x="35.0" y="93.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,v++,m&gt;" mult-x="1.785731101229402" mult-y="-0.5" tail="OmegaRitoR3Recall">
+        <point x="38.0" y="90.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="2.81865234375" mult-x="1.5" mult-y="0.5105238285963907" tail="OmegaV_Recall">
+        <point x="48.0" y="20.5"/>
+        <point x="20.0" y="20.501953125"/>
+        <point x="20.0" y="40.0"/>
+      </arc>
+      <arc head="VaccinatedCount" kind="OUTPUT" mult="&lt;v++&gt;" mult-k="1.9098632812499998" tail="OmegaRitoR3Recall">
+        <point x="35.0" y="82.0"/>
+        <point x="21.0" y="82.0"/>
+      </arc>
+      <arc head="BirthCount" kind="OUTPUT" tail="betatoSNewBorn"/>
+    </edges>
+  </gspn>
+  <gspn name="ReteNOVAXHybrid_per_cpp" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="75">
+    <nodes>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="72.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="73.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="95.0625" y="14.0"/>
+      <color-var domain="Age" name="a" x="73.1875" y="19.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="17.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" marking="430823&lt;a1&gt;+7354153&lt;a2&gt;+20552601&lt;a3&gt;" name="S" x="27.0" y="34.0"/>
+      <transition delay="FN:Born" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" rotation="3.141592653589793" type="GEN" x="20.55" y="34.0"/>
+      <transition delay="FN:Death" guard-x="-2.0" guard-y="-1.5" name="deltaS" rotation="1.5707963267948966" type="GEN" x="27.55" y="29.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="73.0625" y="8.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="33&lt;a1&gt;+ 159 &lt;a2&gt;+6&lt;a3&gt;" name="Ip" x="47.0" y="34.0"/>
+      <transition delay="FN:D:Death" guard-y="-1.5" label-y="-3.0" name="deltaIp" rotation="4.71238898038469" type="GEN" x="47.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="40.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="40.0"/>
+      <transition delay="FN:D:lambda" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" rotation="3.141592653589793" type="GEN" x="37.55" y="34.0"/>
+      <color-class definition="Age*Level" name="AxL" x="75.125" y="14.0"/>
+      <color-var domain="Level" name="l" x="73.4375" y="21.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="32&lt;a1&gt;+ 190 &lt;a2&gt;+6&lt;a3&gt;" name="Is" x="78.0" y="34.0"/>
+      <transition delay="FN:D:Death" name="deltaIs" rotation="4.71238898038469" type="GEN" x="78.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="78.55" y="41.0"/>
+      <transition delay="FN:D:lambda" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" type="GEN" x="67.55" y="34.0"/>
+      <place domain="AxL" label-x="-6.0" label-y="-0.5" marking="433922&lt;a1,l1&gt;+ 436&lt;a1,l2&gt;+ 471 &lt;a1,l3&gt;+ 426 &lt;a1,l4&gt;+  7370523&lt;a2,l1&gt;+ 2340 &lt;a2,l2&gt;+2516 &lt;a2,l3&gt;+2252&lt;a2,l4&gt;+  19955505&lt;a3,l1&gt;+ 83&lt;a3,l2&gt;+ 92 &lt;a3,l3&gt;+83&lt;a3,l4&gt;" name="R" x="47.0" y="60.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3 " guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" rotation="1.5707963267948966" type="GEN" x="41.55" y="55.0"/>
+      <transition delay="FN:Death" name="deltaR" rotation="1.5707963267948966" type="GEN" x="47.55" y="55.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="66.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="55.55" y="66.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" rotation="3.141592653589793" type="GEN" x="67.55" y="41.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="21.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" type="GEN" x="67.55" y="60.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" type="GEN" x="67.55" y="55.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" type="GEN" x="26.55" y="71.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" type="GEN" x="37.55" y="71.0"/>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="58.0" y="24.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="15.0" y="9.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="15.0625" y="7.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="15.3125" y="11.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="35.25" y="6.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="15.125" y="13.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="13.0" y="4.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="32.0" y="3.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="34.0" y="9.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="34.875" y="11.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="34.875" y="13.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="35.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="45.0" y="38.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="51.0" y="38.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="38.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="31.0" y="38.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="34.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="36.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="76.0" y="39.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="82.0" y="39.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="38.0"/>
+        <point x="38.0" y="45.0"/>
+        <point x="53.0" y="45.0"/>
+        <point x="55.5" y="35.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="39.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.09912109375" mult-x="1.6683580919962537" mult-y="0.23299566485380296" tail="R">
+        <point x="45.0" y="64.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,l&gt;" mult-k="1.0260742187499998" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR">
+        <point x="51.0" y="64.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="56.0" y="64.0"/>
+        <point x="50.5" y="63.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="69.5"/>
+        <point x="56.0" y="69.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="42.0"/>
+        <point x="62.5" y="50.5"/>
+        <point x="52.0" y="50.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="60.0"/>
+        <point x="63.0" y="60.0"/>
+        <point x="63.0" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="65.5"/>
+        <point x="30.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="72.0"/>
+        <point x="24.0" y="64.5"/>
+        <point x="30.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="65.5"/>
+        <point x="41.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="72.0"/>
+        <point x="35.0" y="64.5"/>
+        <point x="41.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="39.5"/>
+        <point x="87.5" y="61.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;+&lt;a&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="61.0"/>
+        <point x="87.5" y="39.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="56.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="61.0" y="46.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="46.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="75.5" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="39.5"/>
+        <point x="34.0" y="72.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="72.0"/>
+        <point x="34.0" y="39.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="76.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="93.5" y="35.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="35.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="30.0" y="76.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="56.0"/>
+        <point x="85.0" y="39.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="61.0"/>
+        <point x="89.0" y="38.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="86.0" y="56.0"/>
+        <point x="86.0" y="37.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="25.0"/>
+      </arc>
+    </edges>
+  </gspn>
+  <gspn name="ReteNOVAXHybrid_ALL" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="50">
+    <nodes>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="72.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="73.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="95.0625" y="14.0"/>
+      <color-var domain="Age" name="a" x="73.1875" y="19.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="17.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" marking="430823&lt;a1&gt;+7354153&lt;a2&gt;+20552601&lt;a3&gt;" name="S" x="27.0" y="34.0"/>
+      <transition delay="FN:D:Born" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" rotation="3.141592653589793" type="GEN" x="20.55" y="34.0"/>
+      <transition delay="FN:D:Death" guard-x="-2.0" guard-y="-1.5" name="deltaS" rotation="1.5707963267948966" type="GEN" x="27.55" y="29.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="73.0625" y="8.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="33&lt;a1&gt;+ 159 &lt;a2&gt;+6&lt;a3&gt;" name="Ip" x="47.0" y="34.0"/>
+      <transition delay="FN:D:Death" guard-y="-1.5" label-y="-3.0" name="deltaIp" rotation="4.71238898038469" type="GEN" x="47.55" y="29.0"/>
+      <transition delay="FN:D(0.0030303030303)" guard="a in Y" guard-y="2.5" label-y="1.5" name="PsiStoS_Y" rotation="1.5707963267948966" type="GEN" x="27.55" y="40.0"/>
+      <transition delay="FN:D:lambda" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" rotation="3.141592653589793" type="GEN" x="37.55" y="34.0"/>
+      <color-class definition="Age*Level" name="AxL" x="75.125" y="14.0"/>
+      <color-var domain="Level" name="l" x="73.4375" y="21.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" marking="32&lt;a1&gt;+ 190 &lt;a2&gt;+6&lt;a3&gt;" name="Is" x="78.0" y="34.0"/>
+      <transition delay="FN:D:Death" name="deltaIs" rotation="4.71238898038469" type="GEN" x="78.55" y="29.0"/>
+      <transition delay="FN:D:lambda" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" type="GEN" x="67.55" y="34.0"/>
+      <place domain="AxL" label-x="-6.0" label-y="-0.5" marking="433922&lt;a1,l1&gt;+ 436&lt;a1,l2&gt;+ 471 &lt;a1,l3&gt;+ 426 &lt;a1,l4&gt;+  7370523&lt;a2,l1&gt;+ 2340 &lt;a2,l2&gt;+2516 &lt;a2,l3&gt;+2252&lt;a2,l4&gt;+  19955505&lt;a3,l1&gt;+ 83&lt;a3,l2&gt;+ 92 &lt;a3,l3&gt;+83&lt;a3,l4&gt;" name="R" x="47.0" y="60.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3 " guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" rotation="1.5707963267948966" type="GEN" x="41.55" y="55.0"/>
+      <transition delay="FN:D:Death" name="deltaR" rotation="1.5707963267948966" type="GEN" x="47.55" y="55.0"/>
+      <transition delay="FN:D(0.000587084148729)" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" rotation="1.5707963267948966" type="GEN" x="55.55" y="66.0"/>
+      <transition delay="FN:D(0.0476190476190476)" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" rotation="3.141592653589793" type="GEN" x="67.55" y="41.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="21.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" type="GEN" x="67.55" y="60.0"/>
+      <transition delay="FN:D:lambda" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" type="GEN" x="67.55" y="55.0"/>
+      <transition delay="FN:D:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" type="GEN" x="26.55" y="71.0"/>
+      <transition delay="FN:lambda" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" type="GEN" x="37.55" y="71.0"/>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="58.0" y="24.0"/>
+      <transition delay="FN:D(0.000160384923817)" guard="a in N" guard-y="2.5" label-y="1.5" name="PsiStoS_N" rotation="1.5707963267948966" type="GEN" x="27.55" y="45.0"/>
+      <transition delay="FN:D(0.0030303030303)" guard="a in Y" guard-y="2.5" label-y="1.5" name="PsiIptoIp_Y" rotation="1.5707963267948966" type="GEN" x="47.55" y="41.0"/>
+      <transition delay="FN:D(0.000160384923817)" guard="a in N" guard-y="2.5" label-y="1.5" name="PsiIptoIp_N" rotation="1.5707963267948966" type="GEN" x="47.55" y="46.0"/>
+      <transition delay="FN:D(0.0030303030303)" guard="a in Y" guard-y="2.5" label-y="1.5" name="PsiIstoIs_Y" rotation="1.5707963267948966" type="GEN" x="78.55" y="42.0"/>
+      <transition delay="FN:D(0.000160384923817)" guard="a in N" guard-y="2.5" label-y="1.5" name="PsiIstoIs_N" rotation="1.5707963267948966" type="GEN" x="78.55" y="47.0"/>
+      <transition delay="FN:D(0.0030303030303)" guard="a in Y" guard-y="2.5" label-y="1.5" name="PsiRtoR_Y" rotation="1.5707963267948966" type="GEN" x="46.55" y="67.0"/>
+      <transition delay="FN:D(0.000160384923817)" guard="a in N" guard-y="2.5" label-y="1.5" name="PsiRtoR_N" rotation="1.5707963267948966" type="GEN" x="46.55" y="72.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="35.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiStoS_Y" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="38.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS_Y">
+        <point x="31.0" y="38.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="34.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="36.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="38.0"/>
+        <point x="38.0" y="45.0"/>
+        <point x="53.0" y="45.0"/>
+        <point x="55.5" y="35.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="39.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.7643554687499999" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="56.0" y="64.0"/>
+        <point x="50.5" y="63.0"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,l++&gt;" mult-k="1.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="69.5"/>
+        <point x="56.0" y="69.5"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="42.0"/>
+        <point x="62.5" y="50.5"/>
+        <point x="52.0" y="50.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="60.0"/>
+        <point x="63.0" y="60.0"/>
+        <point x="63.0" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="65.5"/>
+        <point x="30.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="72.0"/>
+        <point x="24.0" y="64.5"/>
+        <point x="30.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="65.5"/>
+        <point x="41.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="72.0"/>
+        <point x="35.0" y="64.5"/>
+        <point x="41.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="39.5"/>
+        <point x="87.5" y="61.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;+&lt;a&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="61.0"/>
+        <point x="87.5" y="39.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="56.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="61.0" y="46.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="46.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="75.5" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="39.5"/>
+        <point x="34.0" y="72.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="72.0"/>
+        <point x="34.0" y="39.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="76.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="93.5" y="35.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="35.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="30.5" y="76.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="56.0"/>
+        <point x="85.0" y="39.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="61.0"/>
+        <point x="89.0" y="38.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="86.0" y="56.0"/>
+        <point x="86.0" y="37.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="25.0"/>
+      </arc>
+      <arc head="PsiStoS_N" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="23.5" y="41.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS_N">
+        <point x="32.0" y="41.0"/>
+      </arc>
+      <arc head="PsiIptoIp_Y" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="Ip">
+        <point x="45.0" y="39.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiIptoIp_Y">
+        <point x="51.0" y="39.0"/>
+      </arc>
+      <arc head="PsiIptoIp_N" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="Ip">
+        <point x="43.5" y="42.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiIptoIp_N">
+        <point x="52.0" y="42.0"/>
+      </arc>
+      <arc head="PsiIstoIs_Y" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="Is">
+        <point x="76.0" y="40.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiIstoIs_Y">
+        <point x="82.0" y="40.0"/>
+      </arc>
+      <arc head="PsiIstoIs_N" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="Is">
+        <point x="74.5" y="43.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiIstoIs_N">
+        <point x="83.0" y="43.0"/>
+      </arc>
+      <arc head="PsiRtoR_Y" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="R">
+        <point x="44.0" y="65.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,l&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiRtoR_Y">
+        <point x="50.0" y="65.0"/>
+      </arc>
+      <arc head="PsiRtoR_N" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="R">
+        <point x="42.5" y="68.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,l&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiRtoR_N">
+        <point x="51.0" y="68.0"/>
+      </arc>
+    </edges>
+  </gspn>
+  <gspn name="ReteNOVAX_per_R" show-fluid-cmd="false" show-timed-cmd="false" view-rates="false" zoom="125">
+    <nodes>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="10.25" name="copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="45.75" y="4.75">Population rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="14.25" name="copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.75" x="117.75" y="6.75">Contact rates (\lambda)</text-box>
+      <color-class definition="circular {nv} is NV + {v1} is V1 + {v2} is V2 + {v3} is V3 + {v4} is V4+ {v5} is V5 " name="Vaccine" x="72.0" y="6.0"/>
+      <color-class definition="circular {a1} is Y + {a2} is N + {a3} is O" name="Age" x="73.5625" y="10.0"/>
+      <color-class definition="Age*Vaccine " name="AxV" x="95.0625" y="14.0"/>
+      <color-var domain="Age" name="a" x="73.1875" y="19.0"/>
+      <constant consttype="REAL" name="beta_a1" value="0" x="48.0625" y="7.0"/>
+      <constant consttype="REAL" name="delta_a1" value="0" x="48.0625" y="9.0"/>
+      <constant consttype="REAL" name="delta_a2" value="0" x="48.0625" y="11.0"/>
+      <constant consttype="REAL" name="delta_a3" value="0" x="48.0625" y="13.0"/>
+      <color-var domain="Age" name="b" x="81.25" y="17.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="19.84375" locked="true" name="copy_copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="44.0625" x="69.96875" y="4.078125">Classes and Variables definition</text-box>
+      <place domain="Age" label-x="2.0" label-y="-1.0" name="S" x="27.0" y="34.0"/>
+      <transition delay="beta_a1" guard="a in Y" guard-y="-1.5" label-y="-2.5" name="betatoSNewBorn" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="20.55" y="34.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" guard-x="-2.0" guard-y="-1.5" name="deltaS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="29.0"/>
+      <color-class definition="circular  {l1} is L0 + {l2} is L1 +{l3} is L2 +{l4} is L3" name="Level" x="73.0625" y="8.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" name="Ip" x="47.0" y="34.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" guard-y="-1.5" label-y="-3.0" name="deltaIp" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="47.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" label-y="3.0" name="PsiIptoIp" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="40.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiStoS" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="27.55" y="40.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_S_a1_a1, If[ a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y,lambda_S_a1_a2, If[ a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y,lambda_S_a1_a3, If[ a in N &amp;&amp; b in N,lambda_S_a2_a2, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N,lambda_S_a2_a3, lambda_S_a3_a3]]]]]" guard-y="-2.0" label-y="-2.0" name="lambdaS_IptoIp" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="37.55" y="34.0"/>
+      <color-class definition="Age*Level" name="AxL" x="75.125" y="14.0"/>
+      <color-var domain="Level" name="l" x="73.4375" y="21.0"/>
+      <place domain="Age" label-x="3.0" label-y="-1.0" name="Is" x="78.0" y="34.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" name="deltaIs" nservers-x="0.5" rotation="4.71238898038469" type="EXP" x="78.55" y="29.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.5" label-y="1.5" name="PsiIstoIs" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="78.55" y="41.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y,lambda_S_a1_a1, If[ a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y,lambda_S_a1_a2, If[ a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y,lambda_S_a1_a3, If[ a in N &amp;&amp; b in N,lambda_S_a2_a2, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N,lambda_S_a2_a3, lambda_S_a3_a3]]]]]" guard-x="-0.5" guard-y="2.0" label-y="2.0" name="lambdaS_IstoIp" nservers-x="0.5" type="EXP" x="67.55" y="34.0"/>
+      <place domain="AxL" label-x="-6.0" label-y="-0.5" name="R" x="47.0" y="60.0"/>
+      <transition delay="gamma" guard="l in L3 " guard-x="-3.5" guard-y="0.0" label-x="-3.5" label-y="-1.0" name="gammaIptoR3" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="41.55" y="55.0"/>
+      <transition delay="If[a == a1, delta_a1, If[ a == a2, delta_a2, delta_a3 ] ]" name="deltaR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="55.0"/>
+      <transition delay="If[a in Y, psi_a1,psi_a2]" guard="a !in O" guard-y="2.0" label-y="1.0" name="PsiRtoR" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="47.55" y="66.0"/>
+      <transition delay="alpha" guard="l !in L3 " guard-x="4.0" guard-y="1.0" label-x="4.0" label-y="-0.5" name="alphaRiitoRi" nservers-x="0.5" rotation="1.5707963267948966" type="EXP" x="57.55" y="67.0"/>
+      <transition delay="gamma" guard="l in L3" guard-y="2.5" label-y="1.5" name="gammaIstoR3" nservers-x="0.5" rotation="3.141592653589793" type="EXP" x="67.55" y="41.0"/>
+      <color-var domain="Level" name="m" x="80.9375" y="21.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y, lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y, lambda_L1_a1_a2, If[ a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y, lambda_L1_a1_a3, If[ a in N &amp;&amp; b in N, lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N, lambda_L1_a2_a3, lambda_L1_a3_a3 ]]]]]" guard="l in L0" guard-y="-2.0" label-y="-3.0" name="lambdaR1_IstoIs" nservers-x="0.5" type="EXP" x="67.55" y="60.0"/>
+      <transition delay="If[ a in Y &amp;&amp; b in Y, lambda_L1_a1_a1, If[ a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y, lambda_L1_a1_a2, If[ a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y, lambda_L1_a1_a3, If[ a in N &amp;&amp; b in N, lambda_L1_a2_a2, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N, lambda_L1_a2_a3, lambda_L1_a3_a3 ]]]]]" guard="l in L0" guard-y="-1.5" label-y="-2.5" name="lambdaR1_IptoIs" nservers-x="0.5" type="EXP" x="67.55" y="55.0"/>
+      <transition delay="If[a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y,Lambda_a1_a2, If[a in N &amp;&amp; b in N,Lambda_a2_a2, If[a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y,Lambda_a1_a3, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N, Lambda_a2_a3, Lambda_a3_a3]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IstoRii" nservers-x="0.5" type="EXP" x="26.55" y="71.0"/>
+      <transition delay="If[a in Y &amp;&amp; b in Y,Lambda_a1_a1, If[a in Y &amp;&amp; b in N || a in N &amp;&amp; b in Y,Lambda_a1_a2, If[a in N &amp;&amp; b in N,Lambda_a2_a2, If[a in Y &amp;&amp; b in O || a in O &amp;&amp; b in Y,Lambda_a1_a3, If[ a in N &amp;&amp; b in O || a in O &amp;&amp; b in N, Lambda_a2_a3, Lambda_a3_a3]]]]]" guard="l in L2 || l in L1" guard-y="-2.0" label-y="-3.0" name="lambdaRi_IptoRii" nservers-x="0.5" type="EXP" x="37.55" y="71.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a1" value="0.2136752137" x="119.625" y="9.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a2" value="0.5586592171" x="119.75" y="11.0"/>
+      <constant consttype="REAL" name="Lambda_a1_a3" value="0.1438848921" x="119.625" y="13.0"/>
+      <constant consttype="REAL" name="Lambda_a2_a2" value="0.0205212395" x="119.75" y="15.0"/>
+      <constant consttype="REAL" name="Lambda_a2_a3" value="0.03640335" x="119.75" y="17.0"/>
+      <constant consttype="REAL" name="Lambda_a3_a3" value="0.0063743" x="119.75" y="19.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a1" value="0.2136752137" x="119.6875" y="25.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a2" value="0.5586592171" x="119.6875" y="27.0"/>
+      <constant consttype="REAL" name="lambda_S_a1_a3" value="0.1438848921" x="119.6875" y="29.0"/>
+      <constant consttype="REAL" name="lambda_S_a2_a2" value="0.0205212395" x="119.6875" y="31.0"/>
+      <constant consttype="REAL" name="lambda_S_a2_a3" value="0.03640335" x="119.6875" y="33.0"/>
+      <constant consttype="REAL" name="lambda_S_a3_a3" value="0.0063743" x="119.6875" y="35.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="14.25" name="copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.75" x="117.75" y="22.875">Contact rates S \rightarrow \left\lbrace Ip,  Is \right\rbrace</text-box>
+      <constant consttype="REAL" name="lambda_L1_a1_a1" value="0.2136752137" x="119.6875" y="41.0"/>
+      <constant consttype="REAL" name="lambda_L1_a1_a2" value="0.5586592171" x="119.6875" y="43.0"/>
+      <constant consttype="REAL" name="lambda_L1_a1_a3" value="0.1438848921" x="119.6875" y="45.0"/>
+      <constant consttype="REAL" name="lambda_L1_a2_a2" value="0.0205212395" x="119.6875" y="47.0"/>
+      <constant consttype="REAL" name="lambda_L1_a2_a3" value="0.03640335" x="119.6875" y="49.0"/>
+      <constant consttype="REAL" name="lambda_L1_a3_a3" value="0.0063743" x="119.5" y="51.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="14.25" name="copy_copy_copy_copy___textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="14.75" x="117.75" y="38.875">Contact rates L1 \rightarrow \left\lbrace Ip,  Is \right\rbrace</text-box>
+      <place domain="Age" label-x="-1.5" label-y="-2.5" name="InfectCount" x="67.0" y="24.0"/>
+      <constant consttype="REAL" name="Theta" value="0" x="9.0" y="10.0"/>
+      <constant consttype="REAL" name="Omega" value="0" x="9.0625" y="8.0"/>
+      <constant consttype="REAL" name="tau" value="0.00117416829746" x="9.3125" y="12.0"/>
+      <constant consttype="REAL" name="gamma" value="0.0476190476190476" x="29.25" y="7.0"/>
+      <constant consttype="REAL" name="alpha" value="0.000587084148729" x="9.125" y="14.0"/>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="11.0" name="__textBox0" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="7.0" y="5.0">Vaccined/Recovered rates</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="4.5" name="__textBox1" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" width="16.5" x="26.0" y="4.75">Healing rate</text-box>
+      <text-box bold="true" border-color="#000000" fill-color="none" height="6.0" name="__textBox2" shadow="true" shape="ROUND_RECTANGLE" text-color="#000000" x="28.0" y="10.0">Ageing rate</text-box>
+      <constant consttype="REAL" name="psi_a1" value="0.0030303030303" x="28.875" y="12.0"/>
+      <constant consttype="REAL" name="psi_a2" value="0.000160384923817" x="28.875" y="14.0"/>
+    </nodes>
+    <edges>
+      <arc head="S" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.24892578125" mult-x="0.9999093019524565" tail="betatoSNewBorn">
+        <point x="22.18740234375" y="35.0"/>
+      </arc>
+      <arc head="deltaS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.50009765625" mult-x="-0.5" mult-y="-0.49951171875" tail="S"/>
+      <arc head="deltaIp" kind="INPUT" mult="&lt;a&gt;" mult-k="0.8250976562500001" mult-x="0.5" mult-y="0.62548828125" tail="Ip"/>
+      <arc head="PsiIptoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="1.19521484375" mult-x="0.9997109252124545" mult-y="5.957690182327724E-4" tail="Ip">
+        <point x="45.0" y="38.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.73349609375" mult-x="0.21448123514689144" mult-y="0.7855187648531086" tail="PsiIptoIp">
+        <point x="51.0" y="38.0"/>
+      </arc>
+      <arc head="PsiStoS" kind="INPUT" mult="&lt;a&gt;" mult-k="0.74736328125" mult-x="0.8990463234804906" mult-y="0.6009536765195094" tail="S">
+        <point x="25.0" y="38.0"/>
+      </arc>
+      <arc head="S" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.80478515625" mult-x="1.6779542829403127" mult-y="0.4915342877947637" tail="PsiStoS">
+        <point x="31.0" y="38.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.98935546875" mult-x="1.08784182671684E-4" mult-y="-1.0731758345487208" tail="Ip">
+        <point x="43.0" y="34.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;+&lt;b&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="43.0" y="36.0"/>
+      </arc>
+      <arc head="lambdaS_IptoIp" kind="INPUT" mult="&lt;a&gt;" tail="S"/>
+      <arc head="deltaIs" kind="INPUT" mult="&lt;a&gt;" mult-x="-1.5" mult-y="-0.5" tail="Is"/>
+      <arc head="PsiIstoIs" kind="INPUT" mult="&lt;a&gt;" mult-k="0.68935546875" mult-x="1.1579207187479028" mult-y="0.12277237500278204" tail="Is">
+        <point x="76.0" y="39.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a++&gt;" mult-k="0.72216796875" mult-x="1.2501163075672252" mult-y="0.7498836924327748" tail="PsiIstoIs">
+        <point x="82.0" y="39.0"/>
+      </arc>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;a&gt;" mult-k="3.046777343750001" mult-x="-0.5821406732946741" mult-y="-1.04364253324907" tail="S">
+        <point x="35.5" y="38.0"/>
+        <point x="38.0" y="45.0"/>
+        <point x="53.0" y="45.0"/>
+        <point x="55.5" y="35.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="0.7838867187499972" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="lambdaS_IstoIp" kind="INPUT" mult="&lt;b&gt;" mult-k="0.49892578125" mult-x="-1.0107421875" mult-y="-0.5" tail="Is"/>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-k="0.3182617187500001" mult-x="0.9991210937500057" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="gammaIptoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="1.0852539062500002" mult-x="-1.0" mult-y="0.11342495823454612" tail="Ip">
+        <point x="42.0" y="39.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.50009765625" mult-x="-1.5005859374999986" mult-y="-4.8828125E-4" tail="gammaIptoR3"/>
+      <arc head="deltaR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.7000976562500001" mult-x="-0.5" mult-y="4.8828125E-4" tail="R"/>
+      <arc head="PsiRtoR" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.09912109375" mult-x="1.1683580919962537" mult-y="-0.26700433514619704" tail="R">
+        <point x="45.0" y="64.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a++,l&gt;" mult-k="0.49990234375" mult-x="1.2649874997353265" mult-y="0.5347253773361444" tail="PsiRtoR"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5136308638994365" mult-y="-0.5559772941175396" tail="alphaRiitoRi">
+        <point x="58.0" y="64.5"/>
+        <point x="52.5" y="64.5"/>
+      </arc>
+      <arc head="alphaRiitoRi" kind="INPUT" mult="&lt;a,l++&gt;" mult-k="2.28271484375" mult-x="0.8408122417355344" mult-y="-1.0" tail="R">
+        <point x="52.0" y="65.5"/>
+        <point x="52.0" y="72.0"/>
+        <point x="58.0" y="72.0"/>
+      </arc>
+      <arc head="gammaIstoR3" kind="INPUT" mult="&lt;a&gt;" mult-k="0.6153320312500001" mult-x="0.6533203125" mult-y="0.6926757812500028" tail="Is"/>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l&gt;" mult-k="0.77373046875" mult-x="0.3766888137126898" mult-y="-1.1029105258897829" tail="gammaIstoR3">
+        <point x="62.5" y="42.0"/>
+        <point x="62.5" y="50.5"/>
+        <point x="52.0" y="50.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="0.8333007812500001" mult-x="0.16728515625000284" mult-y="-0.5" tail="R"/>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;a,l&gt;" mult-k="2.4784179687500005" mult-x="-1.5" mult-y="1.0002259814049665" tail="R">
+        <point x="52.5" y="60.0"/>
+        <point x="63.0" y="60.0"/>
+        <point x="63.0" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="30.5" y="65.5"/>
+        <point x="30.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="1.7245117187499996" mult-x="2.0" mult-y="-1.9256161972691643E-4" tail="lambdaRi_IstoRii">
+        <point x="24.0" y="72.0"/>
+        <point x="24.0" y="64.5"/>
+        <point x="30.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;a,l&gt;" mult-k="1.7098632812499996" mult-x="1.5" mult-y="0.30877780279934086" tail="R">
+        <point x="41.5" y="65.5"/>
+        <point x="41.5" y="72.0"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" mult="&lt;a,l++&gt;" mult-k="2.53017578125" mult-x="0.5000541331762776" tail="lambdaRi_IptoRii">
+        <point x="35.0" y="72.0"/>
+        <point x="35.0" y="64.5"/>
+        <point x="41.5" y="64.5"/>
+      </arc>
+      <arc head="lambdaR1_IstoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="1.2555664062500003" mult-x="-1.5" mult-y="0.4988824979264024" tail="Is">
+        <point x="87.5" y="39.5"/>
+        <point x="87.5" y="61.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;+&lt;a&gt;" tail="lambdaR1_IstoIs">
+        <point x="87.5" y="61.0"/>
+        <point x="87.5" y="39.5"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.3977539062499997" mult-x="2.0" mult-y="0.5007959492594125" tail="lambdaR1_IptoIs">
+        <point x="75.5" y="56.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="61.0" y="46.0"/>
+      </arc>
+      <arc head="lambdaR1_IptoIs" kind="INPUT" mult="&lt;b&gt;" mult-k="0.74267578125" mult-x="-0.18209332300362746" mult-y="0.8074594959199999" tail="Ip">
+        <point x="61.0" y="46.0"/>
+        <point x="75.5" y="46.0"/>
+        <point x="75.5" y="56.0"/>
+      </arc>
+      <arc head="lambdaRi_IptoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.3973632812499996" tail="Ip">
+        <point x="34.0" y="39.5"/>
+        <point x="34.0" y="72.0"/>
+      </arc>
+      <arc head="Ip" kind="OUTPUT" mult="&lt;b&gt;" mult-k="1.78427734375" mult-y="-2.905475206631536E-4" tail="lambdaRi_IptoRii">
+        <point x="34.0" y="72.0"/>
+        <point x="34.0" y="39.5"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;b&gt;" mult-x="1.2118629447135447" mult-y="-0.043585206041655056" tail="lambdaRi_IstoRii">
+        <point x="30.5" y="76.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="93.5" y="35.0"/>
+      </arc>
+      <arc head="lambdaRi_IstoRii" kind="INPUT" mult="&lt;b&gt;" mult-k="1.05947265625" tail="Is">
+        <point x="93.5" y="35.0"/>
+        <point x="93.5" y="76.0"/>
+        <point x="30.5" y="76.0"/>
+      </arc>
+      <arc head="Is" kind="OUTPUT" mult="&lt;a&gt;" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="56.0"/>
+        <point x="85.0" y="39.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="1.02939453125" mult-x="0.9916590198989752" mult-y="-0.5" tail="lambdaR1_IstoIs">
+        <point x="89.0" y="61.0"/>
+        <point x="89.0" y="38.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.96884765625" mult-x="0.5909521473801647" mult-y="0.816374318198072" tail="lambdaR1_IptoIs">
+        <point x="85.0" y="56.0"/>
+        <point x="85.0" y="28.5"/>
+      </arc>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.44208984374999993" mult-x="-0.658203125" mult-y="-0.5" tail="lambdaS_IstoIp"/>
+      <arc head="InfectCount" kind="OUTPUT" mult="&lt;a&gt;" mult-k="0.79404296875" mult-x="-0.5386134700945178" mult-y="1.1922773059810936" tail="lambdaS_IptoIp">
+        <point x="38.0" y="25.0"/>
+      </arc>
+    </edges>
+  </gspn>
+</project>
