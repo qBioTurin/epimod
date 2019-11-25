@@ -4,8 +4,7 @@ Title: Epidemiological modelling (epimod)
 Version: 0.1.0
 Author: Marco Beccuti, Paolo Castagno, Simone Pernice
 Maintainer: Paolo Castagno <castagno@di.unito.it>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: A modeling framework for studying epidemiological systems
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
