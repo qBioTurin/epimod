@@ -1,4 +1,4 @@
-# epimod_sensitivity
+# epimod_analysis
 FROM ubuntu:19.10
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -20,15 +20,10 @@ RUN mkdir /root/scratch; chmod 777 /root/scratch
 # Create data directory
 RUN mkdir /root/data; chmod 777 /root/data
 
-
-# Install all required R packages
-RUN R -e "install.packages('epiR')"
-RUN R -e "install.packages('ggplot2')"
-
 COPY R_scripts /root/scratch/R_scripts
 COPY epimod.tar.gz /root/scratch/epimod.tar.gz
-COPY Files /root/scratch/Files
 
+# Install all required R packages
 RUN R -e "install.packages('/root/scratch/epimod.tar.gz',  repos = NULL)"
 
 # Dump all packages installed with it's version

@@ -1,4 +1,5 @@
-FROM ubuntu:18.04
+# epimod_calibration
+FROM ubuntu:19.10
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -21,16 +22,13 @@ RUN mkdir /root/data; chmod 777 /root/data
 
 
 # Install all required R packages
-RUN R -e "install.packages('parallel')"
 RUN R -e "install.packages('GenSA')"
 
-# COPY EpiTCM /root/scratch/EpiTCM
 COPY R_scripts /root/scratch/R_scripts
-# COPY Configuration /root/scratch/Configuration
-COPY EpiTCM.tar.gz /root/scratch/EpiTCM.tar.gz
+COPY epimod.tar.gz /root/scratch/epimod.tar.gz
 COPY Files /root/scratch/Files
 
-RUN R -e "install.packages('/root/scratch/EpiTCM.tar.gz',  repos = NULL)"
+RUN R -e "install.packages('/root/scratch/epimod.tar.gz',  repos = NULL)"
 
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
