@@ -23,6 +23,8 @@ experiment.cmd <- function(id,
                            solver_fname, solver_type = "LSODA",
                            init_fname = NULL, s_time, f_time, n_run = 1,
                            timeout, out_fname){
+    if(solver_type == "TAUG")
+        solver_type <- paste(solver_type, "-taueps 0.01")
     cmd <- paste0("timeout ", timeout,
                  " .", .Platform$file.sep, basename(solver_fname), " ",
                  out_fname,"-", id,
