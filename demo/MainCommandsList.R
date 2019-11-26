@@ -11,6 +11,10 @@
 # epimod library
 #
 library(epimod)
+#
+# Set the required path
+base_dir <- "/root/scratch/"
+local_dir <- "/home/paolo/Documents/git/pertussis_model/Pipeline/"
 # Then, to run one or more steps of the pipeline you have excecute one of the
 # R scripts provided, as follows:
 #   - generate the solver from the provided petri net:
