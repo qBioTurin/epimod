@@ -1,0 +1,6 @@
+b_rates,b_rate,file='/root/scratch/Files/init_conf_sp.RData'
+c_rates,c_rate,file='/root/scratch/Files/init_conf_sp.RData'
+d_rates,d_rate,file='/root/scratch/Files/init_conf_sp.RData'
+v_rates,v_rate,file='/root/scratch/Files/init_conf_sp.RData'
+probabilities,probability,file='/root/scratch/Files/init_conf_sp.RData'
+init,initial_marking,file='/root/scratch/Files/init_conf_sp.RData'
