@@ -50,7 +50,7 @@ model_generation <-function( out_fname = NULL,
         # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
         netname <- paste0(tmp_dir,out_fname,".PNPRO")
         file.copy(from = net_fname, to = netname)
-        netname <- tools::file_path_sans_ext(net_fname)
+        netname <- tools::file_path_sans_ext(netname)
     }else{
         file.copy(from = net_fname, to = tmp_dir)
         netname <- tools::file_path_sans_ext(basename(net_fname))
