@@ -115,6 +115,6 @@ sensitivity_analysis <-function(
     # Locate the installation folder
     # inst_folder = path.package("epimod", quiet = FALSE)
     # Run the docker image
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epimod_sensitivity Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d epimod_sensitivity Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
     file.remove("./dockerID")
 }
