@@ -96,19 +96,19 @@ sensitivity_analysis <-function(
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
     })
-    file.copy(target_value_fname, to = paste0(parms$volume, basename(target_value_fname)))
+    file.copy(target_value_fname, to = paste0(paste0(chk_dir(volume),"results"), basename(target_value_fname)))
     parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
     # Manage experiments reproducibility
     if(!is.null(seed)){
         parms$seed <- paste0(parms$out_dir,basename(seed))
-        file.copy(from = seed, to = volume )
+        file.copy(from = seed, to = paste0(chk_dir(volume),"results") )
         if(!is.null(extend)){
             parms$extend <- paste0(parms$out_dir,basename(extend))
-            file.copy(from = extend, to = volume )
+            file.copy(from = extend, to = paste0(chk_dir(volume),"results") )
         }
     }
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
-    p_fname <- paste0(volume, parms_fname,".RDS")
+    p_fname <- paste0(paste0(chk_dir(volume),"results"), parms_fname,".RDS")
     # Use version = 2 for compatibility issue
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
