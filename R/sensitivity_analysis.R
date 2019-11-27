@@ -20,14 +20,12 @@
 #' @param n_config, number of configuratons to generate
 #' @param parm_fname, file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @param out_dir, output directory specified by the user
 #' @author Paolo Castagno
 #'
 #' @examples
 #'\dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' sensitivity_analysis(n_config = 2^4,
-#'                      out_dir = paste0(local_dir, "Res/"),
 #'                      out_fname = "sensitivity",
 #'                      parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                      functions_fname = paste0(local_dir, "Configuration/Functions.R"),
@@ -47,7 +45,7 @@
 sensitivity_analysis <-function(
                                 n_config,
                                 # Directories
-                                out_dir, out_fname,
+                                out_fname,
                                 # User defined simulation's parameters
                                 parameters_fname = "", functions_fname = "",
                                 # Parameters to control the simulation
@@ -77,8 +75,8 @@ sensitivity_analysis <-function(
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
-                  run_dir = chk_dir("/root/scratch/Run/"),
-                  out_dir = chk_dir("/root/data/"),
+                  run_dir = chk_dir("/root/scratch/"),
+                  out_dir = chk_dir("/root/data/results/"),
                   out_fname = out_fname,
                   solver_fname = solver_fname,
                   init_fname = init_fname,
@@ -94,6 +92,7 @@ sensitivity_analysis <-function(
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = volume)
     # Change path to the new files' location
+    dir.create(parms$out_dir, showWarnings = FALSE)
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
     })
