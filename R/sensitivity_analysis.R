@@ -89,31 +89,31 @@ sensitivity_analysis <-function(
                   target_value_f = target_value_f,
                   distance_measure = distance_measure,
                   files = files)
+    # Create the folder to store results
+    res_dir <- paste0(chk_dir(volume),"results")
+    dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
-    dir.create(paste0(chk_dir(volume),"results"), showWarnings = FALSE)
-    experiment.env_setup(files = files, dest_dir = paste0(chk_dir(volume),"results"))
+    experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
     })
-    file.copy(target_value_fname, to = paste0(paste0(chk_dir(volume),"results"), basename(target_value_fname)))
+    file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
     parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
     # Manage experiments reproducibility
     if(!is.null(seed)){
         parms$seed <- paste0(parms$out_dir,basename(seed))
-        file.copy(from = seed, to = paste0(chk_dir(volume),"results") )
+        file.copy(from = seed, to = res_dir )
         if(!is.null(extend)){
             parms$extend <- paste0(parms$out_dir,basename(extend))
-            file.copy(from = extend, to = paste0(chk_dir(volume),"results") )
+            file.copy(from = extend, to = res_dir )
         }
     }
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
-    p_fname <- paste0(paste0(chk_dir(volume),"results"), parms_fname,".RDS")
+    p_fname <- paste0(res_dir, parms_fname,".RDS")
     # Use version = 2 for compatibility issue
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
-    # Locate the installation folder
-    # inst_folder = path.package("epimod", quiet = FALSE)
     # Run the docker image
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d epimod_sensitivity Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
     file.remove("./dockerID")
