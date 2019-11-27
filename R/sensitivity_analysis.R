@@ -113,8 +113,9 @@ sensitivity_analysis <-function(
     # Use version = 2 for compatibility issue
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
+    # Locate the installation folder
+    inst_folder = path.package("epimod", quiet = FALSE)
     # Run the docker image
-    cat(paste0("docker run --volume params = --cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epip_sensitivity Rscript /root/scratch/R_scripts/sensitivity.mngr.R ", p_fname))
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epip_sensitivity Rscript /root/scratch/R_scripts/sensitivity.mngr.R ", p_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epip_sensitivity Rscript ", chk_dir(inst_folder),"inst/R_scripts/sensitivity.mngr.R ", p_fname))
     file.remove("./dockerID")
 }
