@@ -90,9 +90,9 @@ sensitivity_analysis <-function(
                   distance_measure = distance_measure,
                   files = files)
     # Copy all the files to the directory docker will mount to the image's file system
-    experiment.env_setup(files = files, dest_dir = volume)
+    dir.create(paste0(chk_dir(volume),"results"), showWarnings = FALSE)
+    experiment.env_setup(files = files, dest_dir = paste0(chk_dir(volume),"results"))
     # Change path to the new files' location
-    dir.create(parms$out_dir, showWarnings = FALSE)
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
     })
