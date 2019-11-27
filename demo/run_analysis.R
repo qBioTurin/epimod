@@ -1,14 +1,14 @@
 model_analysis(out_dir = paste0(base_dir, "Res/"),
                out_fname = "analysis",
-               parameters_fname = paste0(local_dir, "inst/Files/Functions_list_p.csv"),
+               parameters_fname = paste0(local_dir, "inst/Files/Functions_list.csv"),
                functions_fname = paste0(local_dir, "inst/Files/Functions_analysis.R"),
-               solver_fname = paste0(local_dir, "inst/Files/Solver.solver"),
+               solver_fname = paste0(local_dir, "inst/Net/Solver.solver"),
                solver_type = "HLSODA",
                n_run = 4,
                init_fname = "init",
                f_time = 365*43,
                s_time = 365,
-               volume = paste0(local_dir, "Res/"),
+               volume = paste0(local_dir),
                timeout = "1d",
                ini_v = c(0.998382, 0.9999957 ,0.6090477, 1e-07, 1e-07, 0.9996254, 1e-07, 1e-07, 1e-07, 0.6094091, 0.4046836, 0.0008244062, 0.00032889647), # det
                processors=4)

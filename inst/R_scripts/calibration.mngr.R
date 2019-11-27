@@ -1,5 +1,5 @@
 library(GenSA)
-library(EpiTCM)
+library(epimod)
 library(parallel)
 
 calibration.worker <- function(id, config, params){

@@ -1,5 +1,5 @@
 library(parallel)
-library(EpiTCM)
+library(epimod)
 
 model.worker<-function(id,
                        solver_fname, solver_type,

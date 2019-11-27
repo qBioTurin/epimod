@@ -1,5 +1,5 @@
 library(parallel)
-library(EpiTCM)
+library(epimod)
 library(ggplot2)
 
 sensitivity.worker<-function(id,
