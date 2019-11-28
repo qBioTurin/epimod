@@ -118,7 +118,7 @@ model_calibration <-function(
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
     files <- lapply(files, function(x){
-        return(paste0(out_dir,basename(x)))
+        return(paste0(params$out_dir,basename(x)))
     })
     params$files <- files
     parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
