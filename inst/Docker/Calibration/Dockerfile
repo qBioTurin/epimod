@@ -12,7 +12,6 @@ RUN mkdir /root/data; chmod 777 /root/data
 
 # Install all required R packages
 RUN R -e "install.packages('devtools')"
-COPY marker /dev/null
 RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 RUN R -e "install.packages('GenSA')"
 

@@ -1,6 +1,6 @@
 model_analysis <-function(
     # Directories
-    out_dir, out_fname,
+    out_fname,
     # User defined simulation's parameters
     parameters_fname = "", functions_fname = "",
     # Parameters to control the simulation
@@ -25,8 +25,8 @@ model_analysis <-function(
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
-                  run_dir = chk_dir("/root/scratch/Run/"),
-                  out_dir = chk_dir("/root/data/"),
+                  run_dir = chk_dir("/root/scratch/"),
+                  out_dir = chk_dir("/root/data/results/"),
                   out_fname = out_fname,
                   solver_fname = solver_fname,
                   solver_type = solver_type,
