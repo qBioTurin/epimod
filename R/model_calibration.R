@@ -41,8 +41,7 @@
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' base_dir <- "/root/scratch/"
 #' library(EpiTCM)
-#' model_calibration(out_dir = paste0(base_dir, "Res/"),
-#'                   out_fname = "calibration",
+#' model_calibration(out_fname = "calibration",
 #'                   parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                   functions_fname = paste0(local_dir, "Configuration/Functions.R"),
 #'                   solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
@@ -66,7 +65,7 @@
 #' @export
 model_calibration <-function(
     # Directories
-    out_dir, out_fname,
+    out_fname,
     # User defined simulation's parameters
     parameters_fname = "", functions_fname = "",
     # Parameters to control the simulation
@@ -92,9 +91,10 @@ model_calibration <-function(
         distance_measure_fname = distance_measure_fname,
         reference_data = reference_data
     )
-    params <- list(out_dir = "/root/scratch/Res/",
+    params <- list(
+                   run_dir = chk_dir("/root/scratch/"),
+                   out_dir = chk_dir("/root/data/results/"),
                    out_fname = out_fname,
-                   run_dir = "/root/scratch/Run/",
                    solver_type = solver_type,
                    init_fname = init_fname,
                    f_time = f_time,
@@ -112,27 +112,28 @@ model_calibration <-function(
                    seed = seed,
                    processors = processors)
 
+    res_dir <- paste0(chk_dir(volume),"results/")
+    dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
-    experiment.env_setup(files = files, dest_dir = volume)
+    experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
     files <- lapply(files, function(x){
         return(paste0(out_dir,basename(x)))
     })
     params$files <- files
-    parms_fname <- paste0(chk_dir(volume),"params_",out_fname,".RDS")
+    parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
     saveRDS(params, file = parms_fname, version = 2)
-    file.copy(from = target_value_fname, to = volume)
+    file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
     if(!is.null(seed)){
         params$seed <- paste0(params$out_dir,basename(seed))
-        file.copy(from = seed, to = volume )
+        file.copy(from = seed, to = res_dir )
         if(!is.null(extend)){
             params$extend <- paste0(params$out_dir,basename(extend))
-            file.copy(from = extend, to = volume )
+            file.copy(from = extend, to = res_dir )
         }
     }
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
-    cat(paste0("docker run -cidfile=dockerID ","--volume ", volume,":",out_dir," -d epip_calibration Rscript /root/scratch/R_scripts/calibration.mngr.R ", parms_fname))
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":",out_dir," -d epip_calibration Rscript /root/scratch/R_scripts/calibration.mngr.R ", parms_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_calibration Rscript /root/scratch/R_scripts/calibration.mngr.R ", parms_fname))
 
 }
