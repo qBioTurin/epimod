@@ -38,8 +38,11 @@ model_analysis <-function(
                   timeout = timeout,
                   files = files,
                   ini_v = ini_v)
+    # Create the folder to store results
+    res_dir <- paste0(chk_dir(volume),"results/")
+    dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
-    experiment.env_setup(files = files, dest_dir = volume)
+    experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
@@ -47,19 +50,18 @@ model_analysis <-function(
     # Manage experiments reproducibility
     if(!is.null(seed)){
         parms$seed <- paste0(parms$out_dir,basename(seed))
-        file.copy(from = seed, to = volume )
+        file.copy(from = seed, to = res_dir )
         if(!is.null(extend)){
             parms$extend <- paste0(parms$out_dir,basename(extend))
             file.copy(from = extend, to = volume )
         }
     }
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
-    p_fname <- paste0(volume, parms_fname,".RDS")
+    p_fname <- paste0(res_dir, parms_fname,".RDS")
     # Use version = 2 for compatibility issue
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
     # Run the docker image
-    cat(paste0("docker run --volume params = --cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epip_sensitivity Rscript /root/scratch/R_scripts/model.mngr.R ", p_fname))
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":",parms$out_dir," -d epip_sensitivity Rscript /root/scratch/R_scripts/model.mngr.R ", p_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_analysis Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
     file.remove("./dockerID")
 }
