@@ -14,7 +14,7 @@ RUN mkdir /root/data; chmod 777 /root/data
 RUN R -e "install.packages('epiR')"
 RUN R -e "install.packages('ggplot2')"
 RUN R -e "install.packages('devtools')"
-RUN pwd
+COPY marker /dev/null
 RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 
 # Dump all packages installed with it's version

@@ -125,7 +125,7 @@ rank <- rank[order(rank$measure),]
 save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
 stopCluster(cl)
 # Load external function to compute prcc
-source("/root/scratch/R_scripts/sensitivity.prcc.R")
+source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
 prcc <- sensitivity.prcc(config = params$config,
                         target_value_fname = params$target_value_fname,
                         target_value = params$target_value_f,
