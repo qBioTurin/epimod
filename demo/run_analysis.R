@@ -1,5 +1,4 @@
-model_analysis(out_dir = paste0(base_dir, "Res/"),
-               out_fname = "analysis",
+model_analysis(out_fname = "analysis",
                parameters_fname = paste0(local_dir, "inst/Files/Functions_list.csv"),
                functions_fname = paste0(local_dir, "inst/Files/Functions_analysis.R"),
                solver_fname = paste0(local_dir, "inst/Net/Solver.solver"),
