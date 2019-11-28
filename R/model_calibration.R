@@ -134,6 +134,6 @@ model_calibration <-function(
         }
     }
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_calibration Rscript /root/scratch/R_scripts/calibration.mngr.R ", parms_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_calibration Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
 
 }
