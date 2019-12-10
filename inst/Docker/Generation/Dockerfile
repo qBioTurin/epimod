@@ -33,5 +33,6 @@ RUN (curl -H 'Cache-Control: no-cache' \
 	      https://raw.githubusercontent.com/greatspn/SOURCES/master/download.sh | \
           iconv -f latin1 | MKFLAGS="-j 15" bash -s -- -docker  -dont-build-meddly -dont-install-meddly )
 
+ENV PATH="${PATH}:/usr/local/GreatSPN/scripts"
 
 CMD [ "/bin/bash" ]
