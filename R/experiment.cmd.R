@@ -34,5 +34,7 @@ experiment.cmd <- function(id,
                  " -runs ", n_run)
     if(!is.null(init_fname))
         cmd <- paste0(cmd, " -init ", init_fname)
+    if(file.exists("cmdln_params"))
+        cmd <- paste0(cmd, " -t ", "cmdln_params")
     return(cmd)
 }
