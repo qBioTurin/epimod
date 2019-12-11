@@ -4,7 +4,7 @@
 #' @param parm_fname, file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
 #' @param out_dir, output directory specified by the user
-#' @author Paolo Castagno
+#' @author Marco Beccuti, Paolo Castagno, Simone Pernice
 #'
 #' @examples
 #'\dontrun{
@@ -16,17 +16,27 @@ experiment.configurations <- function(n_config,
                                       out_dir,out_fname,
                                       extend = "", optim_vector = NULL){
     source(parm_fname)
+    # Read file
     conn <- file(parm_list,open="r")
     lines <-readLines(conn)
     close(conn)
+    # Initialize an empty list of configurations
     config <- list()
-    cat(extend)
+    # TBD: Add the feature to expand an existing configuration
+    # cat(extend)
+    # For each line the file defines how to generate a (set of) parameter(s)
     for (i in 1:length(lines)){
+        # Create an environment to evaluate the parameters read from file
         env <-new.env()
         args<-unlist(strsplit(lines[i], ","))
-        f <- args[2]
+        # The first element of each line is the name of the file to store the values
         file <- args[1]
-        args<-list(args[-c(1,2)])
+        # The second element of each line is the function name
+        f <- args[2]
+        # The third element of each line is a tag controlling how/where to save each (set of) parameter(s)
+        tag <- args[3]
+        # Further arguments, other the first three, are the parameters used by the user defined function
+        args<-list(args[-c(1,3)])
         args <- lapply(c(1:length(args)),function(x){
             eval(parse(text=args[x]), envir = env)
         })
@@ -37,7 +47,18 @@ experiment.configurations <- function(n_config,
             data <- do.call(f,as.list.environment(env))
             if(j==1)
                 config[[i]] <- list()
-            config[[i]][[j]] <- list(file, n_config, data)
+            if(tag == "I"){
+                config[[i]][[j]] <- list("init", n_config, data)
+            }
+            else if(tag == "G")
+            {
+                config[[i]][[j]] <- list(file, n_config, data)
+            }
+            else if(tag == "T")
+            {
+                # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
+                config[[i]][[j]] <- list(file, -n_config, data)
+            }
         }
     }
     save(config, file = paste0(out_dir, out_fname,".RData"))
