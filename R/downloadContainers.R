@@ -13,7 +13,7 @@
 #' @export
 downloadContainers <- function(containers.file=NULL){
     if(is.null(containers.file)){
-        containers.file=paste(path.package(package="epimod"),"containers/containersNames.txt",sep="/")
+        containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
         containers <-read.table(containers.file,header=TRUE,row.names = 1)
     }
     else{
@@ -21,8 +21,8 @@ downloadContainers <- function(containers.file=NULL){
     }
 
 
-    for(i in dim(containers)[1]){
+    for(i in 1:dim(containers)[1]){
             system(paste("docker pull ",containers[i,1], sep=""))
     }
- writeLines(containers, paste(path.package(package="epimod"),"containers/containersNames.txt",sep="/"))
+ #writeLines(containers, paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/"))
 }
