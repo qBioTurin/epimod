@@ -37,7 +37,7 @@
 #' @export
 model_generation <-function( out_fname = NULL,
                               net_fname,
-                              functions_fname ){
+                              functions_fname=NULL ){
 
     chk_dir<- function(path){
         pwd <- basename(path)
