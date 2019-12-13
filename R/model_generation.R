@@ -43,6 +43,9 @@ model_generation <-function( out_fname = NULL,
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
+
+
+
     # Create temp files and dirs
     tmp_dir <- paste0(chk_dir(tempdir()),"generation_tmp/")
     dir.create(path = tmp_dir)
@@ -73,8 +76,8 @@ model_generation <-function( out_fname = NULL,
     }
 
 
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d", containers.names["generation",1]," ", cmd))
-    file.copy(paste0( netname, ".solver"), chk_dir(pwd))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    file.copy(paste0( netname, ".solver"), chk_dir(dirname(net_fname)))
 
     setwd(pwd)
     unlink(tmp_dir, recursive = TRUE)
