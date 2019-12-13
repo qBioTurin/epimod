@@ -25,7 +25,8 @@
 #' @param out_fname Prefix to the output file name
 #' @param net_fname .PNPRO file storing  the model as ESPN. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected;
 #' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions.
-#' @author Paolo Castagno
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+
 #'
 #' @examples
 #'\dontrun{

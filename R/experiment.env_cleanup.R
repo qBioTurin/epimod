@@ -4,7 +4,7 @@
 #' @param run_dir, the directory to cleanup
 #' @param out_fname, output filename prefix
 #' @param out_dir, output directory specified by the user
-#' @author Paolo Castagno
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 #'
 #' @examples
 #'\dontrun{

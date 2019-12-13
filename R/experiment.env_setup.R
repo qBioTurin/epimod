@@ -2,7 +2,8 @@
 #' @description This is an internal function creating the required structure of files and directiry to run a simulation.
 #' @param id, a numeric identifier used to format the output's file name (optional, if not provided copy files in dest_dir. Otherwise, create a sub-directory id)
 #' @param confg, configuration provided by the function experiment.configurations
-#' @author Paolo Castagno
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+
 #'
 #' @examples
 #'\dontrun{

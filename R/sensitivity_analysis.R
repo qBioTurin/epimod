@@ -20,7 +20,8 @@
 #' @param n_config, number of configuratons to generate
 #' @param parm_fname, file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @author Paolo Castagno
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+
 #'
 #' @examples
 #'\dontrun{

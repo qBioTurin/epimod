@@ -34,7 +34,8 @@
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data
 #' @param distance_measure The name of the function defining the distance measure
 #' @param out_dir Directory where to store all the output generated
-#' @author Paolo Castagno
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+
 #'
 #' @examples
 #'\dontrun{
