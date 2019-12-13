@@ -77,8 +77,9 @@ model_generation <-function( out_fname = NULL,
 
 
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
-    file.copy(paste0( netname, ".solver"), chk_dir(dirname(net_fname)))
-
     setwd(pwd)
+    file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(net_fname)))
+
+
     unlink(tmp_dir, recursive = TRUE)
 }

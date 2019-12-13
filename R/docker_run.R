@@ -50,7 +50,7 @@ docker.run <- function( params=NULL){
         system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
         cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
         cat("\nExecution is interrupted\n")
-        cat(paste("Please send to raffaele.calogero@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
+        cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
         system("echo 3 > ExitStatusFile 2>&1")
         return(3)
     }
