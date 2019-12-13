@@ -48,7 +48,7 @@ model_generation <-function( out_fname = NULL,
 
     # Create temp files and dirs
     tmp_dir <- paste0(chk_dir(tempdir()),"generation_tmp/")
-    dir.create(path = tmp_dir)
+    dir.create(path = tmp_dir,showWarnings = FALSE)
     if(!is.null(out_fname)){
         # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
         netname <- paste0(tmp_dir,out_fname,".PNPRO")
