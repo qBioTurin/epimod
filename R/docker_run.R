@@ -28,7 +28,7 @@ docker.run <- function( params=NULL){
     }
 
     ## to execute docker
-    cat(paste("docker run --privileged=true ",params,"\n", sep=""))
+    cat(paste("docker run --privileged=true ",params,"\n\n", sep=""))
     system(paste("docker run --privileged=true ",params, sep=""))
 
     ## to obtain the Docker ID by file
@@ -45,7 +45,7 @@ docker.run <- function( params=NULL){
     cat(".\n\n")
     ## to check the Docker container status
     dockerExit <- system(paste("docker inspect -f {{.State.ExitCode}}",dockerid),intern= T)
-    cat("\nDocker exit status:",dockerExit,"\n")
+    cat("\nDocker exit status:",dockerExit,"\n\n")
     if(as.numeric(dockerExit)!=0){
         system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
         cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
