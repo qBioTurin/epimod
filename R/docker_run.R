@@ -28,7 +28,7 @@ docker.run <- function( params=NULL){
     }
 
     ## to execute docker
-    cat(paste("docker run --privileged=true ",params, sep=""))
+    cat(paste("docker run --privileged=true ",params,"\n", sep=""))
     system(paste("docker run --privileged=true ",params, sep=""))
 
     ## to obtain the Docker ID by file
@@ -54,6 +54,10 @@ docker.run <- function( params=NULL){
         system("echo 3 > ExitStatusFile 2>&1")
         return(3)
     }
+
+
+    file.remove("dockerID")
+    system(paste("docker rm -f ",dockerid),intern= T)
 
     #Normal Docker execution
     system("echo 0 > ExitStatusFile 2>&1")

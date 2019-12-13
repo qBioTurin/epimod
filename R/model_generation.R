@@ -58,15 +58,24 @@ model_generation <-function( out_fname = NULL,
     }
     file.copy(from = functions_fname, to = tmp_dir)
     # Set commandline to unfold the PN
+
+    #reading docker image names
+    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+
     pwd <- getwd()
     setwd(tmp_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d greatspn ", cmd, " "))
-    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M -C ", paste0("/home/",basename(functions_fname)))
-    file.remove("dockerID")
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d greatspn ", cmd, " "))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
+    if (!is.null(functions_fname)){
+     cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
+    }
+
+
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d", containers.names["generation",1]," ", cmd))
     file.copy(paste0( netname, ".solver"), chk_dir(pwd))
-    file.remove("dockerID")
+
     setwd(pwd)
     unlink(tmp_dir, recursive = TRUE)
 }
