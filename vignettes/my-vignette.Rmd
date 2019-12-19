@@ -1,0 +1,105 @@
+---
+title: "EpiMod: an example of analisys"
+author: "Beccuti Marco, Castagno Paolo, Pernice Simone"
+output: 
+  pdf_document:
+    toc: true
+    toc_depth: 3
+    fig_caption: yes
+bibliography: biblio.bib  
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r wrap-hook,include = FALSE }
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+```
+
+## The Prey-Predator model
+
+The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of first-order nonlinear differential equations, frequently used to describe the dynamics of biological systems in which two species interact, one as a predator and the other as prey. The populations change through time according to the pair of equations:
+
+$$ \begin{aligned} \frac{dx}{dt} &= \alpha x-\beta xy,\\
+{\frac {dy}{dt}}&=\delta xy-\gamma y, \end{aligned}$$
+
+where:
+
+1. $x$ is the number of prey (for example, rabbits);
+2. $y$ is the number of some predator (for example, foxes);
+3. ${\tfrac {dy}{dt}}$ and ${\tfrac {dx}{dt}}$ represent the instantaneous growth rates of the two populations;
+4. $t$ represents time;
+5. $\alpha,\ \beta,\ \gamma,\ \theta$ are positive real parameters describing the interaction of the two species.
+
+
+## Guideline for epimod package
+### How to start 
+
+Before starting the analysis we have to download the Docker containers.
+
+
+```{r}
+library(epimod)
+
+downloadContainers()
+``` 
+
+###  Model generation
+
+```{r, linewidth = 80}
+setwd("~/Desktop/ProvaEpimod")
+model_generation(net_fname = "PredyPredator.PNPRO")
+
+``` 
+
+
+###  Sensitivity analysis
+
+To execute the sensitivity analysis of the model, that is ... , we must define the following objects:
+
+1. parameters_fname (*Functions_list.csv*): ... ;
+2. functions_fname (*Functions.R*): ... ;
+3. target_value_fname (*predator.R*): ... .
+
+Assuming the following fixed rates:
+$\alpha = 2/3,\ \beta = 4/3,\ \gamma = \theta = 1.$
+Than we change the prey and predator initial conditions from 200 to 1800, knowing that the fixed point is at $x(0) = 1000, y(0)=500$.
+In *Functions_list.csv* we will write the function name to exploit for sampling the values in the choosen range. 
+
+```{r}
+ setwd("~/Desktop/ProvaEpimod")
+tools:: "Functions_list.csv"
+ read.csv(, header=FALSE)
+```
+
+```{r, linewidth = 80 }
+# setwd("~/Desktop/ProvaEpimod")
+# sensitivity<-sensitivity_analysis(n_config = 10,
+#                      parameters_fname = "Functions_list.csv",
+#                      functions_fname = "Functions.R",
+#                      target_value_fname = "predator.R",
+#                      solver_fname = "PredyPredator.solver",
+#                      f_time = 50,
+#                      s_time = 1
+#                      )
+``` 
