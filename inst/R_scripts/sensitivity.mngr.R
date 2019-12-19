@@ -60,8 +60,8 @@ param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
 # Get functions name from file path
-distance_measure <- tools::file_path_sans_ext(basename(params$distance_measure_fname))
-target_value <- tools::file_path_sans_ext(basename(params$target_value_fname))
+distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
+target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
     # Save initial seed value
