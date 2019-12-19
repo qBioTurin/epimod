@@ -1,0 +1,2 @@
+i, init_prey, "runif", min = 0.8 , max = 2
+i, init_predator, init_predator_generation, min = 0.8 , max = 2

@@ -78,8 +78,9 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Fix input parameters path
     if(is.null(volume))
     {
-        volume <- basename(solver_fname)
+        volume <- tools::file_path_sans_ext(basename(solver_fname))
     }
+
     if(!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
@@ -120,7 +121,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   files = files)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results/")
-    dir.create(res_dir, showWarnings = FALSE)
+    dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)
+    volume <- tools::file_path_as_absolute(volume)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
