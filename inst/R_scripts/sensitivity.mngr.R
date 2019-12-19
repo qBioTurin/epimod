@@ -3,8 +3,7 @@ library(epimod)
 library(ggplot2)
 
 sensitivity.worker<-function(id,
-                             solver_fname, solver_type,
-                             init_fname, s_time, f_time,
+                             solver_fname, solver_type, s_time, f_time,
                              timeout, run_dir, out_fname, out_dir,
                              files, config){
     # Setup the environment
@@ -14,7 +13,7 @@ sensitivity.worker<-function(id,
     pwd <- getwd()
     setwd(paste0(run_dir,id))
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, init_fname = init_fname, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
     # Measure simulation's run time
     T1 <- Sys.time()
     # Launch the simulation on the Doker
@@ -91,7 +90,10 @@ saveRDS(params,  file = paste0(param_fname))
 # Save final seed
 final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
-file.copy(from = params$target_value_fname, to = params$run_dir)
+if(!is.null(params$files$target_value_fname))
+{
+    file.copy(from = params$files$target_value_fname, to = params$run_dir)
+}
 # Create a cluster
 cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
 # Save session's info
@@ -102,7 +104,6 @@ exec_times <- parLapply( cl,
                          sensitivity.worker,                  # of sensitivity.worker
                          solver_fname = params$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
-                         init_fname = params$init_fname,
                          s_time = params$s_time,
                          f_time = params$f_time,
                          timeout = params$timeout,

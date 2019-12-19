@@ -31,7 +31,6 @@
 #'                      parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                      functions_fname = paste0(local_dir, "Configuration/Functions.R"),
 #'                      solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
-#'                      init_fname = "init",
 #'                      f_time = 365*21,
 #'                      s_time = 365,
 #'                      volume = "/some/path/to/the/local/output/directory",
@@ -46,7 +45,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 # User defined simulation's parameters
                                 n_config, parameters_fname = NULL, functions_fname = NULL,
                                 # Parameters to manage the simulations' execution
-                                volume = dirname(solver_fname), timeout = '1d', parallel_processors = 1,
+                                volume = NULL, timeout = '1d', parallel_processors = 1,
                                 # Parameters to control the ranking
                                 reference_data = NULL, distance_measure_fname = NULL,
                                 # Parameters to control PRCC
@@ -54,21 +53,45 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 # Mange reproducibilty and extend previous experiments
                                 extend = NULL, seed = NULL,
                                 # Directories
-                                out_fname = tools::file_path_sans_ext(basename(solver_fname))
+                                out_fname = NULL
                                 ){
 
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
-    # Parameters used to set up the runing environment
-    files <- list(
-        parameters_fname = parameters_fname,
-        functions_fname = functions_fname,
-        solver_fname = solver_fname,
-        distance_measure_fname = distance_measure_fname,
-        reference_data = reference_data
-    )
+    files <- list()
+    # Fix input parameters path
+    solver_fname <- tools::file_path_as_absolute(solver_fname)
+    if(is.null(volume))
+    {
+        volume <- tools::file_path_sans_ext(basename(solver_fname))
+    }
+    if(!is.null(parameters_fname))
+    {
+        parameters_fname <- tools::file_path_as_absolute(parameters_fname)
+        files[["parameters_fname"]] <- parameters_fname
+    }
+    if(!is.null(functions_fname))
+    {
+        functions_fname <- tools::file_path_as_absolute(functions_fname)
+        files[["functions_fname"]] <- functions_fname
+    }
+    if(!is.null(reference_data))
+    {
+        reference_data <- tools::file_path_as_absolute(reference_data)
+        files[["reference_data"]] <- reference_data
+    }
+    if(!is.null(distance_measure_fname))
+    {
+        distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
+        files[["distance_measure_fname"]] <- distance_measure_fname
+    }
+    if(!is.null(target_value_fname))
+    {
+        target_value_fname <- tools::file_path_as_absolute(target_value_fname)
+        files[["target_value_fname"]] <- target_value_fname
+    }
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
@@ -81,7 +104,6 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   parallel = parallel_processors,
                   volume = volume,
                   timeout = timeout,
-                  target_value_fname = target_value_fname,
                   files = files)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results/")
@@ -89,11 +111,15 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
-    parms$files <- lapply(files, function(x){
-        return(paste0(parms$out_dir,basename(x)))
-    })
-    file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
-    parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
+    if(length(files) > 0)
+    {
+        parms$files <- lapply(files, function(x){
+            return(paste0(parms$out_dir,basename(x)))
+        })
+    }
+    # removed parms$target_value_fname and inserted in files -> check if it works
+    # file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
+    # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
     # Manage experiments reproducibility
     if(!is.null(seed)){
         parms$seed <- paste0(parms$out_dir,basename(seed))
