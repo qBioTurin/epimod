@@ -2,7 +2,7 @@ sensitivity.prcc<-function(config,
                            target_value_fname, target_value,
                            s_time, f_time,
                            out_fname, out_dir,
-                           processors
+                           parallel_processors
 ){
     library(parallel)
     library(epiR)
@@ -81,7 +81,7 @@ sensitivity.prcc<-function(config,
     parms <- parms[,pos]
     names(parms)<-pnames
     # Create a cluster
-    cl <- makeCluster(processors, type = "FORK")
+    cl <- makeCluster(parallel_processors, type = "FORK")
     # Extract data
     # tval <- parLapply( cl,
     #                    c(1:n_config),
