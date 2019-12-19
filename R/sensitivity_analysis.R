@@ -61,11 +61,16 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     files <- list()
-    # Fix input parameters path
+    # Fix input parameter out_fname
     solver_fname <- tools::file_path_as_absolute(solver_fname)
+    if(is.null(out_fname))
+    {
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+    }
+    # Fix input parameters path
     if(is.null(volume))
     {
-        volume <- tools::file_path_sans_ext(basename(solver_fname))
+        volume <- basename(solver_fname)
     }
     if(!is.null(parameters_fname))
     {
@@ -135,6 +140,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
     # Run the docker image
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d epimod_sensitivity Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
+    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
     file.remove("./dockerID")
 }
