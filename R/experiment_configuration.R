@@ -42,7 +42,7 @@ experiment.configurations <- function(n_config,
             # The third element of each line is the function name
             f <- args[3]
             # Further arguments, other the first three, are the parameters used by the user defined function
-            args<-list(args[-c(1,3)])
+            args<-list(args[-c(1:3)])
             args <- lapply(c(1:length(args)),function(x){
                 eval(parse(text=args[x]), envir = env)
                 })
