@@ -76,7 +76,6 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   out_dir = chk_dir("/root/data/results/"),
                   out_fname = out_fname,
                   solver_fname = solver_fname,
-                  init_fname = init_fname,
                   f_time = f_time,
                   s_time = s_time,
                   parallel = parallel_processors,
