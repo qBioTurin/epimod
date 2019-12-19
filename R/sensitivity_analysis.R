@@ -114,7 +114,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   solver_fname = solver_fname,
                   f_time = f_time,
                   s_time = s_time,
-                  parallel = parallel_processors,
+                  parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,
                   files = files)

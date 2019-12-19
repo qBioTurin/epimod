@@ -1,4 +1,4 @@
-sensitivity_analysis(n_config = 2^4,
+sensitivity_analysis(n_config = 2^6,
                      parameters_fname = paste0(local_dir, "inst/Files/Functions_list.csv"),
                      functions_fname = paste0(local_dir, "inst/Files/Functions.R"),
                      solver_fname = paste0(local_dir, "inst/Net/Solver.solver"),
