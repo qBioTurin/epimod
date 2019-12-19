@@ -58,11 +58,19 @@ sensitivity_analysis <-function(# Parameters to control the simulation
 
     chk_dir<- function(path){
         pwd <- basename(path)
-        return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+        return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     files <- list()
     # Fix input parameter out_fname
-    solver_fname <- tools::file_path_as_absolute(solver_fname)
+    if(is.null(solver_fname))
+    {
+        stop("Missing solver file! Abort")
+    }
+    else
+    {
+        solver_fname <- tools::file_path_as_absolute(solver_fname)
+        files[["solver_fname"]] <- solver_fname
+    }
     if(is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")

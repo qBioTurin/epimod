@@ -21,7 +21,7 @@ experiment.env_setup <- function(id = NULL,
     else
         dest_dir <- paste0(dest_dir, id)
     # Create the directory
-    dir.create(dest_dir, recursive = TRUE)
+    dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
     # Copy files in the new directory
     lapply(files,function(x){
         file.copy(from = x, to = dest_dir)
