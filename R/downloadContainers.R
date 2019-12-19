@@ -23,5 +23,5 @@ downloadContainers <- function(containers.file=NULL){
     for(i in 1:dim(containers)[1]){
         system(paste("docker pull ",containers[i,1], sep=""))
     }
-    writeLines(containers, paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/"))
+    write.table(containers, paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/"))
 }
