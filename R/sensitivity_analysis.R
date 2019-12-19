@@ -36,12 +36,10 @@
 #'                      s_time = 365,
 #'                      volume = "/some/path/to/the/local/output/directory",
 #'                      timeout = "1d",
-#'                      processors=4,
+#'                      parallel_processors=4,
 #'                      reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
-#'                      distance_measure = "msqd",
-#'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"),
-#'                      target_value_f = "infects")
+#'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' @export
 sensitivity_analysis <-function(
                                 n_config,
@@ -50,13 +48,13 @@ sensitivity_analysis <-function(
                                 # User defined simulation's parameters
                                 parameters_fname = "", functions_fname = "",
                                 # Parameters to control the simulation
-                                solver_fname = "", init_fname = NULL, f_time, s_time,
+                                solver_fname = "", f_time, s_time,
                                 # Parameters to manage the simulations' execution
-                                volume = "", timeout = '1d', processors,
+                                volume = dirname(solver_fname), timeout = '1d', parallel_processors = 1,
                                 # Parameters to control the ranking
-                                reference_data, distance_measure_fname, distance_measure,
+                                reference_data = NULL, distance_measure_fname = NULL,
                                 # Parameters to control PRCC
-                                target_value_fname, target_value_f,
+                                target_value_fname = NULL,
                                 # Mange reproducibilty and extend previous experiments
                                 extend = NULL, seed = NULL
                                 ){
@@ -83,12 +81,10 @@ sensitivity_analysis <-function(
                   init_fname = init_fname,
                   f_time = f_time,
                   s_time = s_time,
-                  processors = processors,
+                  parallel = parallel_processors,
                   volume = volume,
                   timeout = timeout,
                   target_value_fname = target_value_fname,
-                  target_value_f = target_value_f,
-                  distance_measure = distance_measure,
                   files = files)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results/")

@@ -60,6 +60,9 @@ cat(args)
 param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
+# Get functions name from file path
+distance_measure <- tools::file_path_sans_ext(basename(params$distance_measure_fname))
+target_value <- tools::file_path_sans_ext(basename(params$target_value_fname))
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
     # Save initial seed value
@@ -90,7 +93,7 @@ final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 file.copy(from = params$target_value_fname, to = params$run_dir)
 # Create a cluster
-cl <- makeCluster(params$processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
+cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
@@ -117,7 +120,7 @@ rank <- parLapply(cl,
                   out_dir = params$out_dir,
                   run_dir = params$run_dir,
                   distance_measure_fname = params$files$distance_measure_fname,
-                  distance_measure = params$distance_measure,
+                  distance_measure = distance_measure,
                   reference_data = params$files$reference_data)
 # Sort the rank ascending, according to the distance computed above.
 rank <- do.call("rbind", rank)
@@ -128,12 +131,12 @@ stopCluster(cl)
 source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
 prcc <- sensitivity.prcc(config = params$config,
                         target_value_fname = params$target_value_fname,
-                        target_value = params$target_value_f,
+                        target_value = target_value,
                         s_time = params$s_time,
                         f_time = params$f_time,
                         out_fname = params$out_fname,
                         out_dir = params$out_dir,
-                        processors = params$processors)
+                        parallel_processors = params$parallel_processors)
 # Plot PRCC
 # Get the parameter names and the total number of parameters
 names_param= names(prcc$PRCC)

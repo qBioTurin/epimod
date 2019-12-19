@@ -29,12 +29,12 @@ experiment.configurations <- function(n_config,
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
         args<-unlist(strsplit(lines[i], ","))
-        # The first element of each line is the name of the file to store the values
-        file <- args[1]
-        # The second element of each line is the function name
-        f <- args[2]
-        # The third element of each line is a tag controlling how/where to save each (set of) parameter(s)
-        tag <- args[3]
+        # The first element of each line is a tag controlling how/where to save each (set of) parameter(s)
+        tag <- args[1]
+        # The second element of each line is the name of the file to store the values
+        file <- args[2]
+        # The third element of each line is the function name
+        f <- args[3]
         # Further arguments, other the first three, are the parameters used by the user defined function
         args<-list(args[-c(1,3)])
         args <- lapply(c(1:length(args)),function(x){
@@ -47,14 +47,14 @@ experiment.configurations <- function(n_config,
             data <- do.call(f,as.list.environment(env))
             if(j==1)
                 config[[i]] <- list()
-            if(tag == "I"){
+            if(tag == "i"){
                 config[[i]][[j]] <- list("init", n_config, data)
             }
-            else if(tag == "G")
+            else if(tag == "g")
             {
                 config[[i]][[j]] <- list(file, n_config, data)
             }
-            else if(tag == "T")
+            else if(tag == "p")
             {
                 # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
                 config[[i]][[j]] <- list(file, -n_config, data)
