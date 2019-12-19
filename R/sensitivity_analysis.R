@@ -41,14 +41,10 @@
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' @export
-sensitivity_analysis <-function(
-                                n_config,
-                                # Directories
-                                out_fname,
+sensitivity_analysis <-function(# Parameters to control the simulation
+                                solver_fname, f_time, s_time,
                                 # User defined simulation's parameters
-                                parameters_fname = "", functions_fname = "",
-                                # Parameters to control the simulation
-                                solver_fname = "", f_time, s_time,
+                                n_config, parameters_fname = NULL, functions_fname = NULL,
                                 # Parameters to manage the simulations' execution
                                 volume = dirname(solver_fname), timeout = '1d', parallel_processors = 1,
                                 # Parameters to control the ranking
@@ -56,7 +52,9 @@ sensitivity_analysis <-function(
                                 # Parameters to control PRCC
                                 target_value_fname = NULL,
                                 # Mange reproducibilty and extend previous experiments
-                                extend = NULL, seed = NULL
+                                extend = NULL, seed = NULL,
+                                # Directories
+                                out_fname = tools::file_path_sans_ext(basename(solver_fname))
                                 ){
 
     chk_dir<- function(path){
