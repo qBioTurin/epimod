@@ -35,7 +35,7 @@ experiment.env_setup <- function(id = NULL,
             idx <- id
         else
             idx <- 1
-        # Check ho to handle the parameter
+        # Check how to handle the parameter
         if(config[[x]][[idx]][[2]] > 0)
         {
             # Write the (set of) parameter(s) to file

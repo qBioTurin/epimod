@@ -58,7 +58,7 @@ experiment.configurations <- function(n_config,
                 }
                 else if(tag == "g")
                 {
-                    config[[i]][[j]] <- list(f, n_config, data)
+                    config[[i]][[j]] <- list(file, n_config, data)
                 }
                 else if(tag == "p")
                 {
