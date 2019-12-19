@@ -5,7 +5,7 @@ sensitivity.prcc<-function(config,
                            parallel_processors
 ){
     library(parallel)
-    library(epiR)
+    library(epimod)
     # Prepare the dataset to compute PRCC.
     # Only parameters changing within the configuration will be used
     # Function to flatten a matrix
