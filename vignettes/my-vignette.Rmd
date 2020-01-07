@@ -77,7 +77,7 @@ model_generation(net_fname = "PredyPredator.PNPRO")
 
 To execute the sensitivity analysis of the model, that is ... , we must define the following objects:
 
-1. parameters_fname (*Functions_list.csv*): ... ;
+1. parameters_fname (*Functions_list.csv*): significato delle colonne, e che serve il ; come sep, spazi non nei path ;
 2. functions_fname (*Functions.R*): ... ;
 3. target_value_fname (*predator.R*): ... .
 
@@ -88,8 +88,7 @@ In *Functions_list.csv* we will write the function name to exploit for sampling 
 
 ```{r}
  setwd("~/Desktop/ProvaEpimod")
-tools:: "Functions_list.csv"
- read.csv(, header=FALSE)
+ read.csv("Functions_list.csv", header=FALSE)
 ```
 
 ```{r, linewidth = 80 }
