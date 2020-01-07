@@ -1,1 +1,1 @@
-i,init,init_generation,min_init=c(0.8,0.8),max_init=c(2,2)
+i; init; init_generation; min_init = c(0.8 , 0.8); max_init = c(2 , 2)

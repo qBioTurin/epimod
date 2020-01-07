@@ -26,7 +26,7 @@ experiment.configurations <- function(n_config,
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)
         # remove unnecessary blanks
-        lines <- gsub(" ", "", lines)
+        # lines <- gsub(" ", "", lines)
         close(conn)
         # Initialize an empty list of configurations
         config <- list()
@@ -38,13 +38,13 @@ experiment.configurations <- function(n_config,
             env <-new.env()
             args<-unlist(strsplit(lines[i], ";"))
             # The first element of each line is a tag controlling how/where to save each (set of) parameter(s)
-            tag <- args[1]
+            tag <- gsub(" ", "", args[1])
             # The second element of each line is the name of the file to store the values
-            file <- args[2]
+            file <- gsub(" ", "", args[2])
             # The third element of each line is the function name
-            f <- args[3]
+            f <- gsub(" ", "", args[3])
             # Further arguments, other the first three, are the parameters used by the user defined function
-            args<-list(args[-c(1:3)])
+            args<-args[-c(1:3)]
             args <- lapply(c(1:length(args)),function(x){
                 eval(parse(text=args[x]), envir = env)
                 })
