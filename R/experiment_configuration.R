@@ -25,6 +25,8 @@ experiment.configurations <- function(n_config,
         }
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)
+        # remove unnecessary blanks
+        lines <- gsub(" ", "", lines)
         close(conn)
         # Initialize an empty list of configurations
         config <- list()
@@ -34,7 +36,7 @@ experiment.configurations <- function(n_config,
         for (i in 1:length(lines)){
             # Create an environment to evaluate the parameters read from file
             env <-new.env()
-            args<-unlist(strsplit(lines[i], ","))
+            args<-unlist(strsplit(lines[i], ";"))
             # The first element of each line is a tag controlling how/where to save each (set of) parameter(s)
             tag <- args[1]
             # The second element of each line is the name of the file to store the values
