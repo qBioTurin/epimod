@@ -64,10 +64,16 @@ library(epimod)
 downloadContainers()
 ``` 
 
+### Something to know
+All the files used in this guide are stored in the folder *Example* inside the *epimod* package.
+All the functions print  the following strings:
+
+- *Docker ID is:*, meaning that ...;
+- *Docker exit status: 0*, meaning that ... .
 ###  Model generation
 
 ```{r, linewidth = 80}
-setwd("~/Desktop/ProvaEpimod")
+
 model_generation(net_fname = "PredyPredator.PNPRO")
 
 ``` 
@@ -87,18 +93,47 @@ Than we change the prey and predator initial conditions from 200 to 1800, knowin
 In *Functions_list.csv* we will write the function name to exploit for sampling the values in the choosen range. 
 
 ```{r}
- setwd("~/Desktop/ProvaEpimod")
- read.csv("Functions_list.csv", header=FALSE)
+getwd()
+read.csv("Functions_list.csv", header=FALSE)
 ```
 
 ```{r, linewidth = 80 }
-# setwd("~/Desktop/ProvaEpimod")
-# sensitivity<-sensitivity_analysis(n_config = 10,
-#                      parameters_fname = "Functions_list.csv",
-#                      functions_fname = "Functions.R",
-#                      target_value_fname = "predator.R",
-#                      solver_fname = "PredyPredator.solver",
-#                      f_time = 50,
-#                      s_time = 1
-#                      )
+
+sensitivity<-sensitivity_analysis(n_config = 10,
+                     parameters_fname = "Functions_list.csv",
+                     functions_fname = "Functions.R",
+                     solver_fname = "PredyPredator.solver",
+                     f_time = 20,
+                     s_time = .1
+                     )
+
+##############################
+## Let draw the orbits characterizing the phase-space
+##############################
+
+library(ggplot2)
+
+load("./PredyPredator/results/PredyPredator-sensitivity.RData")
+
+listFile<-list.files("./PredyPredator/results/", pattern = ".trace")
+
+configID<-t(sapply(1:length(listFile),
+       function(x){
+           return(c(x,config[[1]][[x]][[3]]))
+       }) )
+
+#colnames(configID)<-c("ID","Prey","Predator")
+
+ListTraces<-lapply(1:length(listFile),
+              function(x){
+                trace.tmp=read.csv(paste0("./PredyPredator/results/",listFile[x]), sep = "")
+                trace.tmp=data.frame(trace.tmp,ID=configID[which(configID[,1]==x),2])
+                return(trace.tmp)
+              })
+
+traces <- do.call("rbind", ListTraces)
+
+ggplot(traces,aes(x=Prey,y=Predator,group=ID,col=ID) )+
+    geom_path(arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+
 ``` 

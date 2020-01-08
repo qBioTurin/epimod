@@ -3,11 +3,11 @@
   <gspn name="GSPN" show-color-cmd="false" show-fluid-cmd="false">
     <nodes>
       <place label-x="2.0" marking="1000" name="Prey" x="12.0" y="6.0"/>
-      <transition delay="1.1" name="BirthPrey" nservers-x="0.5" type="EXP" x="6.55" y="6.0"/>
-      <transition delay="0.4" name="DeadPrey" nservers-x="0.5" type="EXP" x="22.55" y="6.0"/>
+      <transition delay="0.6666667" name="BirthPrey" nservers-x="0.5" type="EXP" x="6.55" y="6.0"/>
+      <transition delay="1.333333" name="DeadPrey" nservers-x="0.5" type="EXP" x="22.55" y="6.0"/>
       <place label-x="2.5" label-y="2.0" marking="1000" name="Predator" x="16.0" y="19.0"/>
-      <transition delay="0.1" label-x="1.0" label-y="2.0" name="BirthPredator" nservers-x="0.5" type="EXP" x="6.55" y="19.0"/>
-      <transition delay="0.4" name="DeadPredator" nservers-x="0.5" type="EXP" x="22.55" y="19.0"/>
+      <transition delay="1" label-x="1.0" label-y="2.0" name="BirthPredator" nservers-x="0.5" type="EXP" x="6.55" y="19.0"/>
+      <transition delay="1" name="DeadPredator" nservers-x="0.5" type="EXP" x="22.55" y="19.0"/>
     </nodes>
     <edges>
       <arc head="Prey" kind="OUTPUT" mult="2" tail="BirthPrey"/>
@@ -38,7 +38,7 @@
       </arc>
     </edges>
   </gspn>
-  <measures gspn-name="GSPN" name="Measures">
+  <measures gspn-name="GSPN" name="Measures" simplified-UI="false">
     <assignments/>
     <greatspn/>
     <formulas>
