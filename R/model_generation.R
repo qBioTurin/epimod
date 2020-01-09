@@ -70,17 +70,33 @@ model_generation <-function( out_fname = NULL,
     pwd <- getwd()
     setwd(tmp_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
-    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
-    if (!is.null(functions_fname)){
-     cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
+    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+
+    if ( err_code != 0 )
+    {
+        setwd(pwd)
+        file.copy(paste0(tmp_dir, "*.log"),pwd)
+        cat("Scratch folder:", tmp_dir, "\n")
+        stop()
     }
 
+    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
+    if (!is.null(functions_fname)){
+        cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
+    }
 
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
     setwd(pwd)
-    file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(net_fname)))
+    if ( err_code != 0 )
+    {
+        file.copy(paste0(tmp_dir, "*.log"), chk_dir(dirname(net_fname)))
+        cat("Scratch folder:", tmp_dir, "\n")
+        stop()
+    }
+    else
+    {
+        file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(net_fname)))
+        unlink(tmp_dir, recursive = TRUE)
+    }
 
-
-    unlink(tmp_dir, recursive = TRUE)
 }
