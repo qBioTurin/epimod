@@ -45,7 +45,8 @@ experiment.env_setup <- function(id = NULL,
         {
             # Write single parameter to file (cmdln_params) using the format
             # <parameter name> <parameter value>
-            write.table(x = c(config[[x]][[idx]][[1]],config[[x]][[idx]][[3]]), file = "cmdln_params", col.names = FALSE, row.names = FALSE, append = TRUE)
+            # write.table(x = c(config[[x]][[idx]][[1]],config[[x]][[idx]][[3]]), file = "cmdln_params", col.names = FALSE, row.names = FALSE, append = TRUE)
+            write.table(x = paste(config[[x]][[idx]][[1]],config[[x]][[idx]][[3]]), file="cmdln_params", append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
         }
     })
     setwd(w_dir)

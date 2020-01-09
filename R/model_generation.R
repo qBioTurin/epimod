@@ -74,8 +74,9 @@ model_generation <-function( out_fname = NULL,
 
     if ( err_code != 0 )
     {
+        log_file <- list.files(pattern = "\\.log$")[1]
         setwd(pwd)
-        file.copy(paste0(tmp_dir, "*.log"),pwd)
+        file.copy(paste0(tmp_dir, log_file),pwd)
         cat("Scratch folder:", tmp_dir, "\n")
         stop()
     }
@@ -86,15 +87,17 @@ model_generation <-function( out_fname = NULL,
     }
 
     err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
-    setwd(pwd)
     if ( err_code != 0 )
     {
-        file.copy(paste0(tmp_dir, "*.log"), chk_dir(dirname(net_fname)))
+        log_file <- list.files(pattern = "\\.log$")[1]
+        setwd(pwd)
+        file.copy(paste0(tmp_dir, log_file), chk_dir(dirname(net_fname)))
         cat("Scratch folder:", tmp_dir, "\n")
         stop()
     }
     else
     {
+        setwd(pwd)
         file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(net_fname)))
         unlink(tmp_dir, recursive = TRUE)
     }
