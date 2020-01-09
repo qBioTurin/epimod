@@ -4,17 +4,22 @@
 #' @param parm_fname, file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
 #' @param out_dir, output directory specified by the user
+#' @param out_fname, prefix used to name output files
+#' @param extend, unused parameter. Placeholder for future development
 #' @author Marco Beccuti, Paolo Castagno, Simone Pernice
 #'
 #' @examples
 #'\dontrun{
-#' experiment.env_cleanup(id=1, run_dir="/run/directory", out_fname="simulation", out_dir="/out/directory",)
+#' experiment.configurations(nconfig = 10,
+#'                           param_list = list.csv,
+#'                           out_dir="/path/to/output/directory",
+#'                           out_fname="example")
 #' }
 #' @export
 experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list,
                                       out_dir,out_fname,
-                                      extend = "", optim_vector = NULL){
+                                      extend = NULL, optim_vector = NULL){
     if(!is.null(parm_fname))
     {
         source(parm_fname)
@@ -22,7 +27,7 @@ experiment.configurations <- function(n_config,
     # Read file
     if(is.null(parm_list))
     {
-        stop("No file with parameters configuration provided! Abort!")
+        stop("No file with parameters configuration provided! Abort!\n")
     }
     conn <- file(parm_list,open="r")
     lines <-readLines(conn)
@@ -30,7 +35,6 @@ experiment.configurations <- function(n_config,
     # Initialize an empty list of configurations
     config <- list()
     # TBD: Add the feature to expand an existing configuration
-    # cat(extend)
     # For each line the file defines how to generate a (set of) parameter(s)
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file

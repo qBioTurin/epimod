@@ -153,5 +153,4 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
-    file.remove("./dockerID")
 }

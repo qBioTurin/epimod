@@ -5,7 +5,6 @@ sensitivity.prcc<-function(config,
                            parallel_processors
 ){
     library(parallel)
-    # library(epiR)
     # Prepare the dataset to compute PRCC.
     # Only parameters changing within the configuration will be used
     # Function to flatten a matrix
@@ -58,7 +57,7 @@ sensitivity.prcc<-function(config,
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
-    n_config <- config[[1]][[1]][[2]]
+    n_config <- abs(config[[1]][[1]][[2]])
     # Flatten all the parameters in the configuration
     config <- lapply(c(1:length(config)),function(x){
         inner_config <- lapply(c(1:n_config),function(k){
