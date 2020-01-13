@@ -106,6 +106,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         target_value_fname <- tools::file_path_as_absolute(target_value_fname)
         files[["target_value_fname"]] <- target_value_fname
     }
+
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
@@ -119,6 +120,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   volume = volume,
                   timeout = timeout,
                   files = files)
+
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results/")
     dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)

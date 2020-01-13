@@ -51,7 +51,7 @@
 #'                   s_time = 365,
 #'                   volume = volume = "/some/path/to/the/local/output/directory",
 #'                   timeout = "1d",
-#'                   processors=4,
+#'                   parallel_processors=4,
 #'                   reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                   distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                   distance_measure = "msqd",
@@ -72,7 +72,7 @@ model_calibration <-function(
     # Parameters to control the simulation
     solver_fname, solver_type = "LSODA", init_fname = NULL, f_time, s_time, n_run=1,
     # Parameters to manage the simulations' execution
-    volume = "", timeout = '1d', processors,
+    volume = NULL, timeout = '1d', parallel_processors = 1,
     # Vectors to control the optimization
     ini_v, lb_v, ub_v, nb.stop.improvement,
     # Parameters to control the ranking
@@ -86,12 +86,32 @@ model_calibration <-function(
     }
 
     files <- list(
-        parameters_fname = parameters_fname,
-        functions_fname = functions_fname,
-        solver_fname = solver_fname,
-        distance_measure_fname = distance_measure_fname,
-        reference_data = reference_data
+        solver_fname = solver_fname
     )
+
+    if(!is.null(parameters_fname))
+    {
+        parameters_fname <- tools::file_path_as_absolute(parameters_fname)
+        files[["parameters_fname"]] <- parameters_fname
+    }
+    if(!is.null(functions_fname))
+    {
+        functions_fname <- tools::file_path_as_absolute(functions_fname)
+        files[["functions_fname"]] <- functions_fname
+    }
+    if(!is.null(reference_data))
+    {
+        reference_data <- tools::file_path_as_absolute(reference_data)
+        files[["reference_data"]] <- reference_data
+    }
+    if(!is.null(distance_measure_fname))
+    {
+        distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
+        files[["distance_measure_fname"]] <- distance_measure_fname
+    }
+
+
+
     params <- list(
                    run_dir = chk_dir("/root/scratch/"),
                    out_dir = chk_dir("/root/data/results/"),
@@ -111,7 +131,7 @@ model_calibration <-function(
                    files = files,
                    extend = extend,
                    seed = seed,
-                   processors = processors)
+                   processors = parallel_processors)
 
     res_dir <- paste0(chk_dir(volume),"results/")
     dir.create(res_dir, showWarnings = FALSE)
