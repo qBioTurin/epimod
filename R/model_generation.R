@@ -91,14 +91,14 @@ model_generation <-function( out_fname = NULL,
     {
         log_file <- list.files(pattern = "\\.log$")[1]
         setwd(pwd)
-        file.copy(paste0(tmp_dir, log_file), chk_dir(dirname(net_fname)))
+        file.copy(paste0(tmp_dir, log_file), chk_dir(dirname(tools::file_path_as_absolute(net_fname))))
         cat("Scratch folder:", tmp_dir, "\n")
         stop()
     }
     else
     {
         setwd(pwd)
-        file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(net_fname)))
+        file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(tools::file_path_as_absolute(file.path(net_fname)))))
         unlink(tmp_dir, recursive = TRUE)
     }
 
