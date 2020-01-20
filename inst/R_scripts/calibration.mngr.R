@@ -13,7 +13,6 @@ calibration.worker <- function(id, config, params){
                           solver_fname = params$files$solver_fname,
                           solver_type = params$solver_type,
                           n_run = 1,
-                          init_fname = params$init_fname,
                           s_time = params$s_time,
                           f_time = params$f_time,
                           timeout = params$timeout,

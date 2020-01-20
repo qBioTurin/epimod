@@ -129,7 +129,6 @@ model_calibration <-function(
                    out_dir = chk_dir("/root/data/results/"),
                    out_fname = out_fname,
                    solver_type = solver_type,
-                   init_fname = init_fname,
                    f_time = f_time,
                    s_time = s_time,
                    n_run = n_run,

@@ -33,11 +33,11 @@ sensitivity<-sensitivity_analysis(n_config = 20,
 
 model_calibration(out_fname = "calibration",
                   parameters_fname = "Functions_list.csv",
-                  functions_fname = "FunctionsTarget.R",
+                  functions_fname = "CalibrationFunctionsTarget.R",
                   solver_fname = "PredyPredator.solver",
                   reference_data = "reference_data.csv",
                   distance_measure_fname = "msqd.R" ,
-                  target_value_fname = "Target.R" ,
+                  # target_value_fname = "Target.R" ,
                   f_time = 20,
                   s_time = .1,
                   # Vectors to control the optimization
