@@ -16,9 +16,7 @@ experiment.env_setup <- function(id = NULL,
                                  config = NULL)
 {
     # Set the directory
-    if(is.null(id))
-        dest_dir <- dest_dir
-    else
+    if(!is.null(id))
         dest_dir <- paste0(dest_dir, id)
     # Create the directory
     dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)

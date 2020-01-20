@@ -34,7 +34,7 @@
 #' model_generation(out_fname = "Solver",
 #'                  net_fname = paste0(local_dir, "Configuration/Pertussis"),
 #'                  functions_fname = "transitions.cpp")
-#'
+#' }
 #' @export
 model_generation <-function( out_fname = NULL,
                              net_fname,

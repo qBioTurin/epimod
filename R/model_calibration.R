@@ -3,7 +3,7 @@
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
-#' FUNCTION_NAME(reference_dataset, siulation_output)
+#' FUNCTION_NAME(reference_dataset, simulation_output)
 #'
 #' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries)
 #' in addiction to that, the user is asked to provide a function that, given the output of the solver, returns the releveant measure (one column) used to evalaute the quality of the solution.
@@ -32,7 +32,6 @@
 #' @param volume The folder to mount within the Doker image providing all the necessary files
 #' @param reference_data Data to compare with the simulations' results
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data
-#' @param distance_measure The name of the function defining the distance measure
 #' @param out_dir Directory where to store all the output generated
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
@@ -41,7 +40,7 @@
 #'\dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' base_dir <- "/root/scratch/"
-#' library(EpiTCM)
+#' library(epimod)
 #' model_calibration(out_fname = "calibration",
 #'                   parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                   functions_fname = paste0(local_dir, "Configuration/Functions.R"),
@@ -54,40 +53,55 @@
 #'                   parallel_processors=4,
 #'                   reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                   distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
-#'                   distance_measure = "msqd",
 #'                   target_value_fname = paste0(local_dir, "Configuration/Select.R"),
 #'                   target_value_f = "infects",
-#'                   # Vectors to control the optimization
 #'                   ini_v = c(0.48264229, 0.17799173, 0.43572218, 0.06540719, 0.49887063, 0.36793130, 0.01818745, 0.18572619, 0.42815506, 0.07962422, 0.35074813, 0.35074813, 0.36386227),
 #'                   ub_v = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 #'                   lb_v = c(0, 0, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7),
 #'                   nb.stop.improvement = 3000000)
-#'
+#' }
 #' @export
 model_calibration <-function(
-    # Directories
-    out_fname,
-    # User defined simulation's parameters
-    parameters_fname = "", functions_fname = "",
     # Parameters to control the simulation
-    solver_fname, solver_type = "LSODA", init_fname = NULL, f_time, s_time, n_run=1,
+    solver_fname, f_time, s_time, solver_type = "LSODA", n_run=1,
+    # User defined simulation's parameters
+    parameters_fname = NULL, functions_fname = NULL,
     # Parameters to manage the simulations' execution
-    volume = NULL, timeout = '1d', parallel_processors = 1,
+    volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Vectors to control the optimization
-    ini_v, lb_v, ub_v, nb.stop.improvement,
+    ini_v, lb_v, ub_v, nb.stop.improvement = 1e6,
     # Parameters to control the ranking
-    reference_data, distance_measure_fname, distance_measure,
-    target_value_fname, target_value_f,
-    seed = NULL, extend = NULL){
+    reference_data = NULL, distance_measure_fname = NULL,
+    # Mange reproducibilty and extend previous experiments
+    extend = NULL, seed = NULL,
+    # Directories
+    out_fname){
 
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
 
-    files <- list(
-        solver_fname = solver_fname
-    )
+    files <- list()
+    # Fix input parameter out_fname
+    if(is.null(solver_fname))
+    {
+        stop("Missing solver file! Abort")
+    }
+    else
+    {
+        solver_fname <- tools::file_path_as_absolute(solver_fname)
+        files[["solver_fname"]] <- solver_fname
+    }
+    if(is.null(out_fname))
+    {
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+    }
+    # Fix input parameters path
+    if(is.null(volume))
+    {
+        volume <- tools::file_path_sans_ext(basename(solver_fname))
+    }
 
     if(!is.null(parameters_fname))
     {
@@ -110,8 +124,6 @@ model_calibration <-function(
         files[["distance_measure_fname"]] <- distance_measure_fname
     }
 
-
-
     params <- list(
                    run_dir = chk_dir("/root/scratch/"),
                    out_dir = chk_dir("/root/data/results/"),
@@ -123,7 +135,7 @@ model_calibration <-function(
                    n_run = n_run,
                    volume = volume,
                    timeout = timeout,
-                   distance_measure = distance_measure,
+                   distance_measure = tools::file_path_sans_ext(basename(distance_measure_fname)),
                    ini_v = ini_v,
                    lb_v = lb_v,
                    ub_v = ub_v,
@@ -144,7 +156,7 @@ model_calibration <-function(
     params$files <- files
     parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
     saveRDS(params, file = parms_fname, version = 2)
-    file.copy(from = target_value_fname, to = res_dir)
+    # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
     if(!is.null(seed)){
         params$seed <- paste0(params$out_dir,basename(seed))
@@ -156,5 +168,4 @@ model_calibration <-function(
     }
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_calibration Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
-
 }

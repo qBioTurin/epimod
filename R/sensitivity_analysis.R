@@ -39,13 +39,14 @@
 #'                      reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
+#' }
 #' @export
 sensitivity_analysis <-function(# Parameters to control the simulation
                                 solver_fname, f_time, s_time,
                                 # User defined simulation's parameters
                                 n_config, parameters_fname = NULL, functions_fname = NULL,
                                 # Parameters to manage the simulations' execution
-                                volume = NULL, timeout = '1d', parallel_processors = 1,
+                                volume = getwd(), timeout = '1d', parallel_processors = 1,
                                 # Parameters to control the ranking
                                 reference_data = NULL, distance_measure_fname = NULL,
                                 # Parameters to control PRCC
