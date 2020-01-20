@@ -4,16 +4,14 @@
 \alias{sensitivity_analysis}
 \title{Run sensitivity analisys}
 \usage{
-sensitivity_analysis(n_config, out_dir, out_fname, parameters_fname = "",
-  functions_fname = "", solver_fname = "", init_fname = NULL, f_time,
-  s_time, volume = "", timeout = "1d", processors, reference_data,
-  distance_measure_fname, distance_measure, target_value_fname,
-  target_value_f, extend = NULL, seed = NULL)
+sensitivity_analysis(solver_fname, f_time, s_time, n_config,
+  parameters_fname = NULL, functions_fname = NULL, volume = getwd(),
+  timeout = "1d", parallel_processors = 1, reference_data = NULL,
+  distance_measure_fname = NULL, target_value_fname = NULL,
+  extend = NULL, seed = NULL, out_fname = NULL)
 }
 \arguments{
 \item{n_config, }{number of configuratons to generate}
-
-\item{out_dir, }{output directory specified by the user}
 
 \item{parm_fname, }{file with the definition of user defined functions}
 
@@ -38,6 +36,24 @@ The functions allowed to compute the parameters are either R functions or user d
 
 Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 }
+\examples{
+\dontrun{
+local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
+sensitivity_analysis(n_config = 2^4,
+                     out_fname = "sensitivity",
+                     parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
+                     functions_fname = paste0(local_dir, "Configuration/Functions.R"),
+                     solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
+                     f_time = 365*21,
+                     s_time = 365,
+                     volume = "/some/path/to/the/local/output/directory",
+                     timeout = "1d",
+                     parallel_processors=4,
+                     reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
+                     distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
+                     target_value_fname = paste0(local_dir, "Configuration/Select.R"))
+}
+}
 \author{
-Paolo Castagno
+Beccuti Marco, Castagno Paolo, Pernice Simone
 }

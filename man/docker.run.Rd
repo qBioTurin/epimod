@@ -4,17 +4,13 @@
 \alias{docker.run}
 \title{Run docker container}
 \usage{
-docker.run(group = "docker", params = NULL, DockerSwarm = FALSE)
+docker.run(params = NULL)
 }
 \arguments{
-\item{group, }{a character string. Two options: \code{"sudo"} or \code{"docker"}, depending to which group the user belongs}
-
-\item{params, }{a character string containing all parameters needed to run the docker container}
-
-\item{DockerSwarm, }{a bolean value used to enable docker execution in swarm mode.}
+\item{params, }{a character string containing all parameters needed to run the docker container.}
 }
 \value{
-0 if success, 1 if parameters are missing, 2 if the group is neither sudo or docker, 3 if docker execution fails.
+0 if success, 1 if parameters are missing, 2 if dockerid file is present, 3 if docker execution fails.
 }
 \description{
 This is an internal function executing a docker container. Not to be used by users.
@@ -22,10 +18,10 @@ This is an internal function executing a docker container. Not to be used by use
 \examples{
 \dontrun{
     #running runDocker
-     docker.run(group="docker", params=NULL)
+     docker.run(params=NULL)
 
 }
 }
 \author{
-Raffaele Calogero
+Beccuti Marco, Castagno Paolo, Pernice Simone
 }

@@ -34,8 +34,8 @@ objfn <-function(x, params, cl) {
     # Generate a new configuration using the optimizaton output x
     id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
     config <- experiment.configurations(n_config = 1,
-                              parm_list = params$files$parameters_fname,
                               parm_fname = params$files$functions_fname,
+                              parm_list = params$files$parameters_fname,
                               out_dir = params$out_dir,
                               out_fname = params$out_fname,
                               optim_vector = x)
