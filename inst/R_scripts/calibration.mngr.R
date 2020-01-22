@@ -109,7 +109,7 @@ ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
              lower=params$lb_v,
-             control=list(nb.stop.improvement=params$nb.stop.improvement),
+             control=params$control,
              params = params,
              cl = cl)
 stopCluster(cl)
