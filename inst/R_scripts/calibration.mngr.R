@@ -61,7 +61,7 @@ objfn <-function(x, params, cl) {
 
     source(params$files$distance_measure_fname)
     # distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), trace))
-    distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), traces))
+    distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
     # Write header to the file
     optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
     if(!file.exists(optim_trace_fname))
