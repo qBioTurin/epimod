@@ -109,7 +109,9 @@ ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
              lower=params$lb_v,
-             control=params$control,
+             control=list( max.call = params$max.call,
+                           threshold.stop = params$threshold.stop,
+                           max.time = params$max.time),
              params = params,
              cl = cl)
 stopCluster(cl)
