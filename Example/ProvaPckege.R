@@ -37,16 +37,32 @@ model_calibration(out_fname = "calibration",
                   solver_fname = "PredyPredator.solver",
                   reference_data = "reference_data.csv",
                   distance_measure_fname = "msqd.R" ,
-                  # target_value_fname = "Target.R" ,
                   f_time = 20,
                   s_time = .1,
                   # Vectors to control the optimization
-                  ini_v = c(0,0),
+                  ini_v = c(5,5),
                   ub_v = c(10, 10),
                   lb_v = c(0, 0),
-                  max.call = 150)
+                  max.call = 1e7,
+                  threshold.stop = NULL,
+                  max.time = 30
+                  )
 
-
+model_calibration(out_fname = "calibration",
+                  solver_fname = "PredyPredator.solver",
+                  reference_data = "reference_data.csv",
+                  distance_measure_fname = "msqd.R" ,
+                  f_time = 20,
+                  s_time = .1,
+                  # Vectors to control the optimization
+                  ini_v = c(5,5),
+                  ub_v = c(10, 10),
+                  lb_v = c(0, 0),
+                  optim_vector_mod = TRUE,
+                  max.call = 10,
+                  threshold.stop = NULL,
+                  max.time = 30
+)
 
 ####### With General function
 # Model generation step
