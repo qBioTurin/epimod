@@ -31,7 +31,7 @@ experiment.configurations <- function(n_config,
     {
         stop("No file with parameters configuration provided! Abort!\n")
     }
-    if(is.null(parm_list))
+    if(!is.null(parm_list))
     {
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)
