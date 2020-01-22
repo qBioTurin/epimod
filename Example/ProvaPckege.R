@@ -44,7 +44,7 @@ model_calibration(out_fname = "calibration",
                   ini_v = c(0,0),
                   ub_v = c(10, 10),
                   lb_v = c(0, 0),
-                  nb.stop.improvement = 150)
+                  max.call = 150)
 
 
 

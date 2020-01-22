@@ -69,7 +69,9 @@ model_calibration <-function(
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Vectors to control the optimization
-    ini_v, lb_v, ub_v, nb.stop.improvement = 1e6,
+    ini_v, lb_v, ub_v,
+    # Variables controlling optimization termination
+    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
     # Parameters to control the ranking
     reference_data = NULL, distance_measure_fname = NULL,
     # Mange reproducibilty and extend previous experiments
@@ -138,7 +140,7 @@ model_calibration <-function(
                    ini_v = ini_v,
                    lb_v = lb_v,
                    ub_v = ub_v,
-                   nb.stop.improvement = nb.stop.improvement,
+                   control = list(threshold.stop, max.call, max.time),
                    files = files,
                    extend = extend,
                    seed = seed,
