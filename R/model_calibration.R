@@ -69,7 +69,7 @@ model_calibration <-function(
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Vectors to control the optimization
-    ini_v, lb_v, ub_v,
+    ini_v, lb_v, ub_v, optim_vector_mod = FALSE,
     # Variables controlling optimization termination
     threshold.stop = NULL, max.call = 1e7, max.time = NULL,
     # Parameters to control the ranking
@@ -140,6 +140,7 @@ model_calibration <-function(
                    ini_v = ini_v,
                    lb_v = lb_v,
                    ub_v = ub_v,
+                   optim_vector_mod = optim_vector_mod,
                    threshold.stop = threshold.stop,
                    max.call = max.call ,
                    max.time = max.time,
