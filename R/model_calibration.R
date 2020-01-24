@@ -22,17 +22,34 @@
 #'
 #' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
 #'
-#' @param config_fname File collecting all the configurations generated in the sensitivity analysis
-#' @param functions_fname File with the user defined functions to generate istances of the parameters
 #' @param solver_fname .solver file (generated in with the function model_generation)
-#' @param int_fname File containing the initial marking, if required
-#' @param f_time Final solution time
+#' @param f_time Final solution time.
 #' @param s_time Time step at whicch explicit estimates for the system are desired
-#' @param out_fname Prefix to the output file name
+#' @param solver_type  \itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
+#'  \item Stochastic:  SSA or TAUG,
+#'  \item Hybrid: HLSODA or (H)SDE or HODE
+#'  } Default is LSODA.
+#' @param n_run .....
+#' @param parameters_fname
+#' @param functions_fname File with the user defined functions to generate istances of the parameters
 #' @param volume The folder to mount within the Doker image providing all the necessary files
+#' @param timeout ....
+#' @param parallel_processors Integer for the parallel....
+#' @param ini_v Initial values for the parameters to be optimized.
+#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
+#' @param optim_vector_mod Logical value for ... . Default is FALSE.
+#' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
+#' \itemize{
+#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+#' \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
+#'
 #' @param reference_data Data to compare with the simulations' results
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data
-#' @param out_dir Directory where to store all the output generated
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param extend ...
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name
+#'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #'

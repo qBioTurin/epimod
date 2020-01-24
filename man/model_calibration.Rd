@@ -7,32 +7,53 @@
 model_calibration(solver_fname, f_time, s_time, solver_type = "LSODA",
   n_run = 1, parameters_fname = NULL, functions_fname = NULL,
   volume = getwd(), timeout = "1d", parallel_processors = 1, ini_v,
-  lb_v, ub_v, nb.stop.improvement = 1e+06, reference_data = NULL,
+  lb_v, ub_v, optim_vector_mod = FALSE, threshold.stop = NULL,
+  max.call = 1e+07, max.time = NULL, reference_data = NULL,
   distance_measure_fname = NULL, extend = NULL, seed = NULL,
   out_fname)
 }
 \arguments{
 \item{solver_fname}{.solver file (generated in with the function model_generation)}
 
-\item{f_time}{Final solution time}
+\item{f_time}{Final solution time.}
 
 \item{s_time}{Time step at whicch explicit estimates for the system are desired}
+
+\item{solver_type}{\itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
+\item Stochastic:  SSA or TAUG,
+\item Hybrid: HLSODA or (H)SDE or HODE
+} Default is LSODA.}
+
+\item{n_run}{.....}
 
 \item{functions_fname}{File with the user defined functions to generate istances of the parameters}
 
 \item{volume}{The folder to mount within the Doker image providing all the necessary files}
 
+\item{timeout}{....}
+
+\item{parallel_processors}{Integer for the parallel....}
+
+\item{ini_v}{Initial values for the parameters to be optimized.}
+
+\item{lb_v, ub_v}{Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.}
+
+\item{optim_vector_mod}{Logical value for ... . Default is FALSE.}
+
+\item{threshold.stop, max.call, max.time}{These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA::GenSA}}\itemize{
+\item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+\item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+\item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}}
+
 \item{reference_data}{Data to compare with the simulations' results}
 
-\item{distance_measure_fname}{File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data}
+\item{distance_measure_fname}{File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.}
+
+\item{extend}{...}
+
+\item{seed}{Value that can be set to initialize the internal random generator.}
 
 \item{out_fname}{Prefix to the output file name}
-
-\item{config_fname}{File collecting all the configurations generated in the sensitivity analysis}
-
-\item{int_fname}{File containing the initial marking, if required}
-
-\item{out_dir}{Directory where to store all the output generated}
 }
 \description{
 this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models

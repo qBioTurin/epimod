@@ -4,8 +4,9 @@
 \alias{experiment.configurations}
 \title{Generates a set of simulation's configurations}
 \usage{
-experiment.configurations(n_config, parm_fname = NULL, parm_list,
-  out_dir, out_fname, extend = NULL, optim_vector = NULL)
+experiment.configurations(n_config, parm_fname = NULL,
+  parm_list = NULL, out_dir, out_fname, extend = NULL,
+  optim_vector = NULL, optim_vector_mod = FALSE)
 }
 \arguments{
 \item{n_config, }{number of configuratons to generate}
