@@ -20,6 +20,7 @@ experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,
                                       extend = NULL, optim_vector = NULL, optim_vector_mod = FALSE){
+
     if(is.null(parm_fname) && optim_vector_mod)
     {
         stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
