@@ -43,8 +43,9 @@ model_calibration(out_fname = "calibration",
                   ini_v = c(5,5),
                   ub_v = c(10, 10),
                   lb_v = c(0, 0),
-                  max.call = 1e7,
-                  threshold.stop = NULL,
+                  optim_vector_mod = TRUE,
+                  max.call = 10,
+                  threshold.stop = 1e-3,
                   max.time = 30
                   )
 
@@ -54,14 +55,14 @@ model_calibration(out_fname = "calibration",
                   distance_measure_fname = "msqd.R" ,
                   f_time = 20,
                   s_time = .1,
-                  # Vectors to control the optimization
+                  # Variables to control the optimization
                   ini_v = c(5,5),
                   ub_v = c(10, 10),
                   lb_v = c(0, 0),
-                  optim_vector_mod = TRUE,
+                  optim_vector_mod = FALSE,
                   max.call = 10,
-                  threshold.stop = NULL,
-                  max.time = 30
+                  # threshold.stop = NULL,
+                  # max.time = 30
 )
 
 ####### With General function
