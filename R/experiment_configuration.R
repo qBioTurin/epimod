@@ -20,6 +20,14 @@ experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,
                                       extend = NULL, optim_vector = NULL, optim_vector_mod = FALSE){
+    if(is.null(parm_list) && !optim_vector_mod)
+    {
+        stop("Wrong parameters: impossible to generate an initial configuration!\n Please provide a configuration file or allow to use the optimization vector without modification.\n Abort!\n")
+    }
+    if(is.null(parm_fname) && optim_vector_mod)
+    {
+        stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
+    }
     # Initialize an empty list of configurations
     config <- list()
     if(!is.null(parm_fname))
@@ -27,11 +35,7 @@ experiment.configurations <- function(n_config,
         source(parm_fname)
     }
     # Read file
-    if(is.null(parm_list) && !optim_vector_mod)
-    {
-        stop("No file with parameters configuration provided! Abort!\n")
-    }
-    if(!is.null(parm_list))
+        if(!is.null(parm_list))
     {
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)
@@ -79,13 +83,9 @@ experiment.configurations <- function(n_config,
                 # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
                 config[[i]][[j]] <- list(file, -n_config, data)
             }
-            else if(optim_vector_mod)
+            else if(!optim_vector_mod)
             {
                 config[[i]][[j]] <- list("init", n_config, optim_vector)
-            }
-            else
-            {
-                stop("Wrong parameter configuration: either provide parm_list/optim_vector_mod! Abort!\n")
             }
         }
     }
