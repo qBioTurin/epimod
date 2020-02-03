@@ -12,8 +12,10 @@ RUN mkdir /root/data; chmod 777 /root/data
 
 # Install all required R packages
 RUN R -e "install.packages('devtools')"
-COPY marker /dev/null
-RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
+# date > marker
+# COPY marker /dev/null
+# RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
+RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='expand-param-list',dependencies=TRUE)"
 
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
