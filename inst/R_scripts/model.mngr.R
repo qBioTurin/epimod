@@ -3,12 +3,21 @@ library(epimod)
 
 model.worker<-function(id,
                        solver_fname, solver_type,
-                       s_time, f_time,
+                       s_time, f_time, n_run,
                        timeout, run_dir, out_fname, out_dir,
-                       files, config){
-    # Setup the environment
-    experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir)
-    # Environment settled, now run
+                       files, config = NULL){
+    if(!is.null(config))
+    {
+        # Setup the environment
+        experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir, n_run = n_run)
+        # Environment settled, now run
+    }
+    else
+    {
+        # Handle simulations without parameters
+        dir.create(paste0(run_dir, id), recursive = TRUE, showWarnings = FALSE)
+        file.copy(from = solver_fname, to = paste0(run_dir, id))
+    }
     # Change working directory to the one corresponding at the current id
     pwd <- getwd()
     setwd(paste0(run_dir,id))
@@ -53,14 +62,21 @@ if(is.null(params$seed)){
         # We want to extend a previous experiment
         assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
 }
-# Generate configuration
-params$config <-experiment.configurations(n_config = 1,
-                                          parm_fname = params$files$functions_fname,
-                                          parm_list = params$files$parameters_fname,
-                                          out_dir = chk_dir(params$out_dir),
-                                          out_fname = params$out_fname,
-                                          extend = params$extend,
-                                          optim_vector = params$ini_v)
+if(!is.null(params$files$parameters_fname)
+   && !is.null(params$files$functions_fname)
+   && !is.null(params$ini_v))
+{
+    # Generate configuration
+    params$config <-experiment.configurations(n_config = params$n_config,
+                                              parm_fname = params$files$functions_fname,
+                                              parm_list = params$files$parameters_fname,
+                                              out_dir = chk_dir(params$out_dir),
+                                              out_fname = params$out_fname,
+                                              extend = params$extend,
+                                              optim_vector = params$ini_v)
+} else {
+    params$config = NULL
+}
 saveRDS(params,  file = paste0(param_fname))
 # Create a cluster
 cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
@@ -68,12 +84,13 @@ cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
 exec_times <- parLapply( cl,
-                         c(1:params$n_run),                # execute n_run istances
+                         c(1:params$n_config),          # execute n_config istances
                          model.worker,                  # of sensitivity.worker
                          solver_fname = params$solver_fname,  # using the following parameters
                          solver_type = params$solver_type,
                          s_time = params$s_time,
                          f_time = params$f_time,
+                         n_run = params$n_run,
                          timeout = params$timeout,
                          run_dir = params$run_dir,
                          out_fname = params$out_fname,

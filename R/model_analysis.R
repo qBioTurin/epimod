@@ -1,6 +1,6 @@
 model_analysis <-function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, n_run = 1, solver_type = "LSODA",
+    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA",
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL,
     # Parameters to manage the simulations' execution
@@ -51,6 +51,7 @@ model_analysis <-function(
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
+                  n_config = n_config,
                   run_dir = chk_dir("/root/scratch/"),
                   out_dir = chk_dir("/root/data/results/"),
                   out_fname = out_fname,
@@ -85,7 +86,9 @@ model_analysis <-function(
     p_fname <- paste0(res_dir, parms_fname,".RDS")
     # Use version = 2 for compatibility issue
     saveRDS(parms,  file = p_fname, version = 2)
-    p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
+    p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location in the docker image file system
     # Run the docker image
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_analysis Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
+    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
 }
