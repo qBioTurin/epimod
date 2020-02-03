@@ -1,15 +1,14 @@
 model_analysis <-function(
-    # Directories
-    out_fname,
-    # User defined simulation's parameters
-    parameters_fname = "", functions_fname = "",
     # Parameters to control the simulation
-    solver_fname = "", solver_type = "HLSODA", init_fname = NULL, f_time, s_time, n_run = 1,
+    solver_fname, f_time, s_time, n_run = 1, solver_type = "LSODA",
+    # User defined simulation's parameters
+    parameters_fname = NULL, functions_fname = NULL, ini_v = NULL,
     # Parameters to manage the simulations' execution
-    volume = "", timeout = '1d', processors,
+    volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
-    ini_v
+    # Directories
+    out_fname = NULL
 ){
 
     chk_dir<- function(path){
@@ -17,11 +16,38 @@ model_analysis <-function(
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     # Parameters used to set up the runing environment
-    files <- list(
-        parameters_fname = parameters_fname,
-        functions_fname = functions_fname,
-        solver_fname = solver_fname
-    )
+    files <- list()
+    # Fix input parameter out_fname
+    if(is.null(solver_fname))
+    {
+        stop("Missing solver file! Abort")
+    }
+    else
+    {
+        solver_fname <- tools::file_path_as_absolute(solver_fname)
+        files[["solver_fname"]] <- solver_fname
+    }
+    if(is.null(out_fname))
+    {
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+    }
+    # Fix input parameters path
+    if(is.null(volume))
+    {
+        volume <- tools::file_path_sans_ext(basename(solver_fname))
+    }
+
+    if(!is.null(parameters_fname))
+    {
+        parameters_fname <- tools::file_path_as_absolute(parameters_fname)
+        files[["parameters_fname"]] <- parameters_fname
+    }
+    if(!is.null(functions_fname))
+    {
+        functions_fname <- tools::file_path_as_absolute(functions_fname)
+        files[["functions_fname"]] <- functions_fname
+    }
+
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
@@ -30,10 +56,9 @@ model_analysis <-function(
                   out_fname = out_fname,
                   solver_fname = solver_fname,
                   solver_type = solver_type,
-                  init_fname = init_fname,
                   f_time = f_time,
                   s_time = s_time,
-                  processors = processors,
+                  parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,
                   files = files,
@@ -63,5 +88,4 @@ model_analysis <-function(
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
     # Run the docker image
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d epimod_analysis Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
-    file.remove("./dockerID")
 }
