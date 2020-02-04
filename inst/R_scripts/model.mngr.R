@@ -62,10 +62,12 @@ if(is.null(params$seed)){
         # We want to extend a previous experiment
         assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
 }
-if(!is.null(params$files$parameters_fname)
-   && !is.null(params$files$functions_fname)
-   && !is.null(params$ini_v))
+if(is.null(params$files$parameters_fname)
+   && is.null(params$files$functions_fname)
+   && is.null(params$ini_v))
 {
+    params$config = NULL
+} else {
     # Generate configuration
     params$config <-experiment.configurations(n_config = params$n_config,
                                               parm_fname = params$files$functions_fname,
@@ -74,8 +76,6 @@ if(!is.null(params$files$parameters_fname)
                                               out_fname = params$out_fname,
                                               extend = params$extend,
                                               optim_vector = params$ini_v)
-} else {
-    params$config = NULL
 }
 saveRDS(params,  file = paste0(param_fname))
 # Create a cluster
