@@ -9,7 +9,7 @@ model.worker<-function(id,
     if(!is.null(config))
     {
         # Setup the environment
-        experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir, n_run = n_run)
+        experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir)
         # Environment settled, now run
     }
     else
