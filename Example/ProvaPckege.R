@@ -44,10 +44,10 @@ model_calibration(out_fname = "calibration",
                   ub_v = c(10, 10),
                   lb_v = c(0, 0),
                   optim_vector_mod = TRUE,
-                  max.call = 10,
+                  max.call = 20,
                   threshold.stop = 1e-3,
                   max.time = 30
-                  )
+)
 
 model_calibration(out_fname = "calibration",
                   solver_fname = "PredyPredator.solver",
@@ -56,13 +56,13 @@ model_calibration(out_fname = "calibration",
                   f_time = 20,
                   s_time = .1,
                   # Variables to control the optimization
-                  ini_v = c(5,5),
-                  ub_v = c(10, 10),
+                  ini_v = c(20,20),
+                  ub_v = c(40, 40),
                   lb_v = c(0, 0),
                   optim_vector_mod = FALSE,
-                  max.call = 10,
-                  # threshold.stop = NULL,
-                  # max.time = 30
+                  max.call = 2000,
+                  threshold.stop = NULL,
+                  max.time = 30
 )
 
 ####### With General function
@@ -70,3 +70,20 @@ model_calibration(out_fname = "calibration",
 setwd("ExampleWithGeneralFunction/")
 model_generation(net_fname = "PredyPredator.PNPRO",functions_fname="transitions.cpp")
 
+
+# What-if Analysis
+
+model_analysis(out_fname = "model_analysis",
+               # Parameters to control the simulation
+               solver_fname = "PredyPredator.solver",
+               f_time = 20,
+               s_time = .1,
+               n_run = 1,
+               solver_type = "LSODA",
+               # User defined simulation's parameters
+               # parameters_fname = "Functions_list.csv",
+               # functions_fname = "CalibrationFunctionsTarget.R",
+               # ini_v = c(1,1),
+               # Parameters to manage the simulations' execution
+               parallel_processors = 1
+)
