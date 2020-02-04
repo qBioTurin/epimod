@@ -55,7 +55,6 @@ model_analysis <-function(
                   run_dir = chk_dir("/root/scratch/"),
                   out_dir = chk_dir("/root/data/results/"),
                   out_fname = out_fname,
-                  solver_fname = solver_fname,
                   solver_type = solver_type,
                   f_time = f_time,
                   s_time = s_time,

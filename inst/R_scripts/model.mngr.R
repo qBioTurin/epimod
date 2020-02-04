@@ -86,7 +86,7 @@ clusterEvalQ(cl, sessionInfo())
 exec_times <- parLapply( cl,
                          c(1:params$n_config),          # execute n_config istances
                          model.worker,                  # of sensitivity.worker
-                         solver_fname = params$solver_fname,  # using the following parameters
+                         solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = params$solver_type,
                          s_time = params$s_time,
                          f_time = params$f_time,
