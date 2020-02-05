@@ -1,0 +1,3 @@
+p; Prey; runif; n=1; min = 0.8; max=2
+p; Predator; runif; n=1; min = 0.8; max=2
+
