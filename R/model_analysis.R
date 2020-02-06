@@ -53,7 +53,7 @@ model_analysis <-function(
     parms <- list(n_run = n_run,
                   n_config = n_config,
                   run_dir = chk_dir("/root/scratch/"),
-                  out_dir = chk_dir("/root/data/results/"),
+                  out_dir = chk_dir("/root/data/results_model_analysis/"),
                   out_fname = out_fname,
                   solver_type = solver_type,
                   f_time = f_time,
@@ -64,7 +64,7 @@ model_analysis <-function(
                   files = files,
                   ini_v = ini_v)
     # Create the folder to store results
-    res_dir <- paste0(chk_dir(volume),"results/")
+    res_dir <- paste0(chk_dir(volume),"results_model_analysis/")
     dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
