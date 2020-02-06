@@ -32,7 +32,7 @@ experiment.configurations <- function(n_config,
         source(parm_fname)
     }
     # Read file
-        if(!is.null(parm_list))
+    if(!is.null(parm_list))
     {
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)

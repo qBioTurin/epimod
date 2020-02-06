@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This project file has been saved by the New GreatSPN Editor, v.100 --><project name="New project" version="121">
+  <gspn name="GSPN" show-color-cmd="false" show-fluid-cmd="false">
+    <nodes>
+      <place label-x="2.0" marking="1000" name="Prey" x="12.0" y="6.0"/>
+      <transition delay="0.6666667" name="BirthPrey" nservers-x="0.5" type="EXP" x="6.55" y="6.0"/>
+      <transition delay="1.333333" name="DeadPrey" nservers-x="0.5" type="EXP" x="22.55" y="6.0"/>
+      <place label-x="2.5" label-y="2.0" marking="1000" name="Predator" x="16.0" y="19.0"/>
+      <transition delay="1" label-x="1.0" label-y="2.0" name="BirthPredator" nservers-x="0.5" type="EXP" x="6.55" y="19.0"/>
+      <transition delay="1" name="DeadPredator" nservers-x="0.5" type="EXP" x="22.55" y="19.0"/>
+    </nodes>
+    <edges>
+      <arc head="Prey" kind="OUTPUT" mult="2" tail="BirthPrey"/>
+      <arc head="BirthPrey" kind="INPUT" tail="Prey">
+        <point x="13.0" y="2.0"/>
+        <point x="3.5" y="2.0"/>
+        <point x="3.5" y="7.0"/>
+      </arc>
+      <arc head="DeadPrey" kind="INPUT" tail="Prey"/>
+      <arc head="DeadPrey" kind="INPUT" tail="Predator">
+        <point x="17.0" y="11.0"/>
+      </arc>
+      <arc head="Predator" kind="OUTPUT" tail="DeadPrey">
+        <point x="23.0" y="16.5"/>
+      </arc>
+      <arc head="BirthPredator" kind="INPUT" tail="Prey">
+        <point x="7.0" y="11.0"/>
+      </arc>
+      <arc head="Predator" kind="OUTPUT" mult="2" tail="BirthPredator"/>
+      <arc head="BirthPredator" kind="INPUT" tail="Predator">
+        <point x="17.0" y="26.5"/>
+        <point x="3.5" y="26.5"/>
+        <point x="3.5" y="20.0"/>
+      </arc>
+      <arc head="DeadPredator" kind="INPUT" tail="Predator"/>
+      <arc head="Prey" kind="OUTPUT" tail="BirthPredator">
+        <point x="13.0" y="16.5"/>
+      </arc>
+    </edges>
+  </gspn>
+  <measures gspn-name="GSPN" name="Measures" simplified-UI="false">
+    <assignments/>
+    <greatspn/>
+    <formulas>
+      <formula comment="Basic statistics of the toolchain execution." language="STAT"/>
+      <formula comment="All the basic Petri net measures" language="ALL"/>
+    </formulas>
+  </measures>
+</project>
