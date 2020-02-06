@@ -1,0 +1,7 @@
+Error in experiment.configurations(n_config = 1, parm_fname = params$files$functions_fname,  :
+  Wrong parameters: impossible to generate a configuration to run!
+ Please provide a file with parameter generating functions or allow to use the optimization vector without modification.
+ Abort!
+Calls: GenSA -> <Anonymous> -> fn -> experiment.configurations
+Execution halted
+/root/data/results_model_calibrarion/params_calibration.RDS

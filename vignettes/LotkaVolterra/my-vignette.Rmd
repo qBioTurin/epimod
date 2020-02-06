@@ -180,7 +180,7 @@ load("./results_Sensitivity/PredyPredator-sensitivity.RData")
 load("./results_Sensitivity/ranking_PredyPredator-sensitivity.RData")
 reference <- as.data.frame(t(read.csv("reference_data.csv",
                                       header = FALSE,
-                                      sep = "")))
+                                      sep = " ")))
 
 # Then, we read all the trajectories generated saving them in a list called
 # ListTraces. List that will be rewritten as a data frame in order to use ggplot.

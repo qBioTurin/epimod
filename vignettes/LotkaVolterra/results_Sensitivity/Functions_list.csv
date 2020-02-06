@@ -1,3 +1,0 @@
-i; init; init_generation; min_init = c(0.9 , 0.8); max_init = c(1.8 , 2)
-p; BirthPrey; runif; n=1; min = 0.1; max=2
-p; BirthPredator; runif; n=1; min = 0.1; max=2
