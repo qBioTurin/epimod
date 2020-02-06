@@ -112,7 +112,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
                   run_dir = chk_dir("/root/scratch/"),
-                  out_dir = chk_dir("/root/data/results/"),
+                  out_dir = chk_dir("/root/data/results_Sensitivity/"),
                   out_fname = out_fname,
                   solver_fname = solver_fname,
                   f_time = f_time,
@@ -123,7 +123,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   files = files)
 
     # Create the folder to store results
-    res_dir <- paste0(chk_dir(volume),"results/")
+    res_dir <- paste0(chk_dir(volume),"results_Sensitivity/")
     dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)
     volume <- tools::file_path_as_absolute(volume)
     # Copy all the files to the directory docker will mount to the image's file system

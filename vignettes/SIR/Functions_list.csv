@@ -1,0 +1,3 @@
+i; init; init_generation; min_init = c(.5 , 1e-4); max_init = c(1 , .1); N = 1
+p; Recovery; runif; n=1; min = 0.01; max=2
+p; Infection; runif; n=1; min = 0.01; max=2
