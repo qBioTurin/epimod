@@ -37,7 +37,7 @@
 #' @param parallel_processors Integer for the parallel....
 #' @param ini_v Initial values for the parameters to be optimized.
 #' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
-#' @param optim_vector_mod Logical value for ... . Default is FALSE.
+#' @param ini_vector_mod Logical value for ... . Default is FALSE.
 #' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
 #' \itemize{
 #' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
@@ -86,7 +86,7 @@ model_calibration <-function(
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Vectors to control the optimization
-    ini_v, lb_v, ub_v, optim_vector_mod = FALSE,
+    ini_v, lb_v, ub_v, ini_vector_mod = FALSE,
     # Variables controlling optimization termination
     threshold.stop = NULL, max.call = 1e7, max.time = NULL,
     # Parameters to control the ranking
@@ -157,7 +157,7 @@ model_calibration <-function(
                    ini_v = ini_v,
                    lb_v = lb_v,
                    ub_v = ub_v,
-                   optim_vector_mod = optim_vector_mod,
+                   ini_vector_mod = ini_vector_mod,
                    threshold.stop = threshold.stop,
                    max.call = max.call ,
                    max.time = max.time,

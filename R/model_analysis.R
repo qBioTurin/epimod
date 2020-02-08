@@ -2,7 +2,7 @@ model_analysis <-function(
     # Parameters to control the simulation
     solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA",
     # User defined simulation's parameters
-    parameters_fname = NULL, functions_fname = NULL, ini_v = NULL,
+    parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Mange reproducibilty and extend previous experiments
@@ -62,7 +62,8 @@ model_analysis <-function(
                   volume = volume,
                   timeout = timeout,
                   files = files,
-                  ini_v = ini_v)
+                  ini_v = ini_v,
+                  ini_vector_mod = ini_vector_mod)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results_model_analysis/")
     dir.create(res_dir, showWarnings = FALSE)

@@ -19,9 +19,9 @@
 experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,
-                                      extend = NULL, optim_vector = NULL, optim_vector_mod = FALSE){
+                                      extend = NULL, ini_vector = NULL, ini_vector_mod = FALSE){
 
-    if(is.null(parm_fname) && optim_vector_mod)
+    if(is.null(parm_fname) && ini_vector_mod)
     {
         stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
     }
@@ -61,8 +61,8 @@ experiment.configurations <- function(n_config,
         for(j in c(1:n_config)){
             if(j==1)
                 config[[i]] <- list()
-            if(!is.null(optim_vector)){
-                env$x <- optim_vector
+            if(!is.null(ini_vector)){
+                env$x <- ini_vector
             }
             if(!is.null(parm_list))
             {
@@ -80,9 +80,9 @@ experiment.configurations <- function(n_config,
                 # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
                 config[[i]][[j]] <- list(file, -n_config, data)
             }
-            else if(!optim_vector_mod)
+            else if(!ini_vector_mod)
             {
-                config[[i]][[j]] <- list("init", n_config, optim_vector)
+                config[[i]][[j]] <- list("init", n_config, ini_vector)
             }
             else
             {
