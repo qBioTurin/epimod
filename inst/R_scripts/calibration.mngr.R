@@ -37,8 +37,8 @@ objfn <-function(x, params, cl) {
                               parm_list = params$files$parameters_fname,
                               out_dir = params$out_dir,
                               out_fname = params$out_fname,
-                              optim_vector = x,
-                              optim_vector_mod = params$optim_vector_mod)
+                              ini_vector = x,
+                              ini_vector_mod = params$ini_vector_mod)
     # calibration.worker(id = id, config = config, params = params)
     # traces <- read.csv(paste0(params$out_dir,params$out_fname,"-",id,".trace"), sep = "")
     trace_names <- parLapply(cl,

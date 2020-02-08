@@ -75,7 +75,8 @@ if(is.null(params$files$parameters_fname)
                                               out_dir = chk_dir(params$out_dir),
                                               out_fname = params$out_fname,
                                               extend = params$extend,
-                                              optim_vector = params$ini_v)
+                                              ini_vector = params$ini_v,
+                                              ini_vector_mod = params$ini_vector_mod)
 }
 saveRDS(params,  file = paste0(param_fname))
 # Create a cluster
