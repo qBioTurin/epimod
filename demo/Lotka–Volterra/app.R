@@ -39,7 +39,6 @@ msqd<-function(reference, output)
 
 
 server <- function(input, output, session) {
-    debounce(input$n_traces, 1000)
     reference <- as.data.frame(t(read.csv("input/reference_data.csv", header = FALSE, sep = "")))
     rv <- reactiveValues(folders = lapply(list.dirs()[-1], function(x){basename(x)}),
                          rank = data.frame(),

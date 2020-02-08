@@ -10,7 +10,7 @@ downloadContainers()
 model_generation(net_fname = "./input/PredyPredator.PNPRO")
 
 # Step 3: run sensitivity analysus
-sensitivity<-sensitivity_analysis(n_config = 20,
+sensitivity<-sensitivity_analysis(n_config = 20000,
                                   parameters_fname = "input/Functions_list.csv",
                                   functions_fname = "input/Functions.R",
                                   solver_fname = "PredyPredator.solver",
