@@ -166,7 +166,7 @@ model_calibration <-function(
                    seed = seed,
                    processors = parallel_processors)
 
-    res_dir <- paste0(chk_dir(volume),"results_model_calibrarion/")
+    res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
     dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
