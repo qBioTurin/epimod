@@ -21,9 +21,7 @@ model_analysis <-function(
     if(is.null(solver_fname))
     {
         stop("Missing solver file! Abort")
-    }
-    else
-    {
+    } else {
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }

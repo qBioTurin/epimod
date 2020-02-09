@@ -145,7 +145,7 @@ model_calibration <-function(
 
     params <- list(
                    run_dir = chk_dir("/root/scratch/"),
-                   out_dir = chk_dir("/root/data/results_model_calibrarion/"),
+                   out_dir = chk_dir("/root/data/results_model_calibration/"),
                    out_fname = out_fname,
                    solver_type = solver_type,
                    f_time = f_time,

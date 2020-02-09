@@ -44,15 +44,6 @@ server <- function(input, output, session) {
                          rank = data.frame(),
                          ls = data.frame())
 
-    # update.ls() <- function()
-    # {
-    #     ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
-    #     if(length(ls) != length(rv$ls))
-    #     {
-    #         rv$ls <- as.data.frame(ls)
-    #     }
-    # }
-
     update.rank <- function()
     {
         rank_file <- file.path(input$dir,"rank.csv", fsep = .Platform$file.sep)
@@ -202,7 +193,7 @@ server <- function(input, output, session) {
             geom_point(data=reference,aes(x=time,y=V2), col="red")
     })
 
-    output$text <- renderPrint({
+    output$text <- renderText({
         rnk <- rv$rank
         if(input$n_traces > 0 && length(rnk) > 0)
         {
@@ -214,8 +205,6 @@ server <- function(input, output, session) {
     })
 
     observeEvent(input$update_page, {
-        cat("ciao")
-
         rv$folders <- lapply(list.dirs()[-1], function(x){basename(x)})
      })
 
