@@ -51,17 +51,16 @@ server <- function(input, output, session) {
     {
         rank_file <- file.path(input$dir,"rank.csv", fsep = .Platform$file.sep)
         # Load the ls of the target folder
-        # ls <- update.ls()
         ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
         if(length(ls) != length(rv$ls))
         {
             rv$ls <- as.data.frame(ls)
         }
         # Remove traces with already a rank
-        if( length(rv$rank) > 0)
-        {
-           ls <- ls[-which(ls %in% rv$rank$file_name)]
-        }
+        # if( length(rv$rank) > 0)
+        # {
+        #    ls <- ls[-which(ls %in% rv$rank$file_name)]
+        # }
         # Compute the rank for the remaining traces
         if(length(ls) > 0)
         {
@@ -82,9 +81,9 @@ server <- function(input, output, session) {
             rownames(rnk) <- c()
             rnk$distance <- sapply(rnk$distance,as.numeric)
             # Keep the previously computed ranks
-            if(!is.null(rv$rank))
-                rnk <- rbind(rv$rank, rnk)
-            write.table(rnk, file = rank_file, sep = " ", row.names = FALSE)
+            # if(!is.null(rv$rank))
+            #     rnk <- rbind(rv$rank, rnk)
+            # write.table(rnk, file = rank_file, sep = " ", row.names = FALSE)
             rv$rank <- rnk
         }
     }
@@ -206,7 +205,6 @@ server <- function(input, output, session) {
     })
 
     observeEvent(input$update_page, {
-        cat("ciao")
 
         rv$folders <- lapply(list.dirs()[-1], function(x){basename(x)})
      })
