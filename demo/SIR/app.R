@@ -15,11 +15,11 @@ ui <- fluidPage( fluidRow( column(3,
                  tabsetPanel( tabPanel("Phase",
                                        fluidRow(column(12, plotOutput("plot_phase")))
                                        ),
-                              tabPanel("Prey",
-                                       fluidRow(column(12, plotOutput("plot_prey")))
+                              tabPanel("Susceptibles",
+                                       fluidRow(column(12, plotOutput("plot_susceptibles")))
                                        ),
-                              tabPanel("Predator",
-                                       fluidRow(column(12, plotOutput("plot_predator")))
+                              tabPanel("Infects",
+                                       fluidRow(column(12, plotOutput("plot_infects")))
                                        )
                               ),
                  fluidRow(column(5, offset=1, verbatimTextOutput("text")))
@@ -28,13 +28,16 @@ ui <- fluidPage( fluidRow( column(3,
 
 msqd<-function(reference, output)
 {
-    Predator <- output[,"Predator"]
-    Prey <- output[,"Prey"]
+    reference[,1] -> times_ref
+    reference[,3] -> infect_ref
 
-    diff.Predator <- sum(( Predator - reference[,2] )^2 )
-    diff.Prey <- sum(( Prey - reference[,1] )^2 )
+    # We will consider the same time points
+    Infect <- output[which(output$Time %in% times_ref),"I"]
+    infect_ref <- infect_ref[which( times_ref %in% output$Time)]
 
-    return(diff.Predator+diff.Prey)
+    diff.Infect <- sum(( Infect - infect_ref )^2 )
+
+    return(diff.Infect)
 }
 
 
@@ -43,15 +46,6 @@ server <- function(input, output, session) {
     rv <- reactiveValues(folders = lapply(list.dirs()[-1], function(x){basename(x)}),
                          rank = data.frame(),
                          ls = data.frame())
-
-    # update.ls() <- function()
-    # {
-    #     ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
-    #     if(length(ls) != length(rv$ls))
-    #     {
-    #         rv$ls <- as.data.frame(ls)
-    #     }
-    # }
 
     update.rank <- function()
     {
@@ -152,13 +146,13 @@ server <- function(input, output, session) {
                                })
             traces <- do.call("rbind", ListTraces)
             plot <- plot +
-                geom_path(data=traces,aes(x=Prey,y=Predator,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+                geom_path(data=traces,aes(x=I,y=S,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
             geom_point(data=reference,aes(x=V1,y=V2), col="red")
     })
 
-    output$plot_prey <- renderPlot({
+    output$plot_susceptibles <- renderPlot({
         time <- (0:200)*.1
         plot <- ggplot()
         rnk <- rv$rank
@@ -174,13 +168,13 @@ server <- function(input, output, session) {
                                })
             traces <- do.call("rbind", ListTraces)
             plot <- plot +
-                geom_path(data=traces,aes(x=Time,y=Prey,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+                geom_path(data=traces,aes(x=Time/7,y=S,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
-            geom_point(data=reference,aes(x=time,y=V1), col="red")
+            geom_point(data=reference,aes(x=time/7,y=V2), col="red")
     })
 
-    output$plot_predator <- renderPlot({
+    output$plot_infects <- renderPlot({
         time <- (0:200)*.1
         plot <- ggplot()
         rnk <- rv$rank
@@ -196,7 +190,7 @@ server <- function(input, output, session) {
                                })
             traces <- do.call("rbind", ListTraces)
             plot <- plot +
-                geom_path(data=traces,aes(x=Time,y=Predator,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+                geom_path(data=traces,aes(x=Time,y=I,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
             geom_point(data=reference,aes(x=time,y=V2), col="red")

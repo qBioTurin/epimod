@@ -40,6 +40,7 @@ msqd<-function(reference, output)
 
 server <- function(input, output, session) {
     reference <- as.data.frame(t(read.csv("input/reference_data.csv", header = FALSE, sep = "")))
+
     rv <- reactiveValues(folders = lapply(list.dirs()[-1], function(x){basename(x)}),
                          rank = data.frame(),
                          ls = data.frame())
@@ -48,8 +49,8 @@ server <- function(input, output, session) {
     {
         rank_file <- file.path(input$dir,"rank.csv", fsep = .Platform$file.sep)
         # Load the ls of the target folder
-        # ls <- update.ls()
         ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
+        # ls <- as.data.frame(ls)
         if(length(ls) != length(rv$ls))
         {
             rv$ls <- as.data.frame(ls)
@@ -85,47 +86,6 @@ server <- function(input, output, session) {
             rv$rank <- rnk
         }
     }
-    # rank <- reactive({
-    #     rank_file <- file.path(input$dir,"rank.csv", fsep = .Platform$file.sep)
-    #     rnk <- NULL
-    #     # Load the ls of the target folder
-    #     ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
-    #     # Remove traces with already a rank
-    #     if( file.exists(rank_file))
-    #     {
-    #         rnk <- read.csv(file =rank_file, sep = "")
-    #         ls <- ls[-which(ls %in% rnk)]
-    #     }
-    #     # Compute the rank for the remaining traces
-    #     r <- sapply(ls,
-    #                 function(x){
-    #                     # Compute the distance
-    #                     d <- msqd(reference,
-    #                               read.csv(file.path(input$dir, x, fsep = .Platform$file.sep), sep = ""))
-    #                     id <- as.numeric(gsub(pattern="(.trace)",
-    #                                           gsub(pattern="([[:graph:]]+(-){1})",
-    #                                                x=x, replacement=""),
-    #                                           replacement="")
-    #                                      )
-    #                     return(c(id, d, x))
-    #                 })
-    #     if(length(r) > 0)
-    #     {
-    #         r <- as.data.frame(t(r))
-    #         names(r) <- c("id", "distance", "file_name")
-    #         r$distance <- sapply(r$distance,as.numeric)
-    #         # Keep the previously computed ranks
-    #         if(!is.null(rnk))
-    #             r <- rbind(rnk, r)
-    #         write.table(r, file = rank_file, sep = " ", row.names = FALSE)
-    #         rownames(r) <- c()
-    #     }
-    #     else
-    #     {
-    #         r <- rnk
-    #     }
-    #     r
-    # })
 
     output$plot_phase <- renderPlot({
         plot <- ggplot()
@@ -193,7 +153,7 @@ server <- function(input, output, session) {
             geom_point(data=reference,aes(x=time,y=V2), col="red")
     })
 
-    output$text <- renderText({
+    output$text <- renderPrint({
         rnk <- rv$rank
         if(input$n_traces > 0 && length(rnk) > 0)
         {
@@ -205,6 +165,8 @@ server <- function(input, output, session) {
     })
 
     observeEvent(input$update_page, {
+        cat("ciao")
+
         rv$folders <- lapply(list.dirs()[-1], function(x){basename(x)})
      })
 
