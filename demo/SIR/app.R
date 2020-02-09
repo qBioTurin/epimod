@@ -146,14 +146,13 @@ server <- function(input, output, session) {
                                })
             traces <- do.call("rbind", ListTraces)
             plot <- plot +
-                geom_path(data=traces,aes(x=I,y=S,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+                geom_path(data=traces,aes(x=S,y=I,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
-            geom_point(data=reference,aes(x=V1,y=V2), col="red")
+            geom_point(data=reference,aes(x=V2,y=V3), col="red")
     })
 
     output$plot_susceptibles <- renderPlot({
-        time <- (0:200)*.1
         plot <- ggplot()
         rnk <- rv$rank
         if(input$n_traces > 0 && length(rnk) > 0)
@@ -168,14 +167,13 @@ server <- function(input, output, session) {
                                })
             traces <- do.call("rbind", ListTraces)
             plot <- plot +
-                geom_path(data=traces,aes(x=Time/7,y=S,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
+                geom_path(data=traces,aes(x=Time,y=S,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
-            geom_point(data=reference,aes(x=time/7,y=V2), col="red")
+            geom_point(data=reference,aes(x=V1,y=V2), col="red")
     })
 
     output$plot_infects <- renderPlot({
-        time <- (0:200)*.1
         plot <- ggplot()
         rnk <- rv$rank
         if(input$n_traces > 0 && length(rnk) > 0)
@@ -193,7 +191,7 @@ server <- function(input, output, session) {
                 geom_path(data=traces,aes(x=Time,y=I,group=Distance,col=Distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
         }
         plot +
-            geom_point(data=reference,aes(x=time,y=V2), col="red")
+            geom_point(data=reference,aes(x=V1,y=V3), col="red")
     })
 
     output$text <- renderPrint({
