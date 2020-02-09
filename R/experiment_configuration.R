@@ -43,6 +43,7 @@ experiment.configurations <- function(n_config,
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
+        is_function <- TRUE
         if(!is.null(parm_list))
         {
             args<-unlist(strsplit(lines[i], ";"))
@@ -53,10 +54,13 @@ experiment.configurations <- function(n_config,
             # The third element of each line is the function name
             f <- gsub(" ", "", args[3])
             # Further arguments, other the first three, are the parameters used by the user defined function
-            args<-args[-c(1:3)]
-            args <- lapply(c(1:length(args)),function(x){
-                eval(parse(text=args[x]), envir = env)
+            if(length(args) >3 )
+            {
+                args<-args[-c(1:3)]
+                args <- lapply(c(1:length(args)),function(x){
+                    eval(parse(text=args[x]), envir = env)
                 })
+            }
         }
         for(j in c(1:n_config)){
             if(j==1)
@@ -66,7 +70,14 @@ experiment.configurations <- function(n_config,
             }
             if(!is.null(parm_list))
             {
-                data <- do.call(f,as.list.environment(env))
+                if(is_function)
+                {
+                    data <- do.call(f,as.list.environment(env))
+                }
+                else
+                {
+                    data <- f
+                }
             }
             if(exists("tag") && tag == "i"){
                 config[[i]][[j]] <- list("init", n_config, data)
