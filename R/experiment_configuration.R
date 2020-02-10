@@ -54,7 +54,8 @@ experiment.configurations <- function(n_config,
             # The third element of each line is the function name
             f <- gsub(" ", "", args[3])
             # Further arguments, other the first three, are the parameters used by the user defined function
-            if(length(args) > 3)
+            # if(length(args) > 3)
+            if(suppressWarnings(is.na(as.numeric(f))))
             {
                 args<-args[-c(1:3)]
                 args <- lapply(c(1:length(args)),function(x){
