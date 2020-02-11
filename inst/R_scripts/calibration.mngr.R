@@ -106,27 +106,27 @@ experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
 cl <- makeCluster(params$processors, type = "FORK")
 # Call gensa with init_vector as initail condition, upper_vector and lower_vector as boundaries conditions.
-control <- list()
+ctl <- list()
 if(!is.null(params$max.call))
 {
-    control$max.call <- params$max.call
+    ctl$max.call <- params$max.call
 }
 if(!is.null(params$threshold.stop))
 {
-    control$threshold.stop <- params$threshold.stop
+    ctl$threshold.stop <- params$threshold.stop
 }
 if(!is.null(params$max.call))
 {
-    control$max.time <- params$max.time
+    ctl$max.time <- params$max.time
 }
+# control=list( max.call = params$max.call,
+#               threshold.stop = params$threshold.stop,
+#               max.time = params$max.time),
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
              lower=params$lb_v,
-             # control=list( max.call = params$max.call,
-             #               threshold.stop = params$threshold.stop,
-             #               max.time = params$max.time),
-             control = control,
+             control = ctl,
              params = params,
              cl = cl)
 stopCluster(cl)

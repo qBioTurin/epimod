@@ -186,5 +186,5 @@ model_calibration <-function(
     # Run the docker image
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data/ -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
 }
