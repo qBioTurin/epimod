@@ -46,8 +46,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # User defined simulation's parameters
     n_config,
     # Parameters to manage the simulations' execution
-    volume = getwd(),
-){
+    volume = getwd()
+    ){
 
     chk_dir<- function(path){
         pwd <- basename(path)
