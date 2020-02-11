@@ -27,8 +27,10 @@ docker.run <- function( params=NULL){
     }
 
     ## to execute docker
-    cat(paste("docker run --privileged=true ",params,"\n\n", sep=""))
-    system(paste("docker run --privileged=true ",params, sep=""))
+    userid=system("id -u", intern = TRUE)
+    groupid=system("id -g", intern = TRUE)
+    cat(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
+    system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
 
     ## to obtain the Docker ID by file
     dockerid=readLines("dockerID", warn = FALSE)
