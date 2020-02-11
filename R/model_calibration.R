@@ -117,11 +117,6 @@ model_calibration <-function(
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
     }
     # Fix input parameters path
-    if(is.null(volume))
-    {
-        volume <- tools::file_path_sans_ext(basename(solver_fname))
-    }
-
     if(!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
