@@ -5,10 +5,10 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev
 
 # Create scratch directory
-RUN mkdir /root/scratch; chmod 777 /root/scratch
+RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
 
 # Create data directory
-RUN mkdir /root/data; chmod 777 /root/data
+RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 
 # Install all required R packages
 RUN R -e "install.packages('devtools')"
