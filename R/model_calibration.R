@@ -154,7 +154,7 @@ model_calibration <-function(
                    ub_v = ub_v,
                    ini_vector_mod = ini_vector_mod,
                    threshold.stop = threshold.stop,
-                   max.call = max.call ,
+                   max.call = max.call,
                    max.time = max.time,
                    files = files,
                    extend = extend,
