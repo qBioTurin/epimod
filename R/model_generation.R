@@ -38,29 +38,33 @@
 #' @export
 model_generation <-function( out_fname = NULL,
                              net_fname,
-                             functions_fname=NULL ){
+                             functions_fname=NULL,
+                             volume = getwd()){
 
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
 
-
-
+    volume <- tools::file_path_as_absolute(volume)
     # Create temp files and dirs
-    tmp_dir <- paste0(chk_dir(tempdir()),"generation_tmp/")
-    dir.create(path = tmp_dir,showWarnings = FALSE)
+    out_dir <- file.path(volume,"generation", fsep = .Platform$file.sep)
+    if(file.exists(out_dir))
+    {
+        unlink(out_dir, recursive = TRUE)
+    }
+    dir.create(path = out_dir,showWarnings = FALSE)
     if(!is.null(out_fname)){
         # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
-        netname <- paste0(tmp_dir,out_fname,".PNPRO")
+        netname <- file.path(out_dir,out_fname,".PNPRO", fsep = ..Platform$file.sep)
         file.copy(from = net_fname, to = netname)
         netname <- tools::file_path_sans_ext(netname)
-    }else{
-        file.copy(from = net_fname, to = tmp_dir)
+    } else {
+        file.copy(from = net_fname, to = out_dir)
         netname <- tools::file_path_sans_ext(basename(net_fname))
 
     }
-    file.copy(from = functions_fname, to = tmp_dir)
+    file.copy(from = functions_fname, to = out_dir)
     # Set commandline to unfold the PN
 
     #reading docker image names
@@ -68,16 +72,16 @@ model_generation <-function( out_fname = NULL,
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
 
     pwd <- getwd()
-    setwd(tmp_dir)
+    setwd(out_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
 
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
         setwd(pwd)
-        file.copy(paste0(tmp_dir, log_file),pwd)
-        cat("Scratch folder:", tmp_dir, "\n")
+        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep),pwd)
+        cat("Scratch folder:", out_dir, "\n")
         stop()
     }
 
@@ -86,20 +90,20 @@ model_generation <-function( out_fname = NULL,
         cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
     }
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", tmp_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
         setwd(pwd)
-        file.copy(paste0(tmp_dir, log_file), chk_dir(dirname(tools::file_path_as_absolute(net_fname))))
-        cat("Scratch folder:", tmp_dir, "\n")
+        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), chk_dir(dirname(tools::file_path_as_absolute(net_fname))))
+        cat("Check ", out_dir, " for logs\n")
         stop()
-    }
-    else
-    {
+    } else {
         setwd(pwd)
-        file.copy(paste0(tmp_dir, netname, ".solver"), chk_dir(dirname(tools::file_path_as_absolute(file.path(net_fname)))))
-        unlink(tmp_dir, recursive = TRUE)
+        file.copy(file.path(out_dir,paste0(netname, ".solver"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(netname, ".net"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(netname, ".def"),fsep = .Platform$file.sep),chk_dir(volume))
+        unlink(out_dir, recursive = TRUE)
     }
 
 }
