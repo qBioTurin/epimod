@@ -7,7 +7,7 @@
 model_calibration(solver_fname, f_time, s_time, solver_type = "LSODA",
   n_run = 1, parameters_fname = NULL, functions_fname = NULL,
   volume = getwd(), timeout = "1d", parallel_processors = 1, ini_v,
-  lb_v, ub_v, optim_vector_mod = FALSE, threshold.stop = NULL,
+  lb_v, ub_v, ini_vector_mod = FALSE, threshold.stop = NULL,
   max.call = 1e+07, max.time = NULL, reference_data = NULL,
   distance_measure_fname = NULL, extend = NULL, seed = NULL,
   out_fname)
@@ -38,9 +38,10 @@ model_calibration(solver_fname, f_time, s_time, solver_type = "LSODA",
 
 \item{lb_v, ub_v}{Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.}
 
-\item{optim_vector_mod}{Logical value for ... . Default is FALSE.}
+\item{ini_vector_mod}{Logical value for ... . Default is FALSE.}
 
-\item{threshold.stop, max.call, max.time}{These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA::GenSA}}\itemize{
+\item{threshold.stop, max.call, max.time}{These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
+\itemize{
 \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
 \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
 \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}}

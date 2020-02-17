@@ -17,9 +17,24 @@
 #'
 #' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 #'
+#' @param solver_fname .solver file (generated in with the function model_generation)
+#' @param f_time Final solution time.
+#' @param s_time Time step at whicch explicit estimates for the system are desired
 #' @param n_config, number of configuratons to generate
-#' @param parm_fname, file with the definition of user defined functions
+#' @param parameters_fname file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
+#' @param functions_fname File with the user defined functions to generate istances of the parameters
+#' @param volume The folder to mount within the Doker image providing all the necessary files
+#' @param timeout Maximum execution time allowed to each configuration
+#' @param parallel_processors Integer for the number of available processors to use
+#' @param reference_data Data to compare with the simulations' results
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param extend ...
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name
+#'
+#'
+#'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #'

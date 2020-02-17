@@ -4,7 +4,8 @@
 \alias{model_generation}
 \title{Run model calibration}
 \usage{
-model_generation(out_fname = NULL, net_fname, functions_fname = NULL)
+model_generation(out_fname = NULL, net_fname, functions_fname = NULL,
+  volume = getwd())
 }
 \arguments{
 \item{out_fname}{Prefix to the output file name}
