@@ -29,7 +29,7 @@
 #' @param parallel_processors Integer for the number of available processors to use
 #' @param reference_data Data to compare with the simulations' results
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param extend ...
+#' @param extend TO BE DONE
 #' @param seed Value that can be set to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
 #'
@@ -121,8 +121,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
-                  run_dir = chk_dir("/root/scratch/"),
-                  out_dir = chk_dir("/root/data/results_sensitivity_analysis/"),
+                  run_dir = chk_dir("/home/docker/scratch/"),
+                  out_dir = chk_dir("/home/docker/data/results_sensitivity_analysis/"),
                   out_fname = out_fname,
                   solver_fname = solver_fname,
                   f_time = f_time,

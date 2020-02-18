@@ -45,8 +45,8 @@ model_analysis <-function(
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
                   n_config = n_config,
-                  run_dir = chk_dir("/root/scratch/"),
-                  out_dir = chk_dir("/root/data/results_model_analysis/"),
+                  run_dir = chk_dir("/home/docker/scratch/"),
+                  out_dir = chk_dir("/home/docker/data/results_model_analysis/"),
                   out_fname = out_fname,
                   solver_type = solver_type,
                   f_time = f_time,
