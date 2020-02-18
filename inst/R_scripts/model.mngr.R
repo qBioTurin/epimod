@@ -78,7 +78,7 @@ if(is.null(params$files$parameters_fname)
                                               ini_vector = params$ini_v,
                                               ini_vector_mod = params$ini_vector_mod)
 }
-saveRDS(params,  file = paste0(param_fname))
+saveRDS(params,  file = paste0(param_fname), version=2)
 # Create a cluster
 cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
 # Save session's info

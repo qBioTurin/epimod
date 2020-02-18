@@ -11,11 +11,35 @@ sensitivity_analysis(solver_fname, f_time, s_time, n_config,
   volume = getwd())
 }
 \arguments{
+\item{solver_fname}{.solver file (generated in with the function model_generation)}
+
+\item{f_time}{Final solution time.}
+
+\item{s_time}{Time step at whicch explicit estimates for the system are desired}
+
 \item{n_config, }{number of configuratons to generate}
 
-\item{parm_fname, }{file with the definition of user defined functions}
+\item{volume}{The folder to mount within the Doker image providing all the necessary files}
+
+\item{parameters_fname}{file with the definition of user defined functions}
 
 \item{parm_list, }{file listing the name of the functions, the parameters and the name under which the parameters have to be saved}
+
+\item{functions_fname}{File with the user defined functions to generate istances of the parameters}
+
+\item{timeout}{Maximum execution time allowed to each configuration}
+
+\item{parallel_processors}{Integer for the number of available processors to use}
+
+\item{reference_data}{Data to compare with the simulations' results}
+
+\item{distance_measure_fname}{File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.}
+
+\item{extend}{TO BE DONE}
+
+\item{seed}{Value that can be set to initialize the internal random generator.}
+
+\item{out_fname}{Prefix to the output file name}
 
 \item{n_config, }{number of configuratons to generate}
 

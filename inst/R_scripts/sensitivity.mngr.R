@@ -93,7 +93,7 @@ params$config <-experiment.configurations(n_config = params$n_config,
                                    out_dir = chk_dir(params$out_dir),
                                    out_fname = params$out_fname,
                                    extend = params$extend)
-saveRDS(params,  file = paste0(param_fname))
+saveRDS(params,  file = paste0(param_fname), version = 2)
 # Save final seed
 final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
