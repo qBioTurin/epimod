@@ -98,14 +98,16 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 # Create a cluster
-cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
+cl <- makeCluster(params$parallel_processors,
+                  outfile=paste0("log-", params$out_fname, ".txt"),
+                  type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
 exec_times <- parLapply( cl,
                          c(1:params$n_config),                # execute n_config istances
                          sensitivity.worker,                  # of sensitivity.worker
-                         solver_fname = params$solver_fname,  # using the following parameters
+                         solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
                          s_time = params$s_time,
                          f_time = params$f_time,

@@ -124,7 +124,6 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   run_dir = chk_dir("/home/docker/scratch/"),
                   out_dir = chk_dir("/home/docker/data/results_sensitivity_analysis/"),
                   out_fname = out_fname,
-                  solver_fname = solver_fname,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
