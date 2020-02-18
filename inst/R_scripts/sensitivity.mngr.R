@@ -99,7 +99,7 @@ final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
-                  outfile=paste0("log-", params$out_fname, ".txt"),
+                  # outfile=paste0("log-", params$out_fname, ".txt"),
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
