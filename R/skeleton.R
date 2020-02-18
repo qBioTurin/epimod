@@ -41,7 +41,7 @@
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' }
 #' @export
-sensitivity_analysis <-function(# Parameters to control the simulation
+skeleton <-function(# Parameters to control the simulation
     solver_fname, f_time, s_time,
     # User defined simulation's parameters
     n_config,
