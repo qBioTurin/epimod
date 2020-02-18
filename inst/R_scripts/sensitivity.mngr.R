@@ -23,7 +23,7 @@ sensitivity.worker<-function(id,
     # Change the working directory back to the original one
     setwd(pwd)
     # Move relevant files to their final locatio and remove all the temporary files
-    experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
+    # experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
     return(T2)
 }
 # Function to compute the distance between one simulation trace and the reference data
