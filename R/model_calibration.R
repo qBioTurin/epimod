@@ -94,7 +94,7 @@ model_calibration <-function(
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname){
+    out_fname=NULL){
 
     chk_dir<- function(path){
         pwd <- basename(path)
