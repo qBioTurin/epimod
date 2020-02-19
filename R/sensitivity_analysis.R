@@ -131,10 +131,10 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   timeout = timeout,
                   files = files)
 
+    volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results_sensitivity_analysis/")
     dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)
-    volume <- tools::file_path_as_absolute(volume)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
