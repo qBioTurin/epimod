@@ -27,7 +27,7 @@ model_analysis <-function(
     }
     if(is.null(out_fname))
     {
-        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-analysys")
     }
     # Fix input parameters path
     if(!is.null(parameters_fname))
