@@ -1,4 +1,4 @@
-# epimod_sensitivity
+# epimod-sensitivity
 FROM r-base
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,6 +14,7 @@ RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
 
 # Create data directory
 RUN mkdir /home/docker/data; chmod 777 /home/docker/data
+
 # date > marker
 # COPY marker /dev/null
 # RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
