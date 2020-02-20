@@ -80,7 +80,8 @@ if(is.null(params$files$parameters_fname)
 }
 saveRDS(params,  file = paste0(param_fname), version=2)
 # Create a cluster
-cl <- makeCluster(params$parallel_processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
+cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
+                  type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
