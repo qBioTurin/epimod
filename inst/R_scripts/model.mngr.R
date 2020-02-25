@@ -118,21 +118,20 @@ clusterEvalQ(cl, sessionInfo())
 #                          files = params$files,
 #                          config = params$config)
 exec_times <- lapply(c(1:params$n_config),
-                     function(x){
-                         model.worker(cl = cl,
-                                      id = x,
-                                      solver_fname = params$files$solver_fname,  # using the following parameters
-                                      solver_type = params$solver_type,
-                                      s_time = params$s_time,
-                                      f_time = params$f_time,
-                                      n_run = params$n_run,
-                                      timeout = params$timeout,
-                                      run_dir = params$run_dir,
-                                      out_fname = params$out_fname,
-                                      out_dir = params$out_dir,
-                                      files = params$files,
-                                      config = params$config)
-                     })
+                     model.worker,
+                     cl = cl,
+                     solver_fname = params$files$solver_fname,
+                     solver_type = params$solver_type,
+                     s_time = params$s_time,
+                     f_time = params$f_time,
+                     n_run = params$n_run,
+                     timeout = params$timeout,
+                     run_dir = params$run_dir,
+                     out_fname = params$out_fname,
+                     out_dir = params$out_dir,
+                     files = params$files,
+                     config = params$config)
+
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
 final_seed<-.Random.seed
