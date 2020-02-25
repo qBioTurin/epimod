@@ -39,8 +39,9 @@ model.worker<-function(cl,
                                                        timeout=timeout,
                                                        out_fname=out_fname,
                                                        n_run=1)
-                                 write.csv(cmd,file = "cmd.txt");
+                                 write.csv(cmd,file="./cmd.txt");
                                  system(paste(cmd), wait = TRUE)
+                                 return(paste0(id,"-",x))
                                  })
     T2 <- difftime(Sys.time(), T1, unit = "secs")
     lapply(trace_names,function(x){
