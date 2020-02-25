@@ -39,7 +39,7 @@ model.worker<-function(cl,
                                                        timeout=timeout,
                                                        out_fname=out_fname,
                                                        n_run=1)
-                                 cat(cmd)
+                                 write.csv(cmd,file = "cmd.txt");
                                  system(paste(cmd), wait = TRUE)
                                  })
     T2 <- difftime(Sys.time(), T1, unit = "secs")
