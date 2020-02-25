@@ -31,7 +31,15 @@ model.worker<-function(cl,
     trace_names <- parLapply(cl,
                              c(1:n_run),
                              function(x){
-                                 cmd <- experiment.cmd(id = paste0(id,"-",x), solver_fname = tools::file_path_as_absolute(solver_fname), solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = 1)
+                                 cmd <- experiment.cmd(id=paste0(id,"-",x),
+                                                       solver_fname=tools::file_path_as_absolute(solver_fname),
+                                                       solver_type=solver_type,
+                                                       s_time=s_time,
+                                                       f_time=f_time,
+                                                       timeout=timeout,
+                                                       out_fname=out_fname,
+                                                       n_run=1)
+                                 cat(cmd)
                                  system(paste(cmd), wait = TRUE)
                                  })
     T2 <- difftime(Sys.time(), T1, unit = "secs")
