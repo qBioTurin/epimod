@@ -22,7 +22,7 @@ model.worker<-function(id,
     pwd <- getwd()
     setwd(paste0(run_dir,id))
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = n_run)
     # Measure simulation's run time
     T1 <- Sys.time()
     # Launch the simulation on the Doker
