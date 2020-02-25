@@ -1,7 +1,8 @@
 library(parallel)
 library(epimod)
 
-model.worker<-function(id,
+model.worker<-function(cl,
+                       id,
                        solver_fname, solver_type,
                        s_time, f_time, n_run,
                        timeout, run_dir, out_fname, out_dir,
@@ -22,12 +23,29 @@ model.worker<-function(id,
     pwd <- getwd()
     setwd(paste0(run_dir,id))
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = n_run)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = 1)
     # Measure simulation's run time
     T1 <- Sys.time()
     # Launch the simulation on the Doker
-    system(paste(cmd), wait = TRUE)
+    # system(paste(cmd), wait = TRUE)
+    trace_names <- parLapply(cl,
+                             c(1:n_run),
+                             function(x){
+                                 cmd <- experiment.cmd(id = paste0(id,"-",x), solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = 1)
+                                 system(paste(cmd), wait = TRUE)
+                                 })
     T2 <- difftime(Sys.time(), T1, unit = "secs")
+    lapply(trace_names,function(x){
+        fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
+        tr <- read.csv(x, sep = "")
+        if(!file.exists(fnm)){
+            write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+        }
+        else{
+            write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+        }
+        file.remove(x)
+    })
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
     setwd(pwd)
@@ -85,20 +103,36 @@ cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
-exec_times <- parLapply( cl,
-                         c(1:params$n_config),          # execute n_config istances
-                         model.worker,                  # of sensitivity.worker
-                         solver_fname = params$files$solver_fname,  # using the following parameters
-                         solver_type = params$solver_type,
-                         s_time = params$s_time,
-                         f_time = params$f_time,
-                         n_run = params$n_run,
-                         timeout = params$timeout,
-                         run_dir = params$run_dir,
-                         out_fname = params$out_fname,
-                         out_dir = params$out_dir,
-                         files = params$files,
-                         config = params$config)
+# exec_times <- parLapply( cl,
+#                          c(1:params$n_config),          # execute n_config istances
+#                          model.worker,                  # of sensitivity.worker
+#                          solver_fname = params$files$solver_fname,  # using the following parameters
+#                          solver_type = params$solver_type,
+#                          s_time = params$s_time,
+#                          f_time = params$f_time,
+#                          n_run = params$n_run,
+#                          timeout = params$timeout,
+#                          run_dir = params$run_dir,
+#                          out_fname = params$out_fname,
+#                          out_dir = params$out_dir,
+#                          files = params$files,
+#                          config = params$config)
+exec_times <- lapply(c(1:params$n_config),
+                     function(x){
+                         model.worker(cl = cl,
+                                      id = x,
+                                      solver_fname = params$files$solver_fname,  # using the following parameters
+                                      solver_type = params$solver_type,
+                                      s_time = params$s_time,
+                                      f_time = params$f_time,
+                                      n_run = params$n_run,
+                                      timeout = params$timeout,
+                                      run_dir = params$run_dir,
+                                      out_fname = params$out_fname,
+                                      out_dir = params$out_dir,
+                                      files = params$files,
+                                      config = params$config)
+                     })
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
 final_seed<-.Random.seed
