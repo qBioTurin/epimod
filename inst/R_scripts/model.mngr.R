@@ -1,8 +1,7 @@
 library(parallel)
 library(epimod)
 
-model.worker<-function(cl,
-                       id,
+model.worker<-function(id,
                        solver_fname, solver_type,
                        s_time, f_time, n_run,
                        timeout, run_dir, out_fname, out_dir,
@@ -22,6 +21,10 @@ model.worker<-function(cl,
     # Change working directory to the one corresponding at the current id
     pwd <- getwd()
     setwd(paste0(run_dir,id))
+    cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
+                      type = "FORK")
+    # Save session's info
+    clusterEvalQ(cl, sessionInfo())
     # Generate the appropriate command to run on the Docker
     # cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname, n_run = 1)
     # Measure simulation's run time
@@ -53,6 +56,7 @@ model.worker<-function(cl,
               wait = TRUE
               )
     T2 <- difftime(Sys.time(), T1, unit = "secs")
+    stopCluster(cl)
     lapply(trace_names,function(x){
         fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
         tr <- read.csv(paste0(run_dir,id,.Platform$file.sep, out_fname,"-",x,".trace"), sep = "")
@@ -62,7 +66,7 @@ model.worker<-function(cl,
         else{
             write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
         }
-        file.remove(x)
+        file.remove(paste0(run_dir,id,.Platform$file.sep, out_fname,"-",x,".trace"))
     })
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
@@ -116,10 +120,10 @@ if(is.null(params$files$parameters_fname)
 }
 saveRDS(params,  file = paste0(param_fname), version=2)
 # Create a cluster
-cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
-                  type = "FORK")
-# Save session's info
-clusterEvalQ(cl, sessionInfo())
+# cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
+#                   type = "FORK")
+# # Save session's info
+# clusterEvalQ(cl, sessionInfo())
 # Run simulations
 # exec_times <- parLapply( cl,
 #                          c(1:params$n_config),          # execute n_config istances
@@ -137,7 +141,6 @@ clusterEvalQ(cl, sessionInfo())
 #                          config = params$config)
 exec_times <- lapply(X = c(1:params$n_config),
                      FUN = model.worker,
-                     cl = cl,
                      solver_fname = params$files$solver_fname,
                      solver_type = params$solver_type,
                      s_time = params$s_time,
