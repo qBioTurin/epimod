@@ -37,7 +37,7 @@ model.worker<-function(cl,
     cmds <- parLapply(cl,
                       trace_names,
                       experiment.cmd,
-                      solver_fname=tools::file_path_as_absolute(solver_fname),
+                      solver_fname=solver_fname,
                       solver_type=solver_type,
                       s_time=s_time,
                       f_time=f_time,
@@ -45,6 +45,8 @@ model.worker<-function(cl,
                       out_fname=out_fname,
                       n_run=1)
     T1 <- Sys.time()
+    write.csv(unlist(cmds), file=paste0(outdir,"test_",id,".csv"))
+    write.csv(getwd(), file=paste0(outdir,"pwd_",id,".csv"))
     parLapply(cl,
               cmds,
               function(x){
