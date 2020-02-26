@@ -46,7 +46,7 @@ model.worker<-function(cl,
                       n_run=1)
     T1 <- Sys.time()
     write.csv(unlist(cmds), file=paste0(out_dir,"test_",id,".csv"))
-    write.csv(getwd(), file=paste0(out_dir,"pwd_",id,".csv"))
+    write.csv(c(getwd(),is.null(config)), file=paste0(out_dir,"pwd_",id,".csv"))
     # parLapply(cl,
     lapply(          cmds,
               function(x){
@@ -135,8 +135,8 @@ clusterEvalQ(cl, sessionInfo())
 #                          out_dir = params$out_dir,
 #                          files = params$files,
 #                          config = params$config)
-exec_times <- lapply(c(1:params$n_config),
-                     model.worker,
+exec_times <- lapply(X = c(1:params$n_config),
+                     FUN = model.worker,
                      cl = cl,
                      solver_fname = params$files$solver_fname,
                      solver_type = params$solver_type,
