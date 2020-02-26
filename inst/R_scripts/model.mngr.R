@@ -49,9 +49,9 @@ model.worker<-function(cl,
     write.csv(c(getwd(),is.null(config)), file=paste0(out_dir,"pwd_",id,".csv"))
     parLapply(cl = cl,
               X = cmds,
-              fun=function(x){
-                  system(paste(x), wait = TRUE)
-              })
+              fun = system,
+              wait = TRUE
+              )
     T2 <- difftime(Sys.time(), T1, unit = "secs")
     lapply(trace_names,function(x){
         fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
