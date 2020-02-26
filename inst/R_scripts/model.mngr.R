@@ -55,7 +55,7 @@ model.worker<-function(cl,
     T2 <- difftime(Sys.time(), T1, unit = "secs")
     lapply(trace_names,function(x){
         fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
-        tr <- read.csv(x, sep = "")
+        tr <- read.csv(paste0(out_dir, out_fname,"-",x), sep = "")
         if(!file.exists(fnm)){
             write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
         }
