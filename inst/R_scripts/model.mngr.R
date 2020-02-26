@@ -35,7 +35,7 @@ model.worker<-function(cl,
                          id=id
                          )
     cmds <- parLapply(cl=cl,
-                      x=trace_names,
+                      X=trace_names,
                       fun=experiment.cmd,
                       solver_fname=solver_fname,
                       solver_type=solver_type,
