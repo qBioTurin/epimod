@@ -47,9 +47,9 @@ model.worker<-function(cl,
     T1 <- Sys.time()
     write.csv(unlist(cmds), file=paste0(out_dir,"test_",id,".csv"))
     write.csv(c(getwd(),is.null(config)), file=paste0(out_dir,"pwd_",id,".csv"))
-    # parLapply(cl,
-    lapply(          cmds,
-              function(x){
+    parLapply(cl = cl,
+              X = cmds,
+              fun=function(x){
                   system(paste(x), wait = TRUE)
               })
     T2 <- difftime(Sys.time(), T1, unit = "secs")
