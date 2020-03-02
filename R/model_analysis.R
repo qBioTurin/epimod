@@ -1,6 +1,6 @@
 model_analysis <-function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA",
+    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps=0.01,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
@@ -49,6 +49,7 @@ model_analysis <-function(
                   out_dir = chk_dir("/home/docker/data/results_model_analysis/"),
                   out_fname = out_fname,
                   solver_type = solver_type,
+                  taueps = taueps,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,

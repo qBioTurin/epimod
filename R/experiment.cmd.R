@@ -20,10 +20,12 @@
 
 experiment.cmd <- function(id,
                            solver_fname, solver_type = "LSODA",
-                           s_time, f_time, n_run = 1,
+                           s_time, f_time, n_run = 1, taueps = 0.01,
                            timeout, out_fname){
     if(solver_type == "TAUG")
-        solver_type <- paste(solver_type, "-taueps 0.01")
+    {
+        solver_type <- paste(solver_type, "-taueps", taueps)
+    }
     cmd <- paste0("timeout ", timeout,
                  " .", .Platform$file.sep, basename(solver_fname), " ",
                  out_fname,"-", id,
