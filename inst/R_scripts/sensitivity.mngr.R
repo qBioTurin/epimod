@@ -3,8 +3,7 @@ library(epimod)
 library(ggplot2)
 
 sensitivity.worker<-function(id,
-                             solver_fname, solver_type,
-                             init_fname, s_time, f_time,
+                             solver_fname, solver_type, s_time, f_time,
                              timeout, run_dir, out_fname, out_dir,
                              files, config){
     # Setup the environment
@@ -14,7 +13,7 @@ sensitivity.worker<-function(id,
     pwd <- getwd()
     setwd(paste0(run_dir,id))
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, init_fname = init_fname, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
     # Measure simulation's run time
     T1 <- Sys.time()
     # Launch the simulation on the Doker
@@ -60,6 +59,16 @@ cat(args)
 param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
+# Get functions name from file path
+if(!is.null(params$files$distance_measure_fname))
+{
+    distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
+}
+if(!is.null(params$files$target_value_fname))
+{
+    target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
+    file.copy(from = params$files$target_value_fname, to = params$run_dir)
+}
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
     # Save initial seed value
@@ -84,22 +93,22 @@ params$config <-experiment.configurations(n_config = params$n_config,
                                    out_dir = chk_dir(params$out_dir),
                                    out_fname = params$out_fname,
                                    extend = params$extend)
-saveRDS(params,  file = paste0(param_fname))
+saveRDS(params,  file = paste0(param_fname), version = 2)
 # Save final seed
 final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
-file.copy(from = params$target_value_fname, to = params$run_dir)
 # Create a cluster
-cl <- makeCluster(params$processors, outfile=paste0("log-", params$out_fname, ".txt"), type = "FORK")
+cl <- makeCluster(params$parallel_processors,
+                  # outfile=paste0("log-", params$out_fname, ".txt"),
+                  type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
 exec_times <- parLapply( cl,
                          c(1:params$n_config),                # execute n_config istances
                          sensitivity.worker,                  # of sensitivity.worker
-                         solver_fname = params$solver_fname,  # using the following parameters
+                         solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
-                         init_fname = params$init_fname,
                          s_time = params$s_time,
                          f_time = params$f_time,
                          timeout = params$timeout,
@@ -110,53 +119,59 @@ exec_times <- parLapply( cl,
                          config = params$config)
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 # List all the traces in the output directory
-rank <- parLapply(cl,
-                  c(1:params$config[[1]][[1]][[2]]),
-                  sensitivity.distance,
-                  out_fname = params$out_fname,
-                  out_dir = params$out_dir,
-                  run_dir = params$run_dir,
-                  distance_measure_fname = params$files$distance_measure_fname,
-                  distance_measure = params$distance_measure,
-                  reference_data = params$files$reference_data)
-# Sort the rank ascending, according to the distance computed above.
-rank <- do.call("rbind", rank)
-rank <- rank[order(rank$measure),]
-save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
+if(!is.null(params$files$distance_measure_fname))
+{
+    rank <- parLapply(cl,
+                      c(1:abs(params$config[[1]][[1]][[2]])),
+                      sensitivity.distance,
+                      out_fname = params$out_fname,
+                      out_dir = params$out_dir,
+                      run_dir = params$run_dir,
+                      distance_measure_fname = params$files$distance_measure_fname,
+                      distance_measure = distance_measure,
+                      reference_data = params$files$reference_data)
+    # Sort the rank ascending, according to the distance computed above.
+    rank <- do.call("rbind", rank)
+    rank <- rank[order(rank$measure),]
+    save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
+}
 stopCluster(cl)
-# Load external function to compute prcc
-source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
-prcc <- sensitivity.prcc(config = params$config,
-                        target_value_fname = params$target_value_fname,
-                        target_value = params$target_value_f,
-                        s_time = params$s_time,
-                        f_time = params$f_time,
-                        out_fname = params$out_fname,
-                        out_dir = params$out_dir,
-                        processors = params$processors)
-# Plot PRCC
-# Get the parameter names and the total number of parameters
-names_param= names(prcc$PRCC)
-n_params = length(names_param)
-# Get the istants of time at which the PRCC is evaluated
-time <- c(1:(params$f_time %/% params$s_time)) * params$s_time
-# Modify the prcc data structure to ease the plotting
-prcc_frame <- lapply(c(1:n_params),function(x){
-    return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
-                      Param = matrix(rep(names_param[x],length(prcc$PRCC[,x])), ncol = 1),
-                      Time = matrix(time, ncol = 1)))
-    })
-prcc_frame <- do.call("rbind",prcc_frame)
-plt <- ggplot(prcc_frame, aes(x=Time/params$s_time))+
-    geom_line(aes(y=PRCC,group=Param,col=Param)) +
-    ylim(-1,1) +
-    xlab("Time")+
-    ylab("PRCC")+
-    geom_rect(
-        mapping=aes(xmin=-Inf, xmax=Inf, ymin=-.2, ymax=.2),
-        alpha=0.001961,
-        fill="yellow")
-ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
-# Get final time
-exec_time <- difftime(Sys.time(), t1, unit = "secs")
-save(prcc, plt, exec_time, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
+if(!is.null(params$files$target_value_fname))
+{
+    # Load external function to compute prcc
+    source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
+    prcc <- sensitivity.prcc(config = params$config,
+                             target_value_fname = params$files$target_value_fname,
+                             target_value = target_value,
+                             s_time = params$s_time,
+                             f_time = params$f_time,
+                             out_fname = params$out_fname,
+                             out_dir = params$out_dir,
+                             parallel_processors = params$parallel_processors)
+    # Plot PRCC
+    # Get the parameter names and the total number of parameters
+    names_param= names(prcc$PRCC)
+    n_params = length(names_param)
+    # Get the istants of time at which the PRCC is evaluated
+    time <- c(1:(params$f_time %/% params$s_time)) * params$s_time
+    # Modify the prcc data structure to ease the plotting
+    prcc_frame <- lapply(c(1:n_params),function(x){
+        return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
+                          Param = matrix(rep(names_param[x],length(prcc$PRCC[,x])), ncol = 1),
+                          Time = matrix(time, ncol = 1)))
+        })
+    prcc_frame <- do.call("rbind",prcc_frame)
+    plt <- ggplot(prcc_frame, aes(x=Time/params$s_time))+
+        geom_line(aes(y=PRCC,group=Param,col=Param)) +
+        ylim(-1,1) +
+        xlab("Time")+
+        ylab("PRCC")+
+        geom_rect(
+            mapping=aes(xmin=-Inf, xmax=Inf, ymin=-.2, ymax=.2),
+            alpha=0.001961,
+            fill="yellow")
+    ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
+    # Get final time
+    exec_time <- difftime(Sys.time(), t1, unit = "secs")
+    save(prcc, plt, exec_time, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
+}

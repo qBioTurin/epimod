@@ -2,10 +2,9 @@ sensitivity.prcc<-function(config,
                            target_value_fname, target_value,
                            s_time, f_time,
                            out_fname, out_dir,
-                           processors
+                           parallel_processors
 ){
     library(parallel)
-    library(epiR)
     # Prepare the dataset to compute PRCC.
     # Only parameters changing within the configuration will be used
     # Function to flatten a matrix
@@ -54,10 +53,11 @@ sensitivity.prcc<-function(config,
         dat<-cbind(config,t(data[which(data$Time==time),][-1]))
         dat <- as.data.frame(dat)
         names(dat) <- c(names(config),"Output")
-        prcc<-epi.prcc(dat)
+        # prcc<-epi.prcc(dat)
+        prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
-    n_config <- config[[1]][[1]][[2]]
+    n_config <- abs(config[[1]][[1]][[2]])
     # Flatten all the parameters in the configuration
     config <- lapply(c(1:length(config)),function(x){
         inner_config <- lapply(c(1:n_config),function(k){
@@ -81,18 +81,18 @@ sensitivity.prcc<-function(config,
     parms <- parms[,pos]
     names(parms)<-pnames
     # Create a cluster
-    cl <- makeCluster(processors, type = "FORK")
+    cl <- makeCluster(parallel_processors, type = "FORK")
     # Extract data
-    # tval <- parLapply( cl,
-    #                    c(1:n_config),
-    #                    target,
-    #                    target_value_fname = target_value_fname,
-    #                    target_value = target_value,
-    #                    out_fname = out_fname,
-    #                    out_dir = out_dir)
-    tval <- lapply( c(1:n_config),function(x){
-                       target(id=x,target_value_fname = target_value_fname,
-                       target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
+    tval <- parLapply( cl,
+                        c(1:n_config),
+                        target,
+                        target_value_fname = target_value_fname,
+                        target_value = target_value,
+                        out_fname = out_fname,
+                        out_dir = out_dir)
+    # tval <- lapply( c(1:n_config),function(x){
+    #                   target(id=x,target_value_fname = target_value_fname,
+    #                   target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
     stopCluster(cl)
     # Make it a data.frame
     # * tval <- t(do.call("rbind",tval))

@@ -1,0 +1,2 @@
+p; Recovery; runif; n=1; min = 0; max=1
+p; Infection; runif; n=1; min = 1e-05; max=2e-04

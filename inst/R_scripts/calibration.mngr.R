@@ -13,7 +13,6 @@ calibration.worker <- function(id, config, params){
                           solver_fname = params$files$solver_fname,
                           solver_type = params$solver_type,
                           n_run = 1,
-                          init_fname = params$init_fname,
                           s_time = params$s_time,
                           f_time = params$f_time,
                           timeout = params$timeout,
@@ -34,11 +33,12 @@ objfn <-function(x, params, cl) {
     # Generate a new configuration using the optimizaton output x
     id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
     config <- experiment.configurations(n_config = 1,
-                              parm_list = params$files$parameters_fname,
                               parm_fname = params$files$functions_fname,
+                              parm_list = params$files$parameters_fname,
                               out_dir = params$out_dir,
                               out_fname = params$out_fname,
-                              optim_vector = x)
+                              ini_vector = x,
+                              ini_vector_mod = params$ini_vector_mod)
     # calibration.worker(id = id, config = config, params = params)
     # traces <- read.csv(paste0(params$out_dir,params$out_fname,"-",id,".trace"), sep = "")
     trace_names <- parLapply(cl,
@@ -62,7 +62,7 @@ objfn <-function(x, params, cl) {
 
     source(params$files$distance_measure_fname)
     # distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), trace))
-    distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), traces))
+    distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
     # Write header to the file
     optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
     if(!file.exists(optim_trace_fname))
@@ -106,16 +106,32 @@ experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
 cl <- makeCluster(params$processors, type = "FORK")
 # Call gensa with init_vector as initail condition, upper_vector and lower_vector as boundaries conditions.
+ctl <- list()
+if(!is.null(params$max.call))
+{
+    ctl$max.call <- params$max.call
+}
+if(!is.null(params$threshold.stop))
+{
+    ctl$threshold.stop <- params$threshold.stop
+}
+if(!is.null(params$max.call))
+{
+    ctl$max.time <- params$max.time
+}
+# control=list( max.call = params$max.call,
+#               threshold.stop = params$threshold.stop,
+#               max.time = params$max.time),
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
              lower=params$lb_v,
-             control=list(nb.stop.improvement=params$nb.stop.improvement),
+             control = ctl,
              params = params,
              cl = cl)
 stopCluster(cl)
 # Save the output of the optimization problem to file
-save(ret, file = paste0(out_dir,out_fname,"-optim.RData"))
+save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
 # Save final seed
 final_seed<-.Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds",params$out_fname,".RData"))

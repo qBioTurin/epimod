@@ -4,8 +4,8 @@
 \alias{experiment.cmd}
 \title{Generate the commandline to configure and run a simulation}
 \usage{
-experiment.cmd(id, solver_fname, solver_type = "LSODA",
-  init_fname = NULL, s_time, f_time, n_run = 1, timeout, out_fname)
+experiment.cmd(id, solver_fname, solver_type = "LSODA", s_time, f_time,
+  n_run = 1, timeout, out_fname)
 }
 \arguments{
 \item{id, }{a numeric identifier used to format the output's file name}
@@ -13,8 +13,6 @@ experiment.cmd(id, solver_fname, solver_type = "LSODA",
 \item{solver_fname, }{the name of the solver executable file}
 
 \item{solver_type, }{a string definig what solver to apply (LSODA, HLSODA, ..)}
-
-\item{init_fname, }{a providing a marking for each palce in the model (such parameter is optional)}
 
 \item{s_time, }{step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)}
 

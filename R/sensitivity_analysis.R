@@ -17,10 +17,26 @@
 #'
 #' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 #'
+#' @param solver_fname .solver file (generated in with the function model_generation)
+#' @param f_time Final solution time.
+#' @param s_time Time step at whicch explicit estimates for the system are desired
 #' @param n_config, number of configuratons to generate
-#' @param parm_fname, file with the definition of user defined functions
+#' @param parameters_fname file with the definition of user defined functions
 #' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @author Paolo Castagno
+#' @param functions_fname File with the user defined functions to generate istances of the parameters
+#' @param volume The folder to mount within the Doker image providing all the necessary files
+#' @param timeout Maximum execution time allowed to each configuration
+#' @param parallel_processors Integer for the number of available processors to use
+#' @param reference_data Data to compare with the simulations' results
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param extend TO BE DONE
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name
+#'
+#'
+#'
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+
 #'
 #' @examples
 #'\dontrun{
@@ -30,76 +46,107 @@
 #'                      parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                      functions_fname = paste0(local_dir, "Configuration/Functions.R"),
 #'                      solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
-#'                      init_fname = "init",
 #'                      f_time = 365*21,
 #'                      s_time = 365,
 #'                      volume = "/some/path/to/the/local/output/directory",
 #'                      timeout = "1d",
-#'                      processors=4,
+#'                      parallel_processors=4,
 #'                      reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
-#'                      distance_measure = "msqd",
-#'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"),
-#'                      target_value_f = "infects")
+#'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
+#' }
 #' @export
-sensitivity_analysis <-function(
-                                n_config,
-                                # Directories
-                                out_fname,
+sensitivity_analysis <-function(# Parameters to control the simulation
+                                solver_fname, f_time, s_time,
                                 # User defined simulation's parameters
-                                parameters_fname = "", functions_fname = "",
-                                # Parameters to control the simulation
-                                solver_fname = "", init_fname = NULL, f_time, s_time,
+                                n_config, parameters_fname = NULL, functions_fname = NULL,
                                 # Parameters to manage the simulations' execution
-                                volume = "", timeout = '1d', processors,
+                                volume = getwd(), timeout = '1d', parallel_processors = 1,
                                 # Parameters to control the ranking
-                                reference_data, distance_measure_fname, distance_measure,
+                                reference_data = NULL, distance_measure_fname = NULL,
                                 # Parameters to control PRCC
-                                target_value_fname, target_value_f,
+                                target_value_fname = NULL,
                                 # Mange reproducibilty and extend previous experiments
-                                extend = NULL, seed = NULL
+                                extend = NULL, seed = NULL,
+                                # Directories
+                                out_fname = NULL
                                 ){
 
     chk_dir<- function(path){
         pwd <- basename(path)
-        return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+        return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
-    # Parameters used to set up the runing environment
-    files <- list(
-        parameters_fname = parameters_fname,
-        functions_fname = functions_fname,
-        solver_fname = solver_fname,
-        distance_measure_fname = distance_measure_fname,
-        reference_data = reference_data
-    )
+    files <- list()
+    # Fix input parameter out_fname
+    if(is.null(solver_fname))
+    {
+        stop("Missing solver file! Abort")
+    }
+    else
+    {
+        solver_fname <- tools::file_path_as_absolute(solver_fname)
+        files[["solver_fname"]] <- solver_fname
+    }
+    if(is.null(out_fname))
+    {
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+    }
+    # Fix input parameters path
+    if(!is.null(parameters_fname))
+    {
+        parameters_fname <- tools::file_path_as_absolute(parameters_fname)
+        files[["parameters_fname"]] <- parameters_fname
+    }
+    if(!is.null(functions_fname))
+    {
+        functions_fname <- tools::file_path_as_absolute(functions_fname)
+        files[["functions_fname"]] <- functions_fname
+    }
+    if(!is.null(reference_data))
+    {
+        reference_data <- tools::file_path_as_absolute(reference_data)
+        files[["reference_data"]] <- reference_data
+    }
+    if(!is.null(distance_measure_fname))
+    {
+        distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
+        files[["distance_measure_fname"]] <- distance_measure_fname
+    }
+    if(!is.null(target_value_fname))
+    {
+        target_value_fname <- tools::file_path_as_absolute(target_value_fname)
+        files[["target_value_fname"]] <- target_value_fname
+    }
+
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
-                  run_dir = chk_dir("/root/scratch/"),
-                  out_dir = chk_dir("/root/data/results/"),
+                  run_dir = chk_dir("/home/docker/scratch/"),
+                  out_dir = chk_dir("/home/docker/data/results_sensitivity_analysis/"),
                   out_fname = out_fname,
-                  solver_fname = solver_fname,
-                  init_fname = init_fname,
                   f_time = f_time,
                   s_time = s_time,
-                  processors = processors,
+                  parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,
-                  target_value_fname = target_value_fname,
-                  target_value_f = target_value_f,
-                  distance_measure = distance_measure,
                   files = files)
+
+    volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results
-    res_dir <- paste0(chk_dir(volume),"results/")
-    dir.create(res_dir, showWarnings = FALSE)
+    res_dir <- paste0(chk_dir(volume),"results_sensitivity_analysis/")
+    dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
-    parms$files <- lapply(files, function(x){
-        return(paste0(parms$out_dir,basename(x)))
-    })
-    file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
-    parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
+    if(length(files) > 0)
+    {
+        parms$files <- lapply(files, function(x){
+            return(paste0(parms$out_dir,basename(x)))
+        })
+    }
+    # removed parms$target_value_fname and inserted in files -> check if it works
+    # file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
+    # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
     # Manage experiments reproducibility
     if(!is.null(seed)){
         parms$seed <- paste0(parms$out_dir,basename(seed))
@@ -115,6 +162,7 @@ sensitivity_analysis <-function(
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
     # Run the docker image
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":/root/data -d epimod_sensitivity Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
-    file.remove("./dockerID")
+    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
 }
