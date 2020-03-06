@@ -1,4 +1,3 @@
-         'names'
 'sensitivity' qbioturin/epimod-sensitivity:latest
 'generation' qbioturin/epimod-generation:latest
 'analysis' qbioturin/epimod-analysis:latest
