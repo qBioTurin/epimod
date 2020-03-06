@@ -1,4 +1,4 @@
-# epimod-display
+# epimod-analysis
 FROM r-base
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,6 +14,8 @@ RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 # date > marker
 # COPY marker /dev/null
 RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
+
+RUN R -e "file.copy('/usr/local/lib/R/site-library/epimod/R_scripts/app.R', '/home/docker/data')"
 
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
