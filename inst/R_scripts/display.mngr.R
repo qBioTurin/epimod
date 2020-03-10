@@ -1,5 +1,5 @@
 library(epimod)
-
+library(shiny)
 # chk_dir<- function(path){
 # 	pwd <- basename(path)
 # 	return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
