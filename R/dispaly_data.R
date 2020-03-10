@@ -37,7 +37,7 @@ display_data <-function(
 	containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
 	# docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$dir), " -d ", containers.names["display",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/display.mngr.R ", p_fname))
 	docker.run(params = paste0("--cidfile=dockerID ",
-							   "--volume ", volume,":", dirname(parms$dir),
+							   "--volume ", volume,":/home/docker/data",
 							   " -p ", ip, ":",port,":8080",
 							   " -d ", containers.names["display",1],
 							   " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/display.mngr.R"))
