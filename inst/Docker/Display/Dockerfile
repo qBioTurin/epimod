@@ -15,7 +15,7 @@ RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 # COPY marker /dev/null
 RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 
-RUN R -e "library(epimod);file.copy(paste0(path.package(package='epimod'),'/R_scripts/app.R'), '/home/docker/data')"
+RUN R -e "library(epimod);file.copy(paste0(path.package(package='epimod'),'/R_scripts/app.R'), '/home/docker')"
 
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
