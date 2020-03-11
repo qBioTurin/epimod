@@ -46,7 +46,7 @@ server <- function(input, output, session) {
     # reference <- as.data.frame(t(read.csv("input/reference_data.csv", header = FALSE, sep = "")))
 
     rv <- reactiveValues(folders = c("No directory selected", lapply(list.dirs(path="./data")[-1], function(x){basename(x)})),
-                         reference.files = c("No file selected",grep(list.files(recursive = TRUE),
+                         reference.files = c("No file selected",grep(list.files(path = "./data",recursive = TRUE),
                                                pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)",
                                                invert = TRUE,
                                                value = TRUE)
