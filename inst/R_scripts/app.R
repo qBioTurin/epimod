@@ -247,14 +247,13 @@ server <- function(input, output, session) {
 
 
     output$configuration_text <- renderPrint({
-        # list(folders=rv$folders,
-        #      reference.files=input$reference.file,
-        #      reference=rv$reference,
-        #      rank=rv$rank,
-        #      ls=rv$ls,
-        #      traces=rv$traces
-        #      )
-        input$distance.function
+        list(folders=rv$folders,
+             reference.files=input$reference.file,
+             reference=rv$reference,
+             rank=rv$rank,
+             ls=rv$ls,
+             traces=rv$traces
+             )
     })
 }
 
