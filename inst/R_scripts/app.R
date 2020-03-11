@@ -60,7 +60,7 @@ server <- function(input, output, session) {
                  {
                      if(file.exists(input$reference.file))
                      {
-                         rv$reference<-as.data.frame(t(read.csv(input$reference.file, header = FALSE, sep = "")))
+                         rv$reference<-as.data.frame(t(read.csv(file.path("./data",input$reference.file,.Platform$file.sep), header = FALSE, sep = "")))
                      }
                  })
 
@@ -68,7 +68,7 @@ server <- function(input, output, session) {
                  {
                      if(dir.exists(input$dir))
                      {
-                         rv$ls<-list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
+                         rv$ls<-list.files(path = file.path("./data",input$dir,.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
                          rv$traces <- lapply(rv$ls,
                                           function(x){
                                               f <- file.path(getwd(),input$dir, x, fsep = .Platform$file.sep)
