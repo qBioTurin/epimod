@@ -67,7 +67,7 @@ server <- function(input, output, session) {
 
     observeEvent(input$dir,
                  {
-                     if(dir.exists(input$dir))
+                     if(dir.exists(file.path(data_dir,input$dir,fsep=.Platform$file.sep)))
                      {
                          rv$ls<-list.files(path = file.path(data_dir,input$dir,fsep=.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
                          rv$traces <- lapply(rv$ls,
@@ -205,7 +205,7 @@ server <- function(input, output, session) {
 
     output$configuration_text <- renderPrint({
         list(dir=file.path(data_dir,input$dir,fsep=.Platform$file.sep),
-             reference.files=input$reference.file,
+             reference.files=file.path(data_dir,input$reference.file,fsep=.Platform$file.sep),
              ls=rv$ls,
              reference=rv$reference,
              traces=rv$traces
