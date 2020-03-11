@@ -61,7 +61,7 @@ server <- function(input, output, session) {
                  {
                      if(file.exists(input$reference.file))
                      {
-                         rv$reference<-as.data.frame(t(read.csv(file.path(data_dir,input$reference.file,.Platform$file.sep), header = FALSE, sep = "")))
+                         rv$reference<-as.data.frame(t(read.csv(file.path(data_dir,input$reference.file,fsep=.Platform$file.sep), header = FALSE, sep = "")))
                      }
                  })
 
@@ -69,10 +69,10 @@ server <- function(input, output, session) {
                  {
                      if(dir.exists(input$dir))
                      {
-                         rv$ls<-list.files(path = file.path(data_dir,input$dir,.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
+                         rv$ls<-list.files(path = file.path(data_dir,input$dir,fsep=.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
                          rv$traces <- lapply(rv$ls,
                                           function(x){
-                                              f <- file.path(getwd(),input$dir, x, fsep = .Platform$file.sep)
+                                              f <- file.path(getwd(),input$dir, x, fsep = fsep=.Platform$file.sep)
                                               if(file.exists(f))
                                               {
                                                   tr <- read.csv(f, sep = "")
@@ -204,7 +204,7 @@ server <- function(input, output, session) {
 
 
     output$configuration_text <- renderPrint({
-        list(dir=file.path(data_dir,input$dir,.Platform$file.sep),
+        list(dir=file.path(data_dir,input$dir,fsep=.Platform$file.sep),
              reference.files=input$reference.file,
              ls=rv$ls,
              traces=rv$traces
