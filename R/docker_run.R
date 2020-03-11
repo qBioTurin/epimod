@@ -11,7 +11,7 @@
 #'
 #' }
 #' @export
-docker.run <- function( params=NULL){
+docker.run <- function( params=NULL, changeUID=TRUE){
 
     if(is.null(params)){
         cat("\nNo parameters where provided!\n")
@@ -27,10 +27,16 @@ docker.run <- function( params=NULL){
     }
 
     ## to execute docker
-    userid=system("id -u", intern = TRUE)
-    groupid=system("id -g", intern = TRUE)
-    cat(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
-    system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+    if(changeUID)
+    {
+        userid=system("id -u", intern = TRUE)
+        groupid=system("id -g", intern = TRUE)
+        cat(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
+        system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+    } else {
+        cat(paste("docker run --privileged=true ",params,"\n\n", sep=""))
+        system(paste("docker run --privileged=true ",params, sep=""))
+    }
 
     ## to obtain the Docker ID by file
     dockerid=readLines("dockerID", warn = FALSE)
