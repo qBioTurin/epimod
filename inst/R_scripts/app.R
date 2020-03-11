@@ -43,10 +43,11 @@ ui <- fluidPage( theme="bootstrap.css",
                  )
 
 server <- function(input, output, session) {
+    data_dir <- "./data"
     # reference <- as.data.frame(t(read.csv("input/reference_data.csv", header = FALSE, sep = "")))
 
-    rv <- reactiveValues(folders = c("No directory selected", lapply(list.dirs(path="./data")[-1], function(x){basename(x)})),
-                         reference.files = c("No file selected",grep(list.files(path = "./data",recursive = TRUE),
+    rv <- reactiveValues(folders = c("No directory selected", lapply(list.dirs(path=data_dir)[-1], function(x){basename(x)})),
+                         reference.files = c("No file selected",grep(list.files(path = data_dir,recursive = TRUE),
                                                pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)",
                                                invert = TRUE,
                                                value = TRUE)
@@ -60,7 +61,7 @@ server <- function(input, output, session) {
                  {
                      if(file.exists(input$reference.file))
                      {
-                         rv$reference<-as.data.frame(t(read.csv(file.path("./data",input$reference.file,.Platform$file.sep), header = FALSE, sep = "")))
+                         rv$reference<-as.data.frame(t(read.csv(file.path(data_dir,input$reference.file,.Platform$file.sep), header = FALSE, sep = "")))
                      }
                  })
 
@@ -68,7 +69,7 @@ server <- function(input, output, session) {
                  {
                      if(dir.exists(input$dir))
                      {
-                         rv$ls<-list.files(path = file.path("./data",input$dir,.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
+                         rv$ls<-list.files(path = file.path(data_dir,input$dir,.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
                          rv$traces <- lapply(rv$ls,
                                           function(x){
                                               f <- file.path(getwd(),input$dir, x, fsep = .Platform$file.sep)
@@ -117,50 +118,6 @@ server <- function(input, output, session) {
 
                      }
                  })
-
-
-
-    # update.rank <- function()
-    # {
-    #     rank_file <- file.path(input$dir,"rank.csv", fsep = .Platform$file.sep)
-    #     # Load the ls of the target folder
-    #     ls <- rv$ls
-    # # ls <- list.files(path = input$dir, pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
-    # # if(length(ls) != length(rv$ls))
-    # # {
-    # #     rv$ls <- as.data.frame(ls)
-    # # }
-    #     # Remove traces with already a rank
-    #     # if( length(rv$rank) > 0)
-    #     # {
-    #     #    ls <- ls[-which(ls %in% rv$rank$file_name)]
-    #     # }
-    #     # Compute the rank for the remaining traces
-    #     if(length(ls) > 0)
-    #     {
-    #         rnk <- sapply(ls,
-    #                     function(x){
-    #                         # Compute the distance
-    #                         d <- msqd(reference,
-    #                                   read.csv(file.path(input$dir, x, fsep = .Platform$file.sep), sep = ""))
-    #                         id <- as.numeric(gsub(pattern="(.trace)",
-    #                                               gsub(pattern="([[:graph:]]+(-){1})",
-    #                                                    x=x, replacement=""),
-    #                                               replacement="")
-    #                         )
-    #                         return(c(id, d, x))
-    #                     })
-    #         rnk <- as.data.frame(t(rnk))
-    #         names(rnk) <- c("id", "distance", "file_name")
-    #         rownames(rnk) <- c()
-    #         rnk$distance <- sapply(rnk$distance,as.numeric)
-    #         # Keep the previously computed ranks
-    #         # if(!is.null(rv$rank))
-    #         #     rnk <- rbind(rv$rank, rnk)
-    #         # write.table(rnk, file = rank_file, sep = " ", row.names = FALSE)
-    #         rv$rank <- rnk
-    #     }
-    # }
 
     output$plot <- renderPlot({
         plot <- ggplot()
@@ -247,10 +204,8 @@ server <- function(input, output, session) {
 
 
     output$configuration_text <- renderPrint({
-        list(folders=rv$folders,
+        list(dir=file.path(data_dir,input$dir,.Platform$file.sep),
              reference.files=input$reference.file,
-             reference=rv$reference,
-             rank=rv$rank,
              ls=rv$ls,
              traces=rv$traces
              )
