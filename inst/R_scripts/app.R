@@ -72,7 +72,7 @@ server <- function(input, output, session) {
                          rv$ls<-list.files(path = file.path(data_dir,input$dir,fsep=.Platform$file.sep), pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)")
                          rv$traces <- lapply(rv$ls,
                                           function(x){
-                                              f <- file.path(getwd(),input$dir, x, fsep=.Platform$file.sep)
+                                              f <- file.path(data_dir,input$dir, x, fsep=.Platform$file.sep)
                                               if(file.exists(f))
                                               {
                                                   tr <- read.csv(f, sep = "")
