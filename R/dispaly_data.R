@@ -16,8 +16,7 @@
 #' @export
 display_data <-function(
 	volume = getwd(),
-	ip = "192.168.1.1",
-	port = getOption("shiny.port"))
+	port = 80)
 {
 	chk_dir<- function(path){
 		pwd <- basename(path)
@@ -36,9 +35,10 @@ display_data <-function(
 	containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
 	containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
 	# docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$dir), " -d ", containers.names["display",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/display.mngr.R ", p_fname))
-	docker.run(params = paste0("--cidfile=dockerID ",
-							   "--volume ", volume,":/home/docker/data",
-							   " -p ", ip, ":",port,":8080",
-							   " -d ", containers.names["display",1],
-							   " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/display.mngr.R"))
+	docker.run(changeUID=FALSE,
+			   params = paste0("--cidfile=dockerID ",
+							   "--volume ", volume,":/srv/shiny-server/display/data ",
+							   "--volume ", chk_dir(volume),"displaydata_log",":/var/log/shiny-server/",
+							   " -p ",port,":3838",
+							   " -d ", containers.names["display",1]))
 }

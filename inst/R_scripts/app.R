@@ -45,7 +45,7 @@ ui <- fluidPage( theme="bootstrap.css",
 server <- function(input, output, session) {
     # reference <- as.data.frame(t(read.csv("input/reference_data.csv", header = FALSE, sep = "")))
 
-    rv <- reactiveValues(folders = c("No directory selected", lapply(list.dirs()[-1], function(x){basename(x)})),
+    rv <- reactiveValues(folders = c("No directory selected", lapply(list.dirs(path="./data")[-1], function(x){basename(x)})),
                          reference.files = c("No file selected",grep(list.files(recursive = TRUE),
                                                pattern = "[[:graph:]]+(-){1}[[:digit:]]+(.trace)",
                                                invert = TRUE,
@@ -239,7 +239,7 @@ server <- function(input, output, session) {
         updateSelectInput(session, "reference.file",
                           choices = rv$reference.files
         )})
-    
+
     observeEvent(rv$traces,{
         updateSelectInput(session, "places",
                           choices = if(length(rv$traces)>0) names(rv$traces[[1]]))

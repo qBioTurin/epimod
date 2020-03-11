@@ -5,8 +5,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev
 
 # Install all required R packages
-RUN R -e "install.packages('ggplot2')"
 RUN R -e "install.packages('devtools')"
+RUN R -e "install.packages('ggplot2')"
 RUN R -e "install.packages('epiR')"
 
 # Create scratch directory
