@@ -208,7 +208,6 @@ server <- function(input, output, session) {
              reference.files=file.path(data_dir,input$reference.file,fsep=.Platform$file.sep),
              ls=rv$ls,
              reference=rv$reference,
-             traces=rv$traces
              )
     })
 }
