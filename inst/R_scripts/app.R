@@ -207,7 +207,7 @@ server <- function(input, output, session) {
         list(dir=file.path(data_dir,input$dir,fsep=.Platform$file.sep),
              reference.files=file.path(data_dir,input$reference.file,fsep=.Platform$file.sep),
              ls=rv$ls,
-             reference=rv$reference,
+             reference=rv$reference
              )
     })
 }
