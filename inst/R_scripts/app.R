@@ -59,7 +59,7 @@ server <- function(input, output, session) {
 
     observeEvent(input$reference.file,
                  {
-                     if(file.exists(input$reference.file))
+                     if(file.exists(file.path(data_dir,input$reference.file,fsep=.Platform$file.sep)) && input$reference.file != "")
                      {
                          rv$reference<-as.data.frame(t(read.csv(file.path(data_dir,input$reference.file,fsep=.Platform$file.sep), header = FALSE, sep = "")))
                      }
@@ -122,6 +122,7 @@ server <- function(input, output, session) {
     output$plot <- renderPlot({
         plot <- ggplot()
         rnk <- rv$rank
+        traces <- NULL
         if(input$n_traces > 0 && length(rnk) > 0 && length(input$places) >0)
         {
             rnk<-cbind(rnk,c(1:length(rnk[,1])))
@@ -153,15 +154,20 @@ server <- function(input, output, session) {
             traces <- as.data.frame(traces)
             names(traces)<-c("Time","Value","id","distance")
             plot <- plot +
-                geom_path(data=traces,aes(x=Time,y=Value,group=id,col=traces$distance),arrow=arrow(length=unit(0.3,"cm"),ends="first"))
-            if(!is.null(rv$reference))
+                geom_line(data=traces,aes(x=Time,y=Value,group=id,col=traces$distance),size=1)
+        }
+        if(!is.null(rv$reference))
+        {
+            if(!is.null(traces))
             {
                 time <- unique(traces$Time)
-                df <-data.frame(Time=time,Reference=rv$reference)
-                names(df)<-c("Time","Reference")
-                plot +
-                    geom_point(data=df,aes(x=Time,y=Reference), col="red")
+            } else {
+                time<-c(1:max(dim(rv$reference)))
             }
+            df <-data.frame(Time=time,Reference=rv$reference)
+            names(df)<-c("Time","Reference")
+            plot +
+                geom_line(data=df,aes(x=Time,y=Reference), col="red",size=1)
         }
     })
 
