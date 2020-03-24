@@ -49,8 +49,6 @@ model.worker<-function(id,
                       out_fname=out_fname,
                       n_run=1)
     T1 <- Sys.time()
-    write.csv(unlist(cmds), file=paste0(out_dir,"test_",id,".csv"))
-    write.csv(c(getwd(),is.null(config)), file=paste0(out_dir,"pwd_",id,".csv"))
     parLapply(cl = cl,
               X = cmds,
               fun = system,
