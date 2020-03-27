@@ -51,6 +51,11 @@ sensitivity.prcc<-function(config,
     compute_prcc <- function(time,config,data){
         # Dataframe containing the configuration generated and, as last column, the corresponding model output
         dat<-cbind(config,t(data[which(data$Time==time),][-1]))
+        dat<- lapply(1:length(dat[1,]),
+        			 function(x){
+        			 	unlist(dat[,x])
+        			 })
+        dat<-do.call("cbind",dat)
         dat <- as.data.frame(dat)
         names(dat) <- c(names(config),"Output")
         # prcc<-epi.prcc(dat)
@@ -84,15 +89,15 @@ sensitivity.prcc<-function(config,
     cl <- makeCluster(parallel_processors, type = "FORK")
     # Extract data
     tval <- parLapply( cl,
-                        c(1:n_config),
-                        target,
-                        target_value_fname = target_value_fname,
-                        target_value = target_value,
-                        out_fname = out_fname,
-                        out_dir = out_dir)
+    				   c(1:n_config),
+    				   target,
+    				   target_value_fname = target_value_fname,
+    				   target_value = target_value,
+    				   out_fname = out_fname,
+    				   out_dir = out_dir)
     # tval <- lapply( c(1:n_config),function(x){
-    #                   target(id=x,target_value_fname = target_value_fname,
-    #                   target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
+    #                    target(id=x,target_value_fname = target_value_fname,
+    #                    target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
     stopCluster(cl)
     # Make it a data.frame
     # * tval <- t(do.call("rbind",tval))
