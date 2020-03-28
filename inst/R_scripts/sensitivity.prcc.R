@@ -57,7 +57,7 @@ sensitivity.prcc<-function(config,
         			 })
         dat<-do.call("cbind",dat)
         dat <- as.data.frame(dat)
-        names(dat) <- c(names(config),"Output")
+        names(dat) <- c(names(config)[!is.na(names(config))],"Output")
         # prcc<-epi.prcc(dat)
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
@@ -107,7 +107,7 @@ sensitivity.prcc<-function(config,
     tval <- as.data.frame(cbind(c(0,1:(f_time%/%s_time))*s_time, tval))
     tval <- tval[-1,]
     names(tval)[1] <- "Time"
-    save(tval, parms, pnames, file = paste0(params$out_dir,"parms_prcc_",params$out_fname,".RData"))
+    # save(tval, parms, pnames, file = paste0(params$out_dir,"parms_prcc_",params$out_fname,".RData"))
     PRCC.info<-lapply(tval$Time,
                       compute_prcc,
                       config = parms,
