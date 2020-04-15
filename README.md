@@ -39,6 +39,9 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 * Log out and log back in so that your group membership is re-evaluated.
 
 
+### Repository
+[Lotka-Volterra](https://github.com/qBioTurin/Lotka-Volterra)
+
 
 ### Disclaimer:
 **epimod**  developers have no liability for any use of **epimod**  functions, including without limitation, any loss of data, incorrect results, or any costs, liabilities, or damages that result from use of **epimod** .
