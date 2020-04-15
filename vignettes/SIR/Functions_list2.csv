@@ -1,3 +1,0 @@
-i; init; init_generation; min_init = .8; max_init = 1
-p; Recovery; runif; n=1; min = 0.1; max=2
-p; Infection; runif; n=1; min = 0.1; max=2
