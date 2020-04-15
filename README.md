@@ -40,8 +40,9 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 
 
 ### Repository
-[Lotka-Volterra](https://github.com/qBioTurin/Lotka-Volterra)
+The following list is a selection of project developed with **epimod**, providing both the necessary files and explainations to perform the anlaysis. If you find any issue while running projecte listed here, please contact the person or group responsible for such project and not **epimod** developers team. If you are interested in sharing your project, prepare a git repository following the instruction [here](missing.page)
+[Lotka-Volterra](https://github.com/qBioTurin/Lotka-Volterra): 
 
 
-### Disclaimer:
+### Disclaimer
 **epimod**  developers have no liability for any use of **epimod**  functions, including without limitation, any loss of data, incorrect results, or any costs, liabilities, or damages that result from use of **epimod** .
