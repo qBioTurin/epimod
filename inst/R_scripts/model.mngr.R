@@ -5,7 +5,7 @@ model.worker<-function(id,
                        solver_fname, solver_type,taueps,
                        s_time, f_time, n_run,
                        timeout, run_dir, out_fname, out_dir,
-                       files, config = NULL){
+                       files,event.list, config = NULL){
     if(!is.null(config))
     {
         # Setup the environment
@@ -37,8 +37,11 @@ model.worker<-function(id,
                              },
                          id=id
                          )
-    cmds <- parLapply(cl=cl,
-                      X=trace_names,
+    
+    if(is.null(event.list) )
+    {
+          cmds <- parLapply(cl=cl,
+                      X=trace_names, # this is the id parameter in experiment.cmd
                       fun=experiment.cmd,
                       solver_fname=solver_fname,
                       solver_type=solver_type,
@@ -48,14 +51,32 @@ model.worker<-function(id,
                       timeout=timeout,
                       out_fname=out_fname,
                       n_run=1)
-    T1 <- Sys.time()
-    parLapply(cl = cl,
-              X = cmds,
-              fun = system,
-              wait = TRUE
-              )
-    T2 <- difftime(Sys.time(), T1, unit = "secs")
-    stopCluster(cl)
+          T1 <- Sys.time()
+          parLapply(cl = cl,
+                    X = cmds,
+                    fun = system,
+                    wait = TRUE
+                    )
+          T2 <- difftime(Sys.time(), T1, unit = "secs")
+          stopCluster(cl)
+    }else{
+      T1 <- Sys.time()
+      parLapply(cl=cl,
+                X=trace_names, # this is the id parameter in experiment.cmd
+                fun=experiment.event.cmd,
+                solver_fname=solver_fname,
+                solver_type=solver_type,
+                taueps=taueps,
+                s_time=s_time,
+                f_time=f_time,
+                timeout=timeout,
+                out_fname=out_fname,
+                n_run=1,
+                event.list=event.list)
+      T2 <- difftime(Sys.time(), T1, unit = "secs")
+      stopCluster(cl)
+    }
+
     lapply(trace_names,function(x){
         fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
         tr <- read.csv(paste0(run_dir,id,.Platform$file.sep, out_fname,"-",x,".trace"), sep = "")
@@ -151,7 +172,8 @@ exec_times <- lapply(X = c(1:params$n_config),
                      out_fname = params$out_fname,
                      out_dir = params$out_dir,
                      files = params$files,
-                     config = params$config)
+                     config = params$config,
+                     event.list = params$event.list)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed

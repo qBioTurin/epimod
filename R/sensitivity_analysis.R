@@ -69,7 +69,9 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 # Mange reproducibilty and extend previous experiments
                                 extend = NULL, seed = NULL,
                                 # Directories
-                                out_fname = NULL
+                                out_fname = NULL, 
+                                # List of discrete events
+                                event.list=NULL
                                 ){
 
     chk_dir<- function(path){
@@ -129,7 +131,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,
-                  files = files)
+                  files = files,
+                  event.list=event.list)
 
     volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results

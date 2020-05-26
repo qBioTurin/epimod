@@ -49,6 +49,7 @@
 #' @param extend ...
 #' @param seed Value that can be set to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
+#' @param event.list ...
 #'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
@@ -94,7 +95,9 @@ model_calibration <-function(
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname=NULL){
+    out_fname=NULL,
+    # List of discrete events
+    event.list=NULL){
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -159,7 +162,8 @@ model_calibration <-function(
                    files = files,
                    extend = extend,
                    seed = seed,
-                   processors = parallel_processors)
+                   processors = parallel_processors,
+                   event.list=event.list)
 
     res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
     dir.create(res_dir, showWarnings = FALSE)

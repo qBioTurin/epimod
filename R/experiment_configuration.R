@@ -92,7 +92,7 @@ experiment.configurations <- function(n_config,
             {
                 # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
                 config[[i]][[j]] <- list(file, -n_config, data)
-            }
+            }      
             else if(!ini_vector_mod)
             {
                 config[[i]][[j]] <- list("init", n_config, ini_vector)

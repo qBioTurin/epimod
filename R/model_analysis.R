@@ -8,7 +8,9 @@ model_analysis <-function(
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname = NULL
+    out_fname = NULL,
+    # List of discrete events
+    event.list=NULL
 ){
 
     chk_dir<- function(path){
@@ -57,7 +59,8 @@ model_analysis <-function(
                   timeout = timeout,
                   files = files,
                   ini_v = ini_v,
-                  ini_vector_mod = ini_vector_mod)
+                  ini_vector_mod = ini_vector_mod,
+                  event.list=event.list)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results_model_analysis/")
     dir.create(res_dir, showWarnings = FALSE)

@@ -5,6 +5,7 @@ library(ggplot2)
 sensitivity.worker<-function(id,
                              solver_fname, solver_type, s_time, f_time,
                              timeout, run_dir, out_fname, out_dir,
+                             event.list,
                              files, config){
     # Setup the environment
     experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir)
@@ -12,13 +13,23 @@ sensitivity.worker<-function(id,
     # Change working directory to the one corresponding at the current id
     pwd <- getwd()
     setwd(paste0(run_dir,id))
-    # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, timeout = timeout, out_fname = out_fname)
-    # Measure simulation's run time
-    T1 <- Sys.time()
-    # Launch the simulation on the Doker
-    system(paste(cmd), wait = TRUE)
-    T2 <- difftime(Sys.time(), T1, unit = "secs")
+    if(is.null(event.list))
+    {
+      # Generate the appropriate command to run on the Docker
+      cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time,
+                            f_time = f_time, timeout = timeout, out_fname = out_fname)
+      # Measure simulation's run time
+      T1 <- Sys.time()
+      # Launch the simulation on the Doker
+      system(paste(cmd), wait = TRUE)
+      T2 <- difftime(Sys.time(), T1, unit = "secs")
+    }else{
+      experiment.event.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type,
+                           s_time = s_time, f_time = f_time, timeout = timeout,
+                           out_fname = out_fname,
+                           event.list=event.list)
+    }
+    
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
     setwd(pwd)
@@ -116,7 +127,9 @@ exec_times <- parLapply( cl,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir,
                          files = params$files,
-                         config = params$config)
+                         config = params$config,
+                         event.list= params$event.list)
+
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))

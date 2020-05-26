@@ -10,7 +10,7 @@ model_calibration(solver_fname, f_time, s_time, solver_type = "LSODA",
   lb_v, ub_v, ini_vector_mod = FALSE, threshold.stop = NULL,
   max.call = 1e+07, max.time = NULL, reference_data = NULL,
   distance_measure_fname = NULL, extend = NULL, seed = NULL,
-  out_fname)
+  out_fname = NULL, event.list = NULL)
 }
 \arguments{
 \item{solver_fname}{.solver file (generated in with the function model_generation)}
@@ -55,6 +55,8 @@ model_calibration(solver_fname, f_time, s_time, solver_type = "LSODA",
 \item{seed}{Value that can be set to initialize the internal random generator.}
 
 \item{out_fname}{Prefix to the output file name}
+
+\item{event.list}{...}
 }
 \description{
 this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models

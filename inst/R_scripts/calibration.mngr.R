@@ -9,16 +9,34 @@ calibration.worker <- function(id, config, params){
                          config = config)
     pwd <- getwd()
     setwd(paste0(params$run_dir, id))
-    cmd <- experiment.cmd(id,
-                          solver_fname = params$files$solver_fname,
-                          solver_type = params$solver_type,
-                          n_run = 1,
-                          s_time = params$s_time,
-                          f_time = params$f_time,
-                          timeout = params$timeout,
-                          out_fname = params$out_fname)
-
-    system(cmd, wait = TRUE)
+    
+    event.list = params$event.list
+    
+    if(is.null(event.list) )
+    {
+      cmd <- experiment.cmd(id,
+                            solver_fname = params$files$solver_fname,
+                            solver_type = params$solver_type,
+                            n_run = 1,
+                            s_time = params$s_time,
+                            f_time = params$f_time,
+                            timeout = params$timeout,
+                            out_fname = params$out_fname)
+      
+      system(cmd, wait = TRUE)
+    }else{
+      experiment.event.cmd(id,
+                     solver_fname = params$files$solver_fname,
+                     solver_type = params$solver_type,
+                     n_run = 1,
+                     s_time = params$s_time,
+                     f_time = params$f_time,
+                     timeout = params$timeout,
+                     out_fname = params$out_fname,
+                     event.list=event.list)
+    }
+    
+    
     fnm <- paste0(params$out_fname,"-",id,".trace")
     # trace <- read.csv(file = fnm , header = TRUE, sep = "")
     experiment.env_cleanup(id = id,
