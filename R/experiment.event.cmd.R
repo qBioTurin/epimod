@@ -32,11 +32,10 @@ event.worker <-function(id,
 
   for( i in 1:length(times.events) )
   {
+
     if ( i == 1)
     {
       i_time = 0
-      if(file.exists("init")) # the initial marking
-        cmd <- paste0(cmd, " -init init")
     }else{
       i_time = times.events[i-1]
       trace = read.csv( paste0(out_fname,"-", id,"-",i-1,".trace"), sep = "")
@@ -53,9 +52,13 @@ event.worker <-function(id,
       write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
     }
 
+  	if(file.exists("init")) # the initial marking
+  		cmd <- paste0(cmd, " -init init")
+
     f_time = times.events[i]
 
-    cmd <- paste0("timeout ", timeout,
+    cmd <- paste0(cmd,
+    			  "timeout ", timeout,
                   " .", .Platform$file.sep, basename(solver_fname), " ",
                   out_fname,"-", id,"-",i,
                   " -stime ", s_time,
