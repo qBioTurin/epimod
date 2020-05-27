@@ -33,6 +33,8 @@ event.worker <-function(id,
   for( i in 1:length(times.events) )
   {
 
+  	cmd = ""
+
     if ( i == 1)
     {
       i_time = 0
