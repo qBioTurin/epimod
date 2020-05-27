@@ -55,7 +55,7 @@ event.worker <-function(id,
       file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
 
-      write.table(x = as.matrix(new_m,nrow=1), file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
+      write.table(x = as.matrix(new_m,nrow=1), file = "init", col.names = FALSE, row.names = FALSE, sep = " ")
     }
 
     f_time = times.events[i]
