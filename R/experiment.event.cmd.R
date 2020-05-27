@@ -55,7 +55,7 @@ event.worker <-function(id,
     }
 
   	if(file.exists("init")) # the initial marking
-  		cmd <- " -init init "
+  		cmd <- " -init init"
 
     f_time = times.events[i]
 
