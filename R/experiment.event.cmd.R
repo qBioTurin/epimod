@@ -42,7 +42,7 @@ event.worker <-function(id,
       i_time = times.events[i-1]
       trace = read.csv( paste0(out_fname,"-", id,"-",i-1,".trace"), sep = "")
       last_m = trace[length(trace[,1]),-1] # the first col is the time so I have to remove it
-      new_m = last_m + marking.delta
+      new_m = last_m + marking.delta[i-1,]
 
       ############ writing the .trace with all the simulating windows
       write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
