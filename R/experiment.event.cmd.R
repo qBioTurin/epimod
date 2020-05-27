@@ -54,8 +54,7 @@ event.worker <-function(id,
       write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
     }
 
-  	if(file.exists("init")) # the initial marking
-  		cmd <- " -init init"
+
 
     f_time = times.events[i]
 
@@ -69,7 +68,8 @@ event.worker <-function(id,
                   " -type ", solver_type,
                   " -runs ", n_run)
 
-
+    if(file.exists("init")) # the initial marking
+    	cmd <- paste0(cmd, " -init init")
     if(file.exists("cmdln_params"))
       cmd <- paste0(cmd, " -parm ", "cmdln_params")
 
