@@ -48,7 +48,7 @@ event.worker <-function(id,
       write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
                   append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
 
-      file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
+      #file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
 
       write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
@@ -82,7 +82,7 @@ event.worker <-function(id,
   write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
               append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
 
-  file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
+  #file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
   #################
 
 }
