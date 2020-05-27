@@ -54,7 +54,8 @@ event.worker <-function(id,
 
       file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
-
+      cat(new_m,"; as numeric ",as.numeric(new_m),";\n")
+      write.table(x = as.numeric(new_m), file = "initN", col.names = FALSE, row.names = FALSE, sep = ",")
       write.table(x = as.numeric(new_m), file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
     }
 
