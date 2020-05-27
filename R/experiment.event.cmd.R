@@ -52,14 +52,12 @@ event.worker <-function(id,
       	write.table(trace[-length(trace[,1]),], file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
       }
 
-      file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
+      #file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
-      cat(new_m,"; as numeric ",as.numeric(new_m),";\n")
+      cat("as numeric ",as.numeric(new_m),";\n")
       write.table(x = as.numeric(new_m), file = "initN", col.names = FALSE, row.names = FALSE, sep = ",")
       write.table(x = as.numeric(new_m), file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
     }
-
-
 
     f_time = times.events[i]
 
