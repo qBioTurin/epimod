@@ -19,7 +19,7 @@
 #' Example of events list:
 #' event.list<-list(e1=list(time = 4 , update = c(+1,0,0,-1)),
 #'                  e2=list(time = 8 , update = c(+2,0,0,-1)))
-#' 
+#'
 #' @export
 
 event.worker <-function(id,
@@ -29,7 +29,7 @@ event.worker <-function(id,
                         times.events,marking.delta)
 {
   # stop and start the simulation changing the marking:
-  
+
   for( i in 1:length(times.events) )
   {
     if ( i == 1)
@@ -42,19 +42,19 @@ event.worker <-function(id,
       trace = read.csv( paste0(out_fname,"-", id,"-",i-1,".trace"), sep = "")
       last_m = trace[length(trace[,1]),-1] # the first col is the time so I have to remove it
       new_m = last_m + marking.delta
-    
+
       ############ writing the .trace with all the simulating windows
-      write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"), 
+      write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
                   append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-      
+
       file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
-      
+
       write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
     }
-    
+
     f_time = times.events[i]
-    
+
     cmd <- paste0("timeout ", timeout,
                   " .", .Platform$file.sep, basename(solver_fname), " ",
                   out_fname,"-", id,"-",i,
@@ -63,23 +63,23 @@ event.worker <-function(id,
                   " -ftime ", f_time,
                   " -type ", solver_type,
                   " -runs ", n_run)
-    
-    
+
+
     if(file.exists("cmdln_params"))
       cmd <- paste0(cmd, " -parm ", "cmdln_params")
-    
+
     system(cmd, wait = TRUE)
-    
+
   }
-  
+
   ############ writing the .trace with the last simulating windows
   trace = read.csv( paste0(out_fname,"-", id,"-",length(times.events),".trace"), sep = "")
-  write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"), 
+  write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
               append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-  
+
   file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
   #################
-  
+
 }
 
 
@@ -92,11 +92,12 @@ experiment.event.cmd <- function(id,
     {
         solver_type <- paste(solver_type, "-taueps", taueps)
     }
-  
+
   times.events = c( sapply(event.list, `[[`, 1), f_time)
   marking.delta = t( sapply(event.list, `[[`, 2) ) # rows = times, col = places update
 
-  event.worker(solver_fname=solver_fname,
+  event.worker(id=id,
+  			 	solver_fname=solver_fname,
                 solver_type=solver_type,
                 taueps=taueps,
                 s_time=s_time,
@@ -107,5 +108,5 @@ experiment.event.cmd <- function(id,
                 marking.delta=marking.delta,
                 n_run=1)
 
-  
+
 }
