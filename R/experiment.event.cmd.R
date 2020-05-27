@@ -55,7 +55,7 @@ event.worker <-function(id,
       file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
 
-      write.table(x = new_m, file = "initN", col.names = FALSE, row.names = FALSE, sep = ",")
+      write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = " ")
     }
 
 
