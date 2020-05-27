@@ -29,7 +29,7 @@ event.worker <-function(id,
                         times.events,marking.delta)
 {
   # stop and start the simulation changing the marking:
-
+	fnm<-paste0(out_fname,"-", id,".trace")
   for( i in 1:length(times.events) )
   {
 
@@ -45,10 +45,14 @@ event.worker <-function(id,
       new_m = last_m + marking.delta[i-1,]
 
       ############ writing the .trace with all the simulating windows
-      write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
-                  append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+      if(!file.exists(fnm)){
+      	write.table(trace[-length(trace[,1]),], file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+      }
+      else{
+      	write.table(trace[-length(trace[,1]),], file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+      }
 
-      #file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
+      file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
 
       write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
@@ -79,10 +83,14 @@ event.worker <-function(id,
 
   ############ writing the .trace with the last simulating windows
   trace = read.csv( paste0(out_fname,"-", id,"-",length(times.events),".trace"), sep = "")
-  write.table(trace[-length(trace[,1]),], file = paste0(out_fname,"-", id,".trace"),
-              append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+  if(!file.exists(fnm)){
+  	write.table(trace[-length(trace[,1]),], file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+  }
+  else{
+  	write.table(trace[-length(trace[,1]),], file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+  }
 
-  #file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
+  file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
   #################
 
 }
