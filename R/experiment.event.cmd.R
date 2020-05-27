@@ -55,7 +55,7 @@ event.worker <-function(id,
       file.remove(paste0(out_fname,"-", id,"-",i-1,".trace"))
       #################
 
-      write.table(x = new_m, file = "init", col.names = FALSE, row.names = FALSE, sep = ",")
+      write.table(x = new_m, file = "initN", col.names = FALSE, row.names = FALSE, sep = ",")
     }
 
 
@@ -84,10 +84,10 @@ event.worker <-function(id,
   ############ writing the .trace with the last simulating windows
   trace = read.csv( paste0(out_fname,"-", id,"-",length(times.events),".trace"), sep = "")
   if(!file.exists(fnm)){
-  	write.table(trace[-length(trace[,1]),], file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+  	write.table(trace, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
   }
   else{
-  	write.table(trace[-length(trace[,1]),], file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+  	write.table(trace, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
   }
 
   file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
