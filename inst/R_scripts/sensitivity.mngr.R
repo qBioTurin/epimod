@@ -24,12 +24,14 @@ sensitivity.worker<-function(id,
       system(paste(cmd), wait = TRUE)
       T2 <- difftime(Sys.time(), T1, unit = "secs")
     }else{
-      experiment.event.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type,
+    	T1 <- Sys.time()
+      	experiment.event.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type,
                            s_time = s_time, f_time = f_time, timeout = timeout,
                            out_fname = out_fname,
                            event.list=event.list)
+      	T2 <- difftime(Sys.time(), T1, unit = "secs")
     }
-    
+
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
     setwd(pwd)
