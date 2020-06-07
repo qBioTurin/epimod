@@ -103,6 +103,7 @@ model_generation <-function( out_fname = NULL,
         file.copy(file.path(out_dir,paste0(netname, ".solver"),fsep = .Platform$file.sep),chk_dir(volume))
         file.copy(file.path(out_dir,paste0(netname, ".net"),fsep = .Platform$file.sep),chk_dir(volume))
         file.copy(file.path(out_dir,paste0(netname, ".def"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(netname, ".PlaceTransition"),fsep = .Platform$file.sep),chk_dir(volume))
         unlink(out_dir, recursive = TRUE)
     }
 
