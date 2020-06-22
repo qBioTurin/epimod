@@ -38,7 +38,9 @@ event.worker <-function(id,
     if ( i == 1)
     {
       i_time = 0
+      init = paste("init")
     }else{
+      init = paste("initNew")
       i_time = times.events[i-1]
       trace = read.csv( paste0(out_fname,"-", id,"-",i-1,".trace"), sep = "")
       last_m = trace[length(trace[,1]),-1] # the first col is the time so I have to remove it
@@ -56,7 +58,7 @@ event.worker <-function(id,
       #################
       new_m[new_m < 0] = 0
 
-      write.table(x = as.matrix(new_m,nrow=1), file = "init", col.names = FALSE, row.names = FALSE, sep = " ")
+      write.table(x = as.matrix(new_m,nrow=1), file = "initNew", col.names = FALSE, row.names = FALSE, sep = " ")
     }
 
     f_time = times.events[i]
@@ -71,8 +73,8 @@ event.worker <-function(id,
                   " -type ", solver_type,
                   " -runs ", n_run)
 
-    if(file.exists("init")) # the initial marking
-    	cmd <- paste0(cmd, " -init init")
+    if(file.exists(paste(init))) # the initial marking
+    	cmd <- paste0(cmd, " -init ", init)
     if(file.exists("cmdln_params"))
       cmd <- paste0(cmd, " -parm ", "cmdln_params")
 
@@ -90,6 +92,7 @@ event.worker <-function(id,
   }
 
   file.remove(paste0(out_fname,"-", id,"-",length(times.events),".trace"))
+  file.remove("initNew")
   #################
 
 }
