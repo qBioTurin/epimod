@@ -17,7 +17,9 @@ calibration.worker <- function(id, config, params){
                           f_time = params$f_time,
                           timeout = params$timeout,
                           out_fname = params$out_fname)
-
+    # Introduce a random delay to avoid correlations between runs on different cores
+    system(paste0("sleep ", round(runif(1,min=0,max=10)), "s"))
+    # Run simulations
     system(cmd, wait = TRUE)
     fnm <- paste0(params$out_fname,"-",id,".trace")
     # trace <- read.csv(file = fnm , header = TRUE, sep = "")
