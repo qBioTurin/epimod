@@ -56,7 +56,7 @@ model_generation <-function( out_fname = NULL,
     dir.create(path = out_dir,showWarnings = FALSE)
     if(!is.null(out_fname)){
         # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
-        netname <- file.path(out_dir,out_fname,".PNPRO", fsep = .Platform$file.sep)
+        netname <- file.path(out_dir,paste0(out_fname,".PNPRO"), fsep = .Platform$file.sep)
         file.copy(from = net_fname, to = netname)
         netname <- tools::file_path_sans_ext(netname)
     } else {
@@ -100,9 +100,9 @@ model_generation <-function( out_fname = NULL,
         stop()
     } else {
         setwd(pwd)
-        file.copy(file.path(out_dir,paste0(netname, ".solver"),fsep = .Platform$file.sep),chk_dir(volume))
-        file.copy(file.path(out_dir,paste0(netname, ".net"),fsep = .Platform$file.sep),chk_dir(volume))
-        file.copy(file.path(out_dir,paste0(netname, ".def"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(basename(netname), ".solver"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(basename(netname), ".net"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir,paste0(basename(netname), ".def"),fsep = .Platform$file.sep),chk_dir(volume))
         unlink(out_dir, recursive = TRUE)
     }
 
