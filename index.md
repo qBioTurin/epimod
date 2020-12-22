@@ -66,7 +66,7 @@ The following list is a selection of project developed with **EPIMOD**, providin
 
 [**QbioTurin**](https://www.cs.unito.it/do/gruppi.pl/Show?_id=lxu3)
 
-![](Groups.png)
+![](Group.png)
 
 ### Disclaimer
 **EPIMOD**  developers have no liability for any use of **EPIMOD**  functions, including without limitation, any loss of data, incorrect results, or any costs, liabilities, or damages that result from use of **EPIMOD** .
