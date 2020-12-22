@@ -41,65 +41,68 @@ experiment.configurations <- function(n_config,
     # TBD: Add the feature to expand an existing configuration
     # For each line the file defines how to generate a (set of) parameter(s)
     for (i in 1:length(lines)){
-        # Create an environment to evaluate the parameters read from file
-        env <-new.env()
-        is_function <- FALSE
-        if(!is.null(parm_list))
+        if(!startsWith(lines[i],"#"))
         {
-            args<-unlist(strsplit(lines[i], ";"))
-            # The first element of each line is a tag controlling how/where to save each (set of) parameter(s)
-            tag <- gsub(" ", "", args[1])
-            # The second element of each line is the name of the file to store the values
-            file <- gsub(" ", "", args[2])
-            # The third element of each line is the function name
-            f <- gsub(" ", "", args[3])
-            # Further arguments, other the first three, are the parameters used by the user defined function
-            # if(length(args) > 3)
-            if(suppressWarnings(is.na(as.numeric(f))))
-            {
-                args<-args[-c(1:3)]
-                args <- lapply(c(1:length(args)),function(x){
-                    eval(parse(text=args[x]), envir = env)
-                })
-                is_function <- TRUE
-            }
-        }
-        for(j in c(1:n_config)){
-            if(j==1)
-                config[[i]] <- list()
-            if(!is.null(ini_vector)){
-                env$x <- ini_vector
-            }
+            # Create an environment to evaluate the parameters read from file
+            env <-new.env()
+            is_function <- FALSE
             if(!is.null(parm_list))
             {
-                if(is_function)
+                args<-unlist(strsplit(lines[i], ";"))
+                # The first element of each line is a tag controlling how/where to save each (set of) parameter(s)
+                tag <- gsub(" ", "", args[1])
+                # The second element of each line is the name of the file to store the values
+                file <- gsub(" ", "", args[2])
+                # The third element of each line is the function name
+                f <- gsub(" ", "", args[3])
+                # Further arguments, other the first three, are the parameters used by the user defined function
+                # if(length(args) > 3)
+                if(suppressWarnings(is.na(as.numeric(f))))
                 {
-                    data <- do.call(f,as.list.environment(env))
+                    args<-args[-c(1:3)]
+                    args <- lapply(c(1:length(args)),function(x){
+                        eval(parse(text=args[x]), envir = env)
+                    })
+                    is_function <- TRUE
+                }
+            }
+            for(j in c(1:n_config)){
+                if(j==1)
+                    config[[i]] <- list()
+                if(!is.null(ini_vector)){
+                    env$x <- ini_vector
+                }
+                if(!is.null(parm_list))
+                {
+                    if(is_function)
+                    {
+                        data <- do.call(f,as.list.environment(env))
+                    }
+                    else
+                    {
+                        data <- as.numeric(f)
+                    }
+                }
+                if(exists("tag") && tag == "i"){
+                    config[[i]][[j]] <- list("init", n_config, data)
+                }
+                else if(exists("tag") && tag == "g")
+                {
+                    config[[i]][[j]] <- list(file, n_config, data)
+                }
+                else if(exists("tag") && tag == "p")
+                {
+                    # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
+                    config[[i]][[j]] <- list(file, -n_config, data)
+                }
+                else if(!ini_vector_mod)
+                {
+                    config[[i]][[j]] <- list("init", n_config, ini_vector)
                 }
                 else
                 {
-                    data <- as.numeric(f)
+                    stop("Wrong parameter configuration: please check parameters controlling the generation of experiments' configurations.\n Abort!\n")
                 }
-            }
-            if(exists("tag") && tag == "i"){
-                config[[i]][[j]] <- list("init", n_config, data)
-            }
-            else if(exists("tag") && tag == "g")
-            {
-                config[[i]][[j]] <- list(file, n_config, data)
-            }
-            else if(exists("tag") && tag == "p")
-            {
-                # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
-                config[[i]][[j]] <- list(file, -n_config, data)
-            }
-            else if(!ini_vector_mod)
-            {
-                config[[i]][[j]] <- list("init", n_config, ini_vector)
-            }
-            else
-            {
-                stop("Wrong parameter configuration: please check parameters controlling the generation of experiments' configurations.\n Abort!\n")
             }
         }
     }
