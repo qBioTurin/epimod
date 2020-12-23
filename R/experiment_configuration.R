@@ -69,7 +69,7 @@ experiment.configurations <- function(n_config,
             for(j in c(1:n_config)){
                 if(j==1)
                     config[[i]] <- list()
-                if(!is.null(ini_vector)){
+                if(!is.null(ini_vector) && is_function && "x" %in% formalArgs(f)){
                     env$x <- ini_vector
                 }
                 if(!is.null(parm_list))
