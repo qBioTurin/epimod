@@ -41,7 +41,7 @@ experiment.configurations <- function(n_config,
     # TBD: Add the feature to expand an existing configuration
     # For each line the file defines how to generate a (set of) parameter(s)
     for (i in 1:length(lines)){
-        if(!startsWith(lines[i],"#"))
+        if(!startsWith(lines[i],"#") && lines[i] != "")
         {
             # Create an environment to evaluate the parameters read from file
             env <-new.env()
