@@ -51,6 +51,8 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 
 
 ### Repository
+![Alt Text](Plots.gif)
+
 The following list is a selection of project developed with **EPIMOD**, providing both the necessary files and explainations to perform the anlaysis. If you find any issue while running projecte listed here, please contact the person or group responsible for such project and not **EPIMOD** developers team. 
 
 **Step-by-step applications**
@@ -63,11 +65,11 @@ The following list is a selection of project developed with **EPIMOD**, providin
 * [Multiple Sclerosis](https://github.com/qBioTurin/Multiple-Sclerosis): Multiple Sclerosis (MS) represents nowadays in  Europe the leading cause of non-traumatic disabilities in young adults, with more than 700,000 EU cases.  We propose  a new model to study the immune response in relapsing remitting MS (RRMS), the most common form of MS that is characterized by alternate episodes of symptom exacerbation (relapses) with periods of disease stability (remission). In this new model, both the peripheral lymph node/blood  vessel and the central nervous system are explicitly represented. Simulation results have proven the ability of the model to reproduce *in silico* the immune T cell balance characterizing RRMS course and the DAC effects. Furthermore, they confirmed the importance of a timely intervention on the disease course.
 
 ### Bibliography
-* [A computational framework for modeling and studying pertussis epidemiology and vaccination.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03648-6) P. Castagno, S. Pernice, G. Ghetti, M. Povero, L. Pradelli, D. Paolotti, G. Balbo, Matteo Sereno and Marco Beccuti. BMC Bioinformatics, Volume 21, 16 September 2020, Page 344.
+* [A computational framework for modeling and studying pertussis epidemiology and vaccination.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03648-6) P. Castagno, S. Pernice, G. Ghetti, M. Povero, L. Pradelli, D. Paolotti, G. Balbo, M. Sereno and M. Beccuti. BMC Bioinformatics, Volume 21, 16 September 2020, Page 344.
 
-* [Computational modeling of the immune response in multiple sclerosis using epimod framework.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03823-9) S. Pernice, L. Follia, A. Maglione, M. Pennisi, F. Pappalardo, F. Novelli, M. Clerico, Marco Beccuti, F. Cordero, S. Rolla.  BMC Bioinformatics, Volume 21, Article number: 550 (2020).
+* [Computational modeling of the immune response in multiple sclerosis using epimod framework.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03823-9) S. Pernice, L. Follia, A. Maglione, M. Pennisi, F. Pappalardo, F. Novelli, M. Clerico, M. Beccuti, F. Cordero, S. Rolla.  BMC Bioinformatics, Volume 21, Article number: 550 (2020).
 
-* [Impacts of reopening strategies for COVID-19 epidemic: a modeling study in Piedmont region.](https://bmcinfectdis.biomedcentral.com/articles/10.1186/s12879-020-05490-w) S. Pernice, P. Castagno, L. Marcotulli, M. M. Maule, L. Richiardi, G. Moirano, M. Sereno, F. Cordero and Marco Beccuti. BMC Infectious Diseases, Volume 20, Article number: 798 (2020).
+* [Impacts of reopening strategies for COVID-19 epidemic: a modeling study in Piedmont region.](https://bmcinfectdis.biomedcentral.com/articles/10.1186/s12879-020-05490-w) S. Pernice, P. Castagno, L. Marcotulli, M. M. Maule, L. Richiardi, G. Moirano, M. Sereno, F. Cordero and M. Beccuti. BMC Infectious Diseases, Volume 20, Article number: 798 (2020).
 
 ### Group
 
