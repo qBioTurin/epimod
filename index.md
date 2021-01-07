@@ -51,7 +51,7 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 
 
 ### Repository
-![](https://github.com/qBioTurin/epimod/blob/gh-pages/Plots.gif)
+![Sample Gif](https://github.com/qBioTurin/epimod/blob/gh-pages/Plots.gif)
 
 The following list is a selection of project developed with **EPIMOD**, providing both the necessary files and explainations to perform the anlaysis. If you find any issue while running projecte listed here, please contact the person or group responsible for such project and not **EPIMOD** developers team. 
 
