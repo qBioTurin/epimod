@@ -2,7 +2,7 @@
 #title: GreatMod
 #description: GreatSPN + EPIMOD, a modeling framework for studying biological systems.
 #markdown: GFM
-# theme                  : "minimal-mistakes-jekyll"
+theme                  : "minimal-mistakes-jekyll"
 # remote_theme           : "mmistakes/minimal-mistakes"
 minimal_mistakes_skin    : "air" #, "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
