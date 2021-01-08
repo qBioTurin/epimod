@@ -1,4 +1,4 @@
-theme: 
+theme: jekyll-theme-slate
 title: GreatMod
 description: GreatSPN + EPIMOD, a modeling framework for studying biological systems.
 markdown: GFM
