@@ -1,0 +1,1152 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Step by step guide: SIR -</title>
+<meta name="description" content="A modeling framework for studying biological systems">
+
+
+  <meta name="author" content="q-Bio Group">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="Step by step guide: SIR">
+<meta property="og:url" content="http://localhost:4000/sir/">
+
+
+  <meta property="og:description" content="A modeling framework for studying biological systems">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/sir/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "qbioGroup",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logoGreatMod.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/HowInstall/">How to install</a>
+            </li><li class="masthead__menu-item">
+              <a href="/examples/">Examples</a>
+            </li><li class="masthead__menu-item">
+              <a href="/group/">Group</a>
+            </li><li class="masthead__menu-item">
+              <a href="/references/">References</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/qbioGroup.jpg" alt="q-Bio Group" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">q-Bio Group</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>The Quantitative Biology (q-Bio) group.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Turin</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="pernice@di.unito.it" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://www.cs.unito.it/do/gruppi.pl/Show?_id=lxu3" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Step by step guide: SIR">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Step by step guide: SIR
+</h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>In this document we describe how to use the R library <em>epimod</em>. In
+details, <em>epimod</em> implements a new general modeling framework to study
+epidemiological systems, whose novelties and strengths are:</p>
+
+<ol>
+  <li>the use of a graphical formalism to simplify the model creation
+phase;</li>
+  <li>the automatic generation of the deterministic and stochastic process
+underlying the system under study;</li>
+  <li>the implementation of an R package providing a friendly interface to
+access the analysis techniques implemented in the framework;</li>
+  <li>a high level of portability and reproducibility granted by the
+containerization (Veiga Leprevost et al. 2017) of all analysis
+techniques implemented in the framework;</li>
+  <li>a well-defined schema and related infrastructure to allow users to
+easily integrate their own analysis workflow in the framework.</li>
+</ol>
+
+<p>The effectiveness of this framework is showed through the wellknown and
+simple SIR model.</p>
+
+<h1 id="how-to-start">How to start</h1>
+
+<p>Before starting the analysis we have to install (1) GreatSPN GUI, (2)
+docker, and (3) the R package <strong>devtools</strong> for installing <em>EPIMOD</em>.
+GreatSPN GUI, the graphical editor for drawing Petri Nets formalisms, is
+available online (<a href="http://www.di.unito.it/~amparore/mc4cslta/editor.html">link to install
+GreatSPN</a>), and
+it can be installed following the steps showed therein. Then, the user
+must have docker installed on its computer for exploiting the <em>epimod</em>’s
+docker images (for more information on the docker installation see:
+<a href="https://docs.docker.com/engine/installation/">link to install docker</a>),
+and to have authorization to execute docker commands reported in the
+command page of function install docker. To do this the following
+commands must be executed.</p>
+
+<ol>
+  <li>Create the docker group.</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ sudo groupadd docker
+</code></pre></div></div>
+
+<ol>
+  <li>Add your user to the docker group.</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ sudo usermod -aG docker $USER
+</code></pre></div></div>
+
+<p>The R package <em>devtools</em> has to be installed to run <em>epimod</em>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install.packages("devtools")
+library(devtools)
+install_github("qBioTurin/epimod", dependencies=TRUE)
+
+library(epimod)
+</code></pre></div></div>
+
+<p>Then, the following function must be used to download all the docker
+images used by <em>epimod</em>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>downloadContainers()
+</code></pre></div></div>
+
+<h2 id="something-to-know">Something to know</h2>
+
+<p>All the <em>epimod</em> functions print the following information:</p>
+
+<ul>
+  <li><em>Docker ID</em>, that is the CONTAINER ID which is executed by the
+function;</li>
+  <li><em>Docker exit status</em>, if 0 then the execution completed with
+success, otherwise an error log file is saved in the working
+directory.</li>
+</ul>
+
+<h1 id="cases-of-study">Cases of study</h1>
+
+<p>In this section we show the steps necessary to model, study and analyze
+a simple case study. To this aim, we choose to study the diffusion of a
+disease following the SIR dynamics. We refer to (Keeling and Rohani
+2011) for all the details.</p>
+
+<h3 id="sir-model">SIR model</h3>
+
+<p>The S-I-R models the diffusion of an infection in a population assuming
+three possible states (or compartments) in which any invidual in the
+population may move. Specifically, (1) <em>Susceptible</em>, individuals
+unexposed to the disease, (2) <em>Infected</em>, individuals currently infected
+by the disease, and (3) <em>Recovered</em>, individuals which were successfully
+recovered by the infection. To consider the simplest case, we ignore the
+population demography (i.e., births and deaths of individuals are
+omitted), thus we consider only two possible events: the infection
+(passage from <em>Susceptible</em> to <em>Infected</em>), and the recovery (passage
+from <em>Infected</em> to <em>Recovered</em>). We are also assuming to neglect complex
+pattern of contacts, by considering an homogeneous mixing. From a
+mathematical point of view, the system behaviors can be investigated by
+exploiting the deterministic approach (Kurtz 1970) which approximates
+its dynamics through a system of ordinary differential equations (ODEs):</p>
+
+<p>where:</p>
+
+<ul>
+  <li><em>S</em>, <em>I</em>, <em>R</em> are the number of susceptible, infected, and recovered
+individuals, respectively;</li>
+  <li><em>β</em> is the infection rate;</li>
+  <li><em>N</em> is the constant population size;</li>
+  <li><em>γ</em> is the recovery rate, which determines the mean infectious
+period.</li>
+</ul>
+
+<h3 id="model-generation">Model generation</h3>
+
+<p>The first step is the model construction. Starting with the GreatSPN
+editor tool it is possible to draw the model using the PN formalism and
+its generalizations. We recall that the Petri Nets are bipartite graphs
+in which we have two type of nodes, places and transitions. Graphically,
+places are represented as circles and those are the variables of our
+systems. On the other hand, transitions are depicted as rectangles and
+are the possible events happening in the system. Variables and events
+(i.e., places and transitions) are connected through arcs, showing what
+variable(s) is (are) affected by a specific event. For more details we
+refer to (Marsan et al. 1995).</p>
+
+<p>Therefore, as represented in figure , we add one place for each variable
+of the system (i.e., S, I, and R represent the susceptible, infected,
+and recovered individuals respectively), and one transition for each
+possible event (i.e., <em>Infection</em> and <em>Recovery</em>). Finally, we save the
+PN model as a file with extension <em>.PNPRO</em> .</p>
+
+<p><img src="./Images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." /></p>
+<p class="caption">
+ Petri Net representation of the SIR model.
+</p>
+
+<p>Having constructed the model, the generation of both the stochastic (the
+Continuous Time Markov Chain) and deterministic (ODEs) processes
+underlying the model is implemented by the <em>model_generation()</em>
+function. This function takes as input the file generated by the
+graphical editor, in this case called <em>SIR.PNPRO</em>, and automatically
+derives the processes.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_generation(net_fname = "./Net/SIR.PNPRO")
+</code></pre></div></div>
+
+<p>The binary file <em>SIR.solver</em> is generated in which the derived processes
+and the library used for their simulation are packaged.</p>
+
+<p>Notice that <em>model_generation()</em> might take as input parameter a C++
+file defining the functions characterizing the behavior of general
+transitions (Pernice et al. 2019), namely <em>functions_fname</em>. For
+instance, if we want to define the transition <em>Infection</em> as a general
+transition then we have to set the transition as <em>General</em> and name the
+corresponding rate name as <strong>FN:NameGeneralFN</strong>, where in this case the
+<em>NameGeneralFN</em> is <strong>InfectionFunction</strong>. As showed in figure , where
+the transition type is set to <em>General</em> and the delay (i.e., the rate)
+to <strong>FN:InfectionFunction</strong>.</p>
+
+<p><img src="./Images/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." /></p>
+<p class="caption">
+ Petri Net representation of the SIR model, modelling the Infection
+transition as a general transition.
+</p>
+
+<p>Then, we have to properly define a C++ function implementing the
+specific behavior of the transition and save it, for instance in a file
+named <em>transition.cpp</em>, which has to be structured as follow:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static double Infection_rate = 1.428;
+
+double InfectionFunction(double *Value,
+                         map &lt;string,int&gt;&amp; NumTrans,
+                         map &lt;string,int&gt;&amp; NumPlaces,
+                         const vector&lt;string&gt; &amp; NameTrans,
+                         const struct InfTr* Trans,
+                         const int T,
+                         const double&amp; time)
+{
+
+    // Definition of the function exploited to calculate the rate,
+    // in this case for semplicity we define it throught the Mass Action  law
+ 
+    double intensity = 1.0;
+    
+    for (unsigned int k=0; k&lt;Trans[T].InPlaces.size(); k++)
+    {
+        intensity *= pow(Value[Trans[T].InPlaces[k].Id],Trans[T].InPlaces[k].Card);
+    }
+    
+    double rate = Infection_rate * intensity;
+
+    return(rate);
+}
+</code></pre></div></div>
+
+<p>where the fixed input parameters are:</p>
+
+<ul>
+  <li><strong>double *Value</strong>: marking of the Petri Net at time <em>time</em>;</li>
+  <li><strong>map &lt;string,int&gt;&amp; NumTrans</strong>: association between the
+transition name and the corresponding index of the <em>NameTrans</em>
+vector;</li>
+  <li><strong>map &lt;string,int&gt;&amp; NumPlaces</strong>: association between the
+place’s name and the corresponding index of the <em>Value</em> vector;</li>
+  <li>**const vector<string> &amp; NameTrans**: transition names;</string></li>
+  <li><strong>const struct InfTr* Trans</strong>: array of <em>InfTr</em> structures
+(implemented in GreatSPN) which is indexed using the transition
+index. The structure <em>InfTr</em> has the following fileds: (1)
+<em>InPlaces</em>: the input places to a transition, which is characterized
+by the input place index position in the <em>Value</em> vector
+(<em>Trans[T].InPlaces[k].Id</em>) and the arc (linking the <em>k</em> place
+with the <em>T</em> transition) molteplicity
+(<em>Trans[T].InPlaces[k].Card</em>). (2) ….</li>
+  <li><strong>const int T</strong>: index of the firing transition;</li>
+  <li><strong>const double&amp; time</strong> : time.</li>
+</ul>
+
+<p>Notice that the function name has to correspond to the rate name
+associated with the general transition, in this case
+<em>InfectionFunction</em>.</p>
+
+<p>Finally, the process can be derived be the <em>model_generation()</em>
+function as follow.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_generation(net_fname = "./Net/SIR_generalFN.PNPRO",
+                 functions_fname = "./Cpp/transition.cpp")
+</code></pre></div></div>
+
+<h3 id="sensitivity-analysis">Sensitivity analysis</h3>
+
+<p>The second step is represented by the sensitivity analysis, in which the
+deterministic process is solved several times varying the values of the
+unknown parameters to identify which are the sensitive ones (i.e., those
+that have a greater effect on the model behavior), by exploiting the
+Pearson Ranking Correlation Coefficients (PRCCs). This may simplify the
+calibration step reducing (1) the number of variables to be estimated
+and (2) the search space associated with each estimated parameter. With
+this purpose, the function <em>sensitivity_analysis()</em> calculates the
+PRCCs, and, given a reference dataset and a distance measure, it ranks
+the simulations according to the distance of each solution with respect
+to the reference one.</p>
+
+<p>In details, the function <em>sensitivity_analysis()</em> takes in input</p>
+
+<ol>
+  <li><strong>solver_fname</strong>: the file generated by the <em>model_generation</em>
+function, that is <em>SIR.solver</em>;</li>
+  <li><strong>n_config</strong>: the total number of samples to be performed, for
+instance 200;</li>
+  <li><strong>f_time</strong>: the final solution time, for instance 10 weeks (70
+days);</li>
+  <li><strong>s_time</strong>: the time step defining the frequency at which explicit
+estimates for the system values are desired, in this case it could
+be set to 1 day;</li>
+  <li><strong>parameters_fname</strong>: a textual file in which the parameters to be
+studied are listed associated with their range of variability. This
+file is defined by three mandatory columns: (1) a tag representing
+the parameter type: <em>i</em> for the complete initial marking (or
+condition), <em>p</em> for a single parameter (either a single rate or
+initial marking), and <em>g</em> for a rate associated with general
+transitions (Pernice et al. 2019) (the user must define a file name
+coherently with the one used in the general transitions file); (2)
+the name of the transition which is varying (this must correspond to
+name used in the PN draw in GreatSPN editor), if the complete
+initial marking is considered (i.e., with tag <em>i</em>) then by default
+the name <em>init</em> is used; (3) the function used for sampling the
+value of the variable considered, it could be either a R function or
+an user-defined function (in this case it has to be implemented into
+the R script passed through the <em>functions_fname</em> input parameter).
+Let us note that the output of this function must have size equal to
+the length of the varying parameter, that is 1 when tags <em>p</em> or <em>g</em>
+are used, and the size of the marking (number of places) when <em>i</em> is
+used. The remaining columns represent the input parameters needed by
+the functions defined in the third column. An example is given by
+the file <em>Functions_list.csv</em>, where we decided to vary the rates
+of the <em>Recovery</em> and <em>Infection</em> transitions by using the R
+function which generates values following the uniform probability
+distribution on the interval from <em>min</em> to <em>max</em>. We set <em>n=1</em>
+because we must generate one value for each sample.</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   Tag       Name Function Parameter1   Parameter2 Parameter3
+#&gt; 1   p   Recovery    runif        n=1      min = 0      max=1
+#&gt; 2   p  Infection    runif        n=1  min = 1e-05  max=2e-04
+</code></pre></div></div>
+
+<p>Another example might be <em>Functions_list2.csv</em>, where we decide to vary
+the initial marking using the following function <em>init_generation</em>
+defined in the R script <em>Functions.R</em> (see <em>functions_fname</em>
+parameter).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   Tag       Name         Function           Parameter1        Parameter2
+#&gt; 1   i       init  init_generation  min_init = 10000*.8  max_init = 10000
+#&gt; 2   p   Recovery            runif                  n=1           min = 0
+#&gt; 3   p  Infection            runif                  n=1       min = 1e-05
+#&gt;   Parameter3
+#&gt; 1           
+#&gt; 2      max=1
+#&gt; 3  max=2e-04
+</code></pre></div></div>
+
+<ol>
+  <li><strong>functions_fname</strong>: an R file storing the user defined functions
+to generate instances of the parameters summarized in the
+<em>parameters_fname</em> file. An example is given by <em>Functions.R</em>,
+where the function <em>init_generation</em> introduced in
+<em>Functions_list2.csv</em> file is defined in order to sample the
+initial number of susceptible between <em>min_init</em> and <em>max_init</em>,
+and fixing the number of infected and recovered to 1 and 0
+respectively.</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>init_generation&lt;-function(min_init , max_init, n)
+{
+    S=runif(n=1,min=min_init,max=max_init)
+# It returns a vector of lenght equal to 3 since the marking is 
+# defined by the three places: S, I, and R.
+    return( c(S, 1,0) )
+}
+</code></pre></div></div>
+
+<ol>
+  <li><strong>target_value_fname</strong>: an R file providing the function to obtain
+the place or a combination of places from which the PRCCs over the
+time have to be calculated. In details, the function takes in input
+a <em>data.frame</em>, namely <em>output</em>, defined by a number of columns
+equal to the number of places plus one corresponding to the time,
+and number of rows equals to number of time steps defined
+previously. Finally, it must return the column (or a combination of
+columns) corresponding to the place (or combination of places) for
+which the PRCCs have to be calculated for each time step. An example
+is given in <em>Target.R</em>, where the PRCCs are calculated with respect
+to place <em>I</em> (infected individuals).</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Target&lt;-function(output)
+{
+    I &lt;- output[,"I"]
+    return(I)
+}
+</code></pre></div></div>
+
+<ol>
+  <li><strong>reference_data</strong>: a csv file storing the data to be compared with
+the simulations’ result. In <em>reference_data.csv</em> we report the SIR
+evolution starting with 10000 susceptible, one infected and zero
+recovered, with a recovery and infection rates equals to 0.1428 and
+1.428 respectively. Notice that the <strong>reference_data</strong>’s rows must
+be the variable time serie, and so the colums the corresponding
+values at a specific time.</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;      TimeStep1    TimeStep2    TimeStep3    TimeStep4    TimeStep5    TimeStep6
+#&gt; Time         0 1.000000e-01 2.000000e-01 3.000000e-01 4.000000e-01    0.5000000
+#&gt; S        10000 9.999848e+03 9.999674e+03 9.999477e+03 9.999253e+03 9998.9984994
+#&gt; I            1 1.137136e+00 1.293078e+00 1.470399e+00 1.672030e+00    1.9013056
+#&gt; R            0 1.524425e-02 3.257922e-02 5.229125e-02 7.470625e-02    0.1001951
+#&gt;         TimeStep7
+#&gt; Time    0.6000000
+#&gt; S    9998.7088095
+#&gt; I       2.1620116
+#&gt; R       0.1291789
+</code></pre></div></div>
+
+<ol>
+  <li><strong>distance_measure_fname</strong>: the R file storing the function to
+compute the distance (or error) between the model output and the
+reference dataset itself. The function defining the distance takes
+in input only the reference data and the simulation’s output (i.e. a
+trajectory); an example is given by <em>msqd.R</em> where a distance
+measure (based on the squared error distance) as function of the
+infected individuals is defined:</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msqd&lt;-function(reference, output)
+{
+    Infect &lt;- output[,"I"]
+
+    diff.Infect &lt;- sum(( Infect - reference )^2 )
+
+    return(diff.Infect)
+}
+</code></pre></div></div>
+
+<p>Let us observe that: (i) the distance and target functions must have the
+same name of the corresponding R file,(ii) <em>sensitivity_analysis</em>
+exploits also the parallel processing capabilities, and (iii) if the
+user is not interested on the ranking calculation then the
+<strong>distance_measure_fname</strong> and <strong>reference_data</strong> are not necessary
+and can be omitted.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Simple version where only the transition rates vary.
+sensitivity&lt;-sensitivity_analysis(n_config = 200,
+                                  parameters_fname = "Input/Functions_list.csv", 
+                                  solver_fname = "Net/SIR.solver",
+                                  reference_data = "Input/reference_data.csv",
+                                  distance_measure_fname = "Rfunction/msqd.R" ,
+                                  target_value_fname = "Rfunction/Target.R" ,
+                                  f_time = 7*10, # weeks
+                                  s_time = 1, # days      
+                                  parallel_processors = 24
+                                  )
+</code></pre></div></div>
+
+<p>Hence, considering the SIR model we can run the <em>sensitivity_analysis</em>
+varying the <em>Infection</em> and <em>Recovery</em> transitions rates in order to
+characterized their effect on the number of infected individuals.</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations." /></p>
+<p class="caption">
+ The 200 trajectories considering the I place obtained from different
+parameters configurations.
+</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations." /></p>
+<p class="caption">
+ The 200 trajectories considering the S place obtained from different
+parameters configurations.
+</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration." /></p>
+<p class="caption">
+ The 200 trajectories considering the R place obtained from different
+parameters configuration.
+</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error." /></p>
+<p class="caption">
+ Scatter plot showing the squared error between the reference data and
+simulated number of infected. The dark blue points represent the
+parameters configuration with minimum error.
+</p>
+
+<p>From the figures , , and , it is possible to observe the different
+trajectories obtained by solving the system of ODEs, represented by eq.
+, with different parameters configurations, sampled by exploiting the
+function passed through <strong>parameters_fname</strong>. In figure the distance
+values, obtained using the measure definition described before, are
+plotted varying the <em>Recovery</em> parameter (on the x-axis) and <em>Infection</em>
+parameter (on the y-axis). Each point is colored according to a
+nonlinear gradient function starting from color dark blue (i.e., lower
+value) and moving to color light blue (i.e., higher values). From this
+plot we can observe that lower squared errors are obtained when
+<em>Recovery</em> is around 0.13 and <em>Infection</em> around 0.00015, thus we can
+reduce the search space associated with the two parameters around these
+two values.</p>
+
+<p><img src="./Results/results_sensitivity_analysis/prcc_SIR-sensitivity.pdf" alt="\label{fig:prcc} PRCC for the I place over time." /></p>
+<p class="caption">
+ PRCC for the I place over time.
+</p>
+
+<p>The PRCCs values for these two parameters, depicted in figure , with
+respect the number of infections over the entire simulated period are
+both meaningful, especially in the first part of the simulation,
+corresponding to the transient part where the parameters affect mostly
+the output. Differently, this effect decreases after the fifth week
+where all the deterministic trajectories obtained with different
+parameters configurations converge to the same states, see figure .</p>
+
+<p>Other possible examples of how to use this function are reported
+hereafter:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## Version where only the PRCC is calculated
+sensitivity&lt;-sensitivity_analysis(n_config = 100,
+                                  parameters_fname = "Input/Functions_list.csv", 
+                                  functions_fname = "Rfunction/Functions.R",
+                                  solver_fname = "Net/SIR.solver",
+                                  target_value_fname = "Rfunction/Target.R" ,
+                                  parallel_processors = 1,
+                                  f_time = 7*10, # weeks
+                                  s_time = 1 # days
+                                  )
+
+## Version where only the ranking is calculated
+sensitivity&lt;-sensitivity_analysis(n_config = 100,
+                                  parameters_fname = "Input/Functions_list.csv", 
+                                  functions_fname = "Rfunction/Functions.R",
+                                  solver_fname = "Net/SIR.solver",
+                                  reference_data = "Input/reference_data.csv",
+                                  distance_measure_fname = "Rfunction/msqd.R" ,
+                                  parallel_processors = 1,
+                                  f_time = 7*10, # weeks
+                                  s_time = 1 # days
+                                  )
+
+## Complete and more complex version where all the parameters for calculating
+## the PRCC and the ranking are considered, and the initial conditions vary too.
+
+sensitivity&lt;-sensitivity_analysis(n_config = 100,
+                                  parameters_fname = "Input/Functions_list2.csv", 
+                                  functions_fname = "Rfunction/Functions.R",
+                                  solver_fname = "Net/SIR.solver",
+                                  reference_data = "Input/reference_data.csv",
+                                  distance_measure_fname = "Rfunction/msqd.R" ,
+                                  target_value_fname = "Rfunction/Target.R" ,
+                                  parallel_processors = 2,
+                                  f_time = 7*10, # weeks
+                                  s_time = 1 # days
+                                  )
+</code></pre></div></div>
+
+<h4 id="sensitivity-analysis-with-general-transitions">Sensitivity analysis with general transitions</h4>
+
+<p>Let us consider the example of the SIR model where the <em>Infection</em>
+transition is defined as general transition, with the porpoise to
+varying the <em>Infection_rate</em> constant of the corresponding Mass Action
+law. Generally, in order to define the rate of a transition it is
+required to provide some inputs and, hence, we need to define an R
+function (in the <strong>functions_fname</strong> file) which provides all the input
+parameters necessary to the C++ function.</p>
+
+<p>Therefore, we have to modify the <em>Functions_list</em> csv as follow in
+order to associate with the general transition <em>Infection</em> the R
+function, <em>InfectionValuesGeneration</em>, which generates the values
+exploited by the respective function defined in the C++ file, called
+<em>trasition.cpp</em>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   Tag       Name                   Function Parameter1 Parameter2 Parameter3
+#&gt; 1   p   Recovery                      runif        n=1    min = 0      max=1
+#&gt; 2   g  Infection  InfectionValuesGeneration    min = 0      max=1
+</code></pre></div></div>
+
+<p>Successively, we have to define the <em>InfectionValuesGeneration</em> in
+<em>Functions.R</em>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InfectionValuesGeneration&lt;-function(min, max)
+{
+    rate_value &lt;-  runif(n=1, min = min, max = max)
+    return(rate_value)
+}
+</code></pre></div></div>
+
+<p>Notice that the value (or values) generated are temporarily saved in a
+file named as the corresponding name in the <em>Functions_list</em>, in this
+case <em>Infection</em>. Hence, the file <em>transition.cpp</em> has to be modified in
+order to read and use the value generated from the R function
+<em>InfectionValuesGeneration</em>. An example of implementation is the
+following, where two functions are defined: (1) <em>read_constant()</em> in
+order to read the generated value, which is associated with the right
+variable, and (2) <em>init_data_structures()</em> in order to read the file
+only the first time that the function is called.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static double Flag = -1; 
+static double Infection_rate = 1.428;
+
+void read_constant(string fname, double&amp; Infection_rate)
+{
+    ifstream f (fname);
+    string line;
+    if(f.is_open())
+    {
+        int i = 1;
+        while (getline(f,line))
+        {
+            switch(i)
+            {
+                case 1:
+                    Infection_rate = stod(line);
+                    //cout &lt;&lt; "p" &lt;&lt; i &lt;&lt; ": " &lt;&lt; line &lt;&lt; "\t" &lt;&lt; p1 &lt;&lt; endl;
+                    break;
+            }
+            ++i;
+        }
+        f.close();
+    }
+    else
+    {
+        std::cerr&lt;&lt;"\nUnable to open " &lt;&lt; fname &lt;&lt; 
+                ": file do not exists\": file do not exists\n";
+        exit(EXIT_FAILURE);
+    }
+}
+
+void init_data_structures()
+{
+    read_constant("./Infection", Infection_rate);
+    Flag = 1; 
+
+}
+
+double InfectionFunction(double *Value,
+                         map &lt;string,int&gt;&amp; NumTrans,
+                         map &lt;string,int&gt;&amp; NumPlaces,
+                         const vector&lt;string&gt; &amp; NameTrans,
+                         const struct InfTr* Trans,
+                         const int T,
+                         const double&amp; time)
+{
+
+    // Definition of the function exploited to calculate the rate,
+    // in this case for semplicity we define it throught the Mass Action  law
+ 
+    if( Flag == -1)   init_data_structures();
+ 
+    double intensity = 1.0;
+    
+    for (unsigned int k=0; k&lt;Trans[T].InPlaces.size(); k++)
+    {
+        intensity *= pow(Value[Trans[T].InPlaces[k].Id],Trans[T].InPlaces[k].Card);
+    }
+    
+    double rate = Infection_rate * intensity;
+
+    return(rate);
+}
+</code></pre></div></div>
+
+<h3 id="calibration-analysis">Calibration analysis</h3>
+
+<p>The aim of this phase is to optimize the fit of the simulated behavior
+to the reference data by adjusting the parameters associated with both
+Recovery and Infection transitions. This step is performed by the
+function <em>model_calibration()</em>, characterized by the solution of an
+optimization problem in which the distance between the simulated data
+and the reference data is minimized, according to the definition of
+distance provided by the user (<strong>distance_fname</strong>)</p>
+
+<p>The function input parameters are very similar to those introduced for
+the <em>sensitivity_analysis()</em>, we have just to modify the
+<strong>parameters_fname</strong> since we do not need to sample the parameter
+values. An example is given in <em>Functions_list_Calibration.csv</em>, where
+the first two columns (i.e., type and name) remain unchanged,
+differently the functions associated with each rate (defined
+<em>FunctionCalibration.R</em>) have to return the value (or a linear
+transformation) of the vector of the unknown parameters generated from
+the optimization algorithm, namely <em>x</em>, whose size is equal to number of
+parameters in <strong>parameters_fname</strong>. Let us note that the output of
+these functions must return a value for each input parameter.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   Tag       Name   Function Parameter
+#&gt; 1   p   Recovery   recovery       n=1
+#&gt; 2   p  Infection  infection       n=1
+</code></pre></div></div>
+
+<p>For instance, to calibrate the transition rates associated with
+<em>Recovery</em> and <em>Infection</em>, the functions <em>recovery</em> and <em>infection</em>
+have to be defined, returning just the corresponding value from the
+vector <em>x</em>, where <em>x[1]= “Recovery rate”</em>, <em>x[2]= “Infection rate”</em>,
+since we do not want to change the vector generated from the
+optimization algorithm. The order of values in <em>x</em> is given by the order
+of the parameters in <strong>parameters_fname</strong>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>recovery&lt;-function(x)
+{
+    return(x[1])
+}
+
+infection&lt;-function(x)
+{
+    return(x[2])
+}
+</code></pre></div></div>
+
+<p>The remaining parameters are necessary for the optimization process,
+such as the vector defining the upper/lower bound limits, the initial
+parameters value, and the control parameters of the optimization (see
+the R package GenSa (Yang Xiang et al. 2012)).</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_calibration(parameters_fname = "Input/Functions_list_Calibration.csv",
+                  functions_fname = "Rfunction/FunctionCalibration.R",
+                  solver_fname = "Net/SIR.solver",
+                  reference_data = "Input/reference_data.csv",
+                  distance_measure_fname = "Rfunction/msqd.R" ,
+                  f_time = 7*10, # weeks
+                  s_time = 1, # days
+                  # Vectors to control the optimization
+                  ini_v = c(0.15,0.00015),
+                  ub_v = c(0.2, 0.0002),
+                  lb_v = c(0.1, 0.0001),
+                  max.call = 50
+                  )
+</code></pre></div></div>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-1.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place." /></p>
+<p class="caption">
+ Trajectories considering the I place.
+</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-2.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place." /></p>
+<p class="caption">
+Trajectories considering the S place.
+</p>
+
+<p><img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place." /></p>
+<p class="caption">
+ Trajectories considering the R place.
+</p>
+
+<p>In figures , and the trajectories with color depending on the squared
+error w.r.t. reference trend are plotted. In this case, fixing a maximum
+number of objective function calls, we obtain the following optimal
+value for the two parameters:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt; [1] 0.1428522382 0.0001428038
+</code></pre></div></div>
+
+<h4 id="calibration-analysis-with-general-transitions">Calibration analysis with general transitions</h4>
+
+<p>Starting from the changes made in the Sensitivity Analysis phase, we
+have to add the possibility to save the value passed by the optmization
+algorithm instead of the value generated by the function defined by the
+user. By default in the calibration phase, the vector <em>x</em> of the unknown
+parameters, in this case the <em>Recovery</em> and <em>Infection</em> rates, is passed
+to the R functions defined in <em>Functions.R</em>. Therefore, we have to
+modify the <em>InfectionValuesGeneration</em> in order to return the value
+contained in <em>x</em>, i.e. the second one ( the order is given by the order
+of the parameters in <strong>parameters_fname</strong>). Notice that in the
+Sensitivity Analisys phase, the vector <em>x</em> is not passed in input so we
+can generalized the <em>InfectionValuesGeneration</em> as follow in order to
+use it in both the analysis phases.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>InfectionValuesGeneration&lt;-function(min, max, x= NULL)
+{
+    if(is.null(x))  rate_value &lt;-  runif(n=1, min = min, max = max)
+    else rate_value &lt;- x[2]
+    
+    return(rate_value)
+}
+</code></pre></div></div>
+
+<h3 id="model-analysis">Model Analysis</h3>
+
+<p>The last step is the model analysis, where the corresponding function
+<em>model_analysis()</em> executes and tests the behavior of the developed
+model. Furthermore, by changing the input parameters, it is possible to
+perform a <em>what-if</em> analysis or forecasting the evolution of the
+diffusion process. This function solves the system given a specific
+parameters configuration which is passed through the function parameter,
+<em>parameters_fname</em>. In this case, instead of writing a function to
+sample or define the parameter variability, we can pass the specific
+value obtained from the calibration for generating the corresponding
+trajectory.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   Tag       Name Specific value
+#&gt; 1   p   Recovery   0.1428522382
+#&gt; 2   p  Infection   0.0001428038
+
+
+model_analysis(out_fname = "model_analysis",
+               solver_fname = "Net/SIR.solver",
+               parameters_fname = "Results/Functions_list_ModelAnalysis.csv",
+               f_time = 7*10, # weeks
+               s_time = 1
+               )
+</code></pre></div></div>
+
+<h1 id="references">References</h1>
+
+<p>Keeling, Matt J, and Pejman Rohani. 2011. <em>Modeling Infectious Diseases
+in Humans and Animals</em>. Princeton University Press.</p>
+
+<p>Kurtz, T. G. 1970. “Solutions of Ordinary Differential Equations as
+Limits of Pure Jump Markov Processes.” <em>J. Appl. Probab.</em> 1 (7): 49–58.</p>
+
+<p>Marsan, M. Ajmone, G. Balbo, G. Conte, S. Donatelli, and G.
+Franceschinis. 1995. <em>Modelling with Generalized Stochastic Petri Nets</em>.
+New York, NY, USA: J. Wiley.</p>
+
+<p>Pernice, S., M. Pennisi, G. Romano, A. Maglione, S. Cutrupi, F.
+Pappalardo, G. Balbo, M. Beccuti, F. Cordero, and R. A. Calogero. 2019.
+“A Computational Approach Based on the Colored Petri Net Formalism for
+Studying Multiple Sclerosis.” <em>BMC Bioinformatics</em>.</p>
+
+<p>Veiga Leprevost, Felipe da, Björn A Grüning, Saulo Alves Aflitos, Hannes
+L Röst, Julian Uszkoreit, Harald Barsnes, Marc Vaudel, et al. 2017.
+“BioContainers: an open-source and community-driven framework for
+software standardization.” <em>Bioinformatics</em> 33 (16): 2580–2.</p>
+
+<p>Yang Xiang, Sylvain Gubian, Brian Suomela, and Julia Hoeng. 2012.
+“Generalized Simulated Annealing for Efficient Global Optimization: The
+GenSA Package for R.” <em>The R Journal</em>. <a href="http://journal.r-project.org/">http://journal.r-project.org/</a>.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 qbioGroup. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

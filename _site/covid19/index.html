@@ -1,0 +1,391 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Case study: COVID-19 -</title>
+<meta name="description" content="A modeling framework for studying biological systems">
+
+
+  <meta name="author" content="q-Bio Group">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="Case study: COVID-19">
+<meta property="og:url" content="http://localhost:4000/covid19/">
+
+
+  <meta property="og:description" content="A modeling framework for studying biological systems">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/COVID/COVIDmodel.png">
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/covid19/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "qbioGroup",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--splash">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logoGreatMod.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/HowInstall/">How to install</a>
+            </li><li class="masthead__menu-item">
+              <a href="/examples/">Examples</a>
+            </li><li class="masthead__menu-item">
+              <a href="/group/">Group</a>
+            </li><li class="masthead__menu-item">
+              <a href="/references/">References</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/COVID/COVIDmodel.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Case study: COVID-19
+
+        
+      </h1>
+      
+      
+
+
+      
+      
+        <p>
+        
+          <a href="https://github.com/qBioTurin/COVID-19" class="btn btn--light-outline btn--large">Github</a>
+        
+      
+    </div>
+  
+  
+</div>
+
+
+
+<div id="main" role="main">
+  <article class="splash" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Case study: COVID-19">
+    
+    
+    
+
+    <section class="page__content" itemprop="text">
+      <h1 id="model">Model</h1>
+
+<p><img src="/assets/images/COVID/COVIDmodel.png" alt="" /></p>
+
+<p>We propose an extended version of the SEIRS modeled exploiting the Petri Net formalism  to account for the population age distribution, that was classified into three groups: young individuals 0-19 years,  adults 20-69 years, old adults aged at least 70 years.
+The following figure shows:</p>
+
+<ol>
+  <li>(A) The transmission flow diagram of our age-dependent SEIRS model, where the circles represent population partitions and the arcs describe the disease progression.</li>
+  <li>(B) Age-specific and location-specific contact matrices. The intense of the color indicates higher propensity of making the contact.</li>
+  <li>(C) Distribution of quarantine infected (Iq), hospitalized infected (Ih) and deaths (D) from February 24th to May 2nd. The control strategies are reported below the bar graph.</li>
+</ol>
+
+<p><img src="/assets/images/COVID/Model.png" alt="" /></p>
+
+<p>The population of the age class <em>i</em> is partitioned in the following
+seven compartments: (<em>S</em><sub><em>i</em></sub>), (<em>E</em><sub><em>i</em></sub>),
+(<em>I</em><sub><em>u**i</em></sub>), (<em>I</em><sub><em>q**i</em></sub>), (<em>I</em><sub><em>h**i</em></sub>),
+(<em>R</em><sub><em>i</em></sub>), (<em>D</em><sub><em>i</em></sub>). With respect to the classical
+SEIRS model, we have added a transition from <em>I</em><sub><em>u**i</em></sub> to
+<em>I</em><sub><em>q**i</em></sub> to model the possibility to identify undetected
+cases and isolate them. In this way an individual in
+<em>I</em><sub><em>u**i</em></sub> tested as positive to the SARS-CoV-2 swab will be
+moved in the quarantine regime, <em>I</em><sub><em>q**i</em></sub>.</p>
+
+<p>The <em>force of infection</em> adopted in the model is a time and age class dependent function and includes the following four terms:</p>
+
+<ol>
+  <li>the <em>infection rate</em>, depending on the age classes of both the susceptible and the infected individuals who come into contact according to the contact matrix;</li>
+  <li>the <em>strength of governmental restriction</em> defined through a time-depended step function, modeling the severity of the public restrictions;</li>
+  <li>the <em>compliance with the  governmental restriction</em>, reporting how effectively the population adheres to the restriction measures imposed by the Italian government. The higher the disease severity (i.e., the severity of the epidemic in terms of number of deaths and hospitalized individuals in the last 40 days), the better the population compliance;</li>
+  <li>the <em>compliance with individual-level measures</em>, considering how different infection-control measures are properly adopted by the population.</li>
+</ol>
+
+<p>A detailed description of the model (e.g., system of ordinary differential equations, parameters, etc) is reported in [1].</p>
+
+<h3 id="results">Results</h3>
+
+<p>The calibration phase was performed to fit the model outcomes with the
+surveillance Piedmont infection and death data (from February 24st to
+May 2nd) using squared error estimator via trajectory matching. Hence, a
+global optimization algorithm, based on (Yang Xiang et al. 2012), was
+exploited to estimate 13 model parameters characterized by a high
+uncertainty due to their difficulty of being empirically measured:</p>
+
+<ol>
+  <li>three parameters represent the probability of infection for each age
+class,</li>
+  <li>four parameters reflect the governmental action strength,</li>
+  <li>one parameter describes the intensity of the population response,</li>
+  <li>two parameters represent the death rate for the hospitalized
+patients,</li>
+  <li>two parameters are the initial condition for the undetected and
+quarantine infected individuals,</li>
+  <li>the remainder parameter represents the detection rate for the third
+age class starting from the 1<sup><em>s**t</em></sup> April.</li>
+</ol>
+
+<p>Consistently, Figure 2A and 2B show that the calibrated model is able to
+mimic consistently the observed infected and death cases (red line
+respectively). In details, Figure 2A reports the cumulative trend of the
+infected individuals in which the undetected infected are showed in
+orange, the quarantine infected in light blue, and hospitalized infected
+in blue. The purple line reports the cumulative trend of the undetected
+cases diagnosed by SARS-CoV-2 swab tests. Differently Figure 2B shows
+the cumulative trend of deaths. In both histograms the surveillance data
+are reported as red line. Similarly, in Figure 3 the infected
+individuals for each age class are shown.</p>
+
+<p><img src="/assets/images/COVID/Comulatives-1.png" alt="Fig.2) Number of (A) infected and (B) deceased individuals. " /></p>
+<p class="caption">
+Fig.2) Number of (A) infected and (B) deceased individuals.
+</p>
+
+<p><img src="/assets/images/COVID/InfectsHistALL-1.png" alt="Fig.3) Number of infected individuals for each age class. The red curve represents the surveillance data, which does not account for undetected cases." /></p>
+<p class="caption">
+Fig.3) Number of infected individuals for each age class. The red curve
+represents the surveillance data, which does not account for undetected
+cases.
+</p>
+
+<h2 id="studying-the-effects-of-the-government-control-interventions">Studying the effects of the government control interventions.</h2>
+
+<p>Three scenarios are implemented. In the the model is calibrated to fit
+the surveillance data (yellow). In the the model extends the second
+restriction beyond March, 21<sup><em>s**t</em></sup> without implementing the
+third restriction (blue). In the the model consider a higher population
+compliance to the third governmental restriction (green).</p>
+
+<p><img src="/assets/images/COVID/DiffStrengths-1.png" alt="Fig.4) Stochastic simulation results reported as traces (on the left) and as density distributions (on the right)." /></p>
+<p class="caption">
+Fig.4) Stochastic simulation results reported as traces (on the left)
+and as density distributions (on the right).
+</p>
+
+<h2 id="covid-19-epidemic-containment-strategies">COVID-19 epidemic containment strategies.</h2>
+
+<p>The daily evolution of infected individuals is shown varying on the
+columns the the efficacy of individual-level measures and on the rows
+the efficacy of community surveillance.</p>
+
+<p><img src="/assets/images/COVID/Scenario00-1.png" alt="Fig.5) Pessimistic scenario in which the gradual reopening is not counterbalanced by any infection-control strategies" /></p>
+<p class="caption">
+Fig.5) Pessimistic scenario in which the gradual reopening is not
+counterbalanced by any infection-control strategies
+</p>
+
+<p><img src="/assets/images/COVID/Plot3_withLine-1.png" alt="Fig.6) The daily evolution of infected individuals is shown varying on the columns the  the efficacy of individual-level measures and on the rows the efficacy of  community surveillance" /></p>
+<p class="caption">
+Fig.6) The daily evolution of infected individuals is shown varying on
+the columns the the efficacy of individual-level measures and on the
+rows the efficacy of community surveillance
+</p>
+
+<p>Figure 5 shows the daily evolution of infected individuals computed by
+the stochastic simulation. The stacked bars report the undetected
+infected (orange), the quarantine infected (light blue), and
+hospitalized infected (blue). The red line shows the trend of the
+infected cases from surveillance data. The purple line reports the
+cumulative trend of the undetected cases diagnosed by SARS-CoV-2 swab
+tests. In Figure 6 we show the daily forecasts of the number of infected
+individuals with the efficacy of individual-level measures ranging from
+0% to 60% on the columns (increasing by steps of 20%) and, on the rows,
+increasing capability (from 0% to 30%, by 10% steps) of identifying
+otherwise undetected infected individuals. These results are obtained as
+median value of 5000 traces for each scenario obtained from the
+stochastic simulation.</p>
+
+<h1 id="references">References</h1>
+
+<p>Pernice, S., M. Pennisi, G. Romano, A. Maglione, S. Cutrupi, F.
+Pappalardo, G. Balbo, M. Beccuti, F. Cordero, and R. A. Calogero. 2019.
+“A Computational Approach Based on the Colored Petri Net Formalism for
+Studying Multiple Sclerosis.” <em>BMC Bioinformatics</em>.</p>
+
+<p>Yang Xiang, Sylvain Gubian, Brian Suomela, and Julia Hoeng. 2012.
+“Generalized Simulated Annealing for Efficient Global Optimization: The
+GenSA Package for R.” <em>The R Journal</em>. <a href="http://journal.r-project.org/">http://journal.r-project.org/</a>.</p>
+
+    </section>
+  </article>
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 qbioGroup. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
