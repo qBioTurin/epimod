@@ -11,7 +11,7 @@
 # https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/#installing-the-theme
 remote_theme             : "mmistakes/minimal-mistakes@4.21.0"
 # remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    :  "default"
+minimal_mistakes_skin    :  "air"
 
 # Site Settings
 locale                   : "en-US"
