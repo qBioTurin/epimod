@@ -1,0 +1,11 @@
+# main links
+main:
+  - title: "How to install"
+    url: /HowInstall/
+  - title: "Examples"
+    url: /examples/  
+  - title: "Group"
+    url: /group/
+  - title: References
+    url: /references/
+
