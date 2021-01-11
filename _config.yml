@@ -17,7 +17,7 @@ minimal_mistakes_skin    :  "default"
 # Site Settings
 locale                   : "en-US"
 title                    : ""
-title_separator          : #"-"
+title_separator          : "-"
 subtitle                 : #"GreatSPN+Epimod: a modeling framework for studying biological systems."
 name                     : "qbioGroup"
 description              : 
