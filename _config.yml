@@ -12,7 +12,7 @@
 
 theme                  : "minimal-mistakes-jekyll"
 # remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    :  "air"
+minimal_mistakes_skin    :  "default"
 
 # Site Settings
 locale                   : "en-US"
@@ -138,8 +138,6 @@ footer:
 include:
   - .htaccess
   - _pages
-  - _layouts
-  - _data
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
