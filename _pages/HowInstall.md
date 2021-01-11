@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "How to install"
+title: "GreatMod - How to install"
 permalink: /HowInstall/
 toc: true
 toc_label: "Requirements"

@@ -1,5 +1,5 @@
 ---
-title: "Step by step guide: SIR"
+title: "GreatMod -  SIR"
 layout: single
 permalink: /sir/
 author_profile: true

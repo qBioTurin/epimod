@@ -1,5 +1,5 @@
 ---
-title: "Case study: Pertussis"
+title: "GreatMod - Pertussis"
 layout: splash
 permalink: /Pertussis/
 header:

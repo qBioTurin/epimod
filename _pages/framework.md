@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Framework"
+title: "GreatMod - Framework"
 permalink: /framework/
 --- 
 

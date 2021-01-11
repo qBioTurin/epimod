@@ -1,5 +1,5 @@
 ---
-title: "Case study: COVID-19"
+title: "GreatMod - COVID-19"
 layout: splash
 permalink: /covid19/
 header:

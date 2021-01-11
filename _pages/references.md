@@ -1,9 +1,10 @@
 ---
 layout: single
-title: "References"
+title: "GreatMod - References"
 permalink: /references/
 ---
 
+### References
 
 * [A computational framework for modeling and studying pertussis epidemiology and vaccination.](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03648-6) P. Castagno, S. Pernice, G. Ghetti, M. Povero, L. Pradelli, D. Paolotti, G. Balbo, M. Sereno and M. Beccuti. BMC Bioinformatics, Volume 21, 16 September 2020, Page 344.
 

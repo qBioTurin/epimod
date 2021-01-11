@@ -1,5 +1,5 @@
 ---
-title: "Case studies"
+title: "GreatMod - Applications"
 permalink: /examples/
 layout: splash
 intro: 
