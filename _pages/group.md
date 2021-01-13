@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "GreatMod -Group"
+title: "GreatMod - Group"
 permalink: /group/
 author_profile: true
 --- 
