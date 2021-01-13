@@ -10,8 +10,11 @@ author_profile: true
 # Q-Bio Group
 
 Prof.ssa [Cordero Francesca](https://www.cs.unito.it/do/docenti.pl/Show?_id=fcordero)
+
 Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#tab-profilo)
+
 Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
+
 Ferrero Giulio
 Follia Laura 
 Castagno Paolo
