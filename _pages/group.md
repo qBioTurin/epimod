@@ -16,11 +16,17 @@ Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#ta
 Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
 
 Ferrero Giulio
+
 Follia Laura 
+
 Castagno Paolo
+
 Piaggeschi Giulia
+
 [Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
+
 Licheri Nicola
+
 Nosi Vladimir
 
 ## Collaborations
@@ -28,5 +34,7 @@ Nosi Vladimir
 *Cancer Epidemiology Unit*, Department of Medical Science (Unito):
 
 Prof. Richiardi Lorenzo
+
 Prof.ssa Maule Milena
+
 Moirano Giovenale
