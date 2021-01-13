@@ -7,7 +7,7 @@ author_profile: true
 
 ![](/assets/images/Group.png)
 
-### Q-Bio Group
+### Q-Bio Group, Department of Computer Science (Unito)
 
 Prof.ssa [Cordero Francesca](https://www.cs.unito.it/do/docenti.pl/Show?_id=fcordero)
 
@@ -30,8 +30,8 @@ Licheri Nicola
 Nosi Vladimir
 
 
-
-### Cancer Epidemiology Unit*, Department of Medical Science (Unito):
+### Collaborations
+##### Cancer Epidemiology Unit, Department of Medical Science (Unito)
 
 Prof. Richiardi Lorenzo
 
