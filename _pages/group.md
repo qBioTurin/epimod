@@ -38,3 +38,7 @@ Prof. Richiardi Lorenzo
 Prof.ssa Maule Milena
 
 Moirano Giovenale
+
+**Department of Mathematics "Giuseppe Peano" (Unito)**:
+
+Prof.ssa [Sirovich Roberta](https://matematicalm.campusnet.unito.it/do/docenti.pl/Alias?roberta.sirovich#tab-profilo)
