@@ -1,0 +1,184 @@
+I"
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--center">
+      <div class="archive__item">
+        
+
+        <div class="archive__item-body">
+          
+
+          
+            <div class="archive__item-excerpt">
+              
+
+            </div>
+          
+
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<h2 id="step-by-step-applications">Step-by-step Applications</h2>
+<p>These simple models are presented as an introduction to the <strong>GreatMod</strong> usage, showing step by step the base functionalities of the R package, <em>epimod</em>.</p>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/assets/images/SIR.png" alt="placeholder image 2" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">SIR</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>The SIR model is one of the simplest compartmental models, and many models are derivatives of this basic form. The model consists of three compartments: S for the number of susceptible, I for the number of infectious, and R for the number of recovered or deceased.</p>
+
+            </div>
+          
+
+          
+            <p><a href="https://github.com/qBioTurin/SIR" class="btn btn--primary">Read More</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+    <div class="feature__item">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/assets/images/lotkaV.png" alt="placeholder image 2" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Lotka Volterra</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of first-order nonlinear differential equations, frequently used to describe the dynamics of biological systems in which two species interact, one as a predator and the other as prey.</p>
+
+            </div>
+          
+
+          
+            <p><a href="https://github.com/qBioTurin/Lotka-Volterra" class="btn btn--primary">Read More</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<h2 id="complex-applications">Complex Applications</h2>
+
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/assets/images/COVID/COVIDmodel.png" alt="placeholder image 2" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">COVID-19</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>Investigation of the COVID-19 diffusion in the Piedmonnt region</p>
+
+            </div>
+          
+
+          
+            <p><a href="/covid19/" class="btn btn--primary">Read More</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+    <div class="feature__item">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/assets/images/Pertussis/PertussisModel.png" alt="placeholder image 2" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Pertussis</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>Investigation of the pertussis epidemiology in Italy</p>
+
+            </div>
+          
+
+          
+            <p><a href="/Pertussis/" class="btn btn--primary">Read More</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+    <div class="feature__item">
+      <div class="archive__item">
+        
+          <div class="archive__item-teaser">
+            <img src="/assets/images/MS/MSmodel.jpg" alt="placeholder image 2" />
+            
+          </div>
+        
+
+        <div class="archive__item-body">
+          
+            <h2 class="archive__item-title">Multiple Sclerosis</h2>
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>Analysis of the immune response in Multiple Sclerosis given specific treatments</p>
+
+            </div>
+          
+
+          
+            <p><a href="/ms/" class="btn btn--primary">Read More</a></p>
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+:ET

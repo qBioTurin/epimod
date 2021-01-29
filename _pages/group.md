@@ -1,13 +1,24 @@
 ---
 layout: single
-title: "GreatMod - Group"
+title: "GreatMod - Team"
 permalink: /group/
 author_profile: true
 --- 
 
-![](/assets/images/Group.png)
+## Department of Computer Science, Unito
 
-### Q-Bio Group, Department of Computer Science (Unito)
+### Development Team
+
+Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#tab-profilo)
+
+Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
+
+Ph.D. Castagno Paolo
+
+[Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
+
+
+### Q-Bio Group
 
 Prof.ssa [Cordero Francesca](https://www.cs.unito.it/do/docenti.pl/Show?_id=fcordero)
 
@@ -15,11 +26,11 @@ Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#ta
 
 Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
 
-Ferrero Giulio
+Ph.D. Ferrero Giulio
 
-Follia Laura 
+Ph.D. Follia Laura 
 
-Castagno Paolo
+Ph.D. Castagno Paolo
 
 Piaggeschi Giulia
 
@@ -28,17 +39,3 @@ Piaggeschi Giulia
 Licheri Nicola
 
 Nosi Vladimir
-
-
-### Collaborations
-**Cancer Epidemiology Unit, Department of Medical Science (Unito)**:
-
-Prof. Richiardi Lorenzo
-
-Prof.ssa Maule Milena
-
-Moirano Giovenale
-
-**Department of Mathematics "Giuseppe Peano" (Unito)**:
-
-Prof.ssa [Sirovich Roberta](https://matematicalm.campusnet.unito.it/do/docenti.pl/Alias?roberta.sirovich#tab-profilo)

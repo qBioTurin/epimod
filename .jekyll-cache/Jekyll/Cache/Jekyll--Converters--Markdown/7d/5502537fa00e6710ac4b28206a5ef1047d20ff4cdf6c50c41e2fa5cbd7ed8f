@@ -1,0 +1,15 @@
+I"E<h1 id="introduction">Introduction</h1>
+<p><strong>GreatMod</strong> represents a new way of facing the modeling analysis, exploiting the high-level graphical formalism, called Petri Net (PN), and its generalizations, which provide a compact, parametric and intuitive graphical description of the system and automatically derivation of the low-level mathematical processes (either deterministic and stochastic) characterizing the system dynamics.
+The framework strengths can be summarized into four points:</p>
+
+<ol>
+  <li>the use of a graphical formalism to simplify  the model creation phase exploiting the <em>GreatSPN</em> GUI;</li>
+  <li>the implementation of an R package, <strong>EPIMOD</strong>, providing  a friendly interface  to access the analysis techniques (from the sensitivity analysis and calibration of the parameters to the model simulation);</li>
+  <li>a high level of portability and reproducibility granted by  the containerization of all analysis techniques implemented in the framework;</li>
+  <li>a well-defined schema and related infrastructure to allow users to easily integrate their own analysis workflow in the framework.</li>
+</ol>
+
+<p>The following image shows the framework schema depicting its modules and its functionalities from a user point of view.</p>
+
+<p><img src="/assets/images/Framework.png" alt="" /></p>
+:ET

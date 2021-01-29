@@ -4,8 +4,10 @@ main:
     url: /HowInstall/
   - title: "Applications"
     url: /examples/  
-  - title: "Group"
+  - title: "Team"
     url: /group/
+  - title: "Collaborations"
+    url: /collaboration/
   - title: References
     url: /references/
 

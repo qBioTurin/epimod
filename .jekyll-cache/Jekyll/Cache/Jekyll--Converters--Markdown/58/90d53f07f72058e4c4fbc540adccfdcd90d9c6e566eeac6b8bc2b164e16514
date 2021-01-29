@@ -1,0 +1,22 @@
+I"ø<h3 id="pertussis-model">Pertussis Model</h3>
+
+<p><img src="/assets/images/Pertussis/PertussisModel.png" alt="" /></p>
+
+<p>We now describe how the framework functions can be combined to obtain an
+analysis workflow for the Pertussis model introduced in the main paper:
+<em>A computational framework for modeling andstudying pertussis
+epidemiology and vaccination</em>.</p>
+
+<p>We first introduce all the functions, the constants, and the numerical
+values associated with the general transitions rate (the black boxes in
+figure ). Then, we show the proposed framework and how it can be
+successfully used to study and analyze pertussis infection and the
+relative vaccination cycle in Italy. All the details regarding the
+function associated to the general transition and the parameters
+exploited in the simulations are reported in the <em>ReadMe.pdf</em> into the
+folder <strong>pdf</strong>.</p>
+
+<ul>
+  <li><a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03648-6">A computational framework for modeling and studying pertussis epidemiology and vaccination.</a> P. Castagno, S. Pernice, G. Ghetti, M. Povero, L. Pradelli, D. Paolotti, G. Balbo, M. Sereno and M. Beccuti. BMC Bioinformatics, Volume 21, 16 September 2020, Page 344.</li>
+</ul>
+:ET

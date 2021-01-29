@@ -1,0 +1,43 @@
+I"Ø<h2 id="docker">Docker</h2>
+
+<p>You need to have docker installed on your machine, for more info see this document:
+https://docs.docker.com/engine/installation/.</p>
+
+<p>Ensure your user has the rights to run docker (witout the use of <code class="language-plaintext highlighter-rouge">sudo</code>). To create the docker group and add your user:</p>
+
+<ul>
+  <li>Create the docker group.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  $ sudo groupadd docker
+</code></pre></div></div>
+<ul>
+  <li>Add your user to the docker group.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  $ sudo usermod -aG docker $USER
+</code></pre></div></div>
+<ul>
+  <li>Log out and log back in so that your group membership is re-evaluated.</li>
+</ul>
+
+<h2 id="greatspn">GreatSPN</h2>
+<p>The installation of the workflow requires the downloading of the extended version of the <a href="http://www.di.unito.it/~amparore/mc4cslta/editor.html"><em>GreatSPN</em> editor</a>.</p>
+
+<h2 id="epimod">EPIMOD</h2>
+<p>To install <strong>EPIMOD</strong> you can use use <strong>devtools</strong>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>install.packages("devtools")
+library(devtools)
+install_github("https://github.com/qBioTurin/epimod", ref="master")
+</code></pre></div></div>
+
+<p><strong>Download Containers</strong>:</p>
+
+<p>To download all the docker images exploited by <strong>EPIMOD</strong>  you can use:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(epimod)
+downloadContainers()
+</code></pre></div></div>
+
+:ET
