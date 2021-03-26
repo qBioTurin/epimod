@@ -40,7 +40,11 @@ experiment.configurations <- function(n_config,
     }
     # TBD: Add the feature to expand an existing configuration
     # Remove empty lines and comments
-    lines <- lines[-c(which(startsWith(lines,'#')),which(lines==""))]
+    rmv <- c(which(startsWith(lines,'#')),which(lines == ""))
+    if(length(rmv) != 0)
+    {
+        lines <- lines[-rmv]
+    }
     # For each line the file defines how to generate a (set of) parameter(s)
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
