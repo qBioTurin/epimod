@@ -2,35 +2,31 @@ library(parallel)
 library(epimod)
 library(ggplot2)
 
-sensitivity.worker<-function(id,
-                             solver_fname, solver_type, s_time, f_time,
-                             timeout, run_dir, out_fname, out_dir,
-                             event.list,
-                             files, config){
-    # Setup the environment
-    experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir)
-    # Environment settled, now run
-    # Change working directory to the one corresponding at the current id
-    pwd <- getwd()
-    setwd(paste0(run_dir,id))
-    if(is.null(event.list))
-    {
-      # Generate the appropriate command to run on the Docker
-      cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time,
-                            f_time = f_time, timeout = timeout, out_fname = out_fname)
-      # Measure simulation's run time
-      T1 <- Sys.time()
-      # Launch the simulation on the Doker
-      system(paste(cmd), wait = TRUE)
-      T2 <- difftime(Sys.time(), T1, unit = "secs")
-    }else{
-    	T1 <- Sys.time()
-      	experiment.event.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type,
-                           s_time = s_time, f_time = f_time, timeout = timeout,
-                           out_fname = out_fname,
-                           event.list=event.list)
-      	T2 <- difftime(Sys.time(), T1, unit = "secs")
-    }
+sensitivity.worker <- function(id,
+                               solver_fname, solver_type, s_time, f_time,
+                               timeout, run_dir, out_fname, out_dir,
+                               event_times, event_function,
+                               files, config){
+  # Setup the environment
+  experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
+  # Environment settled, now run
+  # Change working directory to the one corresponding at the current id
+  pwd <- getwd()
+  setwd(paste0(run_dir,id))
+  cmd <- experiment.cmd(id = id,
+                        solver_fname = solver_fname,
+                        solver_type = solver_type,
+                        s_time = s_time,
+                        f_time = f_time,
+                        event_times = event_times,
+                        events_function = event_function,
+                        timeout = timeout,
+                        out_fname = out_fname)
+    # Measure simulation's run time
+    T1 <- Sys.time()
+    # Launch the simulation on the Doker
+    system(paste(cmd), wait = TRUE)
+    T2 <- difftime(Sys.time(), T1, unit = "secs")
 
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
@@ -39,6 +35,7 @@ sensitivity.worker<-function(id,
     experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
     return(T2)
 }
+
 # Function to compute the distance between one simulation trace and the reference data
 sensitivity.distance <- function(id,
                                  run_dir,
@@ -100,15 +97,15 @@ if(is.null(params$seed)){
         assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
 }
 # Generate configuration
-params$config <-experiment.configurations(n_config = params$n_config,
-                                   parm_fname = params$files$functions_fname,
-                                   parm_list = params$files$parameters_fname,
-                                   out_dir = chk_dir(params$out_dir),
-                                   out_fname = params$out_fname,
-                                   extend = params$extend)
+params$config <- experiment.configurations(n_config = params$n_config,
+                                           parm_fname = params$files$functions_fname,
+                                           parm_list = params$files$parameters_fname,
+                                           out_dir = chk_dir(params$out_dir),
+                                           out_fname = params$out_fname,
+                                           extend = params$extend)
 saveRDS(params,  file = paste0(param_fname), version = 2)
 # Save final seed
-final_seed<-.Random.seed
+final_seed <- .Random.seed
 save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
@@ -128,9 +125,10 @@ exec_times <- parLapply( cl,
                          run_dir = params$run_dir,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir,
+                         event_times = params$event_times,
+                         events_function = params$event_function,
                          files = params$files,
-                         config = params$config,
-                         event.list= params$event.list)
+                         config = params$config)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 # List all the traces in the output directory

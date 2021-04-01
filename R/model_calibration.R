@@ -92,21 +92,21 @@ model_calibration <-function(
     threshold.stop = NULL, max.call = 1e7, max.time = NULL,
     # Parameters to control the ranking
     reference_data = NULL, distance_measure_fname = NULL,
+    # List of discrete events
+    event_times = NULL, event_function = NULL,
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname=NULL,
-    # List of discrete events
-    event.list=NULL){
+    out_fname=NULL){
 
-    chk_dir<- function(path){
+    chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
 
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
+    if (is.null(solver_fname))
     {
         stop("Missing solver file! Abort")
     }
@@ -115,22 +115,22 @@ model_calibration <-function(
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
-    if(is.null(out_fname))
+    if (is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-calibration")
     }
     # Fix input parameters path
-    if(!is.null(parameters_fname))
+    if (!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
         files[["parameters_fname"]] <- parameters_fname
     }
-    if(!is.null(functions_fname))
+    if (!is.null(functions_fname))
     {
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
     }
-    if(!is.null(reference_data))
+    if  (!is.null(reference_data))
     {
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
@@ -163,7 +163,8 @@ model_calibration <-function(
                    extend = extend,
                    seed = seed,
                    processors = parallel_processors,
-                   event.list=event.list)
+                   event_times = event_times,
+                   event_function = event_function)
 
     res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
     dir.create(res_dir, showWarnings = FALSE)
@@ -178,17 +179,19 @@ model_calibration <-function(
     saveRDS(params, file = parms_fname, version = 2)
     # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
-    if(!is.null(seed)){
+    if (!is.null(seed))
+    {
         params$seed <- paste0(params$out_dir,basename(seed))
         file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
+        if (!is.null(extend))
+        {
             params$extend <- paste0(params$out_dir,basename(extend))
             file.copy(from = extend, to = res_dir )
         }
     }
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt",sep = "/")
+    containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
 }

@@ -2,95 +2,88 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
-calibration.worker <- function(id, config, params){
-    experiment.env_setup(id = id,
-                         files = params$files,
-                         dest_dir = params$run_dir,
-                         config = config)
-    pwd <- getwd()
-    setwd(paste0(params$run_dir, id))
-    
-    event.list = params$event.list
-    
-    if(is.null(event.list) )
-    {
-      cmd <- experiment.cmd(id,
-                            solver_fname = params$files$solver_fname,
-                            solver_type = params$solver_type,
-                            n_run = 1,
-                            s_time = params$s_time,
-                            f_time = params$f_time,
-                            timeout = params$timeout,
-                            out_fname = params$out_fname)
-      
-      system(cmd, wait = TRUE)
-    }else{
-      experiment.event.cmd(id,
-                     solver_fname = params$files$solver_fname,
-                     solver_type = params$solver_type,
-                     n_run = 1,
-                     s_time = params$s_time,
-                     f_time = params$f_time,
-                     timeout = params$timeout,
-                     out_fname = params$out_fname,
-                     event.list=event.list)
-    }
-    
-    
-    fnm <- paste0(params$out_fname,"-",id,".trace")
-    # trace <- read.csv(file = fnm , header = TRUE, sep = "")
-    experiment.env_cleanup(id = id,
-                           run_dir = params$run_dir,
-                           out_fname = params$out_fname,
-                           out_dir = params$out_dir)
-    setwd(pwd)
-    return(paste0(params$out_dir,fnm))
+calibration.worker <- function(id, config, params)
+{
+  # Setup simulation's environment
+  experiment.env_setup(id = id,
+                       files = params$files,
+                       dest_dir = params$run_dir,
+                       config = config)
+  # Store the current working direrctory
+  pwd <- getwd()
+  # Change current directory to the run_dir parameter
+  setwd(paste0(params$run_dir, id))
+  # Generate the command to run with the required parameters
+  cmd <- experiment.cmd(id,
+                        solver_fname = params$files$solver_fname,
+                        solver_type = params$solver_type,
+                        n_run = 1,
+                        s_time = params$s_time,
+                        f_time = params$f_time,
+                        event_times = params$event_times,
+                        event_function = params$event_function,
+                        timeout = params$timeout,
+                        out_fname = params$out_fname)
+  # Execute the command
+  system(cmd, wait = TRUE)
+  # Set-up the result's file name
+  fnm <- paste0(params$out_fname,"-",id,".trace")
+  # Clear the simulation's environment
+  experiment.env_cleanup(id = id,
+                         run_dir = params$run_dir,
+                         out_fname = params$out_fname,
+                         out_dir = params$out_dir)
+  # Restore the previous woring directory
+  setwd(pwd)
+  return(paste0(params$out_dir,fnm))
 }
 
-objfn <-function(x, params, cl) {
-    # Generate a new configuration using the optimizaton output x
-    id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
-    config <- experiment.configurations(n_config = 1,
-                              parm_fname = params$files$functions_fname,
-                              parm_list = params$files$parameters_fname,
-                              out_dir = params$out_dir,
-                              out_fname = params$out_fname,
-                              ini_vector = x,
-                              ini_vector_mod = params$ini_vector_mod)
-    # calibration.worker(id = id, config = config, params = params)
-    # traces <- read.csv(paste0(params$out_dir,params$out_fname,"-",id,".trace"), sep = "")
-    trace_names <- parLapply(cl,
-                        c(paste0(id,"-",c(1:params$n_run))),
-                        calibration.worker,
-                        config = config,
-                        params = params)
-    traces <- lapply(trace_names,function(x){
-        fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
-        tr <- read.csv(x, sep = "")
-        if(!file.exists(fnm)){
-            write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-        }
-        else{
-            write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-        }
-        file.remove(x)
-        return(tr)
-    })
-    traces <- do.call("rbind", traces)
-
-    source(params$files$distance_measure_fname)
-    # distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), trace))
-    distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
-    # Write header to the file
-    optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
-    if(!file.exists(optim_trace_fname))
-    {
-        nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
-        cat(unlist(nms),"\n", file = optim_trace_fname)
+objfn <- function(x, params, cl) {
+  # Generate a new configuration using the configuration provided by the optimization engine
+  id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
+  # Generate the simulation's configuration according to the provided input x
+  config <- experiment.configurations(n_config = 1,
+                                      parm_fname = params$files$functions_fname,
+                                      parm_list = params$files$parameters_fname,
+                                      out_dir = params$out_dir,
+                                      out_fname = params$out_fname,
+                                      ini_vector = x,
+                                      ini_vector_mod = params$ini_vector_mod)
+  # Solve n_run instances of the model
+  trace_names <- parLapply(cl,
+                           c(paste0(id,"-",c(1:params$n_run))),
+                           calibration.worker,
+                           config = config,
+                           params = params)
+  # Append all the solutions in one single data.frame
+  traces <- lapply(trace_names,function(x){
+    fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
+    tr <- read.csv(x, sep = "")
+    if(!file.exists(fnm)){
+      write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
     }
-    cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
-    return(distance)
+    else{
+      write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+    }
+    file.remove(x)
+    return(tr)
+  })
+  traces <- do.call("rbind", traces)
+  # Compute the score for the current configuration
+  source(params$files$distance_measure_fname)
+  distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
+  # Write header to the file
+  optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
+  if(!file.exists(optim_trace_fname))
+  {
+    nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
+    cat(unlist(nms),"\n", file = optim_trace_fname)
+  }
+  cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+  return(distance)
 }
+
+# Utility function
 chk_dir<- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
