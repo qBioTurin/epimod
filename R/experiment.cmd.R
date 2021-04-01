@@ -24,8 +24,13 @@
 worker <- function(id,
                    solver_fname, solver_type,
                    s_time, f_time, n_run = 1, taueps,
+<<<<<<< HEAD
                    time_events = NULL, function_events = NULL,
                    timeout, out_fname)
+=======
+                   timeout, out_fname,
+                   time_events = NULL, function_events = NULL)
+>>>>>>> cbcb36dd9e32aba83b07be6d13c06fd6ff07dd7b
 {
     # stop and start the simulation changing the marking:
     fnm <- paste0(out_fname,"-", id,".trace")
