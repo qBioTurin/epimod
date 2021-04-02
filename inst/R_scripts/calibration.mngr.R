@@ -33,7 +33,7 @@ calibration.worker <- function(id, config, params)
                          run_dir = params$run_dir,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir)
-  # Restore the previous woring directory
+  # Restore the previous working directory
   setwd(pwd)
   return(paste0(params$out_dir,fnm))
 }
