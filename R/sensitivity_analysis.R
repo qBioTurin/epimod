@@ -72,18 +72,31 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 out_fname = NULL
                                 ){
 
+    
+    #common_test function receive all the parameters that will be tested for sensitivity_analysis function
+    ret = common_test(n_config = n_config, 
+                      parameters_fname = parameters_fname,
+                      functions_fname = functions_fname,
+                      solver_fname = solver_fname,
+                      target_value_fname = target_value_fname,
+                      parallel_processors = parallel_processors,
+                      reference_data = reference_data,
+                      distance_measure_fname = distance_measure_fname,
+                      f_time = f_time, # weeks
+                      s_time = s_time, # days
+                      volume = volume,
+                      caller_function = "sensitivity")
+    if(ret!="ok")
+        stop(paste("sensitivity_analysis_test error:",ret,sep = "\n"))    
+    
+    
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
-    {
-        stop("Missing solver file! Abort")
-    }
-    else
-    {
+    if(!is.null(solver_fname)){
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }

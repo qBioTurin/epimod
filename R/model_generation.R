@@ -40,6 +40,13 @@ model_generation <-function( out_fname = NULL,
                              net_fname,
                              functions_fname=NULL,
                              volume = getwd()){
+    
+    #common_test function receive all the parameters that will be tested for model_generation function
+    ret = common_test(net_fname = net_fname, functions_fname = functions_fname,
+                      caller_function = "generation")
+    
+    if(ret!="ok")
+        stop(paste("model_generation_test error:",ret,sep = "\n"))
 
     chk_dir<- function(path){
         pwd <- basename(path)

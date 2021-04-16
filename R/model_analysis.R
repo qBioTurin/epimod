@@ -10,6 +10,29 @@ model_analysis <-function(
     # Directories
     out_fname = NULL
 ){
+    
+    
+    #common_test function receive all the parameters that will be tested for model_calibration function
+    ret = common_test(solver_fname = solver_fname,
+                      parameters_fname = parameters_fname,
+                      functions_fname = functions_fname,
+                      solver_type = solver_type,
+                      n_run = n_run,
+                      ini_v = ini_v,
+                      f_time = f_time, # weeks
+                      s_time = s_time,
+                      volume = volume,
+                      parallel_processors = parallel_processors,
+                      n_config = n_config,
+                      caller_function = "analysis")
+    
+    if(ret!="ok" && !grepl("WARNING",ret)){
+        stop(paste("model_analysis_test error:",ret,sep = "\n"))
+    }else{
+        if(ret!="ok")
+            warning(paste("model_analysis_test",ret))
+    }
+    
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -18,16 +41,9 @@ model_analysis <-function(
     # Parameters used to set up the runing environment
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
-    {
-        stop("Missing solver file! Abort")
-    } else {
+    if(!is.null(solver_fname)){
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
-    }
-    if(is.null(out_fname))
-    {
-        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-analysys")
     }
     # Fix input parameters path
     if(!is.null(parameters_fname))

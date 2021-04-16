@@ -95,6 +95,26 @@ model_calibration <-function(
     extend = NULL, seed = NULL,
     # Directories
     out_fname=NULL){
+    
+    #common_test function receive all the parameters that will be tested for model_calibration function
+    ret = common_test(parameters_fname = parameters_fname,
+                      functions_fname = functions_fname,
+                      solver_fname = solver_fname,
+                      reference_data = reference_data,
+                      distance_measure_fname = distance_measure_fname ,
+                      solver_type = solver_type,
+                      n_run = n_run,
+                      f_time = f_time, # weeks
+                      s_time = s_time, # days
+                      # Vectors to control the optimization
+                      ini_v = ini_v,
+                      ub_v = ub_v,
+                      lb_v = lb_v,
+                      volume = volume,
+                      parallel_processors = parallel_processors,
+                      caller_function = "calibration")
+    if(ret!="ok")
+        stop(paste("model_calibration_test error:",ret,sep = "\n"))
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -103,12 +123,7 @@ model_calibration <-function(
 
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
-    {
-        stop("Missing solver file! Abort")
-    }
-    else
-    {
+    if(!is.null(solver_fname)){
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
