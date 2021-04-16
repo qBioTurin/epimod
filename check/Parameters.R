@@ -1,142 +1,218 @@
 library(devtools)
 library(epimod)
 
-model_generation_test <- function(out_fname = NULL, net_fname, functions_fname = NULL, 
-                             volume = getwd()) {
+common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,target_value_fname = NULL,ini_v, lb_v, ub_v,
+                      solver_fname,f_time,s_time,parameters_fname = NULL, volume = getwd(), parallel_processors = 1, 
+                      solver_type = "LSODA",  n_run = 1, distance_measure_fname = NULL, n_config = 1,out_fname = NULL, 
+                      timeout = "1d", extend = NULL, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL, 
+                      max.call = 1e+07, max.time = NULL, taueps = 0.01,caller_function)
+{
   
-  # b. net_fname (mandatory): Name of the input file with the model representation
-  # ■ Check if the file exists
-  if(missing(net_fname))
-    stop("net_fname parameter is missing! Abort")
-  else{
-    if(!file.exists(net_fname))
-      stop(paste("File ", net_fname, " does not exist!"))
-  }
   
-  # c. functions_fname (optional): C++ file with general transition’s definition
-  # ■ Check if the file exists
   if(!missing(functions_fname)){
     if(!file.exists(functions_fname)){
-      cpp_files = list.files(path = getwd(), pattern = "*.cpp",recursive = TRUE) 
-      stop("File ", functions_fname, " not exists, list of cpp files found: ", 
-                                    paste(unlist(cpp_files),collapse = "\n"))
+      suggested_files = list.files(path = getwd(), 
+                                   pattern = ifelse(caller_function=="generation","*.cpp$","*.R$"), 
+                                   recursive = TRUE) 
+      return(paste("File",functions_fname,"of functions_fname parameter not exists, list of",
+                   ifelse(caller_function=="generation",".cpp",".R"),"files found:\n\t",
+                   paste(unlist(suggested_files),collapse = "\n\t")))
+    }else{
+      if(caller_function!="generation")
+        source(functions_fname)
     }
   }
-}
-
-sensitivity_analysis_test <- function (solver_fname, f_time, s_time, n_config, parameters_fname = NULL, 
-          functions_fname = NULL, volume = getwd(), timeout = "1d", 
-          parallel_processors = 1, reference_data = NULL, distance_measure_fname = NULL, 
-          target_value_fname = NULL, extend = NULL, seed = NULL, out_fname = NULL) 
-{
-  #a. solver_fname (mandatory): Name of the solver executable file
-  #■ Check if the file exists
-  if(missing(solver_fname))
-    stop("solver_fname parameter is missing! Abort")
-  else{
-    if(!file.exists(solver_fname))
-      stop(paste("File ", solver_fname, " does not exist!"))
-  }
-  
-  #b. f_time (mandatory): simulation’s end time
-  #■ Check if it is greater than zero
-  if(missing(f_time))
-    stop("f_time parameter is missing! Abort")
-  else
-    if(f_time<=0)
-      stop("f_time must be greater than zero!")
   
   
-  #c. s_time (mandatory): simulation’s time step
-  #■ Check if it is greater than zero
-  if(missing(s_time))
-    stop("s_time parameter is missing! Abort")
-  else
-    if(s_time<=0)
-      stop("s_time must be greater than zero!")
-  
-  #d. n_config (optional): number of simulation’s configurations to generate   
-  #■ Check if it is greater than zero       ????? (per sensitivity_analysis è obbligatorio)
-  if(!missing(n_config))
-    if(n_config<=0)
-      stop("n_config must be greater than zero!")
-  
-  #e. parameters_fname (optional): file listing how to generate parameters     
-  #■ Check if the file exists               ???? (bug del # se non specificato?)
-  if(!missing(parameters_fname))
-    if(!file.exists(parameters_fname))
-      stop(paste("File ", parameters_fname, " does not exist!"))
-  
-  #f. functions_fname (optional): R file with the implementation of the functions
-  #required to generate parameters provided in parameters_fname
-  #■ Check if the file exists     ???? (controllare che ci siano tutte le funzioni definite in parameters_fname?)
-  if(!missing(functions_fname))
-    if(!file.exists(functions_fname))
-      stop(paste("File ", functions_fname, " does not exist!"))
-  
-  
-  #g. volume (optional): folder to be mounted as Docker volume
-  #■ Check if the folder exists
-  if(!missing(volume))
-    if(!dir.exists(volume))
-      stop("The specified folder does not exist!")
-  
-  
-  #i. parallel_processors (optional): number of available processors
-  #■ Check if it is greater than zero
-  if(!missing(parallel_processors))
-    if(parallel_processors<=0)
-      stop("parallel_processors must be greater than zero!")
-  
-  
-  #j. reference_data (optional): reference data series
-  #■ Check if the file exists
-  #k. distance_measure_fname (optional): distance measure used to compare the
-  #reference data series with the output of the model (used to rank the outputs of
-  #                                                    the model)
-  #■ Check if the file exists
-  #■ Check if reference_data parameter is present
-  #■ Check if the name of the function is the same as the file name (without
-  #extension)
-  #l. target_value_fname (optional): R function to extract the values to compare
-  #with the reference data series (used to compute the Partial Rank Correlation
-  #                                Coefficients)
-  #■ Check if the file exists
-  #■ Check if reference_data parameter is present
-  #■ Check if the name of the function is the same as the file name (without
-  #extension)
-  if(!missing(reference_data)){
-    if(!file.exists(reference_data))
-      stop(paste("File ", reference_data, " does not exist!"))
+  if(caller_function == "generation"){
+    if(missing(net_fname))
+      return("net_fname parameter is missing! Abort")
     else{
-      if(!missing(distance_measure_fname)){
-        if(!file.exists(distance_measure_fname))
-          stop(paste("File ", distance_measure_fname, " does not exist!"))
-        else{
-          fname_without_ext = unlist(strsplit(basename(distance_measure_fname),"\\."))[1]
-          function_signature = paste(fname_without_ext,"<-function\\(([ a-zA-Z]*,)*[ a-zA-Z]*\\)[ ]*(\\n)*\\{",sep="")
-          if(!any(grepl(function_signature,paste(readLines(distance_measure_fname),collapse = " "))))
-            stop("The name of the function is not the same as the file name or you could have miss a '{' 
-            after function definition!")
-        }
-      }
-      if(!missing(target_value_fname)){
-        if(!file.exists(target_value_fname))
-          stop(paste("File ", target_value_fname, " does not exist!"))
-        else{
-          fname_without_ext = unlist(strsplit(basename(target_value_fname),"\\."))[1]
-          function_signature = paste(fname_without_ext,"<-function\\(([ a-zA-Z]*,)*[ a-zA-Z]*\\)[ ]*(\\n)*\\{",sep="")
-          if(!any(grepl(function_signature,paste(readLines(target_value_fname),collapse = " "))))
-            stop("The name of the function is not the same as the file name or you could have miss a '{' 
-            after function definition!")
-        }
+      if(!file.exists(net_fname)){
+        pnpro_files = list.files(path = getwd(), pattern = "*.PNPRO$",recursive = TRUE) 
+        return(paste("File",net_fname,"of net_fname parameter not exists, list of .PNPRO files found:\n\t", 
+                   paste(unlist(pnpro_files),collapse = "\n\t")))
       }
     }
   }
-  else{
-    if(!missing(distance_measure_fname))
-      stop("distance_measure_fname need the reference_data attribute!")
-    if(!missing(target_value_fname))
-      stop("target_value_fname need the reference_data attribute!")
+  
+  
+  
+  if(caller_function %in% c("sensitivity","calibration")){
+    if(missing(reference_data) & caller_function=="calibration")
+      return("reference_data parameter is missing! Abort")
+    
+    if(missing(distance_measure_fname) & caller_function=="calibration")
+      return("distance_measure_fname parameter is missing! Abort")
+    
+    if(missing(reference_data) & !missing(distance_measure_fname) & caller_function=="sensitivity")
+      return("distance_measure_fname need the reference_data parameter!")
+      
+   
+    if(!missing(reference_data)){
+      if(!file.exists(reference_data)){
+        R_files = list.files(path = getwd(), pattern = "*.csv$",recursive = TRUE) 
+        return(paste("File",reference_data,"of reference_data parameter not exists,", 
+                     "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+      }else{
+        if(!missing(distance_measure_fname)){
+          if(!file.exists(distance_measure_fname)){
+            R_files = list.files(path = getwd(), pattern = "*.R$",recursive = TRUE) 
+            return(paste("File",distance_measure_fname,"of distance_measure_fname parameter not exists,", 
+                         "list of .R files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+          }
+          else{
+            fname_without_ext = unlist(strsplit(basename(distance_measure_fname),"\\."))[1]
+            source(distance_measure_fname)
+            if(!exists(fname_without_ext))
+              return(paste("The name of the function in distance_measure_fname is not the same as the file name",
+                           basename(distance_measure_fname),"!"))
+          }
+        }
+      }
+    }
+    
+  }  
+  
+  
+  
+  if(caller_function == "sensitivity"){
+    if(missing(reference_data) && !missing(target_value_fname))
+      return("target_value_fname need the reference_data parameter!")
+    
+        
+    if(!missing(target_value_fname)){
+      if(!file.exists(target_value_fname)){
+        R_files = list.files(path = getwd(), pattern = "*.R$",recursive = TRUE) 
+        return(paste("File",target_value_fname,"of target_value_fname parameter not exists,", 
+                   "list of .R files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+      }
+      else{
+        fname_without_ext = unlist(strsplit(basename(target_value_fname),"\\."))[1]
+        source(target_value_fname)
+        if(!exists(fname_without_ext))
+          return(paste("The name of the function in target_value_fname is not the same as the file name",
+                     basename(target_value_fname),"!"))
+      }
+    }
+      
   }
+  
+  
+  
+  if(caller_function %in% c("calibration","analysis")){
+    # not mandatory in README examples ?
+    if(missing(solver_type))
+      return("solver_type parameter is missing! Abort")
+    else{
+      possibilities = c('ODE-E','ODE-RKF', 'ODE45', 'LSODA', 'SSA', 'TAUG', 'HLSODA', '(H)SDE', 'HODE')
+      if(!solver_type %in% possibilities)
+        return("Value of solver_type must be one of the following: ODE-E, ODE-RKF, ODE45, 
+           LSODA, SSA, TAUG, HLSODA, (H)SDE, HODE")
+    }
+    
+    
+    if(!missing(n_run))
+      if(n_run<=0)
+        return("n_run must be greater than zero!")
+  }
+  
+  
+  
+  if(caller_function == "calibration"){
+    if(missing(ini_v) | missing(lb_v) | missing(ub_v))
+      return("One or more of these parameters ini_v , lb_v or ub_v was not specified! Abort")
+    else
+      if(length(ini_v) != length(lb_v) | length(ini_v) != length(ub_v)){
+        return("ini_v , lb_v and ub_v must have the same number of elements")
+      }else{
+        if(!all(ini_v>lb_v,TRUE))
+          return("Some element of ini_v is less than or equal to the corresponding element of lb_v")
+        if(!all(ini_v<ub_v,TRUE))
+          return("Some element of ini_v is greather than or equal to the corresponding element of ub_v")
+      }
+  }
+  
+  
+  
+  if(caller_function == "analysis"){
+    if(missing(ini_v))
+      return("WARNING: ini_v parameter is missing!")
+  }
+  
+  
+  
+  if(caller_function %in% c("sensitivity","calibration","analysis")){
+    if(missing(solver_fname))
+      return("solver_fname parameter is missing! Abort")
+    else{
+      if(!file.exists(solver_fname)){
+        solver_files = list.files(path = getwd(), pattern = "*.solver$",recursive = TRUE) 
+        return(paste("File",solver_fname,"of solver_fname parameter not exists, list of .solver files found:\n\t", 
+                     paste(unlist(solver_files),collapse = "\n\t")))
+      }
+    }
+    
+    if(missing(f_time))
+      return("f_time parameter is missing! Abort")
+    else
+      if(f_time<=0)
+        return("f_time must be greater than zero!")
+    
+    
+    if(missing(s_time))
+      return("s_time parameter is missing! Abort")
+    else
+      if(s_time<=0)
+        return("s_time must be greater than zero!")
+    
+    #if not specified, a runtime error is generated
+    if(!missing(parameters_fname)){
+      if(!file.exists(parameters_fname)){
+        return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
+      }
+      else{
+        if(grepl("unix",.Platform$OS.type))
+          if(!grepl("ASCII text",system(paste("file",parameters_fname),intern=TRUE)))
+            return("parameters_fname must be a textual file! Abort")
+        
+        file = file(parameters_fname,"r")
+        while(TRUE){
+          line = readLines(file,n=1)
+          if(length(line)!=0){
+            fname = unlist(strsplit(gsub(" ","",line),";"))[3]
+            if(!(exists(fname) | length(find(fname,numeric=TRUE))>=1  | 
+                 !suppressWarnings(is.na(as.numeric(fname))))){
+              close(file)
+              return(paste(fname,"defined in",basename(parameters_fname),"does not exist! Abort"))
+            }
+          } 
+          else
+            break
+        }
+        close(file)
+      }
+    }
+    
+    
+    if(!missing(volume))
+      if(!dir.exists(volume))
+        return(paste("The folder",volume,"of volume parameter does not exist!"))
+    
+    if(!missing(parallel_processors))
+      if(parallel_processors<=0)
+        return("parallel_processors must be greater than zero!")
+  }
+  
+  
+  
+  if(caller_function %in% c("sensitivity","analysis")){
+    #mandatory for sensitivity analysis ?
+    if(!missing(n_config))
+      if(n_config<=0)
+        return("n_config must be greater than zero!")
+  }
+  
+  return("ok")
+  
 }
