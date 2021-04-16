@@ -16,7 +16,7 @@ RUN mkdir /srv/shiny-server/display/data
 
 # date > marker
 # COPY marker /dev/null
-RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
+RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='dev-check',dependencies=TRUE)"
 
 RUN R -e "library(epimod);file.copy(paste0(path.package(package='epimod'),'/R_scripts/app.R'), '/srv/shiny-server/display')"
 
