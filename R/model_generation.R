@@ -41,6 +41,7 @@ model_generation <-function( out_fname = NULL,
                              functions_fname=NULL,
                              volume = getwd()){
     
+    source("../check/Parameters.R")
     #common_test function receive all the parameters that will be tested for model_generation function
     ret = common_test(net_fname = net_fname, functions_fname = functions_fname,
                       caller_function = "generation")

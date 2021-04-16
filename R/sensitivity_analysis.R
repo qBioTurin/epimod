@@ -72,7 +72,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 out_fname = NULL
                                 ){
 
-    
+    source("../check/Parameters.R")
     #common_test function receive all the parameters that will be tested for sensitivity_analysis function
     ret = common_test(n_config = n_config, 
                       parameters_fname = parameters_fname,
