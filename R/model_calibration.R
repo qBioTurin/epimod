@@ -96,7 +96,6 @@ model_calibration <-function(
     # Directories
     out_fname=NULL){
     
-    source("../check/Parameters.R")
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
