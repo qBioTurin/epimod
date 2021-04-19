@@ -6,8 +6,8 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
 {
 
 
-  if(!missing(functions_fname)){
-    if(is.null(functions_fname) | !file.exists(functions_fname)){
+  if(!missing(functions_fname) & !is.null(functions_fname)){
+    if(file.exists(functions_fname)){
       suggested_files = list.files(path = getwd(),
                                    pattern = ifelse(caller_function=="generation","*.cpp$","*.R$"),
                                    recursive = TRUE)
@@ -22,10 +22,10 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
 
 
   if(caller_function == "generation"){
-    if(missing(net_fname))
+    if(missing(net_fname) | is.null(net_fname))
       return("net_fname parameter is missing! Abort")
     else{
-      if(is.null(net_fname) | !file.exists(net_fname)){
+      if(!file.exists(net_fname)){
         pnpro_files = list.files(path = getwd(), pattern = "*.PNPRO$",recursive = TRUE)
         return(paste("File",net_fname,"of net_fname parameter not exists, list of .PNPRO files found:\n\t",
                    paste(unlist(pnpro_files),collapse = "\n\t")))
@@ -46,14 +46,14 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
       return("distance_measure_fname need the reference_data parameter!")
 
 
-    if(!missing(reference_data)){
-      if(is.null(reference_data) | !file.exists(reference_data)){
+    if(!missing(reference_data) & !is.null(reference_data)){
+      if(!file.exists(reference_data)){
         R_files = list.files(path = getwd(), pattern = "*.csv$",recursive = TRUE)
         return(paste("File",reference_data,"of reference_data parameter not exists,",
                      "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
       }else{
-        if(!missing(distance_measure_fname)){
-          if(is.null(distance_measure_fname) | !file.exists(distance_measure_fname)){
+        if(!missing(distance_measure_fname) & !is.null(distance_measure_fname)){
+          if(!file.exists(distance_measure_fname)){
             R_files = list.files(path = getwd(), pattern = "*.R$",recursive = TRUE)
             return(paste("File",distance_measure_fname,"of distance_measure_fname parameter not exists,",
                          "list of .R files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
@@ -78,8 +78,8 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
       return("target_value_fname need the reference_data parameter!")
 
 
-    if(!missing(target_value_fname)){
-      if(is.null(target_value_fname) | !file.exists(target_value_fname)){
+    if(!missing(target_value_fname) & !is.null(target_value_fname)){
+      if(!file.exists(target_value_fname)){
         R_files = list.files(path = getwd(), pattern = "*.R$",recursive = TRUE)
         return(paste("File",target_value_fname,"of target_value_fname parameter not exists,",
                    "list of .R files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
@@ -140,10 +140,10 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
 
 
   if(caller_function %in% c("sensitivity","calibration","analysis")){
-    if(missing(solver_fname))
+    if(missing(solver_fname) | is.null(solver_fname))
       return("solver_fname parameter is missing! Abort")
     else{
-      if(is.null(solver_fname) | !file.exists(solver_fname)){
+      if(!file.exists(solver_fname)){
         solver_files = list.files(path = getwd(), pattern = "*.solver$",recursive = TRUE)
         return(paste("File",solver_fname,"of solver_fname parameter not exists, list of .solver files found:\n\t",
                      paste(unlist(solver_files),collapse = "\n\t")))
@@ -164,8 +164,8 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
         return("s_time must be greater than zero!")
 
     #if not specified, a runtime error is generated
-    if(!missing(parameters_fname)){
-      if(is.null(parameters_fname) | !file.exists(parameters_fname)){
+    if(!missing(parameters_fname) & !is.null(parameters_fname)){
+      if(!file.exists(parameters_fname)){
         return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
       }
       else{
