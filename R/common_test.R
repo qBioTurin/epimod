@@ -7,7 +7,7 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
 
 
   if(!missing(functions_fname) & !is.null(functions_fname)){
-    if(file.exists(functions_fname)){
+    if(!file.exists(functions_fname)){
       suggested_files = list.files(path = getwd(),
                                    pattern = ifelse(caller_function=="generation","*.cpp$","*.R$"),
                                    recursive = TRUE)
