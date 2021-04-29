@@ -10,14 +10,15 @@ library(devtools)
  #                solver_type = "SSA",
  #                s_time = 1)
 
-compare_file<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
+compare_file<-function(furl_st, fname_st,fname_nd){
   if(is.null(furl_st) && is.null(fname_st))
     stop("Missing path of first file to compare! Abort")
   
   if(is.null(fname_nd)){
     warning("WARNING: missing path of second file to compare, 
-            using Results/results_model_analysis/SIR.solver as default")
-    fname_nd = paste0(getwd(),.Platform$file.sep,"Results/results_model_analysis/SIR.solver")
+            using results_reference/deterministic_model/model_analysis-1.trace as default")
+    path = "results_reference/deterministic_model/model_analysis-1.trace"
+    fname_nd = paste0(getwd(),.Platform$file.sep,path)
   }
   
   
@@ -43,7 +44,7 @@ compare_file<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
   dest_nd = paste0(getwd(),.Platform$file.sep,"file2.",fnd_ext)
   file.copy(from = fname_nd, to = dest_nd)
   
-  if(system(paste("diff",basename(dest_st),basename(dest_nd)),ignore.stdout = TRUE)==1)
+  if(system(paste("diff",basename(dest_st),basename(dest_nd)),ignore.stdout = FALSE)==1)
     print("The two files are not equals")
   else
     print("The two files are equals")
@@ -51,8 +52,8 @@ compare_file<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
   unlink(dest_st)
   unlink(dest_nd)
 }
-
-compare_file(fname_st = "Results/results_model_analysis/SIR.solver", fname_nd = "Results/results_model_analysis/SIR.solver")
-compare_file(fname_st = "bmc.cls", fname_nd = "file_compare.R")
-compare_file(furl_st = "https://raw.githubusercontent.com/qBioTurin/SIR/master/Results/results_sensitivity_analysis/SIR.solver"
-             , fname_nd = "Results/results_model_analysis/SIR.solver")
+# Example of running: 
+# compare_file(fname_st = "Results/results_model_analysis/SIR.solver", fname_nd = "Results/results_model_analysis/SIR.solver")
+# compare_file(fname_st = "bmc.cls", fname_nd = "file_compare.R")
+# compare_file(furl_st = "https://raw.githubusercontent.com/qBioTurin/SIR/master/Results/results_sensitivity_analysis/SIR.solver"
+#              , fname_nd = "Results/results_model_analysis/SIR.solver")
