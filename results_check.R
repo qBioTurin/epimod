@@ -1,10 +1,13 @@
 source("file_compare.R")
+#install.packages("fdatest",dependencies = TRUE)
 
 det_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
   cat("STARTING RESULTS CHECK FOR DETERMINISTIC MODEL...\n")
   compare_file(furl_st,fname_st,fname_nd);
   cat("\nEND RESULTS CHECK FOR DETERMINISTIC MODEL...")
 }
+#on the first file are calculated the means, on the second the confidence intervals, then
+#it's check if the mean respect the calculated intervals
 sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 
   cat("STARTING RESULTS CHECK FOR STOCHASTIC MODEL...\n")
@@ -160,7 +163,87 @@ sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 
 	cat("\nEND RESULTS CHECK FOR STOCHASTIC MODEL...")
 }
-det_results_check(fname_st = "results_reference/deterministic_model/model_analysis-1.trace",
-				  fname_nd = "results_reference/deterministic_model/model_analysis-1 (copy).trace")
-sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1.trace",
-				  fname_nd = "results_reference/stochastic_model/model_analysis-1 (copy).trace")
+fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
+	cat("STARTING FUNCTION DATA ANALYSIS...\n")
+	if(is.null(furl_st) && is.null(fname_st))
+		stop("Missing path of first file to compare! Abort")
+
+	if(is.null(fname_nd))
+	{
+		warning("WARNING: missing path of second file to compare,
+            using results_reference/stochastic_model/model_analysis-1 (copy).trace as default")
+		path = "results_reference/stochastic_model/model_analysis-1 (copy).trace"
+		fname_nd = file.path(getwd(),path,fsep= .Platform$file.sep)
+	}
+
+	if(!is.null(furl_st))
+	{
+		fst_ext = unlist(strsplit(basename(furl_st),"\\."))[2]
+		dest_st = file.path(getwd(),paste0("file1.",fst_ext),fsep = .Platform$file.sep)
+		#dest_st = paste0(getwd(),.Platform$file.sep,"file1.",fst_ext)
+		download.file(furl_st,dest_st)
+		trace1= read.csv(file = dest_st,header = TRUE,sep = sep,quote="\"", dec=".")
+	}else
+	{
+		if(!file.exists(fname_st))
+			stop(paste(fname_st,"file not exists! Abort"))
+		else
+			trace1 = read.csv(file= fname_st,header = TRUE,sep = sep,quote="\"", dec=".")
+	}
+
+	if(!file.exists(fname_nd)){
+		if(!is.null(furl_st))
+			unlink(dest_st)
+		stop(paste(fname_nd,"file not exists! Abort"))
+	}else
+	{
+		trace2 = read.csv(fname_nd,header = TRUE,sep = sep,quote="\"", dec=".")
+	}
+
+	if(nrow(trace1)!=nrow(trace2))
+		stop("The two files to compare must have the same number of elements!")
+
+	#values of the Time columns will be the names of columns
+	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
+	trace1.S <- data.frame()
+
+	#the interested elements of i-run
+	base = 1
+	#construction of first data frame, which has the number of row equals to the number of run
+	for(i in c(1:n_ex-1))
+	{
+		ref_column_elem = trace1[base:((base+nrow(trace1)/n_ex)-1),"S"]
+		trace1.S <- rbind(trace1.S , ref_column_elem)
+		base = base + nrow(trace1)/n_ex
+	}
+	cnames = "Time0"
+	for(i in c(2:(nrow(trace1)/n_ex)))
+		cnames = c(cnames,paste0("Time",i-1))
+	names(trace1.S) = cnames
+
+	n_ex <- length(trace2$Time)/(max(trace2$Time)-min(trace2$Time)+1) # = n_run=1000
+	trace2.S <- data.frame()
+	base = 1
+	#construction of second data frame
+	for(i in c(1:n_ex-1))
+	{
+		ref_column_elem = trace2[base:((base+nrow(trace2)/n_ex)-1),"S"]
+		trace2.S <- rbind(trace2.S , ref_column_elem)
+		base = base + nrow(trace2)/n_ex
+	}
+	cnames = "Time0"
+	for(i in c(2:(nrow(trace2)/n_ex)))
+		cnames = c(cnames,paste0("Time",i-1))
+	names(trace2.S) = cnames
+
+
+	#TODO fdatest e plot
+
+	cat("\nEND DATA ANALYSIS...")
+}
+# det_results_check(fname_st = "results_reference/deterministic_model/model_analysis-1.trace",
+# 				  fname_nd = "results_reference/deterministic_model/model_analysis-1 (copy).trace")
+# sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
+# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
+fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
