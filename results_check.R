@@ -180,7 +180,6 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	{
 		fst_ext = unlist(strsplit(basename(furl_st),"\\."))[2]
 		dest_st = file.path(getwd(),paste0("file1.",fst_ext),fsep = .Platform$file.sep)
-		#dest_st = paste0(getwd(),.Platform$file.sep,"file1.",fst_ext)
 		download.file(furl_st,dest_st)
 		trace1= read.csv(file = dest_st,header = TRUE,sep = sep,quote="\"", dec=".")
 	}else
@@ -200,41 +199,56 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 		trace2 = read.csv(fname_nd,header = TRUE,sep = sep,quote="\"", dec=".")
 	}
 
-	if(nrow(trace1)!=nrow(trace2))
+	if(nrow(trace1)!=nrow(trace2) || ncol(trace1)!=ncol(trace2))
 		stop("The two files to compare must have the same number of elements!")
 
 	#values of the Time columns will be the names of columns
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
-	trace1.S <- data.frame()
 
-	#the interested elements of i-run
-	base = 1
-	#construction of first data frame, which has the number of row equals to the number of run
-	for(i in c(1:n_ex-1))
+	#iteration of all columns excluded the first (Time column)
+	for(column_names in names(trace1)[-1])
 	{
-		ref_column_elem = trace1[base:((base+nrow(trace1)/n_ex)-1),"S"]
-		trace1.S <- rbind(trace1.S , ref_column_elem)
-		base = base + nrow(trace1)/n_ex
-	}
-	cnames = "Time0"
-	for(i in c(2:(nrow(trace1)/n_ex)))
-		cnames = c(cnames,paste0("Time",i-1))
-	names(trace1.S) = cnames
+		trace1.ready <- data.frame()
+		#the interested elements of i-run
+		base = 1
+		#construction of first data frame, which has the number of row equals to the number of run
+		for(i in c(1:n_ex-1))
+		{
+			ref_column_elem = trace1[base:((base+nrow(trace1)/n_ex)-1),column_names]
+			trace1.ready <- rbind(trace1.ready , ref_column_elem)
+			base = base + nrow(trace1)/n_ex
+		}
+		cnames = "Time0"
+		for(i in c(2:(nrow(trace1)/n_ex)))
+			cnames = c(cnames,paste0("Time",i-1))
+		names(trace1.ready) = cnames
 
-	n_ex <- length(trace2$Time)/(max(trace2$Time)-min(trace2$Time)+1) # = n_run=1000
-	trace2.S <- data.frame()
-	base = 1
-	#construction of second data frame
-	for(i in c(1:n_ex-1))
-	{
-		ref_column_elem = trace2[base:((base+nrow(trace2)/n_ex)-1),"S"]
-		trace2.S <- rbind(trace2.S , ref_column_elem)
-		base = base + nrow(trace2)/n_ex
+
+		if(!dir.exists("./fda_files"))
+			dir.create("./fda_files",showWarnings = FALSE)
+		write.table(trace1.ready,
+					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fstfile_",column_names,".trace"))
+					,sep=" ",append=FALSE, row.names = FALSE)
+
+		n_ex <- length(trace2$Time)/(max(trace2$Time)-min(trace2$Time)+1) # = n_run=1000
+		trace2.ready <- data.frame()
+		base = 1
+		#construction of second data frame
+		for(i in c(1:n_ex-1))
+		{
+			ref_column_elem = trace2[base:((base+nrow(trace2)/n_ex)-1),column_names]
+			trace2.ready <- rbind(trace2.ready , ref_column_elem)
+			base = base + nrow(trace2)/n_ex
+		}
+		cnames = "Time0"
+		for(i in c(2:(nrow(trace2)/n_ex)))
+			cnames = c(cnames,paste0("Time",i-1))
+		names(trace2.ready) = cnames
+
+		write.table(trace2.ready,
+					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fndfile_",column_names,".trace"))
+					,sep=" ",append=FALSE, row.names = FALSE)
 	}
-	cnames = "Time0"
-	for(i in c(2:(nrow(trace2)/n_ex)))
-		cnames = c(cnames,paste0("Time",i-1))
-	names(trace2.S) = cnames
 
 
 	#TODO fdatest e plot
