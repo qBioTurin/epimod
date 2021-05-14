@@ -66,19 +66,21 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 reference_data = NULL, distance_measure_fname = NULL,
                                 # Parameters to control PRCC
                                 target_value_fname = NULL,
+                                # List of discrete events
+                                event_times = NULL, event_function = NULL,
                                 # Mange reproducibilty and extend previous experiments
                                 extend = NULL, seed = NULL,
                                 # Directories
                                 out_fname = NULL
                                 ){
 
-    chk_dir<- function(path){
+    chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
+    if (is.null(solver_fname))
     {
         stop("Missing solver file! Abort")
     }
@@ -87,32 +89,32 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
-    if(is.null(out_fname))
+    if (is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
     }
     # Fix input parameters path
-    if(!is.null(parameters_fname))
+    if (!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
         files[["parameters_fname"]] <- parameters_fname
     }
-    if(!is.null(functions_fname))
+    if (!is.null(functions_fname))
     {
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
     }
-    if(!is.null(reference_data))
+    if (!is.null(reference_data))
     {
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
     }
-    if(!is.null(distance_measure_fname))
+    if (!is.null(distance_measure_fname))
     {
         distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
         files[["distance_measure_fname"]] <- distance_measure_fname
     }
-    if(!is.null(target_value_fname))
+    if (!is.null(target_value_fname))
     {
         target_value_fname <- tools::file_path_as_absolute(target_value_fname)
         files[["target_value_fname"]] <- target_value_fname
@@ -129,7 +131,9 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,
-                  files = files)
+                  files = files,
+                  event_times = event_times,
+                  event_function = event_function)
 
     volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results
@@ -138,7 +142,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
-    if(length(files) > 0)
+    if (length(files) > 0)
     {
         parms$files <- lapply(files, function(x){
             return(paste0(parms$out_dir,basename(x)))
@@ -148,10 +152,12 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
     # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
     # Manage experiments reproducibility
-    if(!is.null(seed)){
+    if (!is.null(seed))
+    {
         parms$seed <- paste0(parms$out_dir,basename(seed))
         file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
+        if (!is.null(extend))
+        {
             parms$extend <- paste0(parms$out_dir,basename(extend))
             file.copy(from = extend, to = res_dir )
         }
@@ -162,7 +168,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+    containers.names = read.table(containers.file,header = T, stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
 }

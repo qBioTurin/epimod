@@ -22,6 +22,11 @@ sensitivity.prcc<-function(config,
         ret<-NULL
         if(d[1] > 1)
         {
+        	##### Check if there are equal rows in the matrix
+        	x <- unique(x)
+        	d <- dim(x)
+        	###
+
             for(i in 1:d[1]){
                 for(j in 1:d[2])
                     nms <- c(nms, paste0(name,"_",i,"-",j))
