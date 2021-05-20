@@ -52,7 +52,7 @@ worker <- function(id,
             # The first column of the file is the time and we remove it
             last_m <- trace[length(trace[,1]),-1]
             # Generate the new marking by invoking the provided function
-            new_m <- do.call(function_events, list(marking = last_m))
+            new_m <- do.call(function_events, list(marking = last_m, time = i_time))
             ############ writing the .trace with all the simulating windows
             if (!file.exists(fnm))
             {
