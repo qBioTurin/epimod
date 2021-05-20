@@ -1,6 +1,5 @@
          'names'
-'sensitivity' qbioturin/epimod-sensitivity-events:latest
-'generation' qbioturin/epimod-generation-events:latest
-'analysis' qbioturin/epimod-analysis-events:latest
-'calibration' qbioturin/epimod-calibration-events:latest
-'display' qbioturin/epimod-display:latest
+'sensitivity' qbioturin/epimod-sensitivity:latest
+'generation' qbioturin/epimod-generation:latest
+'analysis' qbioturin/epimod-analysis:latest
+'calibration' qbioturin/epimod-calibration:latest
