@@ -19,7 +19,7 @@ sensitivity.worker <- function(id,
                         s_time = s_time,
                         f_time = f_time,
                         event_times = event_times,
-                        events_function = event_function,
+                        event_function = event_function,
                         timeout = timeout,
                         out_fname = out_fname)
     # Measure simulation's run time
@@ -126,7 +126,7 @@ exec_times <- parLapply( cl,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir,
                          event_times = params$event_times,
-                         events_function = params$event_function,
+                         event_function = params$event_function,
                          files = params$files,
                          config = params$config)
 

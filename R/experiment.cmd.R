@@ -7,8 +7,8 @@
 #' @param f_time, simulation's final time
 #' @param n_run, when performing stochastic simulations this parameters controls the number of runs per each set of input parameters
 #' @param taueps, controls the step of the approximation introduced by the tau-leap algorithm
-#' @param time_events, controls the time at which the simulation is stopped to update the marking
-#' @param function_events, specifies the rule to update the marking
+#' @param event_times, controls the time at which the simulation is stopped to update the marking
+#' @param event_function, specifies the rule to update the marking
 #' @param timeout, string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax
 #' @param out_fname, output filename prefix
 #' @return a string
@@ -24,15 +24,15 @@
 worker <- function(id,
                    solver_fname, solver_type,
                    s_time, f_time, n_run = 1, taueps,
-                   time_events = NULL, function_events = NULL,
+                   event_times = NULL, event_function = NULL,
                    timeout, out_fname)
 {
     # stop and start the simulation changing the marking:
     fnm <- paste0(out_fname,"-", id,".trace")
     iterations <- 1
-    if (!is.null(time_events))
+    if (!is.null(event_times))
     {
-        iterations <- length(time_events)
+        iterations <- length(event_times)
     }
     for (i in 1:iterations)
     {
@@ -45,14 +45,14 @@ worker <- function(id,
         else{
             init <- paste0("initNew-", id,"-",i - 1)
             # set the event's time as the new initial time
-            i_time <- time_events[i - 1]
+            i_time <- event_times[i - 1]
             # read the trace file of the previous iteration
             trace <- read.csv( paste0(out_fname,"-", id,"-",i - 1,".trace"), sep = "")
             # The last line of the trace file is the marking at the final time of the previous step
             # The first column of the file is the time and we remove it
             last_m <- trace[length(trace[,1]),-1]
             # Generate the new marking by invoking the provided function
-            new_m <- do.call(function_events, list(marking = last_m, time = i_time))
+            new_m <- do.call(event_function, list(marking = last_m, time = i_time))
             ############ writing the .trace with all the simulating windows
             if (!file.exists(fnm))
             {
@@ -78,7 +78,7 @@ worker <- function(id,
                         row.names = FALSE,
                         sep = " ")
         }
-        f_time <- time_events[i]
+        f_time <- event_times[i]
         cmd <- paste0(cmd,
                       "timeout ", timeout,
                       " .", .Platform$file.sep, basename(solver_fname), " ",
@@ -140,11 +140,11 @@ worker <- function(id,
 #     return(cmd)
 # }
 
-experiment.event.cmd <- function(id,
-                                 solver_fname, solver_type = "LSODA",
-                                 s_time, f_time, n_run = 1, taueps = 0.01,
-                                 time_events = NULL, function_events = NULL ,
-                                 timeout, out_fname){
+experiment.cmd <- function(id,
+                           solver_fname, solver_type = "LSODA",
+                           s_time, f_time, n_run = 1, taueps = 0.01,
+                           event_times = NULL, event_function = NULL ,
+                           timeout, out_fname){
     if (solver_type == "TAUG")
     {
         solver_type <- paste(solver_type, "-taueps", taueps)
@@ -157,7 +157,7 @@ experiment.event.cmd <- function(id,
            f_time = f_time,
            timeout = timeout,
            out_fname = out_fname,
-           time_events = time_events,
-           function_events = function_events,
+           event_times = event_times,
+           event_function = event_function,
            n_run = 1)
 }

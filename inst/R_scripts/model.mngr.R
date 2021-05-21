@@ -138,7 +138,7 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 #                          out_fname = params$out_fname,
 #                          out_dir = params$out_dir,
 # event_times = params$event_times,
-# events_function = params$event_function,
+# event_function = params$event_function,
 #                          files = params$files,
 #                          config = params$config)
 exec_times <- lapply (X = c(1:params$n_config),
@@ -154,7 +154,7 @@ exec_times <- lapply (X = c(1:params$n_config),
                       out_fname = params$out_fname,
                       out_dir = params$out_dir,
                       event_times = params$event_times,
-                      events_function = params$event_function,
+                      event_function = params$event_function,
                       files = params$files,
                       config = params$config)
 
