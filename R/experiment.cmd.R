@@ -48,10 +48,9 @@ worker <- function(id,
             # set the event's time as the new initial time
             i_time <- event_times[i - 1]
             # Read the last line of the trace file, which is the marking at the last time point
-            last_m <- read.csv(fnm,
-                              sep = "",
-                              header = TRUE,
-                              skip = i_time - 1)
+            last_m <- read.table(text = system(paste("sed -n -e '1p;$p'", 'WNV4-analysys-1-1.trace-1.trace'),
+                                               intern = TRUE),
+                                 header = TRUE)
             # The first column of the file is the time and we remove it
             last_m <- last_m[,-1]
             # Generate the new marking by invoking the provided function
