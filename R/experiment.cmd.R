@@ -34,7 +34,7 @@ worker <- function(id,
     {
         iterations <- length(event_times)
     }
-    for (i in 1:iterations)
+    for (i in 1:(iterations + 1))
     {
         cmd = ""
         if ( i == 1)
@@ -78,14 +78,17 @@ worker <- function(id,
                         row.names = FALSE,
                         sep = " ")
         }
-        f_time <- event_times[i]
+        if(i <= iterations)
+            final_time <- event_times[i]
+        else
+            final_time <- f_time
         cmd <- paste0(cmd,
                       "timeout ", timeout,
                       " .", .Platform$file.sep, basename(solver_fname), " ",
                       out_fname,"-", id,"-",i,
                       " -stime ", s_time,
                       " -itime ", i_time,
-                      " -ftime ", f_time,
+                      " -ftime ", final_time,
                       " -type ", solver_type,
                       " -runs ", n_run)
         if (file.exists(paste(init)))
