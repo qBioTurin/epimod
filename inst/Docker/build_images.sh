@@ -19,14 +19,14 @@ for I in $IMAGES; do
 	if [ -f $DIR/Dockerfile ]; then
 		date > marker
 		echo "Building $IMG"
-		echo "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
+		echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
 		RET=$(docker build -t qbioturin/epimod-$IMG:$TAG .)
 		if [[ $RET -eq 0 ]]; then
 			exit 0
 		fi	
 		rm marker
 		echo "Uploading $IMG"
-	       	echo "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
+	       	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
 		RET=$(docker push qbioturin/epimod-$IMG:$TAG)
 		if [[ $RET -eq 0 ]]; then
 			exit 0
