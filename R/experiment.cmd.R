@@ -106,7 +106,7 @@ worker <- function(id,
         }
     }
     ############ writing the .trace with the last simulating windows
-    trace = read.csv( paste0(out_fname,"-", id,"-",length(time.events),".trace"), sep = "")
+    trace = read.csv( paste0(out_fname,"-", id,"-",length(event_times),".trace"), sep = "")
     if (!file.exists(fnm))
     {
         write.table(trace, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
@@ -114,7 +114,7 @@ worker <- function(id,
     else{
         write.table(trace, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
     }
-    file.remove(paste0(out_fname,"-", id,"-",length(time.events),".trace"))
+    file.remove(paste0(out_fname,"-", id,"-",length(event_times),".trace"))
     #################
 }
 
