@@ -37,39 +37,27 @@ worker <- function(id,
     for (i in 1:(iterations + 1))
     {
         cmd = ""
+        # Setup initial marking, initial and final time
         if ( i == 1)
         {
             i_time <- 0
             init <- paste("init")
         }
         else{
-            init <- paste0("initNew-", id,"-",i - 1)
+            init <- paste0("init_iter-", id,"-",i - 1)
             # set the event's time as the new initial time
             i_time <- event_times[i - 1]
-            # read the trace file of the previous iteration
-            trace <- read.csv( paste0(out_fname,"-", id,"-",i - 1,".trace"), sep = "")
-            # The last line of the trace file is the marking at the final time of the previous step
+            # Read the last line of the trace file, which is the marking at the last time point
+            last_m <- read.csv(fnm,
+                              sep = "",
+                              header = TRUE,
+                              skip = i_time - 1)
             # The first column of the file is the time and we remove it
-            last_m <- trace[length(trace[,1]),-1]
+            last_m <- last_m[,-1]
             # Generate the new marking by invoking the provided function
-            new_m <- do.call(event_function, list(marking = last_m, time = i_time))
-            ############ writing the .trace with all the simulating windows
-            if (!file.exists(fnm))
-            {
-                write.table(trace[-length(trace[,1]),],
-                            file = fnm,
-                            sep = " ",
-                            col.names = TRUE,
-                            row.names = FALSE)
-            }
-            else{
-                write.table(trace[-length(trace[,1]),],
-                            file = fnm, append = TRUE,
-                            sep = " ",
-                            col.names = FALSE,
-                            row.names = FALSE)
-            }
-            file.remove(paste0(out_fname,"-", id,"-",i - 1,".trace"))
+            new_m <- do.call(event_function,
+                             list(marking = last_m,
+                                  time = i_time))
             #################
             new_m[new_m < 0] <- 0
             write.table(x = as.matrix(new_m,nrow = 1),
@@ -85,7 +73,7 @@ worker <- function(id,
         cmd <- paste0(cmd,
                       "timeout ", timeout,
                       " .", .Platform$file.sep, basename(solver_fname), " ",
-                      out_fname,"-", id,"-",i,
+                      fnm,"-",i,
                       " -stime ", s_time,
                       " -itime ", i_time,
                       " -ftime ", final_time,
@@ -103,45 +91,52 @@ worker <- function(id,
         }
         # run the solver with all necessary parameters
         system(cmd, wait = TRUE)
+        #############################
+        ## Append the current .trace file to the simulation's one
+        if (!file.exists(fnm))
+        {
+            write.table(trace,
+                        file = fnm,
+                        sep = " ",
+                        col.names = TRUE,
+                        row.names = FALSE)
+        }
+        else{
+            write.table(trace[-1,],
+                        file = fnm,
+                        append = TRUE,
+                        sep = " ",
+                        col.names = FALSE,
+                        row.names = FALSE)
+
+        }
         if (init != "init")
         {
             file.remove(init)
         }
+        file.remove(paste0(out_fname,"-", id,"-",i - 1,".trace"))
     }
     ############ writing the .trace with the last simulating windows
     trace = read.csv( paste0(out_fname,"-", id,"-",length(event_times),".trace"), sep = "")
     if (!file.exists(fnm))
     {
-        write.table(trace, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+        write.table(trace,
+                    file = fnm,
+                    sep = " ",
+                    col.names = TRUE,
+                    row.names = FALSE)
     }
     else{
-        write.table(trace, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+        write.table(trace,
+                    file = fnm,
+                    append = TRUE,
+                    sep = " ",
+                    col.names = FALSE,
+                    row.names = FALSE)
     }
     file.remove(paste0(out_fname,"-", id,"-",length(event_times),".trace"))
     #################
 }
-
-# experiment.cmd <- function(id,
-#                            solver_fname, solver_type = "LSODA",
-#                            s_time, f_time, n_run = 1, taueps = 0.01,
-#                            timeout, out_fname){
-#     if(solver_type == "TAUG")
-#     {
-#         solver_type <- paste(solver_type, "-taueps", taueps)
-#     }
-#     cmd <- paste0("timeout ", timeout,
-#                  " .", .Platform$file.sep, basename(solver_fname), " ",
-#                  out_fname,"-", id,
-#                  " -stime ", s_time,
-#                  " -ftime ", f_time,
-#                  " -type ", solver_type,
-#                  " -runs ", n_run)
-#     if(file.exists("init"))
-#         cmd <- paste0(cmd, " -init init")
-#     if(file.exists("cmdln_params"))
-#         cmd <- paste0(cmd, " -parm ", "cmdln_params")
-#     return(cmd)
-# }
 
 experiment.cmd <- function(id,
                            solver_fname, solver_type = "LSODA",
