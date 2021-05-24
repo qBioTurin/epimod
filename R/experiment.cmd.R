@@ -114,28 +114,8 @@ worker <- function(id,
         {
             file.remove(init)
         }
-        file.remove(paste0(out_fname,"-", id,"-",i - 1,".trace"))
+        # file.remove(paste0(out_fname,"-", id,"-",i - 1,".trace"))
     }
-    ############ writing the .trace with the last simulating windows
-    trace = read.csv( paste0(out_fname,"-", id,"-",length(event_times),".trace"), sep = "")
-    if (!file.exists(fnm))
-    {
-        write.table(trace,
-                    file = fnm,
-                    sep = " ",
-                    col.names = TRUE,
-                    row.names = FALSE)
-    }
-    else{
-        write.table(trace,
-                    file = fnm,
-                    append = TRUE,
-                    sep = " ",
-                    col.names = FALSE,
-                    row.names = FALSE)
-    }
-    file.remove(paste0(out_fname,"-", id,"-",length(event_times),".trace"))
-    #################
 }
 
 experiment.cmd <- function(id,
