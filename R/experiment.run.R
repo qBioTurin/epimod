@@ -125,9 +125,9 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		if (file.exists(paste0(out_fname,"-", id,"-",i - 1,".trace")))
+		if (file.exists(paste0(out_fname,"-", id,"-", i,".trace")))
 		{
-			file.remove(paste0(out_fname,"-", id,"-",i - 1,".trace"))
+			file.remove(paste0(out_fname,"-", id,"-", i,".trace"))
 		}
 	}
 }
