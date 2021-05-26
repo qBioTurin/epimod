@@ -3,10 +3,11 @@ library(epimod)
 
 model.worker <- function(id,
                          solver_fname, solver_type,taueps,
-                         s_time, f_time, n_run,
+                         i_time, f_time, s_time, n_run,
                          timeout, run_dir, out_fname, out_dir,
                          event_times, event_function,
-                         files, config = NULL)
+                         files, config = NULL,
+                         parallel_processors, greed)
 {
   if (!is.null(config))
   {
@@ -19,43 +20,39 @@ model.worker <- function(id,
     dir.create(paste0(run_dir, id), recursive = TRUE, showWarnings = FALSE)
     file.copy(from = solver_fname, to = paste0(run_dir, id))
   }
+
   # Change working directory to the one corresponding at the current id
   pwd <- getwd()
   setwd(paste0(run_dir,id))
-  cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
-                    type = "FORK")
-  # Save session's info
-  clusterEvalQ(cl, sessionInfo())
+
   # Generate the appropriate command to run on the Docker
-  trace_names <- lapply(c(1:n_run),
-                        function(x, id){
-                          paste0(id,"-",x)
-                          },
-                        id = id
-                        )
-  cmds <- parLapply(cl=cl,
-                    X = trace_names, # this is the id parameter in experiment.cmd
-                    fun = experiment.cmd,
-                    solver_fname = solver_fname,
-                    solver_type = solver_type,
-                    taueps = taueps,
-                    s_time = s_time,
-                    f_time = f_time,
-                    event_times = event_times,
-                    event_function = event_function,
-                    timeout = timeout,
-                    out_fname = out_fname,
-                    n_run = 1)
-  T1 <- Sys.time()
-  parLapply(cl = cl,
-            X = cmds,
-            fun = system,
-            wait = TRUE)
-  T2 <- difftime(Sys.time(), T1, unit = "secs")
-  stopCluster(cl)
-  lapply(trace_names,function(x){
+  cmd <- experiment.cmd(solver_fname = solver_fname,
+                        solver_type = solver_type,
+                        taueps = taueps,
+                        timeout = timeout)
+
+  # Compute the number of thread to use (so that the machine workload gets close to one)
+  if (runif(1, min = 0, max = 1) > greed)
+  {
+    parallel_processors <- parallel_processors + 1
+  }
+  ###### ParLapply down here
+  # Run the experiment
+  elapsed <- experiment.run(cmd = cmd,
+                            i_time = i_time,
+                            f_time = f_time,
+                            s_time = s_time,
+                            n_run = n_run,
+                            event_times = event_times,
+                            event_function = event_function,
+                            parallel_processors = parallel_processors,
+                            out_fname = out_fname)
+
+  # Collect all output in a single output file
+  trace_names <- paste0(id, "-", c(1:n_run))
+  lapply(trace_names, function(x){
     fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
-    tr <- read.csv(paste0(run_dir,id,.Platform$file.sep, out_fname,"-",x,".trace"), sep = "")
+    tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
     if (!file.exists(fnm))
     {
       write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
@@ -63,14 +60,14 @@ model.worker <- function(id,
     else {
       write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
     }
-    file.remove(paste0(run_dir,id,.Platform$file.sep, out_fname,"-",x,".trace"))
+    file.remove(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"))
   })
-  cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
+  cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
   # Change the working directory back to the original one
   setwd(pwd)
-  # Move relevant files to their final locatio and remove all the temporary files
+  # Move relevant files to their final location and remove all the temporary files
   experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-  return(T2)
+  return(elapsed)
 }
 
 # Utility function
@@ -120,43 +117,38 @@ if (is.null(params$files$parameters_fname)
 }
 saveRDS(params,  file = paste0(param_fname), version = 2)
 # Create a cluster
-# cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
-#                   type = "FORK")
-# # Save session's info
-# clusterEvalQ(cl, sessionInfo())
-# Run simulations
-# exec_times <- parLapply( cl,
-#                          c(1:params$n_config),          # execute n_config istances
-#                          model.worker,                  # of sensitivity.worker
-#                          solver_fname = params$files$solver_fname,  # using the following parameters
-#                          solver_type = params$solver_type,
-#                          s_time = params$s_time,
-#                          f_time = params$f_time,
-#                          n_run = params$n_run,
-#                          timeout = params$timeout,
-#                          run_dir = params$run_dir,
-#                          out_fname = params$out_fname,
-#                          out_dir = params$out_dir,
-# event_times = params$event_times,
-# event_function = params$event_function,
-#                          files = params$files,
-#                          config = params$config)
-exec_times <- lapply (X = c(1:params$n_config),
-                      FUN = model.worker,
-                      solver_fname = params$files$solver_fname,
-                      solver_type = params$solver_type,
-                      taueps = params$taueps,
-                      s_time = params$s_time,
-                      f_time = params$f_time,
-                      n_run = params$n_run,
-                      timeout = params$timeout,
-                      run_dir = params$run_dir,
-                      out_fname = params$out_fname,
-                      out_dir = params$out_dir,
-                      event_times = params$event_times,
-                      event_function = params$event_function,
-                      files = params$files,
-                      config = params$config)
+cl <- makeCluster(params$parallel_processors,
+                  type = "FORK")
+# Save session's info
+clusterEvalQ(cl, sessionInfo())
+# Run params$parallel_processors configurations in parallel
+threads.mngr <- min(params$n_config, params$parallel_processors)
+threads.wrkr <- floor(params$parallel_processors/threads.mngr)
+threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
+# The probability to use one worker thread more than specified in by threads.wrkr
+threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+exec_times <- parLapply( cl,
+                         c(1:threads.mngr),             # execute threads istances
+                         model.worker,                  # of sensitivity.worker
+                         solver_fname = params$files$solver_fname,  # using the following parameters
+                         solver_type = params$solver_type,
+                         taueps = params$taueps,
+                         i_time = params$i_time,
+                         f_time = params$f_time,
+                         s_time = params$s_time,
+                         n_run = params$n_run,
+                         timeout = params$timeout,
+                         run_dir = params$run_dir,
+                         out_fname = params$out_fname,
+                         out_dir = params$out_dir,
+                         event_times = params$event_times,
+                         event_function = params$event_function,
+                         files = params$files,
+                         config = params$config,
+                         parallel_processors = threads.wrkr,
+                         greed = threads.greed)
+
+stopCluster(cl)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
