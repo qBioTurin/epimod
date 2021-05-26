@@ -38,7 +38,8 @@ model.worker <- function(id,
   }
   ###### ParLapply down here
   # Run the experiment
-  elapsed <- experiment.run(cmd = cmd,
+  elapsed <- experiment.run(base_id = id,
+                            cmd = cmd,
                             i_time = i_time,
                             f_time = f_time,
                             s_time = s_time,
@@ -127,9 +128,9 @@ threads.wrkr <- floor(params$parallel_processors/threads.mngr)
 threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
 # The probability to use one worker thread more than specified in by threads.wrkr
 threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
-exec_times <- parLapply( cl,
-                         c(1:threads.mngr),             # execute threads istances
-                         model.worker,                  # of sensitivity.worker
+exec_times <- parLapply( cl = cl,
+                         X = c(1:threads.mngr),
+                         fun = model.worker,
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = params$solver_type,
                          taueps = params$taueps,
