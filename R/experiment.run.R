@@ -147,16 +147,25 @@ experiment.run <- function(base_id, cmd,
 	jobs <- floor(n_run/parallel_processors)
 	spare <- n_run - parallel_processors * jobs
 	T1 <- Sys.time()
-	ret <- parLapply(cl = cl,
-			  X = c(1:parallel_processors),
-			  fun = worker,
-			  cmd,
-			  i_time = i_time,
-			  f_time = f_time,
-			  s_time = s_time,
-			  event_times = event_times,
-			  event_function = event_function,
-			  out_fname = out_fname)
+	# ret <- parLapply(cl = cl,
+	# 		  X = c(1:parallel_processors),
+	# 		  fun = worker,
+	# 		  cmd,
+	# 		  i_time = i_time,
+	# 		  f_time = f_time,
+	# 		  s_time = s_time,
+	# 		  event_times = event_times,
+	# 		  event_function = event_function,
+	# 		  out_fname = out_fname)
+	ret <- lapply(X = c(1:parallel_processors),
+				  FUN = worker,
+				  cmd,
+				  i_time = i_time,
+				  f_time = f_time,
+				  s_time = s_time,
+				  event_times = event_times,
+				  event_function = event_function,
+				  out_fname = out_fname)
 	if(spare != 0)
 	{
 		parLapply(cl = cl,
