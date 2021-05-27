@@ -101,7 +101,7 @@ worker <- function(worker_id,
 		}
 
 		# Run the solver with all necessary parameters
-		system(cmd, wait = TRUE)
+		system(cmd.iter, wait = TRUE)
 		#############################
 		curr_fnm <- paste0(out_fname, "-", iter.id, ".trace")
 		## Append the current .trace file to the simulation's one
