@@ -100,7 +100,7 @@ worker <- function(worker_id,
 			cmd.iter <- paste0(cmd.iter, " -parm ", "cmdln_params")
 		}
 		# DEBUG
-		write(x = cmd.iter, file = "commands.txt", append = TRUE)
+		write(x = cmd.iter, file = "~/data/commands.txt", append = TRUE)
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
