@@ -107,6 +107,9 @@ worker <- function(worker_id,
 			file.rename(from = curr_fnm, to = fnm)
 		}
 		else{
+			####### PATCH ########
+			system(paste0("sed -i 's/  / /g' ", curr_fnm))
+			##### END PATCH ######
 			trace <- read.table(file = curr_fnm,
 								header = TRUE,
 								sep = " ")
