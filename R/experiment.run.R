@@ -109,6 +109,8 @@ worker <- function(worker_id,
 			# 			col.names = TRUE,
 			# 			row.names = FALSE)
 			file.rename(from = curr_fnm, to = fnm)
+			### DEBUG ###
+			system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			trace <- read.table(file = curr_fnm,
