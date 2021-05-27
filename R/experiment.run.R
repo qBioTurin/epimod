@@ -128,7 +128,7 @@ worker <- function(worker_id,
 		if (file.exists(curr_fnm))
 		{
 			# file.remove(curr_fnm)
-			system(paste0("mv ", curr_fnm, " ~/data/", curr_fnm))
+			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 		}
 	}
 }
