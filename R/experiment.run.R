@@ -37,21 +37,21 @@ worker <- function(worker_id,
 	if (!is.null(event_times) && !is.null(event_function))
 	{
 		iterations <- length(event_times)
+
 	}
 
 	# Substitue the pattern <OUT_FNAME> with the actual file name
 	cmd <- gsub(x = cmd, pattern = "<OUT_FNAME>", out_fname)
-	# Define the identifier for the iterations
-	iter.id <- worker_id
 	for (i in 1:(iterations + 1))
 	{
+		# Define the identifier for the current iteration
+		iter.id <- paste0(worker_id, "-", i)
 		# Setup initial marking, initial and final time
 		if ( i == 1)
 		{
 			init <- paste("init")
 		}
 		else{
-			iter.id <- paste0(iter.id, "-", i)
 			# Generate the init filename for the current iteration
 			init <- paste0("init_iter-", iter.id)
 
@@ -103,21 +103,21 @@ worker <- function(worker_id,
 		# Run the solver with all necessary parameters
 		system(cmd, wait = TRUE)
 		#############################
-		curr_file <- paste0(out_fname,"-", iter.id,".trace")
-		## Read current .trace file
-		trace <- read.table(file = curr_file,
-							sep = " ",
-							header = TRUE)
+		curr_fnm <- paste0(out_fname, "-", iter.id, ".trace")
 		## Append the current .trace file to the simulation's one
 		if (!file.exists(fnm))
 		{
-			write.table(trace,
-						file = fnm,
-						sep = " ",
-						col.names = TRUE,
-						row.names = FALSE)
+			# write.table(trace,
+			# 			file = fnm,
+			# 			sep = " ",
+			# 			col.names = TRUE,
+			# 			row.names = FALSE)
+			file.rename(from = curr_fnm, to = fnm)
 		}
 		else{
+			trace <- read.table(file = curr_fnm,
+								header = TRUE,
+								sep = " ")
 			write.table(trace[-1,],
 						file = fnm,
 						append = TRUE,
@@ -130,9 +130,9 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		if (file.exists(paste0(out_fname,"-", worker_id,"-", i,".trace")))
+		if (file.exists(curr_fnm))
 		{
-			file.remove(paste0(out_fname,"-", worker_id,"-", i,".trace"))
+			file.remove(curr_fnm)
 		}
 	}
 }
