@@ -96,6 +96,10 @@ worker <- function(worker_id,
 		curr_fnm <- paste0(out_fname, "-", iter.id, ".trace")
 		# DEBUG
 		write(x = paste(cmd.iter,curr_fnm), file = "~/data/commands.txt", append = TRUE)
+		####### PATCH ########
+		system(paste0("sed -i 's/  / /g' ", curr_fnm))
+		write(x = system(paste0("head -n 2 ", curr_fnm, " | tail -n 1"), intern = TRUE), file = "~/data/commands.txt", append = TRUE)
+		##### END PATCH ######
 		## Append the current .trace file to the simulation's one
 		if (!file.exists(fnm))
 		{
@@ -107,10 +111,6 @@ worker <- function(worker_id,
 			file.rename(from = curr_fnm, to = fnm)
 		}
 		else{
-			####### PATCH ########
-			system(paste0("sed -i 's/  / /g' ", curr_fnm))
-			write(x = system(paste0("head -n 2 ", curr_fnm, " | tail -n 1"), intern = TRUE), file = "~/data/commands.txt", append = TRUE)
-			##### END PATCH ######
 			trace <- read.table(file = curr_fnm,
 								header = TRUE,
 								sep = " ")
