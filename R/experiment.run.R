@@ -99,7 +99,8 @@ worker <- function(worker_id,
 			# command line parameters
 			cmd.iter <- paste0(cmd.iter, " -parm ", "cmdln_params")
 		}
-
+		# DEBUG
+		write(x = cmd.iter, file = commands.txt, append = TRUE)
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
@@ -130,10 +131,10 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		if (file.exists(curr_fnm))
-		{
-			file.remove(curr_fnm)
-		}
+		# if (file.exists(curr_fnm))
+		# {
+		# 	file.remove(curr_fnm)
+		# }
 	}
 }
 
