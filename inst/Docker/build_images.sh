@@ -20,14 +20,14 @@ for I in $IMAGES; do
 		echo "Building $IMG"
 		echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
 		docker build -t qbioturin/epimod-$IMG:$TAG .
-		if [[ $? -eq 0 ]]; then
+		if [[ $? -ne 0 ]]; then
 			exit 0
 		fi	
 		rm marker
 		echo "Uploading $IMG"
 	       	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
 		docker push qbioturin/epimod-$IMG:$TAG
-		if [[ $? -eq 0 ]]; then
+		if [[ $? -ne 0 ]]; then
 			exit 0
 		fi	
 	else
