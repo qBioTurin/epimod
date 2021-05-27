@@ -24,7 +24,7 @@
 library(parallel)
 
 worker <- function(worker_id,
-				   command, n_run = 1,
+				   cmd, n_run = 1,
 				   i_time, s_time, f_time,
 				   event_times = NULL, event_function = NULL,
 				   out_fname)
@@ -40,7 +40,7 @@ worker <- function(worker_id,
 	}
 
 	# Substitue the pattern <OUT_FNAME> with the actual file name
-	command <- gsub(x = command, pattern = "<OUT_FNAME>", out_fname)
+	cmd <- gsub(x = cmd, pattern = "<OUT_FNAME>", out_fname)
 	# Define the identifier for the iterations
 	iter.id <- worker_id
 	for (i in 1:(iterations + 1))
@@ -83,7 +83,7 @@ worker <- function(worker_id,
 			final_time <- f_time
 
 		# Generate the command to execute the current iteration simulation's configuration
-		cmd.iter <- gsub(x = command, pattern = "<ID>", replacement = iter.id)
+		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = iter.id)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<I_TIME>", replacement = i_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
@@ -159,7 +159,7 @@ experiment.run <- function(base_id, cmd,
 	# 		  out_fname = out_fname)
 	ret <- lapply(X = c(1:parallel_processors),
 				  FUN = worker,
-				  cmd,
+				  cmd = cmd,
 				  i_time = i_time,
 				  f_time = f_time,
 				  s_time = s_time,
@@ -171,7 +171,7 @@ experiment.run <- function(base_id, cmd,
 		parLapply(cl = cl,
 				  X = c((n_run-spare):n_run),
 				  fun = worker,
-				  cmd,
+				  cmd = cmd,
 				  i_time = i_time,
 				  f_time = f_time,
 				  s_time = s_time,
