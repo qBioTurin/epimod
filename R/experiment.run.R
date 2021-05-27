@@ -90,12 +90,12 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = 1)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 
-		# DEBUG
-		write(x = cmd.iter, file = "~/data/commands.txt", append = TRUE)
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
 		curr_fnm <- paste0(out_fname, "-", iter.id, ".trace")
+		# DEBUG
+		write(x = paste(cmd.iter,curr_fnm), file = "~/data/commands.txt", append = TRUE)
 		## Append the current .trace file to the simulation's one
 		if (!file.exists(fnm))
 		{
