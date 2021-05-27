@@ -11,7 +11,6 @@ else
 	TAG=$1
 fi
 for I in $IMAGES; do
-	echo "$I"
 	# Make all letters lowercase and remove the ending babcslash
 	IMG=$(echo $I | tr '[:upper:]' '[:lower:]' | tr -d '[:punct:]')
 	DIR=$PWD/$I
@@ -20,15 +19,15 @@ for I in $IMAGES; do
 		date > marker
 		echo "Building $IMG"
 		echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
-		RET=$(docker build -t qbioturin/epimod-$IMG:$TAG .)
-		if [[ $RET -eq 0 ]]; then
+		docker build -t qbioturin/epimod-$IMG:$TAG .
+		if [[ $? -eq 0 ]]; then
 			exit 0
 		fi	
 		rm marker
 		echo "Uploading $IMG"
 	       	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
-		RET=$(docker push qbioturin/epimod-$IMG:$TAG)
-		if [[ $RET -eq 0 ]]; then
+		docker push qbioturin/epimod-$IMG:$TAG
+		if [[ $? -eq 0 ]]; then
 			exit 0
 		fi	
 	else
