@@ -122,10 +122,11 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		# if (file.exists(curr_fnm))
-		# {
-		# 	file.remove(curr_fnm)
-		# }
+		if (file.exists(curr_fnm))
+		{
+			# file.remove(curr_fnm)
+			system(paste0("mv ", curr_fnm, " ~/data/", curr_fnm))
+		}
 	}
 }
 
@@ -141,7 +142,9 @@ experiment.run <- function(base_id, cmd,
 	cl <- makeCluster(parallel_processors,
 					  type = "FORK")
 	# number of run assigned to each thread
+	#### CHECK ####
 	jobs <- floor(n_run/parallel_processors)
+	#### ##### ####
 	spare <- n_run - parallel_processors * jobs
 	T1 <- Sys.time()
 	# ret <- parLapply(cl = cl,
