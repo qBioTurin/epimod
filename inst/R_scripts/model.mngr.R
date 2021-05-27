@@ -122,12 +122,20 @@ cl <- makeCluster(params$parallel_processors,
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
-# Run params$parallel_processors configurations in parallel
-threads.mngr <- min(params$n_config, params$parallel_processors)
-threads.wrkr <- floor(params$parallel_processors/threads.mngr)
-threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
-# The probability to use one worker thread more than specified in by threads.wrkr
-threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+if(params$parallel_processors != 1)
+{
+  # Run params$parallel_processors configurations in parallel
+  threads.mngr <- min(params$n_config, params$parallel_processors)
+  threads.wrkr <- floor(params$parallel_processors/threads.mngr)
+  threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
+  # The probability to use one worker thread more than specified in by threads.wrkr
+  threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+} else {
+  threads.mngr <- 1
+  threads.wrkr <- 1
+  threads.load <- 1
+  threads.greed <- 0
+}
 # exec_times <- parLapply( cl = cl,
 #                          X = c(1:threads.mngr),
 #                          fun = model.worker,
