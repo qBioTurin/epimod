@@ -103,6 +103,11 @@ worker <- function(worker_id,
 		# Run the solver with all necessary parameters
 		system(cmd, wait = TRUE)
 		#############################
+		curr_file <- paste0(out_fname,"-", iter.id,".trace")
+		## Read current .trace file
+		trace <- read.table(file = curr_file,
+							sep = " ",
+							header = TRUE)
 		## Append the current .trace file to the simulation's one
 		if (!file.exists(fnm))
 		{
