@@ -59,7 +59,7 @@ worker <- function(worker_id,
 			i_time <- event_times[i - 1]
 
 			# Read the last line of the trace file, which is the marking at the last time point
-			last_m <- read.table(text = system(paste0("sed -n -e '1p;$p' ", out_fname, worker_id, ".trace"),
+			last_m <- read.table(text = system(paste0("sed -n -e '1p;$p' ",fnm),
 											   intern = TRUE),
 								 header = TRUE)
 			# The first column of the file is the time and we remove it
@@ -77,7 +77,7 @@ worker <- function(worker_id,
 						sep = " ")
 		}
 		# Set the final time to either the next event's time or to the simulation's end time
-		if(i <= iterations)
+		if (i <= iterations)
 			final_time <- event_times[i]
 		else
 			final_time <- f_time
@@ -125,9 +125,9 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		if (file.exists(paste0(out_fname,"-", id,"-", i,".trace")))
+		if (file.exists(paste0(out_fname,"-", worker_id,"-", i,".trace")))
 		{
-			file.remove(paste0(out_fname,"-", id,"-", i,".trace"))
+			file.remove(paste0(out_fname,"-", worker_id,"-", i,".trace"))
 		}
 	}
 }

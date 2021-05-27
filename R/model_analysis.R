@@ -52,7 +52,7 @@ model_analysis <- function(
                   out_fname = out_fname,
                   solver_type = solver_type,
                   taueps = taueps,
-                  f_time = f_time,
+                  i_time = i_time,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
