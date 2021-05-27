@@ -88,17 +88,8 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<I_TIME>", replacement = i_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = 1)
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 
-		if (file.exists(paste(init)))
-		{
-			# the initial marking
-			cmd.iter <- paste0(cmd.iter, " -init ", init)
-		}
-		if (file.exists("cmdln_params"))
-		{
-			# command line parameters
-			cmd.iter <- paste0(cmd.iter, " -parm ", "cmdln_params")
-		}
 		# DEBUG
 		write(x = cmd.iter, file = "~/data/commands.txt", append = TRUE)
 		# Run the solver with all necessary parameters
