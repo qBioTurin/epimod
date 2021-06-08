@@ -126,6 +126,8 @@ worker <- function(worker_id,
 			# 			sep = " ",
 			# 			col.names = TRUE,
 			# 			row.names = FALSE)
+			# DEBUG
+			write(x = paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm), file = "~/data/commands.txt", append = TRUE)
 			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
 
 		}
