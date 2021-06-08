@@ -117,15 +117,16 @@ worker <- function(worker_id,
 		else{
 			# DEBUG
 			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
-			trace <- read.table(file = curr_fnm,
-								header = TRUE,
-								sep = " ")
-			write.table(trace[-1,],
-						file = fnm,
-						append = TRUE,
-						sep = " ",
-						col.names = TRUE,
-						row.names = FALSE)
+			# trace <- read.table(file = curr_fnm,
+			# 					header = TRUE,
+			# 					sep = " ")
+			# write.table(trace[-1,],
+			# 			file = fnm,
+			# 			append = TRUE,
+			# 			sep = " ",
+			# 			col.names = TRUE,
+			# 			row.names = FALSE)
+			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
 
 		}
 		if (init != "init")
