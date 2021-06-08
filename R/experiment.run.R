@@ -112,7 +112,7 @@ worker <- function(worker_id,
 			# 			row.names = FALSE)
 			file.rename(from = curr_fnm, to = fnm)
 			### DEBUG ###
-			system(paste0("cp ", fnm, " ~/data/", fnm))
+			# system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			# DEBUG
@@ -132,12 +132,12 @@ worker <- function(worker_id,
 		{
 			file.remove(init)
 		}
-		if (file.exists(curr_fnm))
-		{
-			file.remove(curr_fnm)
-			# DEBUG
-			# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
-		}
+		# if (file.exists(curr_fnm))
+		# {
+		# 	file.remove(curr_fnm)
+		# 	# DEBUG
+		# 	# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
+		# }
 	}
 }
 
