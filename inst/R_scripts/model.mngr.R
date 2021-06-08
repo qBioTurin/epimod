@@ -32,7 +32,7 @@ model.worker <- function(id,
                         timeout = timeout)
 
   # Compute the number of thread to use (so that the machine workload gets close to one)
-  if (runif(1, min = 0, max = 1) > greed)
+  if (greed > 0 && runif(1, min = 0, max = 1) > greed)
   {
     parallel_processors <- parallel_processors + 1
   }
