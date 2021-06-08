@@ -180,19 +180,19 @@ experiment.run <- function(base_id, cmd,
 				  event_times = event_times,
 				  event_function = event_function,
 				  out_fname = out_fname)
-	if(spare != 0)
-	{
-		parLapply(cl = cl,
-				  X = c((n_run-spare):n_run),
-				  fun = worker,
-				  cmd = cmd,
-				  i_time = i_time,
-				  f_time = f_time,
-				  s_time = s_time,
-				  event_times = event_times,
-				  event_function = event_function,
-				  out_fname = out_fname)
-	}
+	# if(spare != 0)
+	# {
+	# 	parLapply(cl = cl,
+	# 			  X = c((n_run-spare):n_run),
+	# 			  fun = worker,
+	# 			  cmd = cmd,
+	# 			  i_time = i_time,
+	# 			  f_time = f_time,
+	# 			  s_time = s_time,
+	# 			  event_times = event_times,
+	# 			  event_function = event_function,
+	# 			  out_fname = out_fname)
+	# }
 	T2 <- difftime(Sys.time(), T1, unit = "secs")
 	stopCluster(cl)
 	return(T2)
