@@ -112,11 +112,11 @@ worker <- function(worker_id,
 			# 			row.names = FALSE)
 			file.rename(from = curr_fnm, to = fnm)
 			### DEBUG ###
-			# system(paste0("cp ", fnm, " ~/data/", fnm))
+			system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			# DEBUG
-			# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
+			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 			trace <- read.table(file = curr_fnm,
 								header = TRUE,
 								sep = " ")
@@ -124,7 +124,7 @@ worker <- function(worker_id,
 						file = fnm,
 						append = TRUE,
 						sep = " ",
-						col.names = FALSE,
+						col.names = TRUE,
 						row.names = FALSE)
 
 		}
