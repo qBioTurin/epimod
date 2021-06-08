@@ -116,6 +116,8 @@ worker <- function(worker_id,
 			trace <- read.table(file = curr_fnm,
 								header = TRUE,
 								sep = " ")
+			# DEBUG
+			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 			write.table(trace[-1,],
 						file = fnm,
 						append = TRUE,
@@ -131,6 +133,7 @@ worker <- function(worker_id,
 		if (file.exists(curr_fnm))
 		{
 			# file.remove(curr_fnm)
+			# DEBUG
 			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 		}
 	}
