@@ -130,6 +130,7 @@ worker <- function(worker_id,
 			# DEBUG
 			write(x = paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm), file = "~/data/commands.txt", append = TRUE)
 			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
+			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", paste0("~/data/out_",fnm)))
 
 		}
 		if (init != "init")
