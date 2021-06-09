@@ -31,7 +31,7 @@ worker <- function(worker_id,
 				   out_fname)
 {
 	# Run's output file name
-	fnm <- paste0(out_fname, base_id, "-", worker_id,".trace")
+	fnm <- paste0(out_fname, "-", base_id, "-", worker_id,".trace")
 
 	# Number of iterations due to discrete events
 	iterations <- 0
