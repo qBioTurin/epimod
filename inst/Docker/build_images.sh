@@ -1,6 +1,6 @@
 #!/bin/bash
-IMAGES=($(ls -d */))
-PWD=$(pwd) 
+IMAGES=$(ls -d */)
+BASEDIR=$(pwd) 
 if [ $# -ne 1 ]; then
 	echo "Illegal number of parameters"
 	echo "Usage:"
@@ -13,7 +13,7 @@ fi
 for I in $IMAGES; do
 	# Make all letters lowercase and remove the ending babcslash
 	IMG=$(echo $I | tr '[:upper:]' '[:lower:]' | tr -d '[:punct:]')
-	DIR=$PWD/$I
+	DIR=$BASEDIR/$I
 	cd $DIR
 	if [ -f $DIR/Dockerfile ]; then
 		date > marker
@@ -33,6 +33,6 @@ for I in $IMAGES; do
 	else
 		echo "Dockerfile missing for image qbioturin/epimod-$IMG"
 	fi
-	cd $PWD
+	cd $BASEDIR
 done
 exit 0
