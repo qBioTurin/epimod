@@ -36,7 +36,6 @@ model.worker <- function(id,
   {
     parallel_processors <- parallel_processors + 1
   }
-  ###### ParLapply down here
   # Run the experiment
   elapsed <- experiment.run(base_id = id,
                             cmd = cmd,

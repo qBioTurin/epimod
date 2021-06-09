@@ -25,12 +25,13 @@ library(parallel)
 
 worker <- function(worker_id,
 				   cmd, n_run = 1,
+				   base_id,
 				   i_time, s_time, f_time,
 				   event_times = NULL, event_function = NULL,
 				   out_fname)
 {
 	# Run's output file name
-	fnm <- paste0(out_fname,"-", worker_id,".trace")
+	fnm <- paste0(out_fname, base_id, "-", worker_id,".trace")
 
 	# Number of iterations due to discrete events
 	iterations <- 0
@@ -87,13 +88,13 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<I_TIME>", replacement = i_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
-		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = 1)
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
-		curr_fnm <- paste0(out_fname, "-", iter.id, ".trace")
+		curr_fnm <- paste0(out_fname, base_id, "-", worker_id, "-", iter.id, ".trace")
 		# DEBUG
 		# write(x = paste(cmd.iter,curr_fnm), file = "~/data/commands.txt", append = TRUE)
 		####### PATCH ########
@@ -151,7 +152,7 @@ experiment.run <- function(base_id, cmd,
 						   parallel_processors, out_fname)
 {
 	# Compute the base_id
-	base_id <- 1 + (base_id - 1) * parallel_processors
+	# base_id <- 1 + (base_id - 1) * parallel_processors
 	# Create a cluster
 	cl <- makeCluster(parallel_processors,
 					  type = "FORK")
@@ -159,40 +160,44 @@ experiment.run <- function(base_id, cmd,
 	#### CHECK ####
 	jobs <- floor(n_run/parallel_processors)
 	#### ##### ####
-	spare <- n_run - parallel_processors * jobs
+	# spare <- n_run - parallel_processors * jobs
 	T1 <- Sys.time()
 	# ret <- parLapply(cl = cl,
-	# 		  X = c(1:parallel_processors),
+	# 		  X = c(1:n_run),
 	# 		  fun = worker,
-	# 		  cmd,
+	# 		  cmd = cmd,
+	# 		  base_id = base_id,
 	# 		  i_time = i_time,
 	# 		  f_time = f_time,
 	# 		  s_time = s_time,
+	# 		  n_run = jobs,
 	# 		  event_times = event_times,
 	# 		  event_function = event_function,
 	# 		  out_fname = out_fname)
-	ret <- lapply(X = c(1:parallel_processors),
+	ret <- lapply(X = c(1:n_run),
 				  FUN = worker,
 				  cmd = cmd,
+				  base_id = base_id,
 				  i_time = i_time,
 				  f_time = f_time,
 				  s_time = s_time,
+				  n_run = jobs,
 				  event_times = event_times,
 				  event_function = event_function,
 				  out_fname = out_fname)
-	if(spare != 0)
-	{
-		parLapply(cl = cl,
-				  X = c((n_run-spare):n_run),
-				  fun = worker,
-				  cmd = cmd,
-				  i_time = i_time,
-				  f_time = f_time,
-				  s_time = s_time,
-				  event_times = event_times,
-				  event_function = event_function,
-				  out_fname = out_fname)
-	}
+	# if(spare != 0)
+	# {
+	# 	parLapply(cl = cl,
+	# 			  X = c((n_run-spare):n_run),
+	# 			  fun = worker,
+	# 			  cmd = cmd,
+	# 			  i_time = i_time,
+	# 			  f_time = f_time,
+	# 			  s_time = s_time,
+	# 			  event_times = event_times,
+	# 			  event_function = event_function,
+	# 			  out_fname = out_fname)
+	# }
 	T2 <- difftime(Sys.time(), T1, unit = "secs")
 	stopCluster(cl)
 	return(T2)
