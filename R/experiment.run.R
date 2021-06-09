@@ -84,7 +84,7 @@ worker <- function(worker_id,
 			final_time <- f_time
 
 		# Generate the command to execute the current iteration simulation's configuration
-		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = iter.id)
+		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = paste0(base_id, "-", iter.id))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<I_TIME>", replacement = i_time)
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
@@ -94,7 +94,7 @@ worker <- function(worker_id,
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
-		curr_fnm <- paste0(out_fname, base_id, "-", iter.id, ".trace")
+		curr_fnm <- paste0(out_fname, "-", base_id, "-", iter.id, ".trace")
 		# DEBUG
 		# write(x = paste(cmd.iter,curr_fnm), file = "~/data/commands.txt", append = TRUE)
 		####### PATCH ########
