@@ -106,43 +106,23 @@ worker <- function(worker_id,
 		## Append the current .trace file to the simulation's one
 		if (!file.exists(fnm))
 		{
-			# write.table(trace,
-			# 			file = fnm,
-			# 			sep = " ",
-			# 			col.names = TRUE,
-			# 			row.names = FALSE)
 			file.rename(from = curr_fnm, to = fnm)
 			### DEBUG ###
-			system(paste0("cp ", fnm, " ~/data/", fnm))
+			# system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			# DEBUG
-			system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
-			# trace <- read.table(file = curr_fnm,
-			# 					header = TRUE,
-			# 					sep = " ")
-			# write.table(trace[-1,],
-			# 			file = fnm,
-			# 			append = TRUE,
-			# 			sep = " ",
-			# 			col.names = TRUE,
-			# 			row.names = FALSE)
+			# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 			# DEBUG
-			write(x = paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm), file = "~/data/commands.txt", append = TRUE)
+			# write(x = paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm), file = "~/data/commands.txt", append = TRUE)
 			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
-			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", paste0("~/data/out_",fnm)))
+			file.remove(curr_fnm)
 
 		}
 		if (init != "init")
 		{
 			file.remove(init)
 		}
-		# if (file.exists(curr_fnm))
-		# {
-		# 	file.remove(curr_fnm)
-		# 	# DEBUG
-		# 	# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
-		# }
 	}
 }
 
@@ -152,53 +132,36 @@ experiment.run <- function(base_id, cmd,
 						   event_times = NULL, event_function = NULL,
 						   parallel_processors, out_fname)
 {
-	# Compute the base_id
-	# base_id <- 1 + (base_id - 1) * parallel_processors
 	# Create a cluster
 	cl <- makeCluster(parallel_processors,
 					  type = "FORK")
 	# number of run assigned to each thread
-	#### CHECK ####
 	jobs <- floor(n_run/parallel_processors)
 	#### ##### ####
-	# spare <- n_run - parallel_processors * jobs
 	T1 <- Sys.time()
-	# ret <- parLapply(cl = cl,
-	# 		  X = c(1:n_run),
-	# 		  fun = worker,
-	# 		  cmd = cmd,
-	# 		  base_id = base_id,
-	# 		  i_time = i_time,
-	# 		  f_time = f_time,
-	# 		  s_time = s_time,
-	# 		  n_run = jobs,
-	# 		  event_times = event_times,
-	# 		  event_function = event_function,
-	# 		  out_fname = out_fname)
-	ret <- lapply(X = c(1:n_run),
-				  FUN = worker,
-				  cmd = cmd,
-				  base_id = base_id,
-				  i_time = i_time,
-				  f_time = f_time,
-				  s_time = s_time,
-				  n_run = jobs,
-				  event_times = event_times,
-				  event_function = event_function,
-				  out_fname = out_fname)
-	# if(spare != 0)
-	# {
-	# 	parLapply(cl = cl,
-	# 			  X = c((n_run-spare):n_run),
-	# 			  fun = worker,
+	ret <- parLapply(cl = cl,
+			  X = c(1:n_run),
+			  fun = worker,
+			  cmd = cmd,
+			  base_id = base_id,
+			  i_time = i_time,
+			  f_time = f_time,
+			  s_time = s_time,
+			  n_run = jobs,
+			  event_times = event_times,
+			  event_function = event_function,
+			  out_fname = out_fname)
+	# ret <- lapply(X = c(1:n_run),
+	# 			  FUN = worker,
 	# 			  cmd = cmd,
+	# 			  base_id = base_id,
 	# 			  i_time = i_time,
 	# 			  f_time = f_time,
 	# 			  s_time = s_time,
+	# 			  n_run = jobs,
 	# 			  event_times = event_times,
 	# 			  event_function = event_function,
 	# 			  out_fname = out_fname)
-	# }
 	T2 <- difftime(Sys.time(), T1, unit = "secs")
 	stopCluster(cl)
 	return(T2)
