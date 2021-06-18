@@ -215,8 +215,7 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	dir.create("./fda_files",showWarnings = FALSE)
 
 	#iteration of all columns excluded the first (Time column)
-	# column_names in names(trace1)[-1]
-	for(column_names in names(trace1)[2])
+	for(column_names in names(trace1)[-1])
 	{
 		trace1.ready <- data.frame()
 		#the interested elements of i-run
@@ -256,14 +255,15 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 		write.table(trace2.ready,
 					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fndfile_",column_names,".trace"))
 					,sep=" ",append=FALSE, row.names = FALSE)
+
+		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
+		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+		lapply(ITP.result[["pval"]], write,
+			   file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_col_",column_names,".txt")),
+			   append = TRUE)
+		write.matrix(ITP.result[["pval.matrix"]],
+					 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
-
-
-	ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
-	#plot(ITP.result)
-	ITPimage(ITP.result)
-
-	#TODO fdatest e plot
 
 	cat("\nEND DATA ANALYSIS...")
 }
