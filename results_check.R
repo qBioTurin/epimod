@@ -1,4 +1,5 @@
 source("file_compare.R")
+library(fdatest)
 #install.packages("fdatest",dependencies = TRUE)
 
 det_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
@@ -171,8 +172,8 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	if(is.null(fname_nd))
 	{
 		warning("WARNING: missing path of second file to compare,
-            using results_reference/stochastic_model/model_analysis-1 (copy).trace as default")
-		path = "results_reference/stochastic_model/model_analysis-1 (copy).trace"
+            using results_reference/stochastic_model/model_analysis-1_SSA_copy.trace as default")
+		path = "results_reference/stochastic_model/model_analysis-1_SSA_copy.trace"
 		fname_nd = file.path(getwd(),path,fsep= .Platform$file.sep)
 	}
 
@@ -202,11 +203,20 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	if(nrow(trace1)!=nrow(trace2) || ncol(trace1)!=ncol(trace2))
 		stop("The two files to compare must have the same number of elements!")
 
+	if(!all(names(trace1) == names(trace2),na.rm= TRUE))
+		stop("The columns of the two files to compare must have the same name")
+
 	#values of the Time columns will be the names of columns
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
 
+	if(dir.exists("./fda_files"))
+		unlink("./fda_files",recursive=TRUE)
+
+	dir.create("./fda_files",showWarnings = FALSE)
+
 	#iteration of all columns excluded the first (Time column)
-	for(column_names in names(trace1)[-1])
+	# column_names in names(trace1)[-1]
+	for(column_names in names(trace1)[2])
 	{
 		trace1.ready <- data.frame()
 		#the interested elements of i-run
@@ -224,8 +234,6 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 		names(trace1.ready) = cnames
 
 
-		if(!dir.exists("./fda_files"))
-			dir.create("./fda_files",showWarnings = FALSE)
 		write.table(trace1.ready,
 					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fstfile_",column_names,".trace"))
 					,sep=" ",append=FALSE, row.names = FALSE)
@@ -233,7 +241,7 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 		n_ex <- length(trace2$Time)/(max(trace2$Time)-min(trace2$Time)+1) # = n_run=1000
 		trace2.ready <- data.frame()
 		base = 1
-		#construction of second data frame
+		#creation of second data frame
 		for(i in c(1:n_ex-1))
 		{
 			ref_column_elem = trace2[base:((base+nrow(trace2)/n_ex)-1),column_names]
@@ -250,6 +258,10 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 					,sep=" ",append=FALSE, row.names = FALSE)
 	}
 
+
+	ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+	#plot(ITP.result)
+	ITPimage(ITP.result)
 
 	#TODO fdatest e plot
 
