@@ -29,7 +29,7 @@ compare_file<-function(furl_st, fname_st,fname_nd,fun){
 		download.file(furl_st,dest_st)
 	}else{
 		if(!file.exists(fname_st)){
-			log_it(paste(fname_st,"file not exists! Abort"),fun)
+			log_it(paste("ERROR:",fname_st,"file not exists! Abort"),fun)
 			stop(paste("ERROR:",fname_st,"file not exists! Abort"))
 		}
 
@@ -41,7 +41,7 @@ compare_file<-function(furl_st, fname_st,fname_nd,fun){
 
 	if(!file.exists(fname_nd)){
 		unlink(dest_st)
-		log_it(paste(fname_nd,"file not exists! Abort"),fun)
+		log_it(paste("ERROR:", fname_nd,"file not exists! Abort"),fun)
 		stop(paste(fname_nd,"file not exists! Abort"))
 	}
 
@@ -78,14 +78,25 @@ det_results_check<-function(fname_st,fname_nd,furl_st){
 }
 #on the first file are calculated the means, on the second the confidence intervals, then
 #it's check if the mean respect the calculated intervals
-sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
+sto_results_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
+	fun = "sto_check"
 
-  cat("STARTING RESULTS CHECK FOR STOCHASTIC MODEL...\n")
-  if(is.null(furl_st) && is.null(fname_st))
-    stop("Missing path of first file to compare! Abort")
+	if(dir.exists("./results_check/sto_check"))
+		unlink("./results_check/sto_check",recursive = TRUE)
+
+	dir.create("./results_check/sto_check")
+
+  log_it("STARTING RESULTS CHECK FOR STOCHASTIC MODEL...",fun)
+  if(is.null(furl_st) && is.null(fname_st)){
+  	log_it("ERROR: Missing path of first file to compare! Abort",fun)
+  	stop("Missing path of first file to compare! Abort")
+  }
+
 
   if(is.null(fname_nd))
   {
+  	log_it(paste("WARNING: missing path of second file to compare",
+           "using results_reference/stochastic_model/model_analysis-1 (copy).trace as default"),fun)
     warning("WARNING: missing path of second file to compare,
             using results_reference/stochastic_model/model_analysis-1 (copy).trace as default")
     path = "results_reference/stochastic_model/model_analysis-1 (copy).trace"
@@ -102,22 +113,29 @@ sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
   }else
   {
     if(!file.exists(fname_st))
-      stop(paste(fname_st,"file not exists! Abort"))
-  	else
-  		trace1 = read.csv(file= fname_st,header = TRUE,sep = sep,quote="\"", dec=".")
+    {
+    	log_it(paste("ERROR:",fname_st,"file not exists! Abort"),fun)
+    	stop(paste(fname_st,"file not exists! Abort"))
+    }else{
+    	trace1 = read.csv(file= fname_st,header = TRUE,sep = sep,quote="\"", dec=".")
+    }
   }
 
   if(!file.exists(fname_nd)){
     if(!is.null(furl_st))
       unlink(dest_st)
+  	log_it(paste("ERROR:",fname_nd,"file not exists! Abort"),fun)
     stop(paste(fname_nd,"file not exists! Abort"))
   }else
   {
   	trace2 = read.csv(fname_nd,header = TRUE,sep = sep,quote="\"", dec=".")
   }
 
-	if(nrow(trace1)!=nrow(trace2))
+	if(nrow(trace1)!=nrow(trace2)){
+		log_it("ERROR: The two files to compare must have the same number of elements!",fun)
 		stop("The two files to compare must have the same number of elements!")
+	}
+
 
 	alpha <- 0.01
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1)
@@ -215,8 +233,8 @@ sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 			ub_value = trace2.ci[trace2.ci$Time==referred_row[[1]],ub_index]
 			#the mean must be in the interval calculated
 			if(!(lb_value<=sing_val & sing_val<=ub_value)){
-				print(paste0("Time:",referred_row[[1]],"  ",names(trace1)[column],":",
-							 sing_val," not in interval [",lb_value,",",ub_value,"]"));
+				log_it(paste0("Time:",referred_row[[1]],"  ",names(trace1)[column],":",
+							  sing_val," not in interval [",lb_value,",",ub_value,"]"),fun)
 				printed_error = TRUE
 			}
 
@@ -229,17 +247,32 @@ sto_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 		unlink(dest_st)
 
 	if(!printed_error)
-		print("The calculated means respect the confidence intervals!")
+	{
+		log_it("The calculated means respect the confidence intervals!",fun)
+	}
 
-	cat("\nEND RESULTS CHECK FOR STOCHASTIC MODEL...")
+	log_it("END RESULTS CHECK FOR STOCHASTIC MODEL...",fun)
 }
-fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
-	cat("STARTING FUNCTION DATA ANALYSIS...\n")
+fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
+	fun = "fda_check"
+
+	if(dir.exists("./results_check/fda_check"))
+		unlink("./results_check/fda_check",recursive = TRUE)
+
+	dir.create("./results_check/fda_check")
+
+	log_it("STARTING FUNCTION DATA ANALYSIS...",fun)
 	if(is.null(furl_st) && is.null(fname_st))
+	{
+		log_it("ERROR: Missing path of first file to compare! Abort",fun)
 		stop("Missing path of first file to compare! Abort")
+	}
+
 
 	if(is.null(fname_nd))
 	{
+		log_it(paste("WARNING: missing path of second file to compare,",
+			   "using results_reference/stochastic_model/model_analysis-1_SSA_copy.trace as default"),fun)
 		warning("WARNING: missing path of second file to compare,
             using results_reference/stochastic_model/model_analysis-1_SSA_copy.trace as default")
 		path = "results_reference/stochastic_model/model_analysis-1_SSA_copy.trace"
@@ -255,14 +288,19 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	}else
 	{
 		if(!file.exists(fname_st))
+		{
+			log_it(paste("ERROR:",fname_st,"file not exists! Abort"),fun)
 			stop(paste(fname_st,"file not exists! Abort"))
-		else
+		}else{
 			trace1 = read.csv(file= fname_st,header = TRUE,sep = sep,quote="\"", dec=".")
+		}
+
 	}
 
 	if(!file.exists(fname_nd)){
 		if(!is.null(furl_st))
 			unlink(dest_st)
+		log_it(paste("ERROR:",fname_nd,"file not exists! Abort"),fun)
 		stop(paste(fname_nd,"file not exists! Abort"))
 	}else
 	{
@@ -270,10 +308,18 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 	}
 
 	if(nrow(trace1)!=nrow(trace2) || ncol(trace1)!=ncol(trace2))
+	{
+		log_it("ERROR: The two files to compare must have the same number of elements!",fun)
 		stop("The two files to compare must have the same number of elements!")
+	}
+
 
 	if(!all(names(trace1) == names(trace2),na.rm= TRUE))
+	{
+		log_it("ERROR: The columns of the two files to compare must have the same name",fun)
 		stop("The columns of the two files to compare must have the same name")
+	}
+
 
 	#values of the Time columns will be the names of columns
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
@@ -331,17 +377,17 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 
 
 		lapply(ITP.result[["pval"]], write,
-			   file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_col_",column_names,".txt")),
+			   file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"pval_col_",column_names,".txt")),
 			   append = TRUE)
 		# write.matrix(ITP.result[["pval.matrix"]],
 		# 			 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
 
-	cat("\nEND DATA ANALYSIS...")
+	log_it("END DATA ANALYSIS...",fun)
 }
 results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
-	if(missing(fname_st) & (fun=="det_check" & (is.null(furl_st) | missing(furl_st))))
-		stop("fname_st parameter is missing! Abort")
+	if(missing(fname_st) & (is.null(furl_st) | missing(furl_st)))
+		stop("Either fname_st or furl_st parameter is missing! Abort")
 	if(missing(fname_nd))
 		stop("fname_nd parameter is missing! Abort")
 	if(missing(fun) | is.null(fun))
@@ -355,10 +401,10 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
 
 	switch(fun,
 		   "det_check" = det_results_check(fname_st,fname_nd,furl_st),
-		   "sto_check" = sto_results_check(fname_st,fname_nd),
-		   "fda_test" = fda_check(fname_st,fname_nd))
+		   "sto_check" = sto_results_check(fname_st,fname_nd,furl_st),
+		   "fda_test" = fda_check(fname_st,fname_nd,furl_st))
 }
-#Example of running file_compare:
+#Example of running det_check:
 # results_check("results_reference/deterministic_model/model_analysis-1.trace",
 # 			  "results_reference/deterministic_model/model_analysis-1 (modified).trace",
 # 			  "det_check")
@@ -367,9 +413,11 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
 # 			  fun = "det_check")
 # results_check("Results/results_model_analysis/SIR.solver", "Results/results_model_analysis/SIR.solver", "det_check")
 
-
-#Example of running the other functions:
+#Example of running sto_check:
 # sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
 # 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
-# fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
-# 		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
+# sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
+
+fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
