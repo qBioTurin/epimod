@@ -1,11 +1,80 @@
-source("file_compare.R")
 library(fdatest)
-#install.packages("fdatest",dependencies = TRUE)
 
-det_results_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL){
-  cat("STARTING RESULTS CHECK FOR DETERMINISTIC MODEL...\n")
-  compare_file(furl_st,fname_st,fname_nd);
-  cat("\nEND RESULTS CHECK FOR DETERMINISTIC MODEL...")
+log_it<-function(msg,fun){
+	write(msg,
+		  file = file.path(paste0("./results_check/",fun,
+		  						.Platform$file.sep, "results.log")),
+		  append = TRUE)
+}
+compare_file<-function(furl_st, fname_st,fname_nd,fun){
+	if(is.null(furl_st) && is.null(fname_st)){
+		log_it("ERROR: Missing path of first file to compare! Abort",fun)
+		stop("Missing path of first file to compare! Abort")
+	}
+
+
+	if(is.null(fname_nd)){
+		log_it(paste("WARNING: missing path of second file to compare,",
+		"using results_reference/deterministic_model/model_analysis-1.trace as default"),fun)
+		warning("WARNING: missing path of second file to compare,
+            using results_reference/deterministic_model/model_analysis-1.trace as default")
+		path = "results_reference/deterministic_model/model_analysis-1.trace"
+		fname_nd = paste0(getwd(),.Platform$file.sep,path)
+	}
+
+
+	if(!is.null(furl_st)){
+		fst_ext = unlist(strsplit(basename(furl_st),"\\."))[2]
+		dest_st = paste0(getwd(),.Platform$file.sep,"file1.",fst_ext)
+		download.file(furl_st,dest_st)
+	}else{
+		if(!file.exists(fname_st)){
+			log_it(paste(fname_st,"file not exists! Abort"),fun)
+			stop(paste("ERROR:",fname_st,"file not exists! Abort"))
+		}
+
+
+		fst_ext = unlist(strsplit(basename(fname_st),"\\."))[2]
+		dest_st = paste0(getwd(),.Platform$file.sep,"file1.",fst_ext)
+		file.copy(from = fname_st, to = dest_st)
+	}
+
+	if(!file.exists(fname_nd)){
+		unlink(dest_st)
+		log_it(paste(fname_nd,"file not exists! Abort"),fun)
+		stop(paste(fname_nd,"file not exists! Abort"))
+	}
+
+	fnd_ext = unlist(strsplit(basename(fname_nd),"\\."))[2]
+	dest_nd = paste0(getwd(),.Platform$file.sep,"file2.",fnd_ext)
+	file.copy(from = fname_nd, to = dest_nd)
+
+	if(.Platform$OS.type == "unix")
+	{
+		if(system(paste("diff",basename(dest_st),basename(dest_nd)),ignore.stdout = FALSE)==1){
+			log_it("The two files are not equal",fun)
+			suppressWarnings(out <- system(paste("diff",basename(dest_st),basename(dest_nd)), intern = TRUE))
+			log_it(out,fun)
+		}
+		else{
+			log_it("The two files are equal",fun)
+		}
+
+	}
+
+
+	unlink(dest_st)
+	unlink(dest_nd)
+}
+det_results_check<-function(fname_st,fname_nd,furl_st){
+  if(dir.exists("./results_check/det_check"))
+  	unlink("./results_check/det_check",recursive = TRUE)
+
+  	dir.create("./results_check/det_check")
+
+  	log_it("STARTING RESULTS CHECK FOR DETERMINISTIC MODEL...","det_check")
+	compare_file(furl_st,fname_st,fname_nd,"det_check");
+    log_it("END RESULTS CHECK FOR DETERMINISTIC MODEL...","det_check")
 }
 #on the first file are calculated the means, on the second the confidence intervals, then
 #it's check if the mean respect the calculated intervals
@@ -232,10 +301,10 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 			cnames = c(cnames,paste0("Time",i-1))
 		names(trace1.ready) = cnames
 
-
-		write.table(trace1.ready,
-					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fstfile_",column_names,".trace"))
-					,sep=" ",append=FALSE, row.names = FALSE)
+		#Writing the new format on file
+		# write.table(trace1.ready,
+		# 			file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fstfile_",column_names,".trace"))
+		# 			,sep=" ",append=FALSE, row.names = FALSE)
 
 		n_ex <- length(trace2$Time)/(max(trace2$Time)-min(trace2$Time)+1) # = n_run=1000
 		trace2.ready <- data.frame()
@@ -252,24 +321,55 @@ fda_check<-function(furl_st=NULL, fname_st=NULL,fname_nd=NULL,sep=" "){
 			cnames = c(cnames,paste0("Time",i-1))
 		names(trace2.ready) = cnames
 
-		write.table(trace2.ready,
-					file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fndfile_",column_names,".trace"))
-					,sep=" ",append=FALSE, row.names = FALSE)
+		#Writing the new format on file
+		# write.table(trace2.ready,
+		# 			file = file.path(paste0("./fda_files",.Platform$file.sep,"fda_fndfile_",column_names,".trace"))
+		# 			,sep=" ",append=FALSE, row.names = FALSE)
 
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+
+
 		lapply(ITP.result[["pval"]], write,
 			   file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_col_",column_names,".txt")),
 			   append = TRUE)
-		write.matrix(ITP.result[["pval.matrix"]],
-					 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
+		# write.matrix(ITP.result[["pval.matrix"]],
+		# 			 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
 
 	cat("\nEND DATA ANALYSIS...")
 }
-# det_results_check(fname_st = "results_reference/deterministic_model/model_analysis-1.trace",
-# 				  fname_nd = "results_reference/deterministic_model/model_analysis-1 (copy).trace")
+results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
+	if(missing(fname_st) & (fun=="det_check" & (is.null(furl_st) | missing(furl_st))))
+		stop("fname_st parameter is missing! Abort")
+	if(missing(fname_nd))
+		stop("fname_nd parameter is missing! Abort")
+	if(missing(fun) | is.null(fun))
+		stop("fun parameter must be specified! Abort")
+
+	if(!fun %in% c("det_check","sto_check","fda_test"))
+		stop("The specified function doesn't exist! You can choose between det_check, sto_check and fda_test")
+
+	if(!dir.exists("./results_check"))
+		dir.create("results_check")
+
+	switch(fun,
+		   "det_check" = det_results_check(fname_st,fname_nd,furl_st),
+		   "sto_check" = sto_results_check(fname_st,fname_nd),
+		   "fda_test" = fda_check(fname_st,fname_nd))
+}
+#Example of running file_compare:
+# results_check("results_reference/deterministic_model/model_analysis-1.trace",
+# 			  "results_reference/deterministic_model/model_analysis-1 (modified).trace",
+# 			  "det_check")
+# results_check(furl_st = "https://raw.githubusercontent.com/qBioTurin/SIR/master/Results/results_sensitivity_analysis/SIR.solver",
+# 			  fname_nd = "Results/results_model_analysis/SIR.solver",
+# 			  fun = "det_check")
+# results_check("Results/results_model_analysis/SIR.solver", "Results/results_model_analysis/SIR.solver", "det_check")
+
+
+#Example of running the other functions:
 # sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
 # 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
-fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
-		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
+# fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+# 		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
