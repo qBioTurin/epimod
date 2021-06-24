@@ -253,7 +253,7 @@ sto_results_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
 
 	log_it("END RESULTS CHECK FOR STOCHASTIC MODEL...",fun)
 }
-fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
+fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold){
 	fun = "fda_check"
 
 	if(dir.exists("./results_check/fda_check"))
@@ -324,11 +324,6 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
 	#values of the Time columns will be the names of columns
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
 
-	if(dir.exists("./fda_files"))
-		unlink("./fda_files",recursive=TRUE)
-
-	dir.create("./fda_files",showWarnings = FALSE)
-
 	#iteration of all columns excluded the first (Time column)
 	for(column_names in names(trace1)[-1])
 	{
@@ -375,10 +370,32 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" "){
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
+		#Open graphic device to print plot and images on png
+		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
+			width = 1200, height = 900)
+		plot(ITP.result)
+		ITPimage(ITP.result)
+		#Close graphic device
+		dev.off()
 
-		lapply(ITP.result[["pval"]], write,
-			   file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"pval_col_",column_names,".txt")),
-			   append = TRUE)
+		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
+		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
+		for(i in ITP.result[["pval"]])
+		{
+			if(i>=threshold)
+			{
+				log_it(paste(i,"  PASS"),fun)
+			}else{
+				log_it(paste(i,"  FAIL"),fun)
+			}
+
+		}
+
+		#Writing p-val and p-val matrix on file
+
+		# lapply(ITP.result[["pval"]], write,
+		# 	   file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"pval_col_",column_names,".txt")),
+		# 	   append = TRUE)
 		# write.matrix(ITP.result[["pval.matrix"]],
 		# 			 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
@@ -419,5 +436,7 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
 # sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
 # 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
 
+#Example of running fda_check:
 fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
-		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace")
+		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
+		  threshold = 0.05)
