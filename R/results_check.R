@@ -402,7 +402,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 	log_it("END DATA ANALYSIS...",fun)
 }
-results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
+results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL, threshold=NULL){
 	if(missing(fname_st) & (is.null(furl_st) | missing(furl_st)))
 		stop("Either fname_st or furl_st parameter is missing! Abort")
 	if(missing(fname_nd))
@@ -413,13 +413,16 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
 	if(!fun %in% c("det_check","sto_check","fda_test"))
 		stop("The specified function doesn't exist! You can choose between det_check, sto_check and fda_test")
 
+	if(fun=="fda_test" & (is.null(threshold) | missing(threshold)))
+	   stop("threshold paramter must be specified! Abort")
+
 	if(!dir.exists("./results_check"))
 		dir.create("results_check")
 
 	switch(fun,
 		   "det_check" = det_results_check(fname_st,fname_nd,furl_st),
 		   "sto_check" = sto_results_check(fname_st,fname_nd,furl_st),
-		   "fda_test" = fda_check(fname_st,fname_nd,furl_st))
+		   "fda_test" = fda_check(fname_st,fname_nd,furl_st,threshold = threshold))
 }
 #Example of running det_check:
 # results_check("results_reference/deterministic_model/model_analysis-1.trace",
@@ -431,12 +434,15 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL){
 # results_check("Results/results_model_analysis/SIR.solver", "Results/results_model_analysis/SIR.solver", "det_check")
 
 #Example of running sto_check:
-# sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
-# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
-# sto_results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
-# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace")
+# results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
+# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace",
+# 			  fun = "sto_check")
+# results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+# 				  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto_copy.trace",
+# 			  fun = "sto_check")
 
 #Example of running fda_check:
-fda_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
-		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
-		  threshold = 0.05)
+# results_check(fname_st = "results_reference/stochastic_model/model_analysis-1_SSA.trace",
+# 		  fname_nd = "results_reference/stochastic_model/model_analysis-1_TAUG_corretto.trace",
+# 		  fun = "fda_test",
+# 		  threshold = 0.05)
