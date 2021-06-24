@@ -414,7 +414,7 @@ results_check<-function(fname_st = NULL, fname_nd = NULL, fun, furl_st=NULL, thr
 		stop("The specified function doesn't exist! You can choose between det_check, sto_check and fda_test")
 
 	if(fun=="fda_test" & (is.null(threshold) | missing(threshold)))
-	   stop("threshold paramter must be specified! Abort")
+	   stop("threshold parameter must be specified! Abort")
 
 	if(!dir.exists("./results_check"))
 		dir.create("results_check")
