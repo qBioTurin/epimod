@@ -11,8 +11,6 @@
 #' @author Luca Rosso
 #' @export
 
-threshold=NULL
-
 library(fdatest)
 
 log_it<-function(msg,fun){
