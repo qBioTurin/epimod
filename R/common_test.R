@@ -1,3 +1,44 @@
+#' @title Test correctness of the parameters before execute a function
+#' @description Check if the passed parameters are well defined to execute the specified function, verifying
+#' the existence of the resource path, the length of the array, the value of solver type etc...
+#' @param net_fname .PNPRO file storing  the model as ESPN. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected;
+#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions.
+#' @param reference_data Data to compare with the simulations' results
+#' @param ini_v Initial values for the parameters to be optimized.
+#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
+#' @param solver_fname .solver file (generated in with the function model_generation)
+#' @param f_time Final solution time.
+#' @param s_time Time step at which explicit estimates for the system are desired
+#' @param parameters_fname file with the definition of user defined functions
+#' @param volume The folder to mount within the Docker image providing all the necessary files
+#' @param parallel_processors Integer for the number of available processors to use
+#' @param solver_type  \itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
+#'  \item Stochastic:  SSA or TAUG,
+#'  \item Hybrid: HLSODA or (H)SDE or HODE
+#'  } Default is LSODA.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'.
+#' Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output.
+#' It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param n_config, number of configuratons to generate
+#' @param out_fname Prefix to the output file name
+#' @param timeout Maximum execution time allowed to each configuration
+#' @param extend TO BE DONE
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param ini_vector_mod Logical value for ... . Default is FALSE.
+#' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
+#' \itemize{
+#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+#' \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
+#' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
+#' @author Luca Rosso
+#' @export
+
+
+
+
+
+
 common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,target_value_fname = NULL,ini_v, lb_v, ub_v,
                       solver_fname,f_time,s_time,parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
                       solver_type = "LSODA",  n_run = 1, distance_measure_fname = NULL, n_config = 1,out_fname = NULL,
