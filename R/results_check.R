@@ -1,3 +1,18 @@
+#' @title Check the results files obtained by model analysis
+#' @description This function can compare the results obtained by a deterministic model, in this case
+#' @description the files are compared using the diff unix command, obtained by two different stochastic model
+#' @description calculating the confidence intervals and do a simple form of functional data analysis using
+#' @description the fdatest package. Produce a file log with the output of the used functions.
+#' @param fname_st path of the first file to compare
+#' @param fname_nd path of the second file to compare
+#' @param fun a string defining which control algorithm to apply (det_check, sto_check, fda_test)
+#' @param furl_st url of the first file to compare
+#' @param threshold the limit used to compare the p-values generated in functional data analysis
+#' @author Luca Rosso
+#' @export
+
+threshold=NULL
+
 library(fdatest)
 
 log_it<-function(msg,fun){
