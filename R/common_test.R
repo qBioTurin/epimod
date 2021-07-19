@@ -139,15 +139,10 @@ common_test<-function(net_fname,functions_fname = NULL,reference_data = NULL,tar
 
 
   if(caller_function %in% c("calibration","analysis")){
-    # not mandatory in README examples ?
-    if(missing(solver_type))
-      return("solver_type parameter is missing! Abort")
-    else{
       possibilities = c('ODE-E','ODE-RKF', 'ODE45', 'LSODA', 'SSA', 'TAUG', 'HLSODA', '(H)SDE', 'HODE')
       if(!solver_type %in% possibilities)
         return("Value of solver_type must be one of the following: ODE-E, ODE-RKF, ODE45,
            LSODA, SSA, TAUG, HLSODA, (H)SDE, HODE")
-    }
 
 
     if(!missing(n_run))
