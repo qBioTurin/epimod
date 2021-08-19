@@ -94,8 +94,10 @@ model_calibration <-function(
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname=NULL){
-    
+    out_fname=NULL,
+    #Flag to enable logging activity
+    debug=FALSE){
+
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
@@ -201,5 +203,5 @@ model_calibration <-function(
     # Run the docker image
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname), debug = debug)
 }

@@ -39,7 +39,9 @@
 model_generation <-function( out_fname = NULL,
                              net_fname,
                              functions_fname=NULL,
-                             volume = getwd()){
+                             volume = getwd(),
+							 #Flag to enable logging activity
+							 debug=FALSE){
 
 
     #common_test function receive all the parameters that will be tested for model_generation function
@@ -82,7 +84,7 @@ model_generation <-function( out_fname = NULL,
     pwd <- getwd()
     setwd(out_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd),debug = debug)
 
     if ( err_code != 0 )
     {
@@ -98,7 +100,7 @@ model_generation <-function( out_fname = NULL,
         cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
     }
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd), debug = debug)
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]

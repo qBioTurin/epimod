@@ -69,11 +69,13 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 # Mange reproducibilty and extend previous experiments
                                 extend = NULL, seed = NULL,
                                 # Directories
-                                out_fname = NULL
+                                out_fname = NULL,
+                                #Flag to enable logging activity
+                                debug=FALSE
                                 ){
 
     #common_test function receive all the parameters that will be tested for sensitivity_analysis function
-    ret = common_test(n_config = n_config, 
+    ret = common_test(n_config = n_config,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
                       solver_fname = solver_fname,
@@ -86,9 +88,9 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                       volume = volume,
                       caller_function = "sensitivity")
     if(ret!="ok")
-        stop(paste("sensitivity_analysis_test error:",ret,sep = "\n"))    
-    
-    
+        stop(paste("sensitivity_analysis_test error:",ret,sep = "\n"))
+
+
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
@@ -176,5 +178,5 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Run the docker image
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
 }

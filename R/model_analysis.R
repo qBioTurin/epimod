@@ -8,9 +8,11 @@ model_analysis <-function(
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
-    out_fname = NULL
+    out_fname = NULL,
+    #Flag to enable logging activity
+    debug=FALSE
 ){
-    
+
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(solver_fname = solver_fname,
                       parameters_fname = parameters_fname,
@@ -24,14 +26,14 @@ model_analysis <-function(
                       parallel_processors = parallel_processors,
                       n_config = n_config,
                       caller_function = "analysis")
-    
+
     if(ret!="ok" && !grepl("WARNING",ret)){
         stop(paste("model_analysis_test error:",ret,sep = "\n"))
     }else{
         if(ret!="ok")
             warning(paste("model_analysis_test",ret))
     }
-    
+
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -99,5 +101,5 @@ model_analysis <-function(
     # Run the docker image
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
+    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
 }
