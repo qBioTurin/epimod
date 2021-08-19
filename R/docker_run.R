@@ -11,7 +11,7 @@
 #'
 #' }
 #' @export
-docker.run <- function( params=NULL, changeUID=TRUE){
+docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
 
     if(is.null(params)){
         cat("\nNo parameters where provided!\n")
@@ -32,10 +32,22 @@ docker.run <- function( params=NULL, changeUID=TRUE){
         userid=system("id -u", intern = TRUE)
         groupid=system("id -g", intern = TRUE)
         cat(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
-        system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+        #system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+        if(debug)
+        {
+        	system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+        }else{
+        	system(paste("docker run --rm --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+        }
     } else {
         cat(paste("docker run --privileged=true ",params,"\n\n", sep=""))
-        system(paste("docker run --privileged=true ",params, sep=""))
+        #system(paste("docker run --privileged=true ",params, sep=""))
+    	if(debug)
+    	{
+    		system(paste("docker run --privileged=true ",params, sep=""))
+    	}else{
+    		system(paste("docker run --rm --privileged=true ",params, sep=""))
+    	}
     }
 
     ## to obtain the Docker ID by file
@@ -53,13 +65,26 @@ docker.run <- function( params=NULL, changeUID=TRUE){
     ## to check the Docker container status
     dockerExit <- system(paste("docker inspect -f {{.State.ExitCode}}",dockerid),intern= T)
     cat("\nDocker exit status:",dockerExit,"\n\n")
-    if(as.numeric(dockerExit)!=0){
-        system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
-        cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
-        cat("\nExecution is interrupted\n")
-        cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
-        system("echo 3 > ExitStatusFile 2>&1")
-        return(3)
+    # if(as.numeric(dockerExit)!=0){
+    #     system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
+    #     cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
+    #     cat("\nExecution is interrupted\n")
+    #     cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
+    #     system("echo 3 > ExitStatusFile 2>&1")
+    #     return(3)
+    # }
+
+    if(as.numeric(dockerExit)!=0 || debug){
+    	system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
+	    cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
+	    cat("\nExecution is interrupted\n")
+	    cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
+	    system("echo 3 > ExitStatusFile 2>&1")
+
+
+	    cat("The container's log is saved at: ")
+	    system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid)
+	    return(3)
     }
 
 
