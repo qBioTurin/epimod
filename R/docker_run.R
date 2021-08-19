@@ -74,7 +74,7 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
     #     return(3)
     # }
 
-    if(as.numeric(dockerExit)!=0 || debug==TRUE){
+    if(debug==TRUE){ #as.numeric(dockerExit)!=0
     	system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
 	    cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
 	    cat("\nExecution is interrupted\n")
