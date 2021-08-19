@@ -83,7 +83,7 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
 
 
 	    cat("The container's log is saved at: ")
-	    system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid)
+	    system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid))
 	    return(3)
     }
 
