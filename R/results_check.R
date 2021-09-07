@@ -338,7 +338,8 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
 
 	#iteration of all columns excluded the first (Time column)
-	for(column_names in names(trace1)[-1])
+	#for(column_names in names(trace1)[-1])
+	for(column_names in "S")
 	{
 		trace1.ready <- data.frame()
 		#the interested elements of i-run
@@ -381,13 +382,16 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		# 			,sep=" ",append=FALSE, row.names = FALSE)
 
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
-		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+
+		plot(trace1.ready,type="l",col="blue")
+		points(trace2.ready,type="l",col="blue")
 
 		#Open graphic device to print plot and images on png
-		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
-			width = 1200, height = 900)
-		plot(ITP.result)
-		ITPimage(ITP.result)
+			# png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
+			# 	width = 1200, height = 900)
+			# plot(ITP.result)
+			# ITPimage(ITP.result)
 		#Close graphic device
 		dev.off()
 
