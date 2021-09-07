@@ -387,12 +387,15 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		print(ncol(trace1.ready))
 		for(column_names in names(trace1.ready))
 		{
-			plot(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
-			points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
+			if(column_names == "Time0")
+			{
+				plot(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
+			}else{
+				points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
+			}
 		}
 		for(column_names in names(trace2.ready))
 		{
-			plot(c(1:nrow(trace2.ready)),trace2.ready[,column_names],type="l",col="orange")
 			points(c(1:nrow(trace2.ready)),trace2.ready[,column_names],type="l",col="orange")
 		}
 
