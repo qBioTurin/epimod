@@ -389,7 +389,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			if(column_names == "Time0")
 			{
 				plot(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
-			# }else{
+			}#else{
 			# 	points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
 			# }
 		}
