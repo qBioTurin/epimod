@@ -384,20 +384,19 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
-		print(ncol(trace1.ready))
 		for(column_names in names(trace1.ready))
 		{
 			if(column_names == "Time0")
 			{
 				plot(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
-			}else{
-				points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
-			}
+			# }else{
+			# 	points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue")
+			# }
 		}
-		for(column_names in names(trace2.ready))
-		{
-			points(c(1:nrow(trace2.ready)),trace2.ready[,column_names],type="l",col="orange")
-		}
+		# for(column_names in names(trace2.ready))
+		# {
+		# 	points(c(1:nrow(trace2.ready)),trace2.ready[,column_names],type="l",col="orange")
+		# }
 
 		#Open graphic device to print plot and images on png
 			# png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
@@ -405,7 +404,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			# plot(ITP.result)
 			# ITPimage(ITP.result)
 		#Close graphic device
-		#dev.off()
+			#dev.off()
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
 		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
