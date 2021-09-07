@@ -384,6 +384,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
+		print(ncol(trace1.ready))
 		for(i in c(1:(ncol(trace1.ready))))
 		{
 			plot(i,paste0(trace1.ready$,"Time",i-1),type="l",col="blue")
@@ -396,7 +397,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			# plot(ITP.result)
 			# ITPimage(ITP.result)
 		#Close graphic device
-		dev.off()
+		#dev.off()
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
 		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
