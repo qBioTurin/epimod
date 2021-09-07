@@ -387,8 +387,8 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		print(ncol(trace1.ready))
 		for(i in c(1:(ncol(trace1.ready))))
 		{
-			plot(c(1:ncol(trace1.ready)),paste0(trace1.ready$,"Time",i-1),type="l",col="blue")
-			points(c(1:ncol(trace1.ready)),paste0(trace1.ready$,"Time",i-1),type="l",col="blue")
+			plot(c(1:ncol(trace1.ready)),trace1.ready$paste0("Time",i-1),type="l",col="blue")
+			points(c(1:ncol(trace1.ready)),trace1.ready$paste0("Time",i-1),type="l",col="blue")
 		}
 
 		#Open graphic device to print plot and images on png
