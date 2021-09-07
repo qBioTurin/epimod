@@ -397,7 +397,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Tracce reali del posto ",column_names))
 				legend(x = "topright",                    # Position
 					   inset = 0.08,                      # Distance from the margin as a fraction of the plot region
-					   cex = 2,                         # Change legend size
+					   cex = 1.5,                         # Change legend size
 					   title = "Tipo di solver",          # Title
 					   legend = c("SSA", "TAUG"),         # Legend texts
 					   lty = c(2, 1),                     # Line types
