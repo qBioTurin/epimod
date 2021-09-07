@@ -384,7 +384,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
-		View(trace1.ready)
+		str(trace1.ready)
 		# plot(trace1.ready,type="l",col="blue")
 		# points(trace2.ready,type="l",col="blue")
 
