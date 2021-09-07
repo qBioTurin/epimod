@@ -410,13 +410,6 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 		for(i in c(1:nrow(trace2.ready)))
 		{
-			# if(i == 1)
-			# {
-			# 	plot(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100),
-			# 		 xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
-			# }else{
-			# 	points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
-			# }
 			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="red")
 		}
 
