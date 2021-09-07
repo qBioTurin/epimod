@@ -384,9 +384,11 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
-		str(trace1.ready)
-		# plot(trace1.ready,type="l",col="blue")
-		# points(trace2.ready,type="l",col="blue")
+		for(i in c(1:(ncol(trace1.ready))))
+		{
+			plot(i,paste0(trace1.ready$,"Time",i-1),type="l",col="blue")
+			points(i,paste0(trace1.ready$,"Time",i-1),type="l",col="blue")
+		}
 
 		#Open graphic device to print plot and images on png
 			# png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
