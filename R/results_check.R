@@ -395,6 +395,12 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			{
 				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black",ylim=c(min(trace1.ready)-100,
 					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Tracce reali del posto ",column_names))
+				legend(x = "topright",                    # Position
+					   title = "Tipo di solver",          # Title
+					   legend = c("SSA", "TAUG"),         # Legend texts
+					   lty = c(2, 1),                     # Line types
+					   col = c("black", "red"),           # Line colors
+					   lwd = 1)                           # Line width
 			}else{
 			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black")
 			 }
@@ -409,7 +415,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			# }else{
 			# 	points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
 			# }
-			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="red")
+			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",lty=2,col="red")
 		}
 
 
