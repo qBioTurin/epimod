@@ -385,6 +385,9 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
+		#Open graphic device to print plot and images on png
+		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
+			width = 1200, height = 900)
 
 		for(i in c(1:nrow(trace1.ready)))
 		{
@@ -409,13 +412,9 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
 		}
 
-		#Open graphic device to print plot and images on png
-		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
-			width = 1200, height = 900)
+
 		plot(ITP.result)
 		ITPimage(ITP.result)
-		#Close graphic device
-		dev.off()
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
 		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
@@ -438,6 +437,9 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		# write.matrix(ITP.result[["pval.matrix"]],
 		# 			 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
+
+	#Close graphic device
+	dev.off()
 
 	log_it("END DATA ANALYSIS...",fun)
 }
