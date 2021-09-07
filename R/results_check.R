@@ -393,10 +393,10 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		{
 			if(i == 1)
 			{
-				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(min(trace1.ready)-100,
-					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
+				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black",ylim=c(min(trace1.ready)-100,
+					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Tracce reali del posto ",column_names))
 			}else{
-			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue")
+			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black")
 			 }
 		}
 
@@ -409,11 +409,11 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			# }else{
 			# 	points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
 			# }
-			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange")
+			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="red")
 		}
 
 
-		plot(ITP.result)
+		plot(ITP.result, xlab="time",ylab="population",main=paste("Curve fitting del posto",column_names))
 		ITPimage(ITP.result)
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
