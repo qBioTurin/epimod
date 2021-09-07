@@ -393,10 +393,10 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		{
 			if(i == 1)
 			{
-				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100),
-					 xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
+				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(min(trace1.ready)-100,
+					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
 			}else{
-			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
+			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue")
 			 }
 		}
 
@@ -409,7 +409,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			# }else{
 			# 	points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
 			# }
-			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
+			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange")
 		}
 
 
