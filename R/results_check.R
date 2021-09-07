@@ -385,13 +385,13 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
 		View(trace1.ready)
-		for(column_names in names(trace1.ready)[-1])
+		for(i in c(1:nrow))#for(column_names in names(trace1.ready)[-1])
 		{
-			if(column_names == "Time1")
+			if(i == 1)
 			{
-				plot(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue",ylim=c(-100,10100))
+				plot(c(1:ncol(trace1.ready),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			}else{
-			 	points(c(1:nrow(trace1.ready)),trace1.ready[,column_names],type="l",col="blue",ylim=c(-100,10100))
+			 	points(c(1:ncol(trace1.ready),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			 }
 		}
 		# for(column_names in names(trace2.ready))
