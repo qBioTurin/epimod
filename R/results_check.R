@@ -384,20 +384,28 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
 			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
-		View(trace1.ready)
-		for(i in c(1:nrow(trace1.ready)))#for(column_names in names(trace1.ready)[-1])
+
+		for(i in c(1:nrow(trace1.ready)))
 		{
 			if(i == 1)
 			{
-				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
+				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100),
+					 xlab="time",ylab="population",main=paste("Spline fitting for place",column_names))
 			}else{
 			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			 }
 		}
-		# for(column_names in names(trace2.ready))
-		# {
-		# 	points(c(1:nrow(trace2.ready)),trace2.ready[,column_names],type="l",col="orange")
-		# }
+
+		for(i in c(1:nrow(trace2.ready)))
+		{
+			if(i == 1)
+			{
+				plot(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100)
+					 xlab="time",ylab="population",main=paste("Spline fitting for place",column_names))
+			}else{
+				points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
+			}
+		}
 
 		#Open graphic device to print plot and images on png
 			# png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
