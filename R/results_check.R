@@ -339,7 +339,8 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 	#iteration of all columns excluded the first (Time column)
 	#for(column_names in names(trace1)[-1])
-	for(column_names in "S")
+	#for(column_names in "S")
+	for(column_names in names(trace1)[-1])
 	{
 		trace1.ready <- data.frame()
 		#the interested elements of i-run
@@ -382,7 +383,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		# 			,sep=" ",append=FALSE, row.names = FALSE)
 
 		#ITP.result <- ITP2bspline(trace1.ready,trace2.ready)
-			#ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
+		ITP.result <- ITP2bspline(trace1.ready,trace2.ready,nknots=20,B=1000)
 
 
 		for(i in c(1:nrow(trace1.ready)))
@@ -390,7 +391,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 			if(i == 1)
 			{
 				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100),
-					 xlab="time",ylab="population",main=paste("Spline fitting for place",column_names))
+					 xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
 			}else{
 			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			 }
@@ -398,22 +399,23 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 		for(i in c(1:nrow(trace2.ready)))
 		{
-			if(i == 1)
-			{
-				plot(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100),
-					 xlab="time",ylab="population",main=paste("Spline fitting for place",column_names))
-			}else{
-				points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
-			}
+			# if(i == 1)
+			# {
+			# 	plot(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100),
+			# 		 xlab="time",ylab="population",main=paste("Data plotting for place",column_names))
+			# }else{
+			# 	points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
+			# }
+			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="orange",ylim=c(-100,10100))
 		}
 
 		#Open graphic device to print plot and images on png
-			# png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
-			# 	width = 1200, height = 900)
-			# plot(ITP.result)
-			# ITPimage(ITP.result)
+		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
+			width = 1200, height = 900)
+		plot(ITP.result)
+		ITPimage(ITP.result)
 		#Close graphic device
-			#dev.off()
+		dev.off()
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
 		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
