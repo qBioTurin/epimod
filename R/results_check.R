@@ -389,9 +389,9 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		{
 			if(i == 1)
 			{
-				plot(c(1:ncol(trace1.ready),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
+				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			}else{
-			 	points(c(1:ncol(trace1.ready),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
+			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="blue",ylim=c(-100,10100))
 			 }
 		}
 		# for(column_names in names(trace2.ready))
