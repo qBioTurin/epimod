@@ -387,7 +387,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 		#Open graphic device to print plot and images on png
 		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
-			width = 1250, height = 900)
+			width = 1300, height = 900)
 
 		for(i in c(1:nrow(trace1.ready)))
 		{
@@ -418,9 +418,7 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 
 		plot(ITP.result, xlab="time",ylab="population",main=paste("Curve fitting del posto",column_names),
-			 cex.lab=2,cex.main=2,yaxt="n",xaxt="n")
-		axis(1,cex.axis=2)
-		axis(2,cex.axis=2)
+			 cex.lab=2,cex.main=2)
 		ITPimage(ITP.result)
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
