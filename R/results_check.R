@@ -393,9 +393,12 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		{
 			if(i == 1)
 			{
+				#set margin
+				par(mar=c(5, 5, 4, 2) + 0.1)
+				#set plot
 				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black",lty=2,ylim=c(min(trace1.ready)-100,
 					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Tracce reali del posto ",column_names),
-					cex.lab=1.8,cex.main=2,yaxt="n",xaxt="n")
+					cex.lab=2,cex.main=2,yaxt="n",xaxt="n")
 				axis(1,cex.axis=2)
 				axis(2,cex.axis=2)
 				legend(x = "topright",                    # Position
