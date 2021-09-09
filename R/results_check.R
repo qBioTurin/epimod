@@ -338,6 +338,8 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 	n_ex <- length(trace1$Time)/(max(trace1$Time)-min(trace1$Time)+1) # = n_run=1000
 
 	#iteration of all columns excluded the first (Time column)
+	#for(column_names in names(trace1)[-1])
+	#for(column_names in "S")
 	for(column_names in names(trace1)[-1])
 	{
 		trace1.ready <- data.frame()
@@ -385,11 +387,42 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 
 		#Open graphic device to print plot and images on png
 		png(file = file.path(paste0("./results_check/fda_check",.Platform$file.sep,"place",column_names,"_%2d.png")),
-			width = 1200, height = 900)
-		plot(ITP.result)
+			width = 1300, height = 900)
+
+		for(i in c(1:nrow(trace1.ready)))
+		{
+			if(i == 1)
+			{
+				#set margin
+				par(mar=c(5, 5, 4, 2) + 0.1)
+				#set plot
+				plot(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",col="black",lty=2,ylim=c(min(trace1.ready)-100,
+					max(trace1.ready)+100), xlab="time",ylab="population",main=paste("Tracce reali del posto ",column_names),
+					cex.lab=2,cex.main=2,yaxt="n",xaxt="n")
+				axis(1,cex.axis=2)
+				axis(2,cex.axis=2)
+				legend(x = "topright",                    # Position
+					   inset = 0.08,                      # Distance from the margin as a fraction of the plot region
+					   cex = 1.5,                         # Change legend size
+					   title = "Tipo di solver",          # Title
+					   legend = c("SSA", "TAUG"),         # Legend texts
+					   lty = c(2, 1),                     # Line types
+					   col = c("black", "red"),           # Line colors
+					   lwd = 1)                           # Line width
+			}else{
+			 	points(c(1:ncol(trace1.ready)),trace1.ready[i,],type="l",lty=2,col="black")
+			 }
+		}
+
+		for(i in c(1:nrow(trace2.ready)))
+		{
+			points(c(1:ncol(trace2.ready)),trace2.ready[i,],type="l",col="red")
+		}
+
+
+		plot(ITP.result, xlab="time",ylab="population",main=paste("Curve fitting del posto",column_names),
+			 cex.lab=2,cex.main=2)
 		ITPimage(ITP.result)
-		#Close graphic device
-		dev.off()
 
 		#if p-val>=threshold the null hypotesis it's confirmed, refused otherwise
 		log_it(paste("\n\nP-val >=", threshold,"for place", column_names,":"),fun)
@@ -412,6 +445,9 @@ fda_check<-function(fname_st=NULL,fname_nd=NULL,furl_st=NULL, sep=" ", threshold
 		# write.matrix(ITP.result[["pval.matrix"]],
 		# 			 file = file.path(paste0("./fda_files",.Platform$file.sep,"pval_matr_col_",column_names,".txt")))
 	}
+
+	#Close graphic device
+	dev.off()
 
 	log_it("END DATA ANALYSIS...",fun)
 }
