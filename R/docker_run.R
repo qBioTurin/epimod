@@ -33,21 +33,21 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
         groupid=system("id -g", intern = TRUE)
         cat(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
         #system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
-        if(debug)
-        {
+        # if(debug)
+        #{
         	system(paste("docker run --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
-        }else{
-        	system(paste("docker run --rm --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
-        }
+        #}else{
+        #	system(paste("docker run --rm --privileged=true  --user=",userid,":",groupid," ",params, sep=""))
+        #}
     } else {
         cat(paste("docker run --privileged=true ",params,"\n\n", sep=""))
         #system(paste("docker run --privileged=true ",params, sep=""))
-    	if(debug)
-    	{
+    	# if(debug)
+    	#{
     		system(paste("docker run --privileged=true ",params, sep=""))
-    	}else{
-    		system(paste("docker run --rm --privileged=true ",params, sep=""))
-    	}
+    	# }else{
+    	# 	system(paste("docker run --rm --privileged=true ",params, sep=""))
+    	# }
     }
 
     ## to obtain the Docker ID by file
@@ -85,6 +85,10 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
 	    cat("The container's log is saved at: ")
 	    system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid))
 	    return(3)
+    }
+    else
+    {
+    	system(paste("docker container rm ",dockerid))
     }
 
 
