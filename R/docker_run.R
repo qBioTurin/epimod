@@ -86,11 +86,6 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
 	    system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid))
 	    return(3)
     }
-    else
-    {
-    	system(paste("docker container rm ",dockerid))
-    }
-
 
     file.remove("dockerID")
     system(paste("docker rm -f ",dockerid),intern= T)
