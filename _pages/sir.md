@@ -121,7 +121,7 @@ mathematical point of view, the system behaviors can be investigated by
 exploiting the deterministic approach (Kurtz 1970) which approximates
 its dynamics through a system of ordinary differential equations (ODEs):
 
-<img src="../assets/images/SIR/equation1.png" width="1325" />
+<img src="../assets/images/SIR/equation1.png" width="500" />
 
 
 where:

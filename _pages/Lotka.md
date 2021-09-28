@@ -65,6 +65,8 @@ I, II, III**, whose definitions can be summarize as follows.
 Independently by the functional response exploited, a general version of
 the prey-predator model is defined by the following s system.
 
+<img src="../assets/images/LotkaVolterra/equation1.png" width="500" />
+
 where:
 
 1.  *x*<sub>*Prey*</sub> is the number of preys (e.g., caribou,
