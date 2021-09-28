@@ -108,14 +108,14 @@ where:
     *Prey* place, representing the preys;
 2.  *x*<sub>*Predator*</sub> is the average number of
     tokens in the *Predator* place, representing the predators;
-3.  *α*, *β*, *γ*, *θ* are positive real parameters describing the
+3.  *α*, *β*, *δ*, *γ* are positive real parameters describing the
     interaction of the two species and defining the rate of the
-    *BirthPrey*, *DeathPrey*, *BirthPredator*, *DeathPrey* transitions,
+    *BirthPrey*, *DeathPrey*, *BirthPredator*, *DeathPredator* transitions,
     respectively.
 
 Let use note that Eq.s 2 can be obtained from Eq.s 1 defining
 *g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>) = *β* *x*<sub>*Prey*</sub>,
-*f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *β* *ϵ*.
+*f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *ϵ β*.
 
 ![](../assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
 *Fig.2 The Lotka-Volterra model represented exploiting the SPN formalism.*
