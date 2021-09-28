@@ -58,7 +58,8 @@ I, II, III**, whose definitions can be summarize as follows.
     for example predators learning more specialised techniques for
     hunting or prey handling.
 
-![](/assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
+![Fig.1 Holling types I, II, III functional
+responses.](../assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
 
 Independently by the functional response exploited, a general version of
 the prey-predator model is defined by the following s system.
