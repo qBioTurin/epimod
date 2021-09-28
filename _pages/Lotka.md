@@ -28,7 +28,7 @@ model*.
 The Lotka–Volterra model
 ------------------------
 
-The Lotka-Volterra model is defined by a pair of s, which describes the
+The Lotka-Volterra model is defined by a pair of Ordinary Differential Equations, which describes the
 dynamics of biological systems characterized by two species that may
 interact, one as a predator and the other as prey. From the literature
 it is possible to find several definitions of this model, and in a
@@ -58,8 +58,9 @@ I, II, III**, whose definitions can be summarize as follows.
     for example predators learning more specialised techniques for
     hunting or prey handling.
 
-![Fig.1 Holling types I, II, III functional
-responses.](../assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
+![](../assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
+*Fig.1 Holling types I, II, III functional responses.* 
+
 
 Independently by the functional response exploited, a general version of
 the prey-predator model is defined by the following s system.
@@ -112,8 +113,8 @@ Let use note that Eq.s 2 can be obtained from Eq.s 1 defining
 *g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>) = *β* *x*<sub>*Prey*</sub>,
 *f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *β* *ϵ*.
 
-![Fig.2 The Lotka-Volterra model represented exploiting the SPN
-formalism.](../assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
+![](../assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
+*Fig.2 The Lotka-Volterra model represented exploiting the SPN formalism.*
 
 In this model we are assuming that the prey have an unlimited food
 supply and it is able to reproduce exponentially (*BirthPrey*
@@ -245,10 +246,10 @@ the same name of the corresponding R file.
                                       f_time = 20,
                                       s_time = .1)
 
-![](ReadMe_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
-![Fig.4 PRCC for the **Predator** place over
-time.](../assets/images/LotkaVolterra/prcc_Lotka-Volterra-sensitivity.png)
+![](../assets/images/LotkaVolterra/prcc_Lotka-Volterra-sensitivity.png)
+*Fig.3 PRCC for the Predator place over time.*
+
 
 Running the sensisitivity analysis, we can replicate the results
 reported on Wikipedia,
@@ -266,6 +267,10 @@ dynamics continue in a cycle of growth and decline.
 Let us note that it is possible to run the sensitivity analysys without
 PRCC or ranking, in the case that we are intersted only on to have a
 general idea of the simulation’ results.
+
+![](../assets/images/LotkaVolterra/DynamicsRanking.png)
+*Fig.4 *
+
 
 ### Calibration analysis
 
@@ -302,7 +307,61 @@ In Fig.5 the Lotka-Volterra dynamics are showed fixing: *α* = 1.1,
 *β* = 0.4, *γ* = 0.1, *θ* = 0.4, and the initial number of both the
 species equals to 10.
 
-![Fig.5 The Lotka-Volterra dynamics.](../assets/images/LotkaVolterra/Dynamics.png)
+![](../assets/images/LotkaVolterra/Dynamics.png)
+*Fig.5 The Lotka-Volterra dynamics.*
+
+
+
+
+
+ESPN Model generation
+---------------------
+
+However, most ecological interest in functional responses has to involve
+types II and III. For instance, if it is considered that a single
+predator can feed only until the stomach is full, a saturation function
+is needed to indicate the intake of food, which is modeled using the
+Holling type II term. A simple example of this term is expressed by Eq.
+3, where *a* is the attack rate at which the consumer encounters food
+items per unit of food density, and *h* is the average handling time
+spent on processing a food item. Indeed, more complex examples are given
+in .
+
+Similarly, type III can be characterized by the Eq.
+2 if the attack constant rate *a* is defined in function of the number
+of preys , for instance a general form is given by a hyperbolic function
+of *x*<sub>*Prey*</sub>: in which *b*, *c*, *d* are constants.
+Thus, we can easily derive a general equation of type III as follows:
+
+Finally, considering the functional response types described in Eq.s 3
+and 4, in terms of SPN they should define the rate of the *DeathPrey*
+and *BirthPredator* transitions. Indeed this is not easy using the SPN
+formalism, while it can be achieved easily by exploiting the ESPN
+formalism.
+
+Indeed in the extended formalisms it is possible to integrate in the
+model more complex functional response than the type I by defining the
+*DeathPrey* (and *BirthPredator*) transition as a general transition.
+Let us recall that a general transition *t* ∈ *T*<sub>*g*</sub> is
+defined by a function *f*<sub>*t*</sub>(*x̂*(*ν*), *ν*), where *x̂*(*ν*)
+represents the vector of the average number of tokens for all the
+transition input places at time *ν*. Hence, the general transition
+velocities of Fig.5 should be defined as follows
+
+with *g*() equals to *g*<sub>*II*</sub>() from Eq. 3 or
+*g*<sub>*III*</sub>() from Eq. 4 in order to use a functional
+response of type II or III, respectively.
+
+![](../assets/images/LotkaVolterra/LotkaVolterraESPN.png)
+*Fig. 5 The Lotka-Volterra model represented exploiting the formalism,
+in which we used black boxes to highlight the general
+transitions.*
+
+
+
+    model_generation(net_fname = "./Net/ESPN_LotkaVolterra.PNPRO",
+                     functions_fname = "Cpp/transitions.cpp")
+
 
 References
 ==========

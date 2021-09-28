@@ -5,6 +5,20 @@ permalink: /sir/
 author_profile: true
 ---
 
+-   [Introduction](#introduction)
+-   [How to start](#how-to-start)
+    -   [Something to know](#something-to-know)
+-   [Cases of study](#cases-of-study)
+    -   [SIR model](#sir-model)
+    -   [Model generation](#model-generation)
+    -   [Sensitivity analysis](#sensitivity-analysis)
+    -   [Calibration analysis](#calibration-analysis)
+    -   [Model Analysis](#model-analysis)
+-   [References](#references)
+
+Introduction
+============
+
 In this document we describe how to use the R library *epimod*. In
 details, *epimod* implements a new general modeling framework to study
 epidemiological systems, whose novelties and strengths are:
@@ -129,7 +143,7 @@ and recovered individuals respectively), and one transition for each
 possible event (i.e., *Infection* and *Recovery*). Finally, we save the
 PN model as a file with extension *.PNPRO* .
 
-<img src="./Images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model."  />
+<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1325" />
 <p class="caption">
  Petri Net representation of the SIR model.
 </p>
@@ -157,7 +171,7 @@ corresponding rate name as **FN:NameGeneralFN**, where in this case the
 the transition type is set to *General* and the delay (i.e., the rate)
 to **FN:InfectionFunction**.
 
-<img src="./Images/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition."  />
+<img src="../assets/images/SIR/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
 <p class="caption">
  Petri Net representation of the SIR model, modelling the Infection
 transition as a general transition.
@@ -392,36 +406,29 @@ and can be omitted.
                                       target_value_fname = "Rfunction/Target.R" ,
                                       f_time = 7*10, # weeks
                                       s_time = 1, # days      
-                                      parallel_processors = 24
+                                      parallel_processors = 2
                                       )
 
 Hence, considering the SIR model we can run the *sensitivity\_analysis*
 varying the *Infection* and *Recovery* transitions rates in order to
 characterized their effect on the number of infected individuals.
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
+<img src="../assets/images/SIR/RankI.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations." width="576" />
 <p class="caption">
  The 200 trajectories considering the I place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
+<img src="../assets/images/SIR/RankS.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations." width="576" />
 <p class="caption">
  The 200 trajectories considering the S place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
+<img src="../assets/images/SIR/RankR.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration." width="576" />
 <p class="caption">
  The 200 trajectories considering the R place obtained from different
 parameters configuration.
-</p>
-
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-19-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
-<p class="caption">
- Scatter plot showing the squared error between the reference data and
-simulated number of infected. The dark blue points represent the
-parameters configuration with minimum error.
 </p>
 
 From the figures , , and , it is possible to observe the different
@@ -438,7 +445,7 @@ plot we can observe that lower squared errors are obtained when
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="./Results/results_sensitivity_analysis/prcc_SIR-sensitivity.pdf" alt="\label{fig:prcc} PRCC for the I place over time."  />
+<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="1400" />
 <p class="caption">
  PRCC for the I place over time.
 </p>
@@ -664,17 +671,17 @@ the R package GenSa (Yang Xiang et al. 2012)).
                       max.call = 50
                       )
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-1.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
+<img src="../assets/images/SIR/Sim_Iplace.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place." width="576" />
 <p class="caption">
  Trajectories considering the I place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-2.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
+<img src="../assets/images/SIR/Sim_Splace.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place." width="576" />
 <p class="caption">
 Trajectories considering the S place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-27-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
+<img src="../assets/images/SIR/Sim_Rplace.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place." width="576" />
 <p class="caption">
  Trajectories considering the R place.
 </p>
@@ -724,9 +731,12 @@ sample or define the parameter variability, we can pass the specific
 value obtained from the calibration for generating the corresponding
 trajectory.
 
-    #>   Tag       Name Specific value
-    #> 1   p   Recovery   0.1428522382
-    #> 2   p  Infection   0.0001428038
+    #>   Tag      Name Specific value NA
+    #> 1   p         S        100.000 NA
+    #> 2   p         I         10.000 NA
+    #> 3   p         R          0.000 NA
+    #> 4   p Infection          0.015 NA
+    #> 5   p  Recovery          0.150 NA
 
 
     model_analysis(out_fname = "model_analysis",
