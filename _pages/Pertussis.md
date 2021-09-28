@@ -13,7 +13,7 @@ header:
 
 ### Pertussis Model
 
-![](/assets/images/Pertussis/PertussisModel.png)
+![](../assets/images/Pertussis/PertussisModel.png)
 
 We now describe how the framework functions can be combined to obtain an
 analysis workflow for the Pertussis model introduced in the main paper:

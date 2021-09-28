@@ -13,7 +13,7 @@ header:
 
 ### Multiple Sclerosis Model
 
-![](/assets/images/MS/MSmodel.jpg)
+![](../assets/images/MS/MSmodel.jpg)
 
 In Figure is showed the ESSN model representing the cellular interactions characterizing the immunopa\-thology of RRMS. The model consists of 26 places and 55 transitions, of these 42 are standard and 15 general. In details, the model is divided in two compartments: the peripheral lymph node/blood vessel and the CNS. The two compartments interact with each other through the place BBB. All the transitions describing interactions occurring in peripheral lymph node/blood vessel have the suffix *\_out* while all the transitions taking place in CNS have the suffix *\_in*.
 

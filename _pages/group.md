@@ -15,7 +15,7 @@ Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab
 
 Ph.D. Castagno Paolo
 
-[Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
+Ph.D. [Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
 
 
 ### Q-Bio Group
@@ -32,9 +32,9 @@ Ph.D. Follia Laura
 
 Ph.D. Castagno Paolo
 
-Piaggeschi Giulia
+Ph.D. Piaggeschi Giulia
 
-[Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
+Ph.D. [Pernice Simone](http://www.di.unito.it/~pernice/)
 
 Licheri Nicola
 
