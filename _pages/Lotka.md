@@ -9,6 +9,9 @@ header:
   actions:
     - label: "Github"
       url: https://github.com/qBioTurin/Lotka-Volterra
+toc: true
+toc_label: "Index"
+toc_icon: "cog"
 ---
 
 
