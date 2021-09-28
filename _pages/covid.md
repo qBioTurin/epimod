@@ -1,19 +1,26 @@
 ---
 title: "GreatMod - COVID-19"
 layout: splash
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
 permalink: /covid19/
 header:
-  overlay_color: "#000"
-  overlay_filter: "0.5"
-  overlay_image: /assets/images/COVID/COVIDmodel.png
   actions:
-    - label: "Github"
-      url: https://github.com/qBioTurin/COVID-19
+  - label: Github
+    url: https://github.com/qBioTurin/COVID-19
+  overlay_color: '#000'
+  overlay_filter: '0.5'
+  overlay_image: /assets/images/COVID/COVIDmodel.png
 ---
 
 # Model
 
-![](/assets/images/COVID/COVIDmodel.png)
+<p>
+    <img src="../assets/images/COVID/COVIDmodel.png" width="1000" height="600" />
+</p>
+
 
 We propose an extended version of the SEIRS modeled exploiting the Petri Net formalism  to account for the population age distribution, that was classified into three groups: young individuals 0-19 years,  adults 20-69 years, old adults aged at least 70 years.
 The following figure shows:
@@ -23,17 +30,19 @@ The following figure shows:
 3.  (C) Distribution of quarantine infected (Iq), hospitalized infected (Ih) and deaths (D) from February 24th to May 2nd. The control strategies are reported below the bar graph.
 
 
-![](/assets/images/COVID/Model.png)
+<p>
+    <img src="../assets/images/COVID/Model.png" width="600" height="480" />
+</p>
 
 The population of the age class *i* is partitioned in the following
 seven compartments: (*S*<sub>*i*</sub>), (*E*<sub>*i*</sub>),
-(*I*<sub>*u**i*</sub>), (*I*<sub>*q**i*</sub>), (*I*<sub>*h**i*</sub>),
+(*I*<sub>*u* *i*</sub>), (*I*<sub>*q* *i*</sub>), (*I*<sub>*h* *i*</sub>),
 (*R*<sub>*i*</sub>), (*D*<sub>*i*</sub>). With respect to the classical
-SEIRS model, we have added a transition from *I*<sub>*u**i*</sub> to
-*I*<sub>*q**i*</sub> to model the possibility to identify undetected
+SEIRS model, we have added a transition from *I*<sub>*u* *i*</sub> to
+*I*<sub>*q* *i*</sub> to model the possibility to identify undetected
 cases and isolate them. In this way an individual in
-*I*<sub>*u**i*</sub> tested as positive to the SARS-CoV-2 swab will be
-moved in the quarantine regime, *I*<sub>*q**i*</sub>.
+*I*<sub>*u* *i*</sub> tested as positive to the SARS-CoV-2 swab will be
+moved in the quarantine regime, *I*<sub>*q* *i*</sub>.
 
 
 The *force of infection* adopted in the model is a time and age class dependent function and includes the following four terms:
@@ -65,7 +74,7 @@ uncertainty due to their difficulty of being empirically measured:
 5.  two parameters are the initial condition for the undetected and
     quarantine infected individuals,
 6.  the remainder parameter represents the detection rate for the third
-    age class starting from the 1<sup>*s**t*</sup> April.
+    age class starting from the 1<sup>*s* *t*</sup> April.
 
 Consistently, Figure 2A and 2B show that the calibrated model is able to
 mimic consistently the observed infected and death cases (red line
@@ -78,12 +87,12 @@ the cumulative trend of deaths. In both histograms the surveillance data
 are reported as red line. Similarly, in Figure 3 the infected
 individuals for each age class are shown.
 
-<img src="/assets/images/COVID/Comulatives-1.png" alt="Fig.2) Number of (A) infected and (B) deceased individuals. "  />
+<img src="../assets/images/COVID/Comulatives-1.png" alt="Fig.2) Number of (A) infected and (B) deceased individuals. "  />
 <p class="caption">
 Fig.2) Number of (A) infected and (B) deceased individuals.
 </p>
 
-<img src="/assets/images/COVID/InfectsHistALL-1.png" alt="Fig.3) Number of infected individuals for each age class. The red curve represents the surveillance data, which does not account for undetected cases."  />
+<img src="../assets/images/COVID/InfectsHistALL-1.png" alt="Fig.3) Number of infected individuals for each age class. The red curve represents the surveillance data, which does not account for undetected cases."  />
 <p class="caption">
 Fig.3) Number of infected individuals for each age class. The red curve
 represents the surveillance data, which does not account for undetected
@@ -95,11 +104,11 @@ Studying the effects of the government control interventions.
 
 Three scenarios are implemented. In the the model is calibrated to fit
 the surveillance data (yellow). In the the model extends the second
-restriction beyond March, 21<sup>*s**t*</sup> without implementing the
+restriction beyond March, 21<sup>*s* *t*</sup> without implementing the
 third restriction (blue). In the the model consider a higher population
 compliance to the third governmental restriction (green).
 
-<img src="/assets/images/COVID/DiffStrengths-1.png" alt="Fig.4) Stochastic simulation results reported as traces (on the left) and as density distributions (on the right)."  />
+<img src="../assets/images/COVID/DiffStrengths-1.png" alt="Fig.4) Stochastic simulation results reported as traces (on the left) and as density distributions (on the right)."  />
 <p class="caption">
 Fig.4) Stochastic simulation results reported as traces (on the left)
 and as density distributions (on the right).
@@ -112,13 +121,13 @@ The daily evolution of infected individuals is shown varying on the
 columns the the efficacy of individual-level measures and on the rows
 the efficacy of community surveillance.
 
-<img src="/assets/images/COVID/Scenario00-1.png" alt="Fig.5) Pessimistic scenario in which the gradual reopening is not counterbalanced by any infection-control strategies"  />
+<img src="../assets/images/COVID/Scenario00-1.png" alt="Fig.5) Pessimistic scenario in which the gradual reopening is not counterbalanced by any infection-control strategies"  />
 <p class="caption">
 Fig.5) Pessimistic scenario in which the gradual reopening is not
 counterbalanced by any infection-control strategies
 </p>
 
-<img src="/assets/images/COVID/Plot3_withLine-1.png" alt="Fig.6) The daily evolution of infected individuals is shown varying on the columns the  the efficacy of individual-level measures and on the rows the efficacy of  community surveillance"  />
+<img src="../assets/images/COVID/Plot3_withLine-1.png" alt="Fig.6) The daily evolution of infected individuals is shown varying on the columns the  the efficacy of individual-level measures and on the rows the efficacy of  community surveillance"  />
 <p class="caption">
 Fig.6) The daily evolution of infected individuals is shown varying on
 the columns the the efficacy of individual-level measures and on the
