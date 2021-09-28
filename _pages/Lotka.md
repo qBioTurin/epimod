@@ -31,7 +31,7 @@ The Lotka–Volterra model
 The Lotka-Volterra model is defined by a pair of s, which describes the
 dynamics of biological systems characterized by two species that may
 interact, one as a predator and the other as prey. From the literature
-it is possible to find several definitions of this model , and in a
+it is possible to find several definitions of this model, and in a
 first classification of these models is reported depending on the
 *functional response*, i.e., the change in the rate of prey consumption
 by a predator when the prey density varied. In details, the functional
@@ -109,11 +109,11 @@ where:
     respectively.
 
 Let use note that Eq.s 2 can be obtained from Eq.s 1 defining
-*g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>) = *β**x*<sub>*Prey*</sub>,
-*f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *β**ϵ*.
+*g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>) = *β* *x*<sub>*Prey*</sub>,
+*f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *β* *ϵ*.
 
 ![Fig.2 The Lotka-Volterra model represented exploiting the SPN
-formalism.](/assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
+formalism.](../assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
 
 In this model we are assuming that the prey have an unlimited food
 supply and it is able to reproduce exponentially (*BirthPrey*
@@ -248,7 +248,7 @@ the same name of the corresponding R file.
 ![](ReadMe_files/figure-markdown_strict/unnamed-chunk-10-1.png)
 
 ![Fig.4 PRCC for the **Predator** place over
-time.](/assets/images/LotkaVolterra/prcc_Lotka-Volterra-sensitivity.png)
+time.](../assets/images/LotkaVolterra/prcc_Lotka-Volterra-sensitivity.png)
 
 Running the sensisitivity analysis, we can replicate the results
 reported on Wikipedia,
@@ -302,7 +302,7 @@ In Fig.5 the Lotka-Volterra dynamics are showed fixing: *α* = 1.1,
 *β* = 0.4, *γ* = 0.1, *θ* = 0.4, and the initial number of both the
 species equals to 10.
 
-![Fig.5 The Lotka-Volterra dynamics.](/assets/images/LotkaVolterra/Dynamics.png)
+![Fig.5 The Lotka-Volterra dynamics.](../assets/images/LotkaVolterra/Dynamics.png)
 
 References
 ==========
