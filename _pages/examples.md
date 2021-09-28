@@ -16,7 +16,7 @@ feature_rowEasy:
     alt: "placeholder image 2"
     title: "Lotka Volterra"
     excerpt: "The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of first-order nonlinear differential equations, frequently used to describe the dynamics of biological systems in which two species interact, one as a predator and the other as prey. "
-    url: https://github.com/qBioTurin/Lotka-Volterra
+    url: "/Lotka/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
 feature_rowComplex:
