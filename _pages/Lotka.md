@@ -23,7 +23,7 @@ header:
 
 In this page we show how the and formalisms can be efficiently used to
 analyse the Lotka-Volterra model, also known as the *predator-prey
-model* .
+model*.
 
 The Lotka–Volterra model
 ------------------------
@@ -58,22 +58,21 @@ I, II, III**, whose definitions can be summarize as follows.
     for example predators learning more specialised techniques for
     hunting or prey handling.
 
-![Fig.1 Holling types I, II, III functional
-responses.](/assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
+![](/assets/images/LotkaVolterra/FunctionalResponsesGraph.png)
 
 Independently by the functional response exploited, a general version of
 the prey-predator model is defined by the following s system.
 
 where:
 
-1.  *x*<sub>*P**r**e**y*</sub> is the number of preys (e.g., caribou,
+1.  *x*<sub>*Prey*</sub> is the number of preys (e.g., caribou,
     rabbits, etc);
-2.  *x*<sub>*P**r**e**d**a**t**o**r*</sub> is the number of predators
+2.  *x*<sub>*Predator*</sub> is the number of predators
     (e.g., wolves, foxes, etc);
 3.  *ν* represents time;
-4.  *f*(*x*<sub>*P**r**e**y*</sub>) is the individual prey growth rate
+4.  *f*(*x*<sub>*Prey*</sub>) is the individual prey growth rate
     in the absence of predators;
-5.  *g*(*x*<sub>*P**r**e**y*</sub>, *x*<sub>*P**r**e**d**a**t**o**r*</sub>)
+5.  *g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>)
     is the functional response of the model;
 6.  *ϵ* is the efficiency of the predator in converting consumed prey
     into predator offspring;
@@ -99,9 +98,9 @@ from which the following ODEs system can be derived:
 
 where:
 
-1.  *x*<sub>*P**r**e**y*</sub> is the average number of tokens in the
+1.  *x*<sub>*Prey*</sub> is the average number of tokens in the
     *Prey* place, representing the preys;
-2.  *x*<sub>*P**r**e**d**a**t**o**r*</sub> is the average number of
+2.  *x*<sub>*Predator*</sub> is the average number of
     tokens in the *Predator* place, representing the predators;
 3.  *α*, *β*, *γ*, *θ* are positive real parameters describing the
     interaction of the two species and defining the rate of the
@@ -109,8 +108,8 @@ where:
     respectively.
 
 Let use note that Eq.s 2 can be obtained from Eq.s 1 defining
-*g*(*x*<sub>*P**r**e**y*</sub>, *x*<sub>*P**r**e**d**a**t**o**r*</sub>) = *β**x*<sub>*P**r**e**y*</sub>,
-*f*(*x*<sub>*P**r**e**y*</sub>) = *α* , and *δ* = *β**ϵ*.
+*g*(*x*<sub>*Prey*</sub>, *x*<sub>*Predator*</sub>) = *β**x*<sub>*Prey*</sub>,
+*f*(*x*<sub>*Prey*</sub>) = *α* , and *δ* = *β**ϵ*.
 
 ![Fig.2 The Lotka-Volterra model represented exploiting the SPN
 formalism.](/assets/images/LotkaVolterra/LotkaVolterraSPN1.png)
