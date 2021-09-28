@@ -181,7 +181,7 @@ analysis taking as input
     output data.frame (which represents the output file *.trace*
     reporting the dynamics of each place).
 
-Assuming the following fixed rates: *β* = 4/3, *θ* = 1. Than we change
+Assuming the following fixed rates: *β* = 4/3, *δ* = 1. Than we change
 the prey and predator initial conditions from 200 to 1800, and the prey
 and predator birth rates *α*, *γ* from 0.1 to 2, knowing that we are
 interested to the trajectory generated with the following values:
@@ -308,7 +308,7 @@ model analysis function as follows:
     )
 
 In Fig.5 the Lotka-Volterra dynamics are showed fixing: *α* = 1.1,
-*β* = 0.4, *γ* = 0.1, *θ* = 0.4, and the initial number of both the
+*β* = 0.4, *γ* = 0.1, *δ* = 0.4, and the initial number of both the
 species equals to 10.
 
 ![](../assets/images/LotkaVolterra/Dynamics.png)
