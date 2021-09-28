@@ -5,7 +5,7 @@ permalink: /Lotka/
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"
-  overlay_image: /assets/images/LotkaVolterra/LotkaVolterraSPN1.png
+  overlay_image: /assets/images/LotkaVolterra/preyPredator.png
   actions:
     - label: "Github"
       url: https://github.com/qBioTurin/Lotka-Volterra
