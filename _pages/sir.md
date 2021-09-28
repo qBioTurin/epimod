@@ -3,24 +3,18 @@ title: "GreatMod -  SIR"
 layout: single
 permalink: /sir/
 author_profile: true
+
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"
+  overlay_image: /assets/images/LotkaVolterra/SIRimg.png
   actions:
     - label: "Github"
       url: https://github.com/qBioTurin/SIR
+toc: true
+toc_label: "Index"
+toc_icon: "cog"
 ---
-
--   [Introduction](#introduction)
--   [How to start](#how-to-start)
-    -   [Something to know](#something-to-know)
--   [Cases of study](#cases-of-study)
-    -   [SIR model](#sir-model)
-    -   [Model generation](#model-generation)
-    -   [Sensitivity analysis](#sensitivity-analysis)
-    -   [Calibration analysis](#calibration-analysis)
-    -   [Model Analysis](#model-analysis)
--   [References](#references)
 
 Introduction
 ============
