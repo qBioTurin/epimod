@@ -65,7 +65,7 @@ I, II, III**, whose definitions can be summarize as follows.
 Independently by the functional response exploited, a general version of
 the prey-predator model is defined by the following s system.
 
-<img src="../assets/images/LotkaVolterra/equation1.png" width="500" />
+<img src="../assets/images/LotkaVolterra/equation1.png" width="250" />
 
 where:
 
@@ -326,14 +326,19 @@ is needed to indicate the intake of food, which is modeled using the
 Holling type II term. A simple example of this term is expressed by Eq.
 3, where *a* is the attack rate at which the consumer encounters food
 items per unit of food density, and *h* is the average handling time
-spent on processing a food item. Indeed, more complex examples are given
-in .
+spent on processing a food item. 
+
+<img src="../assets/images/LotkaVolterra/equation3.png" width="250" />
 
 Similarly, type III can be characterized by the Eq.
 2 if the attack constant rate *a* is defined in function of the number
 of preys , for instance a general form is given by a hyperbolic function
-of *x*<sub>*Prey*</sub>: in which *b*, *c*, *d* are constants.
+of *x*<sub>*Prey*</sub>:
+<img src="../assets/images/LotkaVolterra/equation.png" width="250" />
+in which *b*, *c*, *d* are constants.
 Thus, we can easily derive a general equation of type III as follows:
+
+<img src="../assets/images/LotkaVolterra/equation4.png" width="250" />
 
 Finally, considering the functional response types described in Eq.s 3
 and 4, in terms of SPN they should define the rate of the *DeathPrey*
@@ -349,6 +354,8 @@ defined by a function *f*<sub>*t*</sub>(*x̂*(*ν*), *ν*), where *x̂*(*ν*)
 represents the vector of the average number of tokens for all the
 transition input places at time *ν*. Hence, the general transition
 velocities of Fig.5 should be defined as follows
+
+<img src="../assets/images/LotkaVolterra/equation5.png" width="250" />
 
 with *g*() equals to *g*<sub>*II*</sub>() from Eq. 3 or
 *g*<sub>*III*</sub>() from Eq. 4 in order to use a functional
