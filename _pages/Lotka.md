@@ -2,8 +2,15 @@
 title: "GreatMod -  Lotka Volterra"
 layout: single
 permalink: /Lotka/
-author_profile: true
+header:
+  overlay_color: "#000"
+  overlay_filter: "0.5"
+  overlay_image: /assets/images/LotkaVolterra/LotkaVolterraSPN1.png
+  actions:
+    - label: "Github"
+      url: https://github.com/qBioTurin/Lotka-Volterra
 ---
+
 
 -   [The Lotka–Volterra model](#the-lotkavolterra-model)
 -   [First step: call the package](#first-step-call-the-package)
