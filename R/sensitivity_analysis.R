@@ -19,9 +19,9 @@
 #'
 #' @param solver_fname .solver file (generated in with the function *model_generation*).
 #' @param f_time Final solution time.
-#' @param s_time Time step at whicch explicit estimates for the system are desired.
+#' @param s_time Time step at which explicit estimates for the system are desired.
 #' @param n_config Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
-#' @param parameters_fname File with the definition of user defined functions.
+#' @param parameters_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file. 
 #' @param parm_list File listing the name of the functions, the parameters and the name under which the parameters have to be saved.
 #' @param functions_fname File with the user defined functions to generate istances of the parameters.
 #' @param volume The folder to mount within the Doker image providing all the necessary files.
