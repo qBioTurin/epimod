@@ -3,7 +3,7 @@
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
-#' FUNCTION_NAME(reference_dataset, siulation_output)
+#' FUNCTION_NAME(reference_dataset, simulation_output)
 #'
 #' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries)
 #' in addiction to that, the user is asked to provide a function that, given the output of the solver, returns the releveant measure (one column) used to evalaute the quality of the solution.
@@ -17,22 +17,23 @@
 #'
 #' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 #'
-#' @param solver_fname .solver file (generated in with the function model_generation)
-#' @param f_time Final solution time
-#' @param s_time Time step at whicch explicit estimates for the system are desired
-#' @param n_config Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*
-#' @param parameters_fname File with the definition of user defined functions
-#' @param parm_list File listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @param functions_fname File with the user defined functions to generate istances of the parameters
-#' @param volume The folder to mount within the Doker image providing all the necessary files
-#' @param timeout Maximum execution time allowed to each configuration
-#' @param parallel_processors Integer for the number of available processors to use
-#' @param reference_data Data to compare with the simulations' results
+#' @param solver_fname .solver file (generated in with the function *model_generation*).
+#' @param f_time Final solution time.
+#' @param s_time Time step at whicch explicit estimates for the system are desired.
+#' @param n_config Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
+#' @param parameters_fname File with the definition of user defined functions.
+#' @param parm_list File listing the name of the functions, the parameters and the name under which the parameters have to be saved.
+#' @param functions_fname File with the user defined functions to generate istances of the parameters.
+#' @param volume The folder to mount within the Doker image providing all the necessary files.
+#' @param timeout Maximum execution time allowed to each configuration.
+#' @param parallel_processors Integer for the number of available processors to use.
+#' @param reference_data Data to compare with the simulations' results.
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
 #' @param seed Value that can be set to initialize the internal random generator.
-#' @param out_fname Prefix to the output file name
+#' @param out_fname Prefix to the output file name.
 #'
 #'
+#' @seealso model_generation
 #'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
