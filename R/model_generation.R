@@ -4,9 +4,11 @@
 #'      Having constructed the model exploiting the graphical editor, namely GreatSPN, the automatic generation of both the stochastic (the Continuous Time Markov Chain) and
 #'      deterministic (ODEs) processes underlying the model is implemented by the model_generation() function.
 #'
-#' @param out_fname Prefix to the output file name
-#' @param net_fname .PNPRO file storing  the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected;
-#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.  
+#' @param out_fname Prefix to the output file name.
+#' @param net_fname .PNPRO file storing  the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
+#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
+#' @param volume The folder to mount within the Doker image providing all the necessary files.
+
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #' @return Model_generation returns the binary file SIR.solver in which the underlying processes (both deterministic and stochastic) of the Petri Net model and the library used for their simulation are packaged.
