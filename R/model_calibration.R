@@ -1,5 +1,39 @@
 #' @title Run model calibration
-#' @description this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration (both for deterministic and stochastic models).
+#' @description 
+#'
+#' @param solver_fname .solver file (generated in with the function model_generation).
+#' @param f_time Final solution time.
+#' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
+#' @param solver_type  \itemize{ \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
+#'  \item Stochastic: the Gillespie algorithm,which is an exact stochastic method widely used to simulate chemical systems whose behaviour can be described by the Master equations (SSA); or an approximation method of the SSA called tau-leaping method (TAUG), which provides a good compromise between the solution execution time  and its quality.
+#'  \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
+#'  } Default is LSODA.
+#' @param taueps The error control parameter from the tau-leaping approach.
+#' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated. 
+#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
+#' @param volume The folder to mount within the Doker image providing all the necessary files.
+#' @param timeout Maximum execution time allowed to each configuration.
+#' @param parallel_processors Integer for the number of available processors to use for parallelizing the simulations.
+#' @param ini_v Initial values for the parameters to be optimized.
+#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
+#' @param ini_vector_mod Logical value for ... . Default is FALSE.
+#' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
+#' \itemize{
+#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+#' \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
+#'
+#' @param reference_data csv file storing the data to be compared with the simulations’ result.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param extend ...
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name
+#' @param event_times
+#' @param event_function
+#'
+#' @details
+#' model_calibration takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration (both for deterministic and stochastic models).
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
@@ -21,36 +55,6 @@
 #' Furthermore, the vector init_v defines the initial point of the search.
 #'
 #' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
-#'
-#' @param solver_fname .solver file (generated in with the function model_generation)
-#' @param f_time Final solution time.
-#' @param s_time Time step at whicch explicit estimates for the system are desired
-#' @param solver_type  \itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
-#'  \item Stochastic:  SSA or TAUG,
-#'  \item Hybrid: HLSODA or (H)SDE or HODE
-#'  } Default is LSODA.
-#' @param n_run .....
-#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
-#' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file. 
-#' @param volume The folder to mount within the Doker image providing all the necessary files
-#' @param timeout ....
-#' @param parallel_processors Integer for the parallel....
-#' @param ini_v Initial values for the parameters to be optimized.
-#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
-#' @param ini_vector_mod Logical value for ... . Default is FALSE.
-#' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
-#' \itemize{
-#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
-#' \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
-#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
-#'
-#' @param reference_data Data to compare with the simulations' results
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param extend ...
-#' @param seed Value that can be set to initialize the internal random generator.
-#' @param out_fname Prefix to the output file name
-#' @param event.list ...
-#'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #'
