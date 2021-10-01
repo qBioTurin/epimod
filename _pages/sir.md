@@ -3,11 +3,10 @@ title: "GreatMod -  SIR"
 layout: single
 permalink: /sir/
 author_profile: true
-
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"
-  overlay_image: /assets/images/LotkaVolterra/SIRimg.png
+  overlay_image: /assets/images/SIR/SIRimg.png
   actions:
     - label: "Github"
       url: https://github.com/qBioTurin/SIR
