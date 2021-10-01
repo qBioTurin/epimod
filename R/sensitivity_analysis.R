@@ -1,10 +1,10 @@
 #' @title Run sensitivity analisys
-#' @description 
-#'  The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior), 
+#' @description
+#'  The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior),
 #'  by exploiting the Pearson Ranking Correlation Coefficients (PRCCs). Furthermore, a ranking of simulations is returned in according to the distance of each solution with respect to the reference one.
 #'
 #' @param solver_fname .solver file (generated with the function *model_generation*).
-#' @param i_time Initial solution time.               
+#' @param i_time Initial solution time.
 #' @param f_time Final solution time.
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
 #' @param n_config Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
@@ -62,7 +62,7 @@
 #' }
 #' @export
 sensitivity_analysis <-function(# Parameters to control the simulation
-                                solver_fname, f_time, s_time,
+                                solver_fname, i_time, f_time, s_time,
                                 # User defined simulation's parameters
                                 n_config, parameters_fname = NULL, functions_fname = NULL,
                                 # Parameters to manage the simulations' execution
@@ -131,6 +131,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                   run_dir = chk_dir("/home/docker/scratch/"),
                   out_dir = chk_dir("/home/docker/data/results_sensitivity_analysis/"),
                   out_fname = out_fname,
+                  i_time = i_time,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
