@@ -28,7 +28,6 @@ sensitivity.worker <- function(id,
                             n_run = n_run,
                             event_times = event_times,
                             event_function = event_function,
-                            parallel_processors = parallel_processors,
                             out_fname = out_fname)
 
   cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
