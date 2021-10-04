@@ -130,7 +130,7 @@ experiment.run <- function(base_id, cmd,
 						   i_time, f_time, s_time,
 						   n_run = 1,
 						   event_times = NULL, event_function = NULL,
-						   parallel_processors, out_fname)
+						   parallel_processors= 1, out_fname)
 {
 	# Create a cluster
 	cl <- makeCluster(parallel_processors,
