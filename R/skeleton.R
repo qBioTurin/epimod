@@ -40,7 +40,8 @@
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' }
-#' @export
+#' @keywords internal
+#'
 skeleton <-function(# Parameters to control the simulation
     solver_fname, f_time, s_time,
     # User defined simulation's parameters

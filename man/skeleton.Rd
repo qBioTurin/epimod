@@ -53,3 +53,4 @@ sensitivity_analysis(n_config = 2^4,
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone
 }
+\keyword{internal}

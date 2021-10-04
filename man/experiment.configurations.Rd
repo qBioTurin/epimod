@@ -42,3 +42,4 @@ experiment.configurations(nconfig = 10,
 \author{
 Marco Beccuti, Paolo Castagno, Simone Pernice
 }
+\keyword{internal}

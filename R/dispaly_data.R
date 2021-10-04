@@ -13,7 +13,10 @@
 #' display_data(volume = "/some/path/to/the/local/output/directory",
 #'               port = getOption("shiny.port"))
 #' }
-#' @export
+#'
+#'@keywords internal
+#'
+#'
 display_data <-function(
 	volume = getwd(),
 	port = 80)

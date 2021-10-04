@@ -10,7 +10,9 @@
 #'      docker.run(params=NULL)
 #'
 #' }
-#' @export
+#'
+#'@keywords internal
+#'
 docker.run <- function( params=NULL, changeUID=TRUE){
 
     if(is.null(params)){

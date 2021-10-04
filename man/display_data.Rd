@@ -19,7 +19,9 @@ display_data(volume = getwd(), port = 80)
 display_data(volume = "/some/path/to/the/local/output/directory",
               port = getOption("shiny.port"))
 }
+
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone
 }
+\keyword{internal}
