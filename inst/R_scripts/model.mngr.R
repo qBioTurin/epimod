@@ -70,7 +70,7 @@ model.worker<-function(id,
     cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
     # Change the working directory back to the original one
     setwd(pwd)
-    # Move relevant files to their final locatio and remove all the temporary files
+    # Move relevant files to their final location and remove all the temporary files
     experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
     return(T2)
 }

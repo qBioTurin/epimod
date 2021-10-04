@@ -11,6 +11,13 @@ sensitivity.prcc<-function(config,
     flatten <- function(x, name){
         x <- as.data.frame(x)
         d <- dim(x)
+        if(d[1] > 1)
+        {
+            ##### Check if there are equal rows in the matrix and remove them
+            x <- unique(x)
+            d <- dim(x)
+            ###
+        }
         nms<-c()
         ret<-NULL
 
