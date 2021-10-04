@@ -4,8 +4,17 @@
 \alias{experiment.cmd}
 \title{Generate the commandline to configure and run a simulation}
 \usage{
-experiment.cmd(id, solver_fname, solver_type = "LSODA", s_time, f_time,
-  n_run = 1, timeout, out_fname)
+experiment.cmd(
+  id,
+  solver_fname,
+  solver_type = "LSODA",
+  s_time,
+  f_time,
+  n_run = 1,
+  taueps = 0.01,
+  timeout,
+  out_fname
+)
 }
 \arguments{
 \item{id, }{a numeric identifier used to format the output's file name}
