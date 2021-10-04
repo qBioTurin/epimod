@@ -4,9 +4,9 @@
 #'      Having constructed the model exploiting the graphical editor, namely GreatSPN, the automatic generation of both the stochastic (the Continuous Time Markov Chain) and
 #'      deterministic (ODEs) processes underlying the model is implemented by the model_generation() function.
 #'
-#' @param out_fname Prefix to the output file name.
 #' @param net_fname .PNPRO file storing  the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
-#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
+#' @param out_fname Prefix to the output file name.
+#' @param transitions_fname  C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
 #' @param volume The folder to mount within the Doker image providing all the necessary files.
 
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
@@ -16,18 +16,18 @@
 #' @examples
 #'\dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-#' model_generation(out_fname = "Solver",
-#'                  net_fname = paste0(local_dir, "Configuration/Pertussis"),
-#'                  functions_fname = "transitions.cpp")
+#' model_generation(net_fname = paste0(local_dir, "Configuration/Pertussis"),
+#'                  out_fname = "Solver",
+#'                  transitions_fname = "transitions.cpp")
 #' }
 #'
 #' @details 
 #'    GreatSPN GUI, the graphical editor for drawing Petri Nets formalisms, is available online: http://www.di.unito.it/~amparore/mc4cslta/editor.html
 #'    
 #' @export
-model_generation <-function( out_fname = NULL,
-                             net_fname,
-                             functions_fname=NULL,
+model_generation <-function(net_fname,
+                            out_fname = NULL,                             
+                            transitions_fname=NULL,
                              volume = getwd()){
 
     chk_dir<- function(path){
@@ -53,7 +53,7 @@ model_generation <-function( out_fname = NULL,
         netname <- tools::file_path_sans_ext(basename(net_fname))
 
     }
-    file.copy(from = functions_fname, to = out_dir)
+    file.copy(from = transitions_fname, to = out_dir)
     # Set commandline to unfold the PN
 
     #reading docker image names
@@ -75,8 +75,8 @@ model_generation <-function( out_fname = NULL,
     }
 
     cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
-    if (!is.null(functions_fname)){
-        cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
+    if (!is.null(transitions_fname)){
+        cmd= paste0(cmd," -C ", paste0("/home/",basename(transitions_fname)))
     }
 
     err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd))
