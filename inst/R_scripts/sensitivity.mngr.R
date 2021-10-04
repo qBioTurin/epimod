@@ -25,7 +25,7 @@ sensitivity.worker <- function(id,
                             i_time = i_time,
                             f_time = f_time,
                             s_time = s_time,
-                            n_run = n_run,
+                            n_run = 1,
                             event_times = event_times,
                             event_function = event_function,
                             out_fname = out_fname)
