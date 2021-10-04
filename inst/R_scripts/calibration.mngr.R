@@ -13,19 +13,34 @@ calibration.worker <- function(id, config, params)
   pwd <- getwd()
   # Change current directory to the run_dir parameter
   setwd(paste0(params$run_dir, id))
-  # Generate the command to run with the required parameters
-  cmd <- experiment.cmd(id,
-                        solver_fname = params$files$solver_fname,
+  # Generate the appropriate command to run on the Docker
+  cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
                         solver_type = params$solver_type,
-                        n_run = 1,
-                        s_time = params$s_time,
-                        f_time = params$f_time,
-                        event_times = params$event_times,
-                        event_function = params$event_function,
-                        timeout = params$timeout,
-                        out_fname = params$out_fname)
+                        taueps = params$taueps,
+                        timeout = params$timeout)
+  # Generate the command to run with the required parameters
+  # cmd <- experiment.cmd(id,
+  #                       solver_fname = params$files$solver_fname,
+  #                       solver_type = params$solver_type,
+  #                       n_run = 1,
+  #                       s_time = params$s_time,
+  #                       f_time = params$f_time,
+  #                       event_times = params$event_times,
+  #                       event_function = params$event_function,
+  #                       timeout = params$timeout,
+  #                       out_fname = params$out_fname)
   # Execute the command
-  system(cmd, wait = TRUE)
+  # system(cmd, wait = TRUE)
+  experiment.run(base_id = id,
+                 cmd = cmd,
+                 i_time = params$i_time,
+                 f_time = params$f_time,
+                 s_time = params$s_time,
+                 n_run = 1,
+                 event_times = params$event_times,
+                 event_function = params$event_function,
+                 parallel_processors = params$parallel_processors,
+                 out_fname = params$out_fname)
   # Set-up the result's file name
   fnm <- paste0(params$out_fname,"-",id,".trace")
   # Clear the simulation's environment

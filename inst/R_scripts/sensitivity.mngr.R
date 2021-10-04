@@ -3,7 +3,8 @@ library(epimod)
 library(ggplot2)
 
 sensitivity.worker <- function(id,
-                               solver_fname, solver_type, s_time, f_time,
+                               solver_fname, solver_type,
+                               i_time, s_time, f_time,
                                timeout, run_dir, out_fname, out_dir,
                                event_times, event_function,
                                files, config){
@@ -13,27 +14,29 @@ sensitivity.worker <- function(id,
   # Change working directory to the one corresponding at the current id
   pwd <- getwd()
   setwd(paste0(run_dir,id))
-  cmd <- experiment.cmd(id = id,
-                        solver_fname = solver_fname,
-                        solver_type = solver_type,
-                        s_time = s_time,
-                        f_time = f_time,
-                        event_times = event_times,
-                        event_function = event_function,
-                        timeout = timeout,
-                        out_fname = out_fname)
-    # Measure simulation's run time
-    T1 <- Sys.time()
-    # Launch the simulation on the Doker
-    system(paste(cmd), wait = TRUE)
-    T2 <- difftime(Sys.time(), T1, unit = "secs")
 
-    cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
-    # Change the working directory back to the original one
-    setwd(pwd)
-    # Move relevant files to their final locatio and remove all the temporary files
-    experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-    return(T2)
+  cmd <- experiment.cmd(solver_fname = solver_fname,
+                        solver_type = solver_type,
+                        taueps = taueps,
+                        timeout = timeout)
+  # Run the experiment
+  elapsed <- experiment.run(base_id = id,
+                            cmd = cmd,
+                            i_time = i_time,
+                            f_time = f_time,
+                            s_time = s_time,
+                            n_run = n_run,
+                            event_times = event_times,
+                            event_function = event_function,
+                            parallel_processors = parallel_processors,
+                            out_fname = out_fname)
+
+  cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
+  # Change the working directory back to the original one
+  setwd(pwd)
+  # Move relevant files to their final locatio and remove all the temporary files
+  experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
+  return(elapsed)
 }
 
 # Function to compute the distance between one simulation trace and the reference data
@@ -119,6 +122,7 @@ exec_times <- parLapply( cl,
                          sensitivity.worker,                  # of sensitivity.worker
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
+                         i_time = params$i_time,
                          s_time = params$s_time,
                          f_time = params$f_time,
                          timeout = params$timeout,
