@@ -5,18 +5,18 @@
 \title{Run model generation}
 \usage{
 model_generation(
-  out_fname = NULL,
   net_fname,
-  functions_fname = NULL,
+  out_fname = NULL,
+  transitions_fname = NULL,
   volume = getwd()
 )
 }
 \arguments{
-\item{out_fname}{Prefix to the output file name.}
-
 \item{net_fname}{.PNPRO file storing  the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.}
 
-\item{functions_fname}{C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.}
+\item{out_fname}{Prefix to the output file name.}
+
+\item{transitions_fname}{C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.}
 
 \item{volume}{The folder to mount within the Doker image providing all the necessary files.}
 }
@@ -33,9 +33,9 @@ GreatSPN GUI, the graphical editor for drawing Petri Nets formalisms, is availab
 \examples{
 \dontrun{
 local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-model_generation(out_fname = "Solver",
-                 net_fname = paste0(local_dir, "Configuration/Pertussis"),
-                 functions_fname = "transitions.cpp")
+model_generation(net_fname = paste0(local_dir, "Configuration/Pertussis"),
+                 out_fname = "Solver",
+                 transitions_fname = "transitions.cpp")
 }
 
 }
