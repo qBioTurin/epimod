@@ -13,13 +13,13 @@ calibration.worker <- function(id, config, params)
   pwd <- getwd()
   # Change current directory to the run_dir parameter
   setwd(paste0(params$run_dir, id))
-  print("generating command template..")
+  print("[calibration.worer] Generating command template")
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
                         solver_type = params$solver_type,
                         taueps = params$taueps,
                         timeout = params$timeout)
-  print(paste0("..", cmd))
+  print("[calibration.worer] Done generating command template")
   # Generate the command to run with the required parameters
   # cmd <- experiment.cmd(id,
   #                       solver_fname = params$files$solver_fname,
@@ -33,7 +33,7 @@ calibration.worker <- function(id, config, params)
   #                       out_fname = params$out_fname)
   # Execute the command
   # system(cmd, wait = TRUE)
-  print("Starting simulations..")
+  print("[calibration.worer] Starting simulations..")
   experiment.run(base_id = id,
                  cmd = cmd,
                  i_time = params$i_time,
@@ -44,7 +44,7 @@ calibration.worker <- function(id, config, params)
                  event_function = params$event_function,
                  parallel_processors = params$parallel_processors,
                  out_fname = params$out_fname)
-  print("..Done!")
+  print("[calibration.worer] Simulation done!")
   # Set-up the result's file name
   fnm <- paste0(params$out_fname,"-",id,".trace")
   # Clear the simulation's environment
@@ -69,11 +69,13 @@ objfn <- function(x, params, cl) {
                                       ini_vector = x,
                                       ini_vector_mod = params$ini_vector_mod)
   # Solve n_run instances of the model
+  print("[objfn] Calling calibration.worer")
   trace_names <- parLapply(cl,
                            c(paste0(id,"-",c(1:params$n_run))),
                            calibration.worker,
                            config = config,
                            params = params)
+  print("[objfn] Done calibration.worer")
   # Append all the solutions in one single data.frame
   traces <- lapply(trace_names,function(x){
     fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
