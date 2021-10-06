@@ -41,16 +41,18 @@ sensitivity.worker <- function(id,
 # Function to compute the distance between one simulation trace and the reference data
 sensitivity.distance <- function(id,
                                  run_dir,
-                                 out_fname,
+                                 ## out_fname,
                                  out_dir,
                                  distance_measure_fname,
                                  distance_measure,
                                  reference_data){
     pwd <- getwd()
     setwd(out_dir)
-    system(paste0("echo \"Trying to open ", out_fname, "-", id, "-1-1.trace\""))
+    system(paste0("echo \"Trying to open ", id, "\""))
     # Read the output and compute the distance from reference data
-    trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
+    ## trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
+    trace <- read.csv(id,
+                      sep = "")
     # Load distance definition
     source(distance_measure_fname)
     # Load reference data (IMPORTANT it has to be a column vector)
@@ -139,11 +141,11 @@ write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$ou
 if(!is.null(params$files$distance_measure_fname))
 {
     rank <- parLapply(cl,
-                      #c(1:abs(params$config[[1]][[1]][[2]])),
+                      ## c(1:abs(params$config[[1]][[1]][[2]])),
                       list.files(path = params$out_dir,
                                  pattern = paste0(params$out_fname, "(-[0-9]{1})+")),
                       sensitivity.distance,
-                      out_fname = params$out_fname,
+                      # out_fname = params$out_fname,
                       out_dir = params$out_dir,
                       run_dir = params$run_dir,
                       distance_measure_fname = params$files$distance_measure_fname,
