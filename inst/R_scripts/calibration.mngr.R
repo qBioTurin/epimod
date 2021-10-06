@@ -13,11 +13,13 @@ calibration.worker <- function(id, config, params)
   pwd <- getwd()
   # Change current directory to the run_dir parameter
   setwd(paste0(params$run_dir, id))
+  print("generating command template..")
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
                         solver_type = params$solver_type,
                         taueps = params$taueps,
                         timeout = params$timeout)
+  print(paste0("..", cmd))
   # Generate the command to run with the required parameters
   # cmd <- experiment.cmd(id,
   #                       solver_fname = params$files$solver_fname,
@@ -31,6 +33,7 @@ calibration.worker <- function(id, config, params)
   #                       out_fname = params$out_fname)
   # Execute the command
   # system(cmd, wait = TRUE)
+  print("Starting simulations..")
   experiment.run(base_id = id,
                  cmd = cmd,
                  i_time = params$i_time,
@@ -41,6 +44,7 @@ calibration.worker <- function(id, config, params)
                  event_function = params$event_function,
                  parallel_processors = params$parallel_processors,
                  out_fname = params$out_fname)
+  print("..Done!")
   # Set-up the result's file name
   fnm <- paste0(params$out_fname,"-",id,".trace")
   # Clear the simulation's environment
@@ -145,9 +149,7 @@ if(!is.null(params$max.call))
 {
     ctl$max.time <- params$max.time
 }
-# control=list( max.call = params$max.call,
-#               threshold.stop = params$threshold.stop,
-#               max.time = params$max.time),
+
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
