@@ -140,7 +140,10 @@ write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$ou
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))
 {
-    rank <- parLapply(cl,
+	print("Computing rank for the following files:")
+	print(list.files(path = params$out_dir,
+									 pattern = paste0(params$out_fname, "(-[0-9]+)+")))
+	rank <- parLapply(cl,
                       ## c(1:abs(params$config[[1]][[1]][[2]])),
                       list.files(path = params$out_dir,
                                  pattern = paste0(params$out_fname, "(-[0-9]+)+")),
