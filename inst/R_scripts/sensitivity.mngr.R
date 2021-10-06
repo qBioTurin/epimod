@@ -139,7 +139,9 @@ write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$ou
 if(!is.null(params$files$distance_measure_fname))
 {
     rank <- parLapply(cl,
-                      c(1:abs(params$config[[1]][[1]][[2]])),
+                      #c(1:abs(params$config[[1]][[1]][[2]])),
+                      list.files(path = params$out_dir,
+                                 pattern = paste0(params$out_fname, "(-[0-9]{1})+")),
                       sensitivity.distance,
                       out_fname = params$out_fname,
                       out_dir = params$out_dir,
