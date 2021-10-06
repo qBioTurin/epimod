@@ -108,7 +108,7 @@ worker <- function(worker_id,
 		{
 			file.rename(from = curr_fnm, to = fnm)
 			### DEBUG ###
-			system(paste0("cp ", fnm, " ~/data/", fnm))
+			# system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			# DEBUG
