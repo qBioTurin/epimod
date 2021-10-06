@@ -33,7 +33,7 @@ sensitivity.worker <- function(id,
   cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
   # Change the working directory back to the original one
   setwd(pwd)
-  # Move relevant files to their final locatio and remove all the temporary files
+  # Move relevant files to their final location and remove all the temporary files
   experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
   return(elapsed)
 }
@@ -49,7 +49,7 @@ sensitivity.distance <- function(id,
     pwd <- getwd()
     setwd(out_dir)
     # Read the output and compute the distance from reference data
-    trace <- read.csv(paste0(out_fname, "-", id, ".trace"), sep = "")
+    trace <- read.csv(paste0(out_fname, "-", id, "-1.trace"), sep = "")
     # Load distance definition
     source(distance_measure_fname)
     # Load reference data (IMPORTANT it has to be a column vector)
