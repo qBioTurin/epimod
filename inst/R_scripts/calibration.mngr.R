@@ -74,11 +74,15 @@ objfn <- function(x, params, cl) {
                                       ini_vector_mod = params$ini_vector_mod)
   # Solve n_run instances of the model
   print("[objfn] Calling calibration.worer")
-  trace_names <- parLapply(cl,
-                           c(paste0(id,"-",c(1:params$n_run))),
-                           calibration.worker,
-                           config = config,
-                           params = params)
+  # trace_names <- parLapply(cl,
+  #                          c(paste0(id,"-",c(1:params$n_run))),
+  #                          calibration.worker,
+  #                          config = config,
+  #                          params = params)
+  trace_names <- lapply(c(paste0(id,"-",c(1:params$n_run))),
+                        calibration.worker,
+                        config = config,
+                        params = params)
   print("[objfn] Done calibration.worer")
   # Append all the solutions in one single data.frame
   traces <- lapply(trace_names,function(x){
