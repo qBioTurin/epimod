@@ -140,24 +140,18 @@ write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$ou
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))
 {
-	print(paste0("Computing rank for the following files {", params$out_fname, "(-[0-9]+)+}:"))
-	print(list.files(path = params$out_dir,
-									 pattern = paste0(params$out_fname, "(-[0-9]+)+")))
 	rank <- parLapply(cl,
-                      ## c(1:abs(params$config[[1]][[1]][[2]])),
-                      list.files(path = params$out_dir,
-                                 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
-                      sensitivity.distance,
-                      # out_fname = params$out_fname,
-                      out_dir = params$out_dir,
-                      ## run_dir = params$run_dir,
-                      distance_measure_fname = params$files$distance_measure_fname,
-                      distance_measure = distance_measure,
-                      reference_data = params$files$reference_data)
-    # Sort the rank ascending, according to the distance computed above.
-    rank <- do.call("rbind", rank)
-    rank <- rank[order(rank$measure),]
-    save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
+										list.files(path = params$out_dir,
+															 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
+										sensitivity.distance,
+										out_dir = params$out_dir,
+										distance_measure_fname = params$files$distance_measure_fname,
+										distance_measure = distance_measure,
+										reference_data = params$files$reference_data)
+	# Sort the rank ascending, according to the distance computed above.
+	rank <- do.call("rbind", rank)
+	rank <- rank[order(rank$measure),]
+	save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
 }
 stopCluster(cl)
 if(!is.null(params$files$target_value_fname))
