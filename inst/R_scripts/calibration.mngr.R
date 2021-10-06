@@ -4,6 +4,10 @@ library(parallel)
 
 calibration.worker <- function(id, config, params)
 {
+  print("[calibration.worker] Starts with parameters:")
+  print(paste0("[calibration.worker] - id ", id))
+  print(paste0("[calibration.worker] - config ", config))
+  print(paste0("[calibration.worker] - params ", params))
   # Setup simulation's environment
   experiment.env_setup(id = id,
                        files = params$files,
