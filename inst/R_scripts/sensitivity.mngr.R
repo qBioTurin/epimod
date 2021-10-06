@@ -40,7 +40,7 @@ sensitivity.worker <- function(id,
 
 # Function to compute the distance between one simulation trace and the reference data
 sensitivity.distance <- function(id,
-                                 run_dir,
+                                 ## run_dir,
                                  ## out_fname,
                                  out_dir,
                                  distance_measure_fname,
@@ -143,11 +143,11 @@ if(!is.null(params$files$distance_measure_fname))
     rank <- parLapply(cl,
                       ## c(1:abs(params$config[[1]][[1]][[2]])),
                       list.files(path = params$out_dir,
-                                 pattern = paste0(params$out_fname, "(-[0-9]{1})+")),
+                                 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
                       sensitivity.distance,
                       # out_fname = params$out_fname,
                       out_dir = params$out_dir,
-                      run_dir = params$run_dir,
+                      ## run_dir = params$run_dir,
                       distance_measure_fname = params$files$distance_measure_fname,
                       distance_measure = distance_measure,
                       reference_data = params$files$reference_data)
