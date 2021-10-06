@@ -48,6 +48,7 @@ sensitivity.distance <- function(id,
                                  reference_data){
     pwd <- getwd()
     setwd(out_dir)
+    system(paste0("echo \"Trying to open ", out_fname, "-", id, "-1-1.trace\""))
     # Read the output and compute the distance from reference data
     trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
     # Load distance definition
