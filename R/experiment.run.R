@@ -48,7 +48,7 @@ worker <- function(worker_id,
 		# Define the identifier for the current iteration
 		iter.id <- paste0(worker_id, "-", i)
 		# Setup initial marking, initial and final time
-		if ( i == 1)
+		if (i == 1)
 		{
 			init <- paste("init")
 		}
@@ -108,7 +108,7 @@ worker <- function(worker_id,
 		{
 			file.rename(from = curr_fnm, to = fnm)
 			### DEBUG ###
-			# system(paste0("cp ", fnm, " ~/data/", fnm))
+			system(paste0("cp ", fnm, " ~/data/", fnm))
 		}
 		else{
 			# DEBUG
