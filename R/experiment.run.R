@@ -130,9 +130,10 @@ experiment.run <- function(base_id, cmd,
 						   i_time, f_time, s_time,
 						   n_run = 1,
 						   event_times = NULL, event_function = NULL,
-						   parallel_processors= 1, out_fname)
+						   parallel_processors = 1, out_fname)
 {
 	# Create a cluster
+	print(paste0("[experiment.run] paralle_processors = ", parallel_processors))
 	# cl <- makeCluster(spec = parallel_processors,
 	# 				  type = "FORK")
 	cl <- makeForkCluster(nnodes = parallel_processors)
