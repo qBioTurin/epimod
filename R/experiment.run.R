@@ -133,7 +133,7 @@ experiment.run <- function(base_id, cmd,
 						   parallel_processors = 1, out_fname)
 {
 	# Create a cluster
-	print(paste0("[experiment.run] paralle_processors = ", parallel_processors))
+	print(paste0("[experiment.run] parallel_processors = ", parallel_processors))
 	# cl <- makeCluster(spec = parallel_processors,
 	# 				  type = "FORK")
 	cl <- makeForkCluster(nnodes = parallel_processors)
