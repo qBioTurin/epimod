@@ -147,29 +147,29 @@ experiment.run <- function(base_id, cmd,
 	jobs <- floor(n_run/parallel_processors)
 	#### ##### ####
 	T1 <- Sys.time()
-	ret <- parLapply(cl = cl,
-			  X = c(1:n_run),
-			  fun = worker,
-			  cmd = cmd,
-			  base_id = base_id,
-			  i_time = i_time,
-			  f_time = f_time,
-			  s_time = s_time,
-			  n_run = jobs,
-			  event_times = event_times,
-			  event_function = event_function,
-			  out_fname = out_fname)
-	# ret <- lapply(X = c(1:n_run),
-	# 			  FUN = worker,
-	# 			  cmd = cmd,
-	# 			  base_id = base_id,
-	# 			  i_time = i_time,
-	# 			  f_time = f_time,
-	# 			  s_time = s_time,
-	# 			  n_run = jobs,
-	# 			  event_times = event_times,
-	# 			  event_function = event_function,
-	# 			  out_fname = out_fname)
+	# ret <- parLapply(cl = cl,
+	# 		  X = c(1:n_run),
+	# 		  fun = worker,
+	# 		  cmd = cmd,
+	# 		  base_id = base_id,
+	# 		  i_time = i_time,
+	# 		  f_time = f_time,
+	# 		  s_time = s_time,
+	# 		  n_run = jobs,
+	# 		  event_times = event_times,
+	# 		  event_function = event_function,
+	# 		  out_fname = out_fname)
+	ret <- lapply(X = c(1:n_run),
+				  FUN = worker,
+				  cmd = cmd,
+				  base_id = base_id,
+				  i_time = i_time,
+				  f_time = f_time,
+				  s_time = s_time,
+				  n_run = jobs,
+				  event_times = event_times,
+				  event_function = event_function,
+				  out_fname = out_fname)
 	T2 <- difftime(Sys.time(), T1, unit = "secs")
 	stopCluster(cl)
 	return(T2)
