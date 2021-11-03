@@ -51,8 +51,8 @@ calibration.worker <- function(id, config, params)
   print("[calibration.worer] Simulation done!")
   # Set-up the result's file name
   # fnm <- paste0(params$out_fname,"-",id,".trace")
-  print("[calibration.worer] Returning file name: ", unlist(list.files(pattern = "([a-zA-Z]+-){2}([0-9]+-*)+.trace"))[1])
-  fnm <- unlist(list.files(pattern = "([a-zA-Z]+-){2}([0-9]+-*)+.trace"))[1]
+  print(paste0("[calibration.worer] Returning file name: ", unlist(list.files(pattern = "([a-zA-Z]+-){2}([0-9]+-*)+.trace"))))
+  fnm <- unlist(list.files(pattern = "([a-zA-Z]+-){2}([0-9]+-*)+.trace"))
   # Clear the simulation's environment
   experiment.env_cleanup(id = id,
                          run_dir = params$run_dir,
