@@ -79,10 +79,16 @@ objfn <- function(x, params, cl) {
   #                          calibration.worker,
   #                          config = config,
   #                          params = params)
-  trace_names <- lapply(c(paste0(id,"-",c(1:params$n_run))),
-                        calibration.worker,
-                        config = config,
-                        params = params)
+
+  ##### DEBUG ######
+  trace_names <- list.files(pattern = "([a-zA-Z]+-){2}([0-9]+-*)+.trace")
+
+  # trace_names <- lapply(c(paste0(id,"-",c(1:params$n_run))),
+  #                       calibration.worker,
+  #                       config = config,
+  #                       params = params)
+  ##### DEBUG ######
+
   print("[objfn] Done calibration.worer")
   # Append all the solutions in one single data.frame
   traces <- lapply(trace_names,function(x){
