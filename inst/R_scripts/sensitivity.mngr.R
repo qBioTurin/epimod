@@ -21,14 +21,15 @@ sensitivity.worker <- function(id,
                         timeout = timeout)
   # Run the experiment
   elapsed <- experiment.run(base_id = id,
-                            cmd = cmd,
-                            i_time = i_time,
-                            f_time = f_time,
-                            s_time = s_time,
-                            n_run = 1,
-                            event_times = event_times,
-                            event_function = event_function,
-                            out_fname = out_fname)
+  						  cmd = cmd,
+  						  i_time = i_time,
+  						  f_time = f_time,
+  						  s_time = s_time,
+  						  n_run = 1,
+  						  event_times = event_times,
+  						  event_function = event_function,
+  						  out_fname = out_fname,
+  						  parallel_processors = params$processors)
 
   cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
   # Change the working directory back to the original one
