@@ -85,11 +85,17 @@ worker <- function(worker_id,
 
 		# Generate the command to execute the current iteration simulation's configuration
 		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = paste0(base_id, "-", iter.id))
+		print(paste0("[experiment.run] replacement <ID> ", replacement))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
+		print(paste0("[experiment.run] replacement <S_TIME> ", replacement))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<I_TIME>", replacement = i_time)
+		print(paste0("[experiment.run] replacement <I_TIME> ", replacement))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
+		print(paste0("[experiment.run] replacement <F_TIME> ", replacement))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
+		print(paste0("[experiment.run] replacement <N_RUN> ", replacement))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
+		print(paste0("[experiment.run] replacement <INIT> ", replacement))
 
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
