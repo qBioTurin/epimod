@@ -4,7 +4,7 @@ library(epimod)
 model.worker<-function(id,
                        solver_fname, solver_type,taueps,
                        s_time, f_time, n_run,
-                       timeout, run_dir, out_fname, out_dir,
+                       timeout, run_dir, out_fname, out_dir, seed,
                        files, config = NULL){
     if(!is.null(config))
     {
@@ -37,6 +37,14 @@ model.worker<-function(id,
                              },
                          id=id
                          )
+
+    #Seed management
+    load(params$seed)
+    set.seed(kind = "Super-Duper", seed = timestamp)
+    seed <- runif(min = 1, max = 1000000000, n = 1) + n
+    set.seed(kind = "Mersenne-Twister", seed = seed)
+    #Update n in a critic section
+
     cmds <- parLapply(cl=cl,
                       X=trace_names,
                       fun=experiment.cmd,
@@ -45,6 +53,7 @@ model.worker<-function(id,
                       taueps=taueps,
                       s_time=s_time,
                       f_time=f_time,
+    									seed = seed,
                       timeout=timeout,
                       out_fname=out_fname,
                       n_run=1)
@@ -86,21 +95,23 @@ param_fname <- args[1]
 params <- readRDS(param_fname)
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
-    # Save initial seed value
-    set.seed(kind = "Mersenne-Twister", seed = NULL)
-    init_seed <- .Random.seed
-}else{
-    load(params$seed)
-    if(is.null(params$extend))
-    {
-        # We want to reproduce the output of a previous set of experiments
-        assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-        params$extend <- ""
-    }
-    else
-        # We want to extend a previous experiment
-        assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
-}
+	# Save initial seed value
+	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+	timestamp <- as.numeric(Sys.time())
+	n <- 1
+	save(timestamp, n, file = paste0(params$out_dir, "seeds-", params$out_fname, ".RData"))
+}#else{
+	#load(params$seed)
+	# if(is.null(params$extend))
+	# {
+	#     # We want to reproduce the output of a previous set of experiments
+	# 	  assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
+	#     params$extend <- ""
+	# }
+	# else
+	#     # We want to extend a previous experiment
+	#     assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
+#}
 if(is.null(params$files$parameters_fname)
    && is.null(params$files$functions_fname)
    && is.null(params$ini_v))
@@ -150,11 +161,12 @@ exec_times <- lapply(X = c(1:params$n_config),
                      run_dir = params$run_dir,
                      out_fname = params$out_fname,
                      out_dir = params$out_dir,
+										 seed = params$seed,
                      files = params$files,
                      config = params$config)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
 final_seed<-.Random.seed
-save(init_seed, final_seed, file = paste0(params$out_dir,"seeds",params$out_fname,".RData"))
+#save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 file.copy(from = params$target_value_fname, to = params$run_dir)

@@ -9,12 +9,21 @@ calibration.worker <- function(id, config, params){
                          config = config)
     pwd <- getwd()
     setwd(paste0(params$run_dir, id))
+
+    #Seed management
+    load(params$seed)
+    set.seed(kind = "Super-Duper", seed = timestamp)
+    seed <- runif(min = 1, max = 1000000000, n = 1) + n
+    set.seed(kind = "Mersenne-Twister", seed = seed)
+    #Update n in a critic section
+
     cmd <- experiment.cmd(id,
                           solver_fname = params$files$solver_fname,
                           solver_type = params$solver_type,
                           n_run = 1,
                           s_time = params$s_time,
                           f_time = params$f_time,
+    											seed = seed,
                           timeout = params$timeout,
                           out_fname = params$out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
@@ -88,21 +97,23 @@ params_fname <- args[1]
 params <- readRDS(params_fname)
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
-    # Save initial seed value
-    set.seed(kind = "Mersenne-Twister", seed = NULL)
-    init_seed <- .Random.seed
-}else{
-    load(params$seed)
-    if(is.null(params$extend))
-    {
-        # We want to reproduce the output of a previous set of experiments
-        assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-        params$extend <- ""
-    }
-    else
-        # We want to extend a previous experiment
-        assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
-}
+	# Save initial seed value
+	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+	timestamp <- as.numeric(Sys.time())
+	n <- 1
+	save(timestamp, n, file = params$seed)
+}#else{
+# 	load(params$seed)
+# 	if(is.null(params$extend))
+# 	{
+# 	    # We want to reproduce the output of a previous set of experiments
+# 		  assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
+# 	    params$extend <- ""
+# 	}
+# 	else
+# 	    # We want to extend a previous experiment
+# 	    assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
+# }
 # Copy files to the run directory
 experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
@@ -117,7 +128,7 @@ if(!is.null(params$threshold.stop))
 {
     ctl$threshold.stop <- params$threshold.stop
 }
-if(!is.null(params$max.call))
+if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
 }
@@ -135,5 +146,5 @@ stopCluster(cl)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
 # Save final seed
-final_seed<-.Random.seed
-save(init_seed, final_seed, file = paste0(params$out_dir,"seeds",params$out_fname,".RData"))
+#final_seed<-.Random.seed
+#save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
