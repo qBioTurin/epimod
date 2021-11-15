@@ -1,5 +1,6 @@
 #!/bin/bash
-IMAGES=$(ls -d */)
+#IMAGES=$(ls -d */)
+IMAGES=(Analysis Calibration Sensitivity)
 BASEDIR=$(pwd) 
 if [ $# -ne 1 ]; then
 	echo "Illegal number of parameters"
@@ -10,7 +11,7 @@ if [ $# -ne 1 ]; then
 else
 	TAG=$1
 fi
-for I in $IMAGES; do
+for I in ${IMAGES[@]}; do
 	# Make all letters lowercase and remove the ending babcslash
 	IMG=$(echo $I | tr '[:upper:]' '[:lower:]' | tr -d '[:punct:]')
 	DIR=$BASEDIR/$I
@@ -26,7 +27,7 @@ for I in $IMAGES; do
 		rm marker
 		echo "Uploading $IMG"
 	       	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
-		docker push qbioturin/epimod-$IMG:$TAG
+		#docker push qbioturin/epimod-$IMG:$TAG
 		if [[ $? -ne 0 ]]; then
 			exit 0
 		fi	
