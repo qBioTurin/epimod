@@ -97,16 +97,20 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
 		print(paste0("[experiment.run] replacement <N_RUN> ", n_run))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
-		if (file.exists("init"))
+		if (file.exists(init))
 		{
+			if(length(grep(x = cmd.iter,
+						   pattern = "<INIT>")) != 1)
+			{
+				cmd.iter = paste0(cmd.iter, " -init <INIT>")
+			}
 			print(paste0("[experiment.run] replacement <INIT> ", init))
 			cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
+			### DEBUG ###
+			print(paste0("[experiment.run] cat ", init, "..."))
+			system(paste("cat", init))
+			### DEBUG ###
 		}
-		### DEBUG ###
-		print(paste0("[experiment.run] cat ", init, "..."))
-		system(paste("cat", init))
-		### DEBUG ###
-
 		### DEBUG ###
 		print(paste0("[experiment.run] launching\n\t", cmd.iter))
 		### DEBUG ###
