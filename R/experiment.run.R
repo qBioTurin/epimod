@@ -56,6 +56,21 @@ worker <- function(worker_id,
 			init <- paste("init")
 		}
 		else{
+			# Fix command template:
+			# 1) Add init file, if not present
+			if(length(grep(x = cmd.iter,
+						   pattern = "<INIT>")) != 1)
+			{
+				cmd.iter = paste0(cmd.iter, " -init <INIT>")
+			}
+			# Disable commandline parameters
+			if(length(grep(x = cmd.iter,
+						   pattern = " -parm cmdln_params")) == 1)
+			{
+				cmd.iter = gsub(x = cmd.iter,
+								pattern = " -parm cmdln_params",
+								replacement = "")
+			}
 			# Generate the init filename for the current iteration
 			init <- paste0("init_iter-", iter.id)
 
@@ -99,11 +114,6 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
 		if (file.exists(init))
 		{
-			if(length(grep(x = cmd.iter,
-						   pattern = "<INIT>")) != 1)
-			{
-				cmd.iter = paste0(cmd.iter, " -init <INIT>")
-			}
 			print(paste0("[experiment.run] replacement <INIT> ", init))
 			cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 			### DEBUG ###
