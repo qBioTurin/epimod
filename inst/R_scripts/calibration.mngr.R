@@ -132,6 +132,18 @@ if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
 }
+
+#Seed management
+load(params$seed)
+set.seed(kind = "Super-Duper", seed = timestamp)
+seed <- runif(min = 1, max = 1000000000, n = 1) + n
+set.seed(kind = "Mersenne-Twister", seed = seed)
+#Update n in a critic section
+n <- n + 1
+save(timestamp, n, file = params$seed)
+
+ctl$seed <- seed
+
 # control=list( max.call = params$max.call,
 #               threshold.stop = params$threshold.stop,
 #               max.time = params$max.time),
