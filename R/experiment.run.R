@@ -141,7 +141,7 @@ worker <- function(worker_id,
 			# Remove last line from the output file
 			### DEBUG ###
 			print(paste0("head -n-1 ", fnm))
-			system(paste0("head -n-1 ", fnm))
+			system(paste0("head -n-1 ", paste0(fnm,"_tmp"),"; mv ", paste0(fnm,"_tmp")," ", fnm))
 			### DEBUG ###
 			system(paste0("head -n-1 ", fnm, " > ", fnm))
 			# Remove first line from the current output file and append to the output file
