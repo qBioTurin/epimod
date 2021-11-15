@@ -1,6 +1,7 @@
 #!/bin/bash
-IMAGES=$(ls -d */)
-BASEDIR=$(pwd) 
+# IMAGES=$(ls -d */)
+IMAGES=(Sensitivity Calibration Analysis)
+BASEDIR=$(pwd)
 if [ $# -ne 1 ]; then
 	echo "Illegal number of parameters"
 	echo "Usage:"
@@ -10,7 +11,8 @@ if [ $# -ne 1 ]; then
 else
 	TAG=$1
 fi
-for I in $IMAGES; do
+# for I in $IMAGES; do
+for I in ${IMAGES[@]}; do
 	# Make all letters lowercase and remove the ending babcslash
 	IMG=$(echo $I | tr '[:upper:]' '[:lower:]' | tr -d '[:punct:]')
 	DIR=$BASEDIR/$I
@@ -22,14 +24,14 @@ for I in $IMAGES; do
 		docker build -t qbioturin/epimod-$IMG:$TAG .
 		if [[ $? -ne 0 ]]; then
 			exit 0
-		fi	
+		fi
 		rm marker
 		echo "Uploading $IMG"
 	       	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
 		docker push qbioturin/epimod-$IMG:$TAG
 		if [[ $? -ne 0 ]]; then
 			exit 0
-		fi	
+		fi
 	else
 		echo "Dockerfile missing for image qbioturin/epimod-$IMG"
 	fi
