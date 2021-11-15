@@ -96,7 +96,7 @@ experiment.configurations <- function(n_config,
             }
             else if(exists("tag") && tag == "p")
             {
-                # When launching the simulation you find a negative value in the second field, write it to a string instead of writing it in a file
+                # Write commandline parameters to file when the second element is less than zero
                 config[[i]][[j]] <- list(file, -n_config, data)
             }
             else if(!ini_vector_mod)
