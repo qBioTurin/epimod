@@ -48,6 +48,9 @@ worker <- function(worker_id,
 		# Define the identifier for the current iteration
 		iter.id <- paste0(worker_id, "-", i)
 		# Setup initial marking, initial and final time
+		### TODO ###
+		# Remove this part pf the if statement
+		# END TODO #
 		if (i == 1)
 		{
 			init <- paste("init")
@@ -94,12 +97,19 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
 		print(paste0("[experiment.run] replacement <N_RUN> ", n_run))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
-		print(paste0("[experiment.run] replacement <INIT> ", init))
-		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
-		# DEBUG
-		print(paste0("experiment.run cat ", init, "..."))
+		if (file.exists("init"))
+		{
+			print(paste0("[experiment.run] replacement <INIT> ", init))
+			cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
+		}
+		### DEBUG ###
+		print(paste0("[experiment.run] cat ", init, "..."))
 		system(paste("cat", init))
+		### DEBUG ###
 
+		### DEBUG ###
+		print(paste0("[experiment.run] launching\n\t", cmd.iter))
+		### DEBUG ###
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
