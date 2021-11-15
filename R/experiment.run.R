@@ -97,6 +97,7 @@ worker <- function(worker_id,
 		print(paste0("[experiment.run] replacement <INIT> ", init))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 		# DEBUG
+		print(paste0("experiment.run cat ", init, "..."))
 		system(paste("cat", init))
 
 		# Run the solver with all necessary parameters
@@ -126,11 +127,13 @@ worker <- function(worker_id,
 			# Remove last line from the output file
 			### DEBUG ###
 			print(paste0("head -n-1 ", fnm))
+			system(paste0("head -n-1 ", fnm))
 			### DEBUG ###
 			system(paste0("head -n-1 ", fnm, " > ", fnm))
 			# Remove first line from the current output file and append to the output file
 			### DEBUG ###
 			print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
+			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
 			### DEBUG ###
 			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
