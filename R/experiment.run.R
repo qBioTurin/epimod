@@ -57,18 +57,17 @@ worker <- function(worker_id,
 		}
 		else{
 			# Fix command template:
-			cmd.iter <- cmd
 			# 1) Add init file, if not present
-			if(length(grep(x = cmd.iter,
+			if(length(grep(x = cmd,
 						   pattern = "<INIT>")) != 1)
 			{
-				cmd.iter = paste0(cmd.iter, " -init <INIT>")
+				cmd = paste0(cmd, " -init <INIT>")
 			}
 			# Disable commandline parameters
-			if(length(grep(x = cmd.iter,
+			if(length(grep(x = cmd,
 						   pattern = " -parm cmdln_params")) == 1)
 			{
-				cmd.iter = gsub(x = cmd.iter,
+				cmd = gsub(x = cmd,
 								pattern = " -parm cmdln_params",
 								replacement = "")
 			}
