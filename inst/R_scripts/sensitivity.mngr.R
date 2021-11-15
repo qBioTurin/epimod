@@ -16,12 +16,12 @@ sensitivity.worker<-function(id,
     #Seed management
     load(params$seed)
     set.seed(kind = "Super-Duper", seed = timestamp)
-    seed_num <- runif(min = 1, max = 1000000000, n = 1) + n
-    set.seed(kind = "Mersenne-Twister", seed = seed_num)
+    seed <- runif(min = 1, max = 1000000000, n = 1) + n
+    set.seed(kind = "Mersenne-Twister", seed = seed)
     #Update n in a critic section
 
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, seed = seed_num, timeout = timeout, out_fname = out_fname)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, seed = seed, timeout = timeout, out_fname = out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
     system(paste0("sleep ", round(runif(1,min=0,max=10)), "s"))
     # Measure simulation's run time
