@@ -13,7 +13,7 @@ calibration.worker <- function(id, config, params){
     #Seed management
     load(params$seed)
     set.seed(kind = "Super-Duper", seed = timestamp)
-    seed <- runif(min = 1, max = 1000000000, n = 1) + n
+    seed <- runif(min = 1, max = .Machine$integer.max, n = 1) + n
     set.seed(kind = "Mersenne-Twister", seed = seed)
     #Update n in a critic section
 
