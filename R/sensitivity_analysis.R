@@ -67,11 +67,11 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                                 # Parameters to control PRCC
                                 target_value_fname = NULL,
                                 # Mange reproducibilty and extend previous experiments
-                                extend = NULL, seed = NULL,
+                                extend = FALSE, seed = NULL,
                                 # Directories
                                 out_fname = NULL,
                                 #Flag to enable logging activity
-                                debug=FALSE
+                                debug = FALSE
                                 ){
 
     #common_test function receive all the parameters that will be tested for sensitivity_analysis function
@@ -86,9 +86,11 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                       f_time = f_time, # weeks
                       s_time = s_time, # days
                       volume = volume,
+    									seed = seed,
+    									extend = extend,
                       caller_function = "sensitivity")
-    if(ret!="ok")
-        stop(paste("sensitivity_analysis_test error:",ret,sep = "\n"))
+    if(ret != "ok")
+        stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
 
     chk_dir<- function(path){
@@ -148,7 +150,10 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results_sensitivity_analysis/")
-    dir.create(res_dir, showWarnings = FALSE,recursive = TRUE)
+    if(!extend & file.exists(res_dir)){
+			unlink(res_dir, recursive = TRUE)
+    }
+    dir.create(res_dir, showWarnings = FALSE, recursive = TRUE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
@@ -158,18 +163,17 @@ sensitivity_analysis <-function(# Parameters to control the simulation
             return(paste0(parms$out_dir,basename(x)))
         })
     }
+
     # removed parms$target_value_fname and inserted in files -> check if it works
     # file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
     # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
+
     # Manage experiments reproducibility
-    if(!is.null(seed)){
-        parms$seed <- paste0(parms$out_dir,basename(seed))
-        file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
-            parms$extend <- paste0(parms$out_dir,basename(extend))
-            file.copy(from = extend, to = res_dir )
-        }
+    if(!is.null(seed) & !extend){
+			parms$seed <- paste0(parms$out_dir, paste0("seeds-", out_fname, ".RData"))
+			file.copy(from = seed, to = paste0(res_dir, "seeds-", out_fname, ".RData"))
     }
+
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
     p_fname <- paste0(res_dir, parms_fname,".RDS")
     # Use version = 2 for compatibility issue

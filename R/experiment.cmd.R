@@ -20,7 +20,7 @@
 
 experiment.cmd <- function(id,
                            solver_fname, solver_type = "LSODA",
-                           s_time, f_time, n_run = 1, taueps = 0.01,
+                           s_time, f_time, n_run = 1, taueps = 0.01, seed,
                            timeout, out_fname){
     if(solver_type == "TAUG")
     {
@@ -32,6 +32,7 @@ experiment.cmd <- function(id,
                  " -stime ", s_time,
                  " -ftime ", f_time,
                  " -type ", solver_type,
+    						 " -seed ", seed,
                  " -runs ", n_run)
     if(file.exists("init"))
         cmd <- paste0(cmd, " -init init")

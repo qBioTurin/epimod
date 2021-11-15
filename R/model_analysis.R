@@ -1,16 +1,16 @@
 model_analysis <-function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps=0.01,
+    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
     # Mange reproducibilty and extend previous experiments
-    extend = NULL, seed = NULL,
+    extend = FALSE, seed = NULL,
     # Directories
     out_fname = NULL,
     #Flag to enable logging activity
-    debug=FALSE
+    debug = FALSE
 ){
 
     #common_test function receive all the parameters that will be tested for model_calibration function
@@ -27,11 +27,11 @@ model_analysis <-function(
                       n_config = n_config,
                       caller_function = "analysis")
 
-    if(ret!="ok" && !grepl("WARNING",ret)){
-        stop(paste("model_analysis_test error:",ret,sep = "\n"))
+    if(ret != "ok" && !grepl("WARNING", ret)){
+        stop(paste("model_analysis_test error:", ret, sep = "\n"))
     }else{
-        if(ret!="ok")
-            warning(paste("model_analysis_test",ret))
+        if(ret != "ok")
+            warning(paste("model_analysis_test", ret))
     }
 
 
@@ -45,6 +45,10 @@ model_analysis <-function(
     if(!is.null(solver_fname)){
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
+    }
+    if(is.null(out_fname))
+    {
+    	out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-analysis")
     }
     # Fix input parameters path
     if(!is.null(parameters_fname))
@@ -84,15 +88,13 @@ model_analysis <-function(
     parms$files <- lapply(files, function(x){
         return(paste0(parms$out_dir,basename(x)))
     })
+
     # Manage experiments reproducibility
-    if(!is.null(seed)){
-        parms$seed <- paste0(parms$out_dir,basename(seed))
-        file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
-            parms$extend <- paste0(parms$out_dir,basename(extend))
-            file.copy(from = extend, to = volume )
-        }
+    if(!is.null(seed) & !extend){
+    	params$seed <- paste0(params$out_dir, paste0("seeds", out_fname, ".RData"))
+    	file.copy(from = seed, to = paste0(res_dir, "seeds", out_fname, ".RData"))
     }
+
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
     p_fname <- paste0(res_dir, parms_fname,".RDS")
     # Use version = 2 for compatibility issue

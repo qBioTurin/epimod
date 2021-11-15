@@ -41,7 +41,7 @@
 #' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
 #' \itemize{
 #' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
-#' \item maxit (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#' \item max.call (Integer) represents the maximum number of call of the objective function. Default is 1e7.
 #' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
 #'
 #' @param reference_data Data to compare with the simulations' results
@@ -80,7 +80,7 @@
 #' @export
 model_calibration <-function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, solver_type = "LSODA", n_run=1,
+    solver_fname, f_time, s_time, solver_type = "LSODA", n_run = 1,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL,
     # Parameters to manage the simulations' execution
@@ -92,11 +92,11 @@ model_calibration <-function(
     # Parameters to control the ranking
     reference_data = NULL, distance_measure_fname = NULL,
     # Mange reproducibilty and extend previous experiments
-    extend = NULL, seed = NULL,
+    extend = FALSE, seed = NULL,
     # Directories
-    out_fname=NULL,
+    out_fname = NULL,
     #Flag to enable logging activity
-    debug=FALSE){
+    debug = FALSE){
 
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(parameters_fname = parameters_fname,
@@ -113,10 +113,11 @@ model_calibration <-function(
                       ub_v = ub_v,
                       lb_v = lb_v,
                       volume = volume,
+    									seed = seed,
                       parallel_processors = parallel_processors,
                       caller_function = "calibration")
-    if(ret!="ok")
-        stop(paste("model_calibration_test error:",ret,sep = "\n"))
+    if(ret != "ok")
+        stop(paste("model_calibration_test error:", ret, sep = "\n"))
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -179,6 +180,9 @@ model_calibration <-function(
                    processors = parallel_processors)
 
     res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
+    if(!extend & file.exists(res_dir)){
+    	unlink(res_dir, recursive = TRUE)
+    }
     dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
@@ -187,18 +191,17 @@ model_calibration <-function(
         return(paste0(params$out_dir,basename(x)))
     })
     params$files <- files
-    parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
-    saveRDS(params, file = parms_fname, version = 2)
+
     # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
-    if(!is.null(seed)){
-        params$seed <- paste0(params$out_dir,basename(seed))
-        file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
-            params$extend <- paste0(params$out_dir,basename(extend))
-            file.copy(from = extend, to = res_dir )
-        }
+    if(!is.null(seed) & !extend){
+    	params$seed <- paste0(params$out_dir, paste0("seeds", out_fname, ".RData"))
+    	file.copy(from = seed, to = paste0(res_dir, "seeds", out_fname, ".RData"))
     }
+
+    parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
+    saveRDS(params, file = parms_fname, version = 2)
+
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
     # Run the docker image
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
