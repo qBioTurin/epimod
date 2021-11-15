@@ -96,6 +96,8 @@ worker <- function(worker_id,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
 		print(paste0("[experiment.run] replacement <INIT> ", init))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
+		# DEBUG
+		system(paste("cat", init))
 
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
@@ -121,7 +123,12 @@ worker <- function(worker_id,
 			# system(paste0("cp ", curr_fnm, " ~/data/", curr_fnm))
 			# DEBUG
 			# write(x = paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm), file = "~/data/commands.txt", append = TRUE)
-			system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
+			#system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
+			#system(paste0("tail -n $(expr $(wc -l ", curr_fnm, " | cut -f1 -d' ') - 2) ", curr_fnm, " >> ", fnm))
+			# Remove last line from the output file
+			system(paste0("head -n-1 ", fnm, " > ", fnm))
+			# Remove first line from the current output file and append to the output file
+			system(paste0("tail -n-1 ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
 
 		}
