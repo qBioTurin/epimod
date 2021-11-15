@@ -57,6 +57,7 @@ worker <- function(worker_id,
 		}
 		else{
 			# Fix command template:
+			cmd.iter <- cmd
 			# 1) Add init file, if not present
 			if(length(grep(x = cmd.iter,
 						   pattern = "<INIT>")) != 1)
@@ -103,7 +104,7 @@ worker <- function(worker_id,
 
 		# Generate the command to execute the current iteration simulation's configuration
 		print(paste0("[experiment.run] replacement <ID> ", paste0(base_id, "-", iter.id)))
-		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = paste0(base_id, "-", iter.id))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<ID>", replacement = paste0(base_id, "-", iter.id))
 		print(paste0("[experiment.run] replacement <S_TIME> ", s_time))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
 		print(paste0("[experiment.run] replacement <I_TIME> ", i_time))
