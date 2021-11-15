@@ -128,7 +128,7 @@ worker <- function(worker_id,
 			# Remove last line from the output file
 			system(paste0("head -n-1 ", fnm, " > ", fnm))
 			# Remove first line from the current output file and append to the output file
-			system(paste0("tail -n-1 ", curr_fnm, " >> ", fnm))
+			system(paste0("tail -n-$(expr $(wc -l ", curr_fnm, ") - 1) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
 
 		}
@@ -154,29 +154,29 @@ experiment.run <- function(base_id, cmd,
 	jobs <- floor(n_run/parallel_processors)
 	#### ##### ####
 	T1 <- Sys.time()
-	# ret <- parLapply(cl = cl,
-	# 		  X = c(1:n_run),
-	# 		  fun = worker,
-	# 		  cmd = cmd,
-	# 		  base_id = base_id,
-	# 		  i_time = i_time,
-	# 		  f_time = f_time,
-	# 		  s_time = s_time,
-	# 		  n_run = jobs,
-	# 		  event_times = event_times,
-	# 		  event_function = event_function,
-	# 		  out_fname = out_fname)
-	ret <- lapply(X = c(1:n_run),
-				  FUN = worker,
-				  cmd = cmd,
-				  base_id = base_id,
-				  i_time = i_time,
-				  f_time = f_time,
-				  s_time = s_time,
-				  n_run = jobs,
-				  event_times = event_times,
-				  event_function = event_function,
-				  out_fname = out_fname)
+	ret <- parLapply(cl = cl,
+			  X = c(1:n_run),
+			  fun = worker,
+			  cmd = cmd,
+			  base_id = base_id,
+			  i_time = i_time,
+			  f_time = f_time,
+			  s_time = s_time,
+			  n_run = jobs,
+			  event_times = event_times,
+			  event_function = event_function,
+			  out_fname = out_fname)
+	# ret <- lapply(X = c(1:n_run),
+	# 			  FUN = worker,
+	# 			  cmd = cmd,
+	# 			  base_id = base_id,
+	# 			  i_time = i_time,
+	# 			  f_time = f_time,
+	# 			  s_time = s_time,
+	# 			  n_run = jobs,
+	# 			  event_times = event_times,
+	# 			  event_function = event_function,
+	# 			  out_fname = out_fname)
 	T2 <- difftime(Sys.time(), T1, unit = "secs")
 	stopCluster(cl)
 	return(T2)
