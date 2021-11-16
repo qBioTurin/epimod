@@ -55,13 +55,14 @@ worker <- function(worker_id,
 			{
 				system("touch cmdln_params")
 				if (file.exists("cmdln_mrk")){
-					system("echo 'cmdln_mrk'; cat cmdln_mrk")
+					print(system("echo '[experiment.run] cmdln_mrk'; cat cmdln_mrk"))
 					system("cat cmdln_mrk >> cmdln_params")
 				}
 				if ( file.exists("cmdln_exp")){
-					system("echo 'cmdln_params'; cat cmdln_params")
+					print(system("echo '[experiment.run] cmdln_exp'; cat cmdln_exp"));
 					system("cat cmdln_exp >> cmdln_params")
 				}
+				print(system("echo '[experiment.run] cmdln_params'; cat cmdln_params"));
 			}
 		}
 		else{
