@@ -74,6 +74,7 @@ worker <- function(worker_id,
 				cmd = paste0(cmd, " -init <INIT>")
 			}
 			# Disable commandline parameters
+			print(system("echo [experiment.run] files in $PWD; ls"));
 			if(length(grep(x = cmd,
 						   pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
 			{
