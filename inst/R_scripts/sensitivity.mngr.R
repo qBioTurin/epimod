@@ -88,10 +88,13 @@ if(is.null(params$seed)){
 		save(init_seed, extend_seed, n, file = params$seed)
 }else{
     load(params$seed)
-    if(!params$extend){
+    if(params$extend){
         # We want to extend a previous experiment
         assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
     }
+		else{
+			n <- 1
+		}
 }
 
 if(!params$extend){
