@@ -40,7 +40,7 @@ worker <- function(worker_id,
 		iterations <- length(event_times)
 
 	}
-
+	print(paste0("[experiment.run] Setting up command line ... ", cmd))
 	# Substitute the pattern <OUT_FNAME> with the actual file name
 	cmd <- gsub(x = cmd, pattern = "<OUT_FNAME>", out_fname)
 	for (i in 1:(iterations + 1))
