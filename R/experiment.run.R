@@ -74,7 +74,7 @@ worker <- function(worker_id,
 			}
 			# Disable commandline parameters
 			if(length(grep(x = cmd,
-						   pattern = "cmdln_params")) == 1)
+						   pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
 			{
 				cmd <- gsub(x = cmd,
 								pattern = "cmdln_exp",
