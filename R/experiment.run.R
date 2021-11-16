@@ -41,19 +41,26 @@ worker <- function(worker_id,
 
 	}
 
-	# Substitue the pattern <OUT_FNAME> with the actual file name
+	# Substitute the pattern <OUT_FNAME> with the actual file name
 	cmd <- gsub(x = cmd, pattern = "<OUT_FNAME>", out_fname)
 	for (i in 1:(iterations + 1))
 	{
 		# Define the identifier for the current iteration
 		iter.id <- paste0(worker_id, "-", i)
 		# Setup initial marking, initial and final time
-		### TODO ###
-		# Remove this part pf the if statement
-		# END TODO #
 		if (i == 1)
 		{
 			init <- paste("init")
+			if (file.exists("cmdln_mrk") | file.exists("cmdln_exp"))
+			{
+				system("touch cmdln_params")
+				if (file.exists("cmdln_mrk")){
+					system("cat cmdln_mrk >> cmdln_params")
+				}
+				if ( file.exists("cmdln_exp")){
+					system("cat cmdln_exp >> cmdln_params")
+				}
+			}
 		}
 		else{
 			# Fix command template:
@@ -65,10 +72,10 @@ worker <- function(worker_id,
 			}
 			# Disable commandline parameters
 			if(length(grep(x = cmd,
-						   pattern = " -parm cmdln_params")) == 1)
+						   pattern = "cmdln_params")) == 1)
 			{
-				cmd = gsub(x = cmd,
-								pattern = " -parm cmdln_params",
+				cmd <- gsub(x = cmd,
+								pattern = "cmdln_exp",
 								replacement = "")
 			}
 			# Generate the init filename for the current iteration

@@ -74,7 +74,8 @@ sensitivity.prcc<-function(config,
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
-    n_config <- abs(config[[1]][[1]][[2]])
+    # n_config <- abs(config[[1]][[1]][[2]])
+    n_config <- length(config[[1]][[1]][[1]])
     # Flatten all the parameters in the configuration
     config <- lapply(c(1:length(config)),function(x){
         inner_config <- lapply(c(1:n_config),function(k){

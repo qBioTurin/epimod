@@ -87,21 +87,29 @@ experiment.configurations <- function(n_config,
                     data <- as.numeric(f)
                 }
             }
+            # Initial marking
             if(exists("tag") && tag == "i"){
-                config[[i]][[j]] <- list("init", n_config, data)
+                config[[i]][[j]] <- list("init", "i", data)
             }
+            # General rate function
             else if(exists("tag") && tag == "g")
             {
-                config[[i]][[j]] <- list(file, n_config, data)
+                config[[i]][[j]] <- list(file, "g", data)
             }
-            else if(exists("tag") && tag == "p")
+            # Exponential rate
+            else if(exists("tag") && tag == "e")
             {
-                # Write commandline parameters to file when the second element is less than zero
-                config[[i]][[j]] <- list(file, -n_config, data)
+                config[[i]][[j]] <- list(file, "e", data)
             }
+            # Marking for a specific place
+            else if(exists("tag") && tag == "m")
+            {
+            	config[[i]][[j]] <- list(file, "m", data)
+            }
+            # Initial marking
             else if(!ini_vector_mod)
             {
-                config[[i]][[j]] <- list("init", n_config, ini_vector)
+                config[[i]][[j]] <- list("init", "i", ini_vector)
             }
             else
             {

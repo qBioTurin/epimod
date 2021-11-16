@@ -32,7 +32,7 @@ experiment.cmd <- function(solver_fname, solver_type = "LSODA", taueps = 0.01,
                   " -runs <N_RUN>")
     if (file.exists("init"))
         cmd <- paste0(cmd, " -init <INIT>")
-    if (file.exists("cmdln_params"))
+    if (file.exists("cmdln_mrk") | file.exists("cmdln_exp"))
         cmd <- paste0(cmd, " -parm cmdln_params")
     return(cmd)
 }
