@@ -79,8 +79,12 @@ worker <- function(worker_id,
 						   pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
 			{
 				cmd <- gsub(x = cmd,
-								pattern = "cmdln_exp",
-								replacement = "")
+								pattern = "cmdln_params",
+								replacement = "cmdln_exp")
+			} else {
+				cmd <- gsub(x = cmd,
+							pattern = "cmdln_params",
+							replacement = "")
 			}
 			# Generate the init filename for the current iteration
 			init <- paste0("init_iter-", iter.id)
