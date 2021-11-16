@@ -14,7 +14,7 @@ sensitivity.worker<-function(id,
     setwd(paste0(run_dir,id))
 
     # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, seed = seed, timeout = timeout, out_fname = out_fname)
+    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, seed = seed + id, timeout = timeout, out_fname = out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
     system(paste0("sleep ", round(runif(1,min=0,max=10)), "s"))
     # Measure simulation's run time
@@ -72,33 +72,31 @@ if(!is.null(params$files$target_value_fname))
     target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
     file.copy(from = params$files$target_value_fname, to = params$run_dir)
 }
+
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
     # Save initial seed value
 		params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+
 		timestamp <- as.numeric(Sys.time())
+		set.seed(kind = "Super-Duper", seed = timestamp)
+
+		init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
+		extend_seed <- init_seed
 		n <- 1
-		save(timestamp, n, file = paste0(params$out_dir, "seeds-", params$out_fname, ".RData"))
-}#else{
-    #load(params$seed)
-    # if(is.null(params$extend))
-    # {
-    #     # We want to reproduce the output of a previous set of experiments
-    # 	  assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-    #     params$extend <- ""
-    # }
-    # else
-    #     # We want to extend a previous experiment
-    #     assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
-#}
 
-#Seed management
-load(params$seed)
-set.seed(kind = "Super-Duper", seed = timestamp)
-seed_num <- runif(min = 1, max = .Machine$integer.max, n = 1) + n
-set.seed(kind = "Mersenne-Twister", seed = seed_num)
-#Update n in a critic section
+		save(init_seed, extend_seed, n, file = params$seed)
+}else{
+    load(params$seed)
+    if(!params$extend){
+        # We want to extend a previous experiment
+        assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+    }
+}
 
+if(!params$extend){
+	set.seed(kind = "Mersenne-Twister", seed = init_seed)
+}
 
 # Generate configuration
 params$config <-experiment.configurations(n_config = params$n_config,
@@ -108,9 +106,11 @@ params$config <-experiment.configurations(n_config = params$n_config,
                                    out_fname = params$out_fname,
                                    extend = params$extend)
 saveRDS(params,  file = paste0(param_fname), version = 2)
+
 # Save final seed
-#final_seed<-.Random.seed
-#save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
+extend_seed <- .Random.seed
+save(init_seed, extend_seed, n, file = params$seed)
+
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
                   # outfile=paste0("log-", params$out_fname, ".txt"),
@@ -129,10 +129,14 @@ exec_times <- parLapply( cl,
                          run_dir = params$run_dir,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir,
-												 seed = seed_num,
+												 seed = init_seed,
                          files = params$files,
                          config = params$config)
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
+
+n <- n + params$n_config
+save(init_seed, extend_seed, n, file = params$seed)
+
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))
 {
