@@ -83,7 +83,7 @@ worker <- function(worker_id,
 								replacement = "cmdln_exp")
 			} else {
 				cmd <- gsub(x = cmd,
-							pattern = "cmdln_params",
+							pattern = "-parm cmdln_params",
 							replacement = "")
 			}
 			# Generate the init filename for the current iteration
