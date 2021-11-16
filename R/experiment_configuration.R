@@ -107,7 +107,7 @@ experiment.configurations <- function(n_config,
             	config[[i]][[j]] <- list(file, "m", data)
             }
             # Initial marking
-            else if(!ini_vector_mod)
+            else if(!ini_vector_mod && !is.null(ini_vector))
             {
                 config[[i]][[j]] <- list("init", "i", ini_vector)
             }
