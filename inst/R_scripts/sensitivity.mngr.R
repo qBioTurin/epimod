@@ -112,7 +112,6 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 
 # Save final seed
 extend_seed <- .Random.seed
-#save(init_seed, extend_seed, n, file = params$seed)
 
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
