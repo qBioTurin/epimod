@@ -51,6 +51,8 @@ experiment.configurations <- function(n_config,
 		if(length(config) != 0)
 			config_length <- length(config[1])
 
+		log(config_length)
+
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
