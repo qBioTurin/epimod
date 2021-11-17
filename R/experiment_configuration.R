@@ -47,6 +47,10 @@ experiment.configurations <- function(n_config,
     }
     # TBD: Add the feature to expand an existing configuration
     # For each line the file defines how to generate a (set of) parameter(s)
+		config_length <- 0
+		if(length(config) != 0)
+			config_length <- length(config[1])
+
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
@@ -72,7 +76,6 @@ experiment.configurations <- function(n_config,
             }
         }
         #for(j in c(1:n_config)){
-        config_length <- length(config)
         for(j in c(config_length+1:config_length+n_config)){
             if(j==1)
                 config[[i]] <- list()
