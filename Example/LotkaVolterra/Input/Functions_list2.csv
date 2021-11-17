@@ -1,0 +1,6 @@
+p; Prey; 200
+p; Predator; 10
+p; BirthPrey; 0
+g; DeathPrey; ParamsFuncResponse; a =  0.4 ; h = 0.05; eps = 0.25
+g; BirthPredator; ParamsFuncResponse; a =  0.4 ; h = 0.05; eps = 0.25
+p; DeathPredator; 0.4

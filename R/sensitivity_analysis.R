@@ -89,20 +89,26 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     									seed = seed,
     									extend = extend,
                       caller_function = "sensitivity")
+
     if(ret != "ok")
         stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
+    results_dir_name <- "results_sensitivity_analysis/"
+    if(extend){
+    	seed <- paste0("results_sensitivity_analysis/seeds-", out_fname, ".RData")
+    	results_dir_name <- "results_sensitivity_analysis_extended/"
+    }
 
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     files <- list()
-    # Fix input parameter out_fname
     if(!is.null(solver_fname)){
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
+    # Fix input parameter out_fname
     if(is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
@@ -133,23 +139,29 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         target_value_fname <- tools::file_path_as_absolute(target_value_fname)
         files[["target_value_fname"]] <- target_value_fname
     }
+    if(!is.null(seed))
+    {
+    	seed <- tools::file_path_as_absolute(seed)
+    	files[["seed"]] <- seed
+    }
 
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
                   run_dir = chk_dir("/home/docker/scratch/"),
-                  out_dir = chk_dir("/home/docker/data/results_sensitivity_analysis/"),
+                  out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
                   out_fname = out_fname,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
                   volume = volume,
+    							extend = extend,
                   timeout = timeout,
                   files = files)
 
     volume <- tools::file_path_as_absolute(volume)
     # Create the folder to store results
-    res_dir <- paste0(chk_dir(volume),"results_sensitivity_analysis/")
+   	res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){
 			unlink(res_dir, recursive = TRUE)
     }
@@ -169,9 +181,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
 
     # Manage experiments reproducibility
-    if(!is.null(seed) & !extend){
-			parms$seed <- paste0(parms$out_dir, paste0("seeds-", out_fname, ".RData"))
-			file.copy(from = seed, to = paste0(res_dir, "seeds-", out_fname, ".RData"))
+    if(!is.null(seed)){
+			parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
     }
 
     # Save all the parameters to file, in a location accessible from inside the dockerized environment

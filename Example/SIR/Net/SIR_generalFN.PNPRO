@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- This project file has been saved by the New GreatSPN Editor, v.100 --><project name="New project" version="121">
+  <gspn name="PetriNet">
+    <nodes>
+      <place marking="10000" name="S" x="6.0" y="3.0"/>
+      <place marking="1" name="I" x="16.0" y="3.0"/>
+      <place name="R" x="30.0" y="3.0"/>
+      <transition delay="FN:InfectionFunction" delay-x="-3.5" delay-y="2.5" name="Infection" type="GEN" x="10.55" y="3.0"/>
+      <transition delay="0.1428571" delay-x="-0.5" delay-y="2.0" name="Recovery" nservers-x="0.5" type="EXP" x="23.55" y="3.0"/>
+    </nodes>
+    <edges>
+      <arc head="Infection" kind="INPUT" tail="S"/>
+      <arc head="Infection" kind="INPUT" mult-k="0.77021484375" tail="I">
+        <point x="14.0" y="2.5"/>
+      </arc>
+      <arc head="I" kind="OUTPUT" mult="2" mult-k="1.02783203125" mult-x="0.4998298257265432" mult-y="0.6668665837218093" tail="Infection">
+        <point x="14.0" y="5.5"/>
+      </arc>
+      <arc head="Recovery" kind="INPUT" tail="I">
+        <point x="21.0" y="2.5"/>
+      </arc>
+      <arc head="R" kind="OUTPUT" tail="Recovery">
+        <point x="27.5" y="2.5"/>
+      </arc>
+    </edges>
+  </gspn>
+  <measures gspn-name="PetriNet" name="Measures" simplified-UI="false">
+    <assignments/>
+    <greatspn/>
+    <formulas>
+      <formula comment="Basic statistics of the toolchain execution." language="STAT"/>
+      <formula comment="All the basic Petri net measures" language="ALL"/>
+    </formulas>
+  </measures>
+</project>

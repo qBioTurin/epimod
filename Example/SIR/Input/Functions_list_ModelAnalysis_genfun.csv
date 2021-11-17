@@ -1,0 +1,5 @@
+p;S;100;
+p;I;10;
+p;R;0;
+g;Infection;infection_generation;inf.rate=0.015
+p;Recovery;0.15;

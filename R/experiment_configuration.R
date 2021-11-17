@@ -19,7 +19,7 @@
 experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,
-                                      extend = NULL, ini_vector = NULL, ini_vector_mod = FALSE){
+                                      extend = FALSE, ini_vector = NULL, ini_vector_mod = FALSE){
 
     if(is.null(parm_fname) && ini_vector_mod)
     {
