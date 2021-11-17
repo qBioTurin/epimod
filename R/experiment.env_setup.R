@@ -21,7 +21,7 @@ experiment.env_setup <- function(id = NULL,
     # Create the directory
     if(file.exists(dest_dir))
     {
-        unlink(dest_dir, recursive = TRUE)
+        #unlink(dest_dir, recursive = TRUE)
     }
     dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
     # Copy files in the new directory
