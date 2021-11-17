@@ -91,6 +91,7 @@ if(is.null(params$seed)){
     if(params$extend){
         # We want to extend a previous experiment
         assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+    		load(paste0(params$out_dir, "SIR-sensitivity.RData"))
     }
 		else{
 			n <- 1
@@ -107,7 +108,8 @@ params$config <-experiment.configurations(n_config = params$n_config,
                                    parm_list = params$files$parameters_fname,
                                    out_dir = chk_dir(params$out_dir),
                                    out_fname = params$out_fname,
-                                   extend = params$extend)
+                                   extend = params$extend,
+																	 config = config)
 saveRDS(params,  file = paste0(param_fname), version = 2)
 
 # Save final seed
@@ -121,7 +123,7 @@ cl <- makeCluster(params$parallel_processors,
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
 exec_times <- parLapply( cl,
-                         c(1:params$n_config),                # execute n_config istances
+                         c(n:n+params$n_config-1),                # execute n_config istances
                          sensitivity.worker,                  # of sensitivity.worker
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",

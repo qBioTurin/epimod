@@ -19,14 +19,15 @@
 experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,
-                                      extend = FALSE, ini_vector = NULL, ini_vector_mod = FALSE){
+                                      ini_vector = NULL, ini_vector_mod = FALSE,
+																			extend = FALSE, config = list()){
 
     if(is.null(parm_fname) && ini_vector_mod)
     {
         stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
     }
     # Initialize an empty list of configurations
-    config <- list()
+    #config <- list()
     if(!is.null(parm_fname))
     {
         source(parm_fname)
@@ -70,7 +71,8 @@ experiment.configurations <- function(n_config,
                 is_function <- TRUE
             }
         }
-        for(j in c(1:n_config)){
+        #for(j in c(1:n_config)){
+        for(j in c(length(config)+1:length(config)+n_config)){
             if(j==1)
                 config[[i]] <- list()
             if(!is.null(ini_vector) && is_function && "x" %in% formalArgs(f)){

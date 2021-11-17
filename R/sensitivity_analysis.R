@@ -94,10 +94,10 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
     results_dir_name <- "results_sensitivity_analysis/"
-    if(extend){
-    	seed <- paste0("results_sensitivity_analysis/seeds-", out_fname, ".RData")
-    	results_dir_name <- "results_sensitivity_analysis_extended/"
-    }
+    #if(extend){
+    #	seed <- paste0("results_sensitivity_analysis/seeds-", out_fname, ".RData")
+    #	results_dir_name <- "results_sensitivity_analysis_extended/"
+    #}
 
     chk_dir<- function(path){
         pwd <- basename(path)
