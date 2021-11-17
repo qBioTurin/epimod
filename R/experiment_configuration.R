@@ -49,7 +49,7 @@ experiment.configurations <- function(n_config,
     # For each line the file defines how to generate a (set of) parameter(s)
 		config_length <- 0
 		if(length(config) != 0)
-			config_length <- length(config[1])
+			config_length <- length(config[[1]])
 
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
