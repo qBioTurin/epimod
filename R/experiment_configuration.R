@@ -51,8 +51,6 @@ experiment.configurations <- function(n_config,
 		if(length(config) != 0)
 			config_length <- length(config[1])
 
-		log(config_length)
-
     for (i in 1:length(lines)){
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
@@ -78,7 +76,7 @@ experiment.configurations <- function(n_config,
             }
         }
         #for(j in c(1:n_config)){
-        for(j in c(config_length+1:config_length+n_config)){
+        for(j in c((config_length+1):(config_length+n_config))){
             if(j==1)
                 config[[i]] <- list()
             if(!is.null(ini_vector) && is_function && "x" %in% formalArgs(f)){

@@ -124,7 +124,7 @@ cl <- makeCluster(params$parallel_processors,
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
 exec_times <- parLapply( cl,
-                         c(n:n+params$n_config-1),                # execute n_config istances
+                         c(n:(n+params$n_config-1)),                # execute n_config istances
                          sensitivity.worker,                  # of sensitivity.worker
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
