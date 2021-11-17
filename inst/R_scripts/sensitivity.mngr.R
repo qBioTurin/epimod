@@ -74,6 +74,7 @@ if(!is.null(params$files$target_value_fname))
 }
 
 # Load seed and previous configuration, if required.
+config <- list()
 if(is.null(params$seed)){
     # Save initial seed value
 		params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
@@ -99,7 +100,6 @@ if(is.null(params$seed)){
 }
 
 if(!params$extend){
-	config <- list()
 	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
