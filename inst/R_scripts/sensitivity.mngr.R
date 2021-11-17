@@ -99,6 +99,7 @@ if(is.null(params$seed)){
 }
 
 if(!params$extend){
+	config <- list()
 	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
