@@ -92,7 +92,7 @@ objfn <- function(x, params, cl) {
   print("[objfn] Done calibration.worer")
   # Append all the solutions in one single data.frame
   print("[objfn] Settling files...")
-  print(list.files())
+  print(list.files(path = params$out_dir))
   traces <- lapply(trace_names,function(x){
     fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
     print(paste0("[objfn] reading file", params$out_dir, params$out_fname,"-", id, ".trace"))
@@ -107,8 +107,10 @@ objfn <- function(x, params, cl) {
     return(tr)
   })
   traces <- do.call("rbind", traces)
+  print("[objfn] done settling files!")
   # Compute the score for the current configuration
   source(params$files$distance_measure_fname)
+  print("[objfn] Computing distance")
   distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
   # Write header to the file
   optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
@@ -118,6 +120,7 @@ objfn <- function(x, params, cl) {
     cat(unlist(nms),"\n", file = optim_trace_fname)
   }
   cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+  print("[objfn] Done computing distance")
   return(distance)
 }
 
