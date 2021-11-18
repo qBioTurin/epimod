@@ -7,36 +7,39 @@ sensitivity.worker <- function(id,
                                i_time, s_time, f_time,
                                timeout, run_dir, out_fname, out_dir,
                                event_times, event_function,
-                               files, config){
-  # Setup the environment
-  experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
-  # Environment settled, now run
-  # Change working directory to the one corresponding at the current id
-  pwd <- getwd()
-  setwd(paste0(run_dir,id))
-
-  cmd <- experiment.cmd(solver_fname = solver_fname,
-                        solver_type = solver_type,
-                        taueps = taueps,
-                        timeout = timeout)
-  # Run the experiment
-  elapsed <- experiment.run(base_id = id,
-  						  cmd = cmd,
-  						  i_time = i_time,
-  						  f_time = f_time,
-  						  s_time = s_time,
-  						  n_run = 1,
-  						  event_times = event_times,
-  						  event_function = event_function,
-  						  out_fname = out_fname,
-  						  parallel_processors = params$processors)
-
-  cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
-  # Change the working directory back to the original one
-  setwd(pwd)
-  # Move relevant files to their final location and remove all the temporary files
-  experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-  return(elapsed)
+                               files, config,
+							   parallel_processors, greed ){
+	# Setup the environment
+	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
+	# Environment settled, now run
+	# Change working directory to the one corresponding at the current id
+	pwd <- getwd()
+	setwd(paste0(run_dir,id))
+	cmd <- experiment.cmd(solver_fname = solver_fname,
+						  solver_type = solver_type,
+						  taueps = taueps,
+						  timeout = timeout)
+	# Run the experiment
+	if (greed > 0 && runif(1, min = 0, max = 1) > greed)
+	{
+		parallel_processors <- parallel_processors + 1
+	}
+	elapsed <- experiment.run(base_id = id,
+							  cmd = cmd,
+							  i_time = i_time,
+							  f_time = f_time,
+							  s_time = s_time,
+							  n_run = 1,
+							  event_times = event_times,
+							  event_function = event_function,
+							  out_fname = out_fname,
+							  parallel_processors = parallel_processors)
+	cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
+	# Change the working directory back to the original one
+	setwd(pwd)
+	# Move relevant files to their final location and remove all the temporary files
+	experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
+	return(elapsed)
 }
 
 # Function to compute the distance between one simulation trace and the reference data
@@ -119,6 +122,20 @@ cl <- makeCluster(params$parallel_processors,
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
+if(params$parallel_processors != 1)
+{
+	# Run params$parallel_processors configurations in parallel
+	threads.mngr <- min(params$n_config, params$parallel_processors)
+	threads.wrkr <- floor(params$parallel_processors/threads.mngr)
+	threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
+	# The probability to use one worker thread more than specified in by threads.wrkr
+	threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+} else {
+	threads.mngr <- 1
+	threads.wrkr <- 1
+	threads.load <- 1
+	threads.greed <- 0
+}
 # Run simulations
 # exec_times <- parLapply( cl,
 #                          c(1:params$n_config),                # execute n_config istances
@@ -135,7 +152,9 @@ clusterEvalQ(cl, sessionInfo())
 #                          event_times = params$event_times,
 #                          event_function = params$event_function,
 #                          files = params$files,
-#                          config = params$config)
+                         # config = params$config,
+                         # parallel_processors = threads.wrkr,
+                         # greed = threads.greed)
 exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
 					 sensitivity.worker,                  # of sensitivity.worker
 					 solver_fname = params$files$solver_fname,  # using the following parameters
@@ -150,7 +169,9 @@ exec_times <- lapply(c(1:params$n_config),                # execute n_config ist
 					 event_times = params$event_times,
 					 event_function = params$event_function,
 					 files = params$files,
-					 config = params$config)
+					 config = params$config,
+					 parallel_processors = threads.wrkr,
+					 greed = threads.greed)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 # List all the traces in the output directory
