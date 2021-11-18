@@ -120,35 +120,50 @@ cl <- makeCluster(params$parallel_processors,
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 # Run simulations
-exec_times <- parLapply( cl,
-                         c(1:params$n_config),                # execute n_config istances
-                         sensitivity.worker,                  # of sensitivity.worker
-                         solver_fname = params$files$solver_fname,  # using the following parameters
-                         solver_type = "LSODA",
-                         i_time = params$i_time,
-                         s_time = params$s_time,
-                         f_time = params$f_time,
-                         timeout = params$timeout,
-                         run_dir = params$run_dir,
-                         out_fname = params$out_fname,
-                         out_dir = params$out_dir,
-                         event_times = params$event_times,
-                         event_function = params$event_function,
-                         files = params$files,
-                         config = params$config)
+# exec_times <- parLapply( cl,
+#                          c(1:params$n_config),                # execute n_config istances
+#                          sensitivity.worker,                  # of sensitivity.worker
+#                          solver_fname = params$files$solver_fname,  # using the following parameters
+#                          solver_type = "LSODA",
+#                          i_time = params$i_time,
+#                          s_time = params$s_time,
+#                          f_time = params$f_time,
+#                          timeout = params$timeout,
+#                          run_dir = params$run_dir,
+#                          out_fname = params$out_fname,
+#                          out_dir = params$out_dir,
+#                          event_times = params$event_times,
+#                          event_function = params$event_function,
+#                          files = params$files,
+#                          config = params$config)
+exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
+					 sensitivity.worker,                  # of sensitivity.worker
+					 solver_fname = params$files$solver_fname,  # using the following parameters
+					 solver_type = "LSODA",
+					 i_time = params$i_time,
+					 s_time = params$s_time,
+					 f_time = params$f_time,
+					 timeout = params$timeout,
+					 run_dir = params$run_dir,
+					 out_fname = params$out_fname,
+					 out_dir = params$out_dir,
+					 event_times = params$event_times,
+					 event_function = params$event_function,
+					 files = params$files,
+					 config = params$config)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))
 {
 	rank <- parLapply(cl,
-										list.files(path = params$out_dir,
-															 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
-										sensitivity.distance,
-										out_dir = params$out_dir,
-										distance_measure_fname = params$files$distance_measure_fname,
-										distance_measure = distance_measure,
-										reference_data = params$files$reference_data)
+					  list.files(path = params$out_dir,
+					  		   pattern = paste0(params$out_fname, "(-[0-9]+)+")),
+					  sensitivity.distance,
+					  out_dir = params$out_dir,
+					  distance_measure_fname = params$files$distance_measure_fname,
+					  distance_measure = distance_measure,
+					  reference_data = params$files$reference_data)
 	# Sort the rank ascending, according to the distance computed above.
 	rank <- do.call("rbind", rank)
 	rank <- rank[order(rank$measure),]
