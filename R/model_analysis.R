@@ -5,7 +5,7 @@ model_analysis <-function(
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
-    # Mange reproducibilty and extend previous experiments
+    # Mange reproducibility and extend previous experiments
     extend = FALSE, seed = NULL,
     # Directories
     out_fname = NULL,
@@ -13,7 +13,7 @@ model_analysis <-function(
     debug = FALSE
 ){
 
-    #common_test function receive all the parameters that will be tested for model_calibration function
+    #Common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(solver_fname = solver_fname,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
@@ -23,6 +23,7 @@ model_analysis <-function(
                       f_time = f_time, # weeks
                       s_time = s_time,
                       volume = volume,
+    									seed = seed,
                       parallel_processors = parallel_processors,
                       n_config = n_config,
                       caller_function = "analysis")
@@ -34,6 +35,7 @@ model_analysis <-function(
             warning(paste("model_analysis_test", ret))
     }
 
+    results_dir_name <- "results_model_analysis/"
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -61,13 +63,18 @@ model_analysis <-function(
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
     }
+    if(!is.null(seed))
+    {
+    	seed <- tools::file_path_as_absolute(seed)
+    	files[["seed"]] <- seed
+    }
 
     # Global parameters used to manage the dockerized environment
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
                   n_config = n_config,
                   run_dir = chk_dir("/home/docker/scratch/"),
-                  out_dir = chk_dir("/home/docker/data/results_model_analysis/"),
+                  out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
                   out_fname = out_fname,
                   solver_type = solver_type,
                   taueps = taueps,
@@ -80,7 +87,10 @@ model_analysis <-function(
                   ini_v = ini_v,
                   ini_vector_mod = ini_vector_mod)
     # Create the folder to store results
-    res_dir <- paste0(chk_dir(volume),"results_model_analysis/")
+    res_dir <- paste0(chk_dir(volume), results_dir_name)
+    if(!extend & file.exists(res_dir)){
+    	unlink(res_dir, recursive = TRUE)
+    }
     dir.create(res_dir, showWarnings = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
@@ -90,9 +100,8 @@ model_analysis <-function(
     })
 
     # Manage experiments reproducibility
-    if(!is.null(seed) & !extend){
-    	params$seed <- paste0(params$out_dir, paste0("seeds", out_fname, ".RData"))
-    	file.copy(from = seed, to = paste0(res_dir, "seeds", out_fname, ".RData"))
+    if(!is.null(seed)){
+    	parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
     }
 
     # Save all the parameters to file, in a location accessible from inside the dockerized environment

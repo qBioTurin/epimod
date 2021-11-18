@@ -38,13 +38,6 @@ model.worker<-function(id,
                          id=id
                          )
 
-    #Seed management
-    load(params$seed)
-    set.seed(kind = "Super-Duper", seed = timestamp)
-    seed <- runif(min = 1, max = .Machine$integer.max, n = 1) + n
-    set.seed(kind = "Mersenne-Twister", seed = seed)
-    #Update n in a critic section
-
     cmds <- parLapply(cl=cl,
                       X=trace_names,
                       fun=experiment.cmd,
@@ -93,25 +86,37 @@ cat(args)
 param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
+
 # Load seed and previous configuration, if required.
+config <- list()
 if(is.null(params$seed)){
 	# Save initial seed value
 	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+
 	timestamp <- as.numeric(Sys.time())
+	set.seed(kind = "Super-Duper", seed = timestamp)
+
+	init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
+	extend_seed <- init_seed
 	n <- 1
-	save(timestamp, n, file = paste0(params$out_dir, "seeds-", params$out_fname, ".RData"))
-}#else{
-	#load(params$seed)
-	# if(is.null(params$extend))
-	# {
-	#     # We want to reproduce the output of a previous set of experiments
-	# 	  assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-	#     params$extend <- ""
-	# }
-	# else
-	#     # We want to extend a previous experiment
-	#     assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
-#}
+
+	save(init_seed, extend_seed, n, file = params$seed)
+}else{
+	load(params$seed)
+	if(params$extend){
+		# We want to extend a previous experiment
+		assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+		load(paste0(params$out_dir, "SIR-calibration.RData"))
+	}
+	else{
+		n <- 1
+	}
+}
+
+if(!params$extend){
+	set.seed(kind = "Mersenne-Twister", seed = init_seed)
+}
+
 if(is.null(params$files$parameters_fname)
    && is.null(params$files$functions_fname)
    && is.null(params$ini_v))
@@ -161,12 +166,12 @@ exec_times <- lapply(X = c(1:params$n_config),
                      run_dir = params$run_dir,
                      out_fname = params$out_fname,
                      out_dir = params$out_dir,
-										 seed = params$seed,
+										 seed = init_seed,
                      files = params$files,
                      config = params$config)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
-final_seed<-.Random.seed
+#final_seed<-.Random.seed
 #save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 file.copy(from = params$target_value_fname, to = params$run_dir)

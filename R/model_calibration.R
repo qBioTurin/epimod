@@ -119,6 +119,8 @@ model_calibration <-function(
     if(ret != "ok")
         stop(paste("model_calibration_test error:", ret, sep = "\n"))
 
+    results_dir_name <- "results_model_calibration/"
+
     chk_dir<- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
@@ -163,7 +165,7 @@ model_calibration <-function(
 
     params <- list(
                    run_dir = chk_dir("/home/docker/scratch/"),
-                   out_dir = chk_dir("/home/docker/data/results_model_calibration/"),
+                   out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
                    out_fname = out_fname,
                    solver_type = solver_type,
                    f_time = f_time,
@@ -183,7 +185,7 @@ model_calibration <-function(
                    extend = extend,
                    processors = parallel_processors)
 
-    res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
+    res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){
     	unlink(res_dir, recursive = TRUE)
     }

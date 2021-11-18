@@ -116,6 +116,10 @@ if(is.null(params$seed)){
 	}
 }
 
+if(!params$extend){
+	set.seed(kind = "Mersenne-Twister", seed = init_seed)
+}
+
 # Copy files to the run directory
 experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
@@ -133,10 +137,6 @@ if(!is.null(params$threshold.stop))
 if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
-}
-
-if(!params$extend){
-	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
 ctl$seed <- init_seed
