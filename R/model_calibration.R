@@ -126,7 +126,7 @@ model_calibration <- function(# Parameters to control the simulation
 
     chk_dir<- function(path){
         pwd <- basename(path)
-        return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+        return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
 
     files <- list()
@@ -137,7 +137,7 @@ model_calibration <- function(# Parameters to control the simulation
     }
     if(is.null(out_fname))
     {
-        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-calibration")
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "-calibration")
     }
     # Fix input parameters path
     if(!is.null(parameters_fname))
@@ -197,7 +197,7 @@ model_calibration <- function(# Parameters to control the simulation
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
     files <- lapply(files, function(x){
-        return(paste0(params$out_dir,basename(x)))
+        return(paste0(params$out_dir, basename(x)))
     })
     params$files <- files
 
@@ -207,12 +207,12 @@ model_calibration <- function(# Parameters to control the simulation
     	params$seed <- paste0(params$out_dir, "seeds-", out_fname, ".RData")
     }
 
-    parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")
+    parms_fname <- paste0(chk_dir(res_dir), "params_", out_fname, ".RDS")
     saveRDS(params, file = parms_fname, version = 2)
 
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname), debug = debug)
+    containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+    containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
+    docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(params$out_dir), " -d ", containers.names["calibration", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname), debug = debug)
 }

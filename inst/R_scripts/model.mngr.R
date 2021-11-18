@@ -46,7 +46,7 @@ model.worker<-function(id,
                       taueps=taueps,
                       s_time=s_time,
                       f_time=f_time,
-    									seed = seed,
+    									seed = seed + id,
                       timeout=timeout,
                       out_fname=out_fname,
                       n_run=1)
@@ -169,6 +169,10 @@ exec_times <- lapply(X = c(1:params$n_config),
 										 seed = init_seed,
                      files = params$files,
                      config = params$config)
+
+# Save final seed
+extend_seed <- .Random.seed
+save(init_seed, extend_seed, n, file = params$seed)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 # Save final seed
