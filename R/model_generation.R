@@ -1,4 +1,5 @@
-#' @title Run model calibration
+#' @title Run model generation
+#' TO DO: rewrite the description (now it refers to model calibration).
 #' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
@@ -62,16 +63,16 @@ model_generation <-function( out_fname = NULL,
     }
 
     volume <- tools::file_path_as_absolute(volume)
-    # Create temp files and dirs
-    out_dir <- file.path(volume,"generation", fsep = .Platform$file.sep)
+    # Create temp files and directories
+    out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
     if(file.exists(out_dir))
     {
         unlink(out_dir, recursive = TRUE)
     }
-    dir.create(path = out_dir,showWarnings = FALSE)
+    dir.create(path = out_dir, showWarnings = FALSE)
     if(!is.null(out_fname)){
         # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
-        netname <- file.path(out_dir,paste0(out_fname,".PNPRO"), fsep = .Platform$file.sep)
+        netname <- file.path(out_dir, paste0(out_fname, ".PNPRO"), fsep = .Platform$file.sep)
         file.copy(from = net_fname, to = netname)
         netname <- tools::file_path_sans_ext(netname)
     } else {
@@ -80,32 +81,32 @@ model_generation <-function( out_fname = NULL,
 
     }
     file.copy(from = functions_fname, to = out_dir)
-    # Set commandline to unfold the PN
+    # Set command line to unfold the PN
 
-    #reading docker image names
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    #Reading docker image names
+    containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+    containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
 
     pwd <- getwd()
     setwd(out_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd),debug = debug)
+    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
 
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
         setwd(pwd)
-        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep),pwd)
+        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), pwd)
         cat("Scratch folder:", out_dir, "\n")
         stop()
     }
 
     cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
     if (!is.null(functions_fname)){
-        cmd= paste0(cmd," -C ", paste0("/home/",basename(functions_fname)))
+        cmd= paste0(cmd, " -C ", paste0("/home/", basename(functions_fname)))
     }
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ","--volume ", out_dir,":/home/ -d ", containers.names["generation",1]," ", cmd), debug = debug)
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
@@ -115,11 +116,10 @@ model_generation <-function( out_fname = NULL,
         stop()
     } else {
         setwd(pwd)
-        file.copy(file.path(out_dir,paste0(basename(netname), ".solver"),fsep = .Platform$file.sep),chk_dir(volume))
-        file.copy(file.path(out_dir,paste0(basename(netname), ".net"),fsep = .Platform$file.sep),chk_dir(volume))
-        file.copy(file.path(out_dir,paste0(basename(netname), ".def"),fsep = .Platform$file.sep),chk_dir(volume))
-        file.copy(file.path(out_dir,paste0(basename(netname), ".PlaceTransition"),fsep = .Platform$file.sep),chk_dir(volume))
+        file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume))
+        file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume))
+        file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume))
+        file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume))
         unlink(out_dir, recursive = TRUE)
     }
-
 }

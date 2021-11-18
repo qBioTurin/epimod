@@ -204,7 +204,7 @@ model_calibration <- function(# Parameters to control the simulation
     # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
     if(!is.null(seed)){
-    	parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
+    	params$seed <- paste0(params$out_dir, "seeds-", out_fname, ".RData")
     }
 
     parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")

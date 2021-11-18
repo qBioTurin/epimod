@@ -16,7 +16,7 @@ calibration.worker <- function(id, config, params, seed){
                           n_run = 1,
                           s_time = params$s_time,
                           f_time = params$f_time,
-    											seed = seed,
+    											seed = seed + id,
                           timeout = params$timeout,
                           out_fname = params$out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
@@ -138,12 +138,8 @@ if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
 }
-
 ctl$seed <- init_seed
 
-# control=list( max.call = params$max.call,
-#               threshold.stop = params$threshold.stop,
-#               max.time = params$max.time),
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
              upper=params$ub_v,
@@ -160,6 +156,3 @@ save(init_seed, extend_seed, n, file = params$seed)
 stopCluster(cl)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
-# Save final seed
-#final_seed<-.Random.seed
-#save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
