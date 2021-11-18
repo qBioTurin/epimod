@@ -91,8 +91,11 @@ objfn <- function(x, params, cl) {
 
   print("[objfn] Done calibration.worer")
   # Append all the solutions in one single data.frame
+  print("[objfn] Settling files...")
+  print(list.files())
   traces <- lapply(trace_names,function(x){
     fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
+    print(paste0("[objfn] reading file", params$out_dir, params$out_fname,"-", id, ".trace"))
     tr <- read.csv(x, sep = "")
     if(!file.exists(fnm)){
       write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
