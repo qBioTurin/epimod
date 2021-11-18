@@ -1,60 +1,64 @@
 #' @title Run model calibration
-#' @description this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models
+#' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration, both for deterministic and stochastic models.
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
 #' FUNCTION_NAME(reference_dataset, simulation_output)
 #'
-#' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries)
-#' in addiction to that, the user is asked to provide a function that, given the output of the solver, returns the releveant measure (one column) used to evalaute the quality of the solution.
+#' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries).
+#' In addition to that, the user is asked to provide a function that, given the output of the solver, returns the relevant measure (one column) used to evaluate the quality of the solution.
 #'
-#' The sensitivity analysis will be performed through a Monte Carlo sampling throug user defined functions.
-#' the parameters involved in the sensitivity analysis have to be listed in a cvs file using the following structure:
+#' The sensitivity analysis will be performed through a Monte Carlo sampling through user defined functions.
+#' The parameters involved in the sensitivity analysis have to be listed in a cvs file using the following structure:
 #'
 #' OUTPUT_FILE_NAME, FUNCTION_NAME, LIST OF PARAMETERS (comma separated)
 #'
-#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to run_sensitivity through the parameter parameters_fname)
+#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to model_calibration through the parameter parameters_fname)
 #'
 #' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 #'
 #' To drive the optimization, the user has to provide a function to generate a new configuration, starting from a vector of n elements (each one ranging from 0 to 1).
-#' Furthermore, the vector init_v defines the initial point of the search.
+#' Furthermore, the vector ini_v defines the initial point of the search.
 #'
-#' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
+#' IMPORTANT: the length of the vector ini_v defines the number of variables to variate within the search of the optimal configuration.
 #'
 #' @param solver_fname .solver file (generated in with the function model_generation)
 #' @param f_time Final solution time.
-#' @param s_time Time step at whicch explicit estimates for the system are desired
-#' @param solver_type  \itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
-#'  \item Stochastic:  SSA or TAUG,
+#' @param s_time Time step at which explicit estimates for the system are desired
+#' @param solver_type
+#' \itemize{
+#'  \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA
+#'  \item Stochastic: SSA or TAUG
 #'  \item Hybrid: HLSODA or (H)SDE or HODE
 #'  } Default is LSODA.
 #' @param n_run .....
-#' @param parameters_fname
-#' @param functions_fname File with the user defined functions to generate istances of the parameters
-#' @param volume The folder to mount within the Doker image providing all the necessary files
-#' @param timeout ....
-#' @param parallel_processors Integer for the parallel....
-#' @param ini_v Initial values for the parameters to be optimized.
-#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
+#' @param parameters_fname File with the definition of user defined functions
+#' @param functions_fname File with the user defined functions to generate instances of the parameters
+#' @param volume The folder to mount within the Docker image providing all the necessary files
+#' @param timeout Maximum execution time allowed to each configuration
+#' @param parallel_processors Integer for the number of available processors to use
+#' @param ini_v Initial values for the parameters to be optimized
+#' @param lb_v,ub_v Vectors with length equal to the number of parameters which are varying. Lower/Upper bounds for each parameter
 #' @param ini_vector_mod Logical value for ... . Default is FALSE.
 #' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
 #' \itemize{
-#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
-#' \item max.call (Integer) represents the maximum number of call of the objective function. Default is 1e7.
-#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
-#'
+#'  \item threshold.stop (Numeric) represents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+#'  \item max.call (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#'  \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.
+#' } These arguments not always work, actually.
 #' @param reference_data Data to compare with the simulations' results
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param extend ...
-#' @param seed Value that can be set to initialize the internal random generator.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param extend If TRUE the actual configuration is extended including n_config new configurations
+#' @param seed .RData file that can be used to initialize the internal random generator
 #' @param out_fname Prefix to the output file name
+#'
+#'
 #'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #'
 #' @examples
-#'\dontrun{
+#' \dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' base_dir <- "/root/scratch/"
 #' library(epimod)
@@ -67,7 +71,7 @@
 #'                   s_time = 365,
 #'                   volume = volume = "/some/path/to/the/local/output/directory",
 #'                   timeout = "1d",
-#'                   parallel_processors=4,
+#'                   parallel_processors = 4,
 #'                   reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                   distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                   target_value_fname = paste0(local_dir, "Configuration/Select.R"),
@@ -78,27 +82,27 @@
 #'                   nb.stop.improvement = 3000000)
 #' }
 #' @export
-model_calibration <-function(
-    # Parameters to control the simulation
-    solver_fname, f_time, s_time, solver_type = "LSODA", n_run = 1,
-    # User defined simulation's parameters
-    parameters_fname = NULL, functions_fname = NULL,
-    # Parameters to manage the simulations' execution
-    volume = getwd(), timeout = '1d', parallel_processors = 1,
-    # Vectors to control the optimization
-    ini_v, lb_v, ub_v, ini_vector_mod = FALSE,
-    # Variables controlling optimization termination
-    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
-    # Parameters to control the ranking
-    reference_data = NULL, distance_measure_fname = NULL,
-    # Mange reproducibilty and extend previous experiments
-    extend = FALSE, seed = NULL,
-    # Directories
-    out_fname = NULL,
-    #Flag to enable logging activity
-    debug = FALSE){
+model_calibration <- function(# Parameters to control the simulation
+															solver_fname, f_time, s_time, solver_type = "LSODA", n_run = 1,
+													    # User defined simulation's parameters
+													    parameters_fname = NULL, functions_fname = NULL,
+													    # Parameters to manage the simulations' execution
+													    volume = getwd(), timeout = '1d', parallel_processors = 1,
+													    # Vectors to control the optimization
+													    ini_v, lb_v, ub_v, ini_vector_mod = FALSE,
+													    # Variables controlling optimization termination
+													    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
+													    # Parameters to control the ranking
+													    reference_data = NULL, distance_measure_fname = NULL,
+													    # Mange reproducibilty and extend previous experiments
+													    extend = FALSE, seed = NULL,
+													    # Directories
+													    out_fname = NULL,
+													    #Flag to enable logging activity
+													    debug = FALSE
+														 ){
 
-    #common_test function receive all the parameters that will be tested for model_calibration function
+    #Common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
                       solver_fname = solver_fname,
@@ -106,9 +110,8 @@ model_calibration <-function(
                       distance_measure_fname = distance_measure_fname ,
                       solver_type = solver_type,
                       n_run = n_run,
-                      f_time = f_time, # weeks
-                      s_time = s_time, # days
-                      # Vectors to control the optimization
+                      f_time = f_time,
+                      s_time = s_time,
                       ini_v = ini_v,
                       ub_v = ub_v,
                       lb_v = lb_v,

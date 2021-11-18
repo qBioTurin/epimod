@@ -152,6 +152,11 @@ ret <- GenSA(par=params$ini_v,
              params = params,
              cl = cl,
 						 seed = init_seed)
+
+# Save final seed
+extend_seed <- .Random.seed
+save(init_seed, extend_seed, n, file = params$seed)
+
 stopCluster(cl)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))

@@ -39,7 +39,7 @@
 
 #'
 #' @examples
-#'\dontrun{
+#' \dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' sensitivity_analysis(n_config = 2^4,
 #'                      out_fname = "sensitivity",
@@ -56,25 +56,25 @@
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' }
 #' @export
-sensitivity_analysis <-function(# Parameters to control the simulation
-                                solver_fname, f_time, s_time,
-                                # User defined simulation's parameters
-                                n_config, parameters_fname = NULL, functions_fname = NULL,
-                                # Parameters to manage the simulations' execution
-                                volume = getwd(), timeout = '1d', parallel_processors = 1,
-                                # Parameters to control the ranking
-                                reference_data = NULL, distance_measure_fname = NULL,
-                                # Parameters to control PRCC
-                                target_value_fname = NULL,
-                                # Mange reproducibilty and extend previous experiments
-                                extend = FALSE, seed = NULL,
-                                # Directories
-                                out_fname = NULL,
-                                #Flag to enable logging activity
-                                debug = FALSE
+sensitivity_analysis <- function(# Parameters to control the simulation
+                                 solver_fname, f_time, s_time,
+                                 # User defined simulation's parameters
+                                 n_config, parameters_fname = NULL, functions_fname = NULL,
+                                 # Parameters to manage the simulations' execution
+                                 volume = getwd(), timeout = '1d', parallel_processors = 1,
+                                 # Parameters to control the ranking
+                                 reference_data = NULL, distance_measure_fname = NULL,
+                                 # Parameters to control PRCC
+                                 target_value_fname = NULL,
+                                 # Mange reproducibilty and extend previous experiments
+                                 extend = FALSE, seed = NULL,
+                                 # Directories
+                                 out_fname = NULL,
+                                 #Flag to enable logging activity
+                                 debug = FALSE
                                 ){
 
-    #common_test function receive all the parameters that will be tested for sensitivity_analysis function
+    #Common_test function receive all the parameters that will be tested for sensitivity_analysis function
     ret = common_test(n_config = n_config,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
@@ -83,8 +83,8 @@ sensitivity_analysis <-function(# Parameters to control the simulation
                       parallel_processors = parallel_processors,
                       reference_data = reference_data,
                       distance_measure_fname = distance_measure_fname,
-                      f_time = f_time, # weeks
-                      s_time = s_time, # days
+                      f_time = f_time,
+                      s_time = s_time,
                       volume = volume,
     									seed = seed,
     									extend = extend,
