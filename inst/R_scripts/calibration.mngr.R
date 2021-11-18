@@ -95,7 +95,7 @@ objfn <- function(x, params, cl) {
   print(list.files(path = params$out_dir))
   traces <- lapply(trace_names,function(x){
   	fnm.list <- list.files(path = params$out_dir)
-  	fnm <- fnm.list[grep(x = files,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
+  	fnm <- fnm.list[grep(x = fnm.list,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
     # fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
   	fnm <- paste0(params$out_dir, fnm)
   	print(paste0("[objfn] reading file", params$out_dir, params$out_fname,"-", id, ".trace"))
