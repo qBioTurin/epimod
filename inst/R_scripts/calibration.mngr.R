@@ -46,7 +46,8 @@ objfn <-function(x, params, cl, seed) {
     # calibration.worker(id = id, config = config, params = params)
     # traces <- read.csv(paste0(params$out_dir,params$out_fname,"-",id,".trace"), sep = "")
     trace_names <- parLapply(cl,
-                        c(paste0(id,"-",c(1:params$n_run))),
+                        #c(paste0(id,"-",c(1:params$n_run))),
+    										c(1:params$n_run),
                         calibration.worker,
                         config = config,
                         params = params,

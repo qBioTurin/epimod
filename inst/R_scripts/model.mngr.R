@@ -133,6 +133,11 @@ if(is.null(params$files$parameters_fname)
                                               ini_vector = params$ini_v,
                                               ini_vector_mod = params$ini_vector_mod)
 }
+
+# Save final seed
+extend_seed <- .Random.seed
+save(init_seed, extend_seed, n, file = params$seed)
+
 saveRDS(params,  file = paste0(param_fname), version=2)
 # Create a cluster
 # cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
@@ -152,6 +157,7 @@ saveRDS(params,  file = paste0(param_fname), version=2)
 #                          run_dir = params$run_dir,
 #                          out_fname = params$out_fname,
 #                          out_dir = params$out_dir,
+#													 seed = init_seed,
 #                          files = params$files,
 #                          config = params$config)
 exec_times <- lapply(X = c(1:params$n_config),
@@ -170,12 +176,5 @@ exec_times <- lapply(X = c(1:params$n_config),
                      files = params$files,
                      config = params$config)
 
-# Save final seed
-extend_seed <- .Random.seed
-save(init_seed, extend_seed, n, file = params$seed)
-
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
-# Save final seed
-#final_seed<-.Random.seed
-#save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
 file.copy(from = params$target_value_fname, to = params$run_dir)
