@@ -74,7 +74,7 @@ sensitivity_analysis <- function(# Parameters to control the simulation
                                  debug = FALSE
                                 ){
 
-    #Common_test function receive all the parameters that will be tested for sensitivity_analysis function
+    #common_test function receive all the parameters that will be tested for sensitivity_analysis function
     ret = common_test(n_config = n_config,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,

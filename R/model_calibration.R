@@ -102,7 +102,7 @@ model_calibration <- function(# Parameters to control the simulation
 													    debug = FALSE
 														 ){
 
-    #Common_test function receive all the parameters that will be tested for model_calibration function
+    #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
                       solver_fname = solver_fname,

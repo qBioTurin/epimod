@@ -275,10 +275,10 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
 
 		load(seed)
 		if(!exists("init_seed") | !exists("extend_seed") | !exists("n"))
-			return(paste0("The seed file (", seed, ") must contain two variables named init_seed, extend_seed and n!"))
+			return(paste0("The seed file (", seed, ") must contain three variables named init_seed, extend_seed and n!"))
 
 		if(!is.numeric(init_seed) | !is.numeric(extend_seed) | !is.numeric(n))
-			return(paste0("The two variables init_seed, extend_seed and n into the seed file (", seed, ") must be a number!"))
+			return(paste0("The three variables init_seed, extend_seed and n into the seed file (", seed, ") must be a number!"))
 	}
 
   return("ok")

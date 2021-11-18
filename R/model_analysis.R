@@ -13,7 +13,7 @@ model_analysis <-function(
     debug = FALSE
 ){
 
-    #Common_test function receive all the parameters that will be tested for model_calibration function
+    #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(solver_fname = solver_fname,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
@@ -85,7 +85,8 @@ model_analysis <-function(
                   timeout = timeout,
                   files = files,
                   ini_v = ini_v,
-                  ini_vector_mod = ini_vector_mod)
+                  ini_vector_mod = ini_vector_mod,
+    							extend = extend)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){

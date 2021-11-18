@@ -1,5 +1,5 @@
 #' @title Run model calibration
-#' @description this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models
+#' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration. both for deterministic and stochastic models
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
@@ -23,13 +23,16 @@
 #' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
 #'
 #' @param out_fname Prefix to the output file name
-#' @param net_fname .PNPRO file storing  the model as ESPN. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected;
-#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions.
+#' @param net_fname .PNPRO file storing  the model as ESPN. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected
+#' @param functions_fname C++ file defining the functions managing the behaviour of general transitions.
+#'
+#'
+#'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
 #'
 #' @examples
-#'\dontrun{
+#' \dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' model_generation(out_fname = "Solver",
 #'                  net_fname = paste0(local_dir, "Configuration/Pertussis"),
@@ -45,7 +48,9 @@ model_generation <-function( out_fname = NULL,
 
 
     #common_test function receive all the parameters that will be tested for model_generation function
-    ret = common_test(net_fname = net_fname, functions_fname = functions_fname, volume = volume,
+    ret = common_test(net_fname = net_fname,
+    									functions_fname = functions_fname,
+    									volume = volume,
                       caller_function = "generation")
 
     if(ret != "ok")
