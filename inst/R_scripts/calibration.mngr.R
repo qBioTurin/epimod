@@ -51,9 +51,9 @@ calibration.worker <- function(id, config, params)
   print("[calibration.worer] Simulation done!")
   # Set-up the result's file name
   # fnm <- paste0(params$out_fname,"-",id,".trace")
-  print(paste0("[calibration.worer] Returning file name: ", unlist(list.files(pattern = paste0(params$out_fname,"(-[0-9]){1}(-[0-9+])+(.trace){1}")))))
+  print(paste0("[calibration.worer] Returning file name: ", unlist(list.files(pattern = paste0(params$out_fname,"(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))))
   fnm <- unlist(list.files(pattern = paste0(params$out_fname,
-  										  "(-[0-9]){1}(-[0-9+])+(.trace){1}")))
+  										  "(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))
   # Clear the simulation's environment
   experiment.env_cleanup(id = id,
                          run_dir = params$run_dir,
@@ -125,7 +125,7 @@ objfn <- function(x, params, cl) {
 	print("[objfn] Computing distance")
 	distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
 	# Write header to the file
-	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
+	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
 		nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
 		cat(unlist(nms),"\n", file = optim_trace_fname)
