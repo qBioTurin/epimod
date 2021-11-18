@@ -2,7 +2,7 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
-calibration.worker <- function(id, config, params){
+calibration.worker <- function(id, config, params, seed){
     experiment.env_setup(id = id,
                          files = params$files,
                          dest_dir = params$run_dir,
@@ -16,6 +16,7 @@ calibration.worker <- function(id, config, params){
                           n_run = 1,
                           s_time = params$s_time,
                           f_time = params$f_time,
+    											seed = seed,
                           timeout = params$timeout,
                           out_fname = params$out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
@@ -32,7 +33,7 @@ calibration.worker <- function(id, config, params){
     return(paste0(params$out_dir,fnm))
 }
 
-objfn <-function(x, params, cl) {
+objfn <-function(x, params, cl, seed) {
     # Generate a new configuration using the optimizaton output x
     id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
     config <- experiment.configurations(n_config = 1,
@@ -48,7 +49,8 @@ objfn <-function(x, params, cl) {
                         c(paste0(id,"-",c(1:params$n_run))),
                         calibration.worker,
                         config = config,
-                        params = params)
+                        params = params,
+    										seed = seed)
     traces <- lapply(trace_names,function(x){
         fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
         tr <- read.csv(x, sep = "")
@@ -148,7 +150,8 @@ ret <- GenSA(par=params$ini_v,
              lower=params$lb_v,
              control = ctl,
              params = params,
-             cl = cl)
+             cl = cl,
+						 seed = init_seed)
 stopCluster(cl)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
