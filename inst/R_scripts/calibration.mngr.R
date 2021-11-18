@@ -98,7 +98,7 @@ objfn <- function(x, params, cl) {
   	fnm <- fnm.list[grep(x = fnm.list,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
     # fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
   	fnm <- paste0(params$out_dir, fnm)
-  	print(paste0("[objfn] reading file", params$out_dir, params$out_fname,"-", id, ".trace"))
+  	print(paste0("[objfn] reading file", fnm))
     tr <- read.csv(x, sep = "")
     if(!file.exists(fnm)){
       write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
