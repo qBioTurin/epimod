@@ -76,7 +76,7 @@ objfn <- function(x, params, cl) {
 										ini_vector_mod = params$ini_vector_mod)
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
-	traces_name <- list.files(path = params$out_dir)
+	traces_name <- list.files()
 	traces_name <- traces_name[grep(x = traces_name,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
@@ -84,9 +84,7 @@ objfn <- function(x, params, cl) {
 	print(traces_name)
 	traces <- lapply(traces_name,function(x){
 		print(paste0("[objfn] reading file", x))
-		tr <- read.csv(file = paste0(params$out_dir,
-									 .Platform$path.sep,
-									 x),
+		tr <- read.csv(file = x,
 					   sep = "")
 		file.remove(x)
 		return(tr)
