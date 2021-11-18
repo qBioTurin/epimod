@@ -64,67 +64,64 @@ calibration.worker <- function(id, config, params)
 }
 
 objfn <- function(x, params, cl) {
-  # Generate a new configuration using the configuration provided by the optimization engine
-  id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
-  # Generate the simulation's configuration according to the provided input x
-  config <- experiment.configurations(n_config = 1,
-                                      parm_fname = params$files$functions_fname,
-                                      parm_list = params$files$parameters_fname,
-                                      out_dir = params$out_dir,
-                                      out_fname = params$out_fname,
-                                      ini_vector = x,
-                                      ini_vector_mod = params$ini_vector_mod)
-  # Solve n_run instances of the model
-  print("[objfn] Calling calibration.worer")
-  # trace_names <- parLapply(cl,
-  #                          c(paste0(id,"-",c(1:params$n_run))),
-  #                          calibration.worker,
-  #                          config = config,
-  #                          params = params)
-
-  ##### DEBUG ######
-  trace_names <- lapply(c(paste0(id,"-",c(1:params$n_run))),
-                        calibration.worker,
-                        config = config,
-                        params = params)
-  ##### DEBUG ######
-
-  print("[objfn] Done calibration.worer")
-  # Append all the solutions in one single data.frame
-  print("[objfn] Settling files...")
-  print(list.files(path = params$out_dir))
-  traces <- lapply(trace_names,function(x){
-  	fnm.list <- list.files(path = params$out_dir)
-  	fnm <- fnm.list[grep(x = fnm.list,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
-    # fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
-  	fnm <- paste0(params$out_dir, fnm)
-  	print(paste0("[objfn] reading file", fnm))
-    tr <- read.csv(x, sep = "")
-    if(!file.exists(fnm)){
-      write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-    }
-    else{
-      write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-    }
-    file.remove(x)
-    return(tr)
-  })
-  traces <- do.call("rbind", traces)
-  print("[objfn] done settling files!")
-  # Compute the score for the current configuration
-  source(params$files$distance_measure_fname)
-  print("[objfn] Computing distance")
-  distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
-  # Write header to the file
-  optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
-  if(!file.exists(optim_trace_fname))
-  {
-    nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
-    cat(unlist(nms),"\n", file = optim_trace_fname)
-  }
-  cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
-  print("[objfn] Done computing distance")
-  return(distance)
+	# Generate a new configuration using the configuration provided by the optimization engine
+	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
+	# Generate the simulation's configuration according to the provided input x
+	config <- experiment.configurations(n_config = 1,
+										parm_fname = params$files$functions_fname,
+										parm_list = params$files$parameters_fname,
+										out_dir = params$out_dir,
+										out_fname = params$out_fname,
+										ini_vector = x,
+										ini_vector_mod = params$ini_vector_mod)
+	# Solve n_run instances of the model
+	print("[objfn] Calling calibration.worer")
+	traces_name <- list.files(path = params$out_dir)
+	traces_name <- traces_name[grep(x = traces_name,pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
+	print("[objfn] Done calibration.worer")
+	# Append all the solutions in one single data.frame
+	print("[objfn] Settling files...")
+	print(traces_name)
+	traces <- lapply(traces_name,function(x){
+		print(paste0("[objfn] reading file", x))
+		tr <- read.csv(file = paste0(params$out_dir,
+									 .Platform$path.sep,
+									 x),
+					   sep = "")
+		file.remove(x)
+		return(tr)
+	})
+	traces <- do.call("rbind", traces)
+	write.table(traces,
+				file = paste0(params$out_dir,
+							  params$out_fname,
+							  "-",
+							  id,
+							  ".trace"),
+				sep = " ",
+				col.names = TRUE,
+				row.names = FALSE,
+				append = FALSE)
+	# fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
+	# if(!file.exists(fnm)){
+	# 	write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+	# } else{
+	# 	write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+	# }
+	print("[objfn] done settling files!")
+	# Compute the score for the current configuration
+	source(params$files$distance_measure_fname)
+	print("[objfn] Computing distance")
+	distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
+	# Write header to the file
+	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
+	if(!file.exists(optim_trace_fname)) {
+		nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
+		cat(unlist(nms),"\n", file = optim_trace_fname)
+	}
+	cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+	print("[objfn] Done computing distance")
+	return(distance)
 }
 
 # Utility function
