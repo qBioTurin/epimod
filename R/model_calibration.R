@@ -155,6 +155,11 @@ model_calibration <-function(
         distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
         files[["distance_measure_fname"]] <- distance_measure_fname
     }
+    if(!is.null(seed))
+    {
+    	seed <- tools::file_path_as_absolute(seed)
+    	files[["seed"]] <- seed
+    }
 
     params <- list(
                    run_dir = chk_dir("/home/docker/scratch/"),
@@ -176,7 +181,6 @@ model_calibration <-function(
                    max.time = max.time,
                    files = files,
                    extend = extend,
-                   seed = seed,
                    processors = parallel_processors)
 
     res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
@@ -194,9 +198,8 @@ model_calibration <-function(
 
     # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
-    if(!is.null(seed) & !extend){
-    	params$seed <- paste0(params$out_dir, paste0("seeds", out_fname, ".RData"))
-    	file.copy(from = seed, to = paste0(res_dir, "seeds", out_fname, ".RData"))
+    if(!is.null(seed)){
+    	parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
     }
 
     parms_fname <- paste0(chk_dir(res_dir),"params_",out_fname,".RDS")

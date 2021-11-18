@@ -19,10 +19,10 @@ experiment.env_setup <- function(id = NULL,
     if(!is.null(id))
         dest_dir <- paste0(dest_dir, id)
     # Create the directory
-    if(file.exists(dest_dir))
-    {
-        #unlink(dest_dir, recursive = TRUE)
-    }
+    #if(file.exists(dest_dir))
+    #{
+    #    unlink(dest_dir, recursive = TRUE)
+    #}
     dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
     # Copy files in the new directory
     lapply(files,function(x){

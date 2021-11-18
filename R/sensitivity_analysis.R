@@ -1,36 +1,36 @@
 #' @title Run sensitivity analisys
-#' @description this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
+#' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
-#' FUNCTION_NAME(reference_dataset, siulation_output)
+#' FUNCTION_NAME(reference_dataset, simulation_output)
 #'
-#' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries)
-#' in addiction to that, the user is asked to provide a function that, given the output of the solver, returns the releveant measure (one column) used to evalaute the quality of the solution.
+#' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries).
+#' In addition to that, the user is asked to provide a function that, given the output of the solver, returns the relevant measure (one column) used to evaluate the quality of the solution.
 #'
-#' The sensitivity analysis will be performed through a Monte Carlo sampling throug user defined functions.
-#' the parameters involved in the sensitivity analysis have to be listed in a cvs file using the following structure:
+#' The sensitivity analysis will be performed through a Monte Carlo sampling through user defined functions.
+#' The parameters involved in the sensitivity analysis have to be listed in a cvs file using the following structure:
 #'
 #' OUTPUT_FILE_NAME, FUNCTION_NAME, LIST OF PARAMETERS (comma separated)
 #'
-#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to run_sensitivity through the parameter parameters_fname)
+#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to sensitivity_analysis through the parameter parameters_fname).
 #'
-#' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
+#' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init".
 #'
 #' @param solver_fname .solver file (generated in with the function model_generation)
-#' @param f_time Final solution time.
-#' @param s_time Time step at whicch explicit estimates for the system are desired
-#' @param n_config, number of configuratons to generate
-#' @param parameters_fname file with the definition of user defined functions
-#' @param parm_list, file listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @param functions_fname File with the user defined functions to generate istances of the parameters
-#' @param volume The folder to mount within the Doker image providing all the necessary files
+#' @param f_time Final solution time
+#' @param s_time Time step at which explicit estimates for the system are desired
+#' @param n_config Number of configurations to generate
+#' @param parameters_fname File with the definition of user defined functions
+#' @param parm_list File listing the name of the functions, the parameters and the name under which the parameters have to be saved
+#' @param functions_fname File with the user defined functions to generate instances of the parameters
+#' @param volume The folder to mount within the Docker image providing all the necessary files
 #' @param timeout Maximum execution time allowed to each configuration
 #' @param parallel_processors Integer for the number of available processors to use
 #' @param reference_data Data to compare with the simulations' results
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param extend TO BE DONE
-#' @param seed Value that can be set to initialize the internal random generator.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a dataframe with the id of the simulation and its corresponding distance from the reference data
+#' @param extend If TRUE the actual configuration is extended including n_config new configurations
+#' @param seed .RData file that can be used to initialize the internal random generator
 #' @param out_fname Prefix to the output file name
 #'
 #'
@@ -50,7 +50,7 @@
 #'                      s_time = 365,
 #'                      volume = "/some/path/to/the/local/output/directory",
 #'                      timeout = "1d",
-#'                      parallel_processors=4,
+#'                      parallel_processors = 4,
 #'                      reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
 #'                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
@@ -94,10 +94,6 @@ sensitivity_analysis <-function(# Parameters to control the simulation
         stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
     results_dir_name <- "results_sensitivity_analysis/"
-    #if(extend){
-    #	seed <- paste0("results_sensitivity_analysis/seeds-", out_fname, ".RData")
-    #	results_dir_name <- "results_sensitivity_analysis_extended/"
-    #}
 
     chk_dir<- function(path){
         pwd <- basename(path)
@@ -111,7 +107,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     # Fix input parameter out_fname
     if(is.null(out_fname))
     {
-        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-sensitivity")
+        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "-sensitivity")
     }
     # Fix input parameters path
     if(!is.null(parameters_fname))
@@ -146,7 +142,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     }
 
     # Global parameters used to manage the dockerized environment
-    parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
+    parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
     parms <- list(n_config = n_config,
                   run_dir = chk_dir("/home/docker/scratch/"),
                   out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
@@ -172,7 +168,7 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     if(length(files) > 0)
     {
         parms$files <- lapply(files, function(x){
-            return(paste0(parms$out_dir,basename(x)))
+            return(paste0(parms$out_dir, basename(x)))
         })
     }
 
@@ -186,12 +182,12 @@ sensitivity_analysis <-function(# Parameters to control the simulation
     }
 
     # Save all the parameters to file, in a location accessible from inside the dockerized environment
-    p_fname <- paste0(res_dir, parms_fname,".RDS")
+    p_fname <- paste0(res_dir, parms_fname, ".RDS")
     # Use version = 2 for compatibility issue
-    saveRDS(parms,  file = p_fname, version = 2)
-    p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location on the docker image file system
+    saveRDS(parms, file = p_fname, version = 2)
+    p_fname <- paste0( parms$out_dir, parms_fname, ".RDS") # location on the docker image file system
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["sensitivity",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
+    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+    containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
+    docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
 }

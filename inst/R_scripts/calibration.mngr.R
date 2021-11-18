@@ -10,20 +10,12 @@ calibration.worker <- function(id, config, params){
     pwd <- getwd()
     setwd(paste0(params$run_dir, id))
 
-    #Seed management
-    load(params$seed)
-    set.seed(kind = "Super-Duper", seed = timestamp)
-    seed <- runif(min = 1, max = .Machine$integer.max, n = 1) + n
-    set.seed(kind = "Mersenne-Twister", seed = seed)
-    #Update n in a critic section
-
     cmd <- experiment.cmd(id,
                           solver_fname = params$files$solver_fname,
                           solver_type = params$solver_type,
                           n_run = 1,
                           s_time = params$s_time,
                           f_time = params$f_time,
-    											seed = seed,
                           timeout = params$timeout,
                           out_fname = params$out_fname)
     # Introduce a random delay to avoid correlations between runs on different cores
@@ -95,25 +87,33 @@ cat(args)
 params_fname <- args[1]
 # Read the parameters list
 params <- readRDS(params_fname)
+
 # Load seed and previous configuration, if required.
+config <- list()
 if(is.null(params$seed)){
 	# Save initial seed value
 	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+
 	timestamp <- as.numeric(Sys.time())
+	set.seed(kind = "Super-Duper", seed = timestamp)
+
+	init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
+	extend_seed <- init_seed
 	n <- 1
-	save(timestamp, n, file = params$seed)
-}#else{
-# 	load(params$seed)
-# 	if(is.null(params$extend))
-# 	{
-# 	    # We want to reproduce the output of a previous set of experiments
-# 		  assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-# 	    params$extend <- ""
-# 	}
-# 	else
-# 	    # We want to extend a previous experiment
-# 	    assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
-# }
+
+	save(init_seed, extend_seed, n, file = params$seed)
+}else{
+	load(params$seed)
+	if(params$extend){
+		# We want to extend a previous experiment
+		assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+		load(paste0(params$out_dir, "SIR-calibration.RData"))
+	}
+	else{
+		n <- 1
+	}
+}
+
 # Copy files to the run directory
 experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
@@ -133,16 +133,11 @@ if(!is.null(params$max.time))
     ctl$max.time <- params$max.time
 }
 
-#Seed management
-load(params$seed)
-set.seed(kind = "Super-Duper", seed = timestamp)
-seed <- runif(min = 1, max = 1000000000, n = 1) + n
-set.seed(kind = "Mersenne-Twister", seed = seed)
-#Update n in a critic section
-n <- n + 1
-save(timestamp, n, file = params$seed)
+if(!params$extend){
+	set.seed(kind = "Mersenne-Twister", seed = init_seed)
+}
 
-ctl$seed <- seed
+ctl$seed <- init_seed
 
 # control=list( max.call = params$max.call,
 #               threshold.stop = params$threshold.stop,
