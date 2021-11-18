@@ -124,7 +124,7 @@ if(!params$extend){
 experiment.env_setup(files = params$files, dest_dir = params$run_dir)
 # Create a cluster
 cl <- makeCluster(params$processors, type = "FORK")
-# Call gensa with init_vector as initail condition, upper_vector and lower_vector as boundaries conditions.
+# Call GenSA with init_vector as initial condition, upper_vector and lower_vector as boundaries conditions.
 ctl <- list()
 if(!is.null(params$max.call))
 {
