@@ -135,11 +135,6 @@ if(is.null(params$files$parameters_fname)
     																					config = config)
 }
 
-# Save final seed
-extend_seed <- .Random.seed
-n <- n + params$n_config
-save(init_seed, extend_seed, n, file = params$seed)
-
 saveRDS(params,  file = paste0(param_fname), version=2)
 # Create a cluster
 # cl <- makeCluster(params$parallel_processors,# outfile=paste0("log-", params$out_fname, ".txt"),
@@ -148,7 +143,7 @@ saveRDS(params,  file = paste0(param_fname), version=2)
 # clusterEvalQ(cl, sessionInfo())
 # Run simulations
 # exec_times <- parLapply( cl,
-#                          c(1:params$n_config),          # execute n_config istances
+#                          c(n:(n+params$n_config-1)),    # execute n_config istances
 #                          model.worker,                  # of sensitivity.worker
 #                          solver_fname = params$files$solver_fname,  # using the following parameters
 #                          solver_type = params$solver_type,
@@ -162,7 +157,7 @@ saveRDS(params,  file = paste0(param_fname), version=2)
 #													 seed = init_seed,
 #                          files = params$files,
 #                          config = params$config)
-exec_times <- lapply(X = c(1:params$n_config),
+exec_times <- lapply(X = c(n:(n+params$n_config-1)),
                      FUN = model.worker,
                      solver_fname = params$files$solver_fname,
                      solver_type = params$solver_type,
@@ -177,6 +172,11 @@ exec_times <- lapply(X = c(1:params$n_config),
 										 seed = init_seed,
                      files = params$files,
                      config = params$config)
+
+# Save final seed
+extend_seed <- .Random.seed
+n <- n + params$n_config
+save(init_seed, extend_seed, n, file = params$seed)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 file.copy(from = params$target_value_fname, to = params$run_dir)
