@@ -131,11 +131,13 @@ if(is.null(params$files$parameters_fname)
                                               out_fname = params$out_fname,
                                               extend = params$extend,
                                               ini_vector = params$ini_v,
-                                              ini_vector_mod = params$ini_vector_mod)
+                                              ini_vector_mod = params$ini_vector_mod,
+    																					config = config)
 }
 
 # Save final seed
 extend_seed <- .Random.seed
+n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
 saveRDS(params,  file = paste0(param_fname), version=2)
