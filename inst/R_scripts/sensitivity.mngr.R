@@ -92,7 +92,7 @@ if(is.null(params$seed)){
     if(params$extend){
         # We want to extend a previous experiment
         assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
-    		load(paste0(params$out_dir, paste0(params$out_dir, params$out_fname, ".RData")))
+    		load(paste0(params$out_dir, params$out_fname, ".RData"))
     }
 		else{
 			n <- 1
