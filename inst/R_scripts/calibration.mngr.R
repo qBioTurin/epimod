@@ -36,6 +36,9 @@ calibration.worker <- function(id, config, params, seed){
 objfn <-function(x, params, cl, seed) {
     # Generate a new configuration using the optimizaton output x
     id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
+
+    set.seed(kind = "Mersenne-Twister", seed = seed)
+
     config <- experiment.configurations(n_config = 1,
                               parm_fname = params$files$functions_fname,
                               parm_list = params$files$parameters_fname,
@@ -92,7 +95,6 @@ params_fname <- args[1]
 params <- readRDS(params_fname)
 
 # Load seed and previous configuration, if required.
-config <- list()
 if(is.null(params$seed)){
 	# Save initial seed value
 	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
@@ -101,24 +103,10 @@ if(is.null(params$seed)){
 	set.seed(kind = "Super-Duper", seed = timestamp)
 
 	init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
-	extend_seed <- init_seed
-	n <- 1
 
-	save(init_seed, extend_seed, n, file = params$seed)
+	save(init_seed, file = params$seed)
 }else{
 	load(params$seed)
-	if(params$extend){
-		# We want to extend a previous experiment
-		assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
-		load(paste0(params$out_dir, params$out_fname, ".RData"))
-	}
-	else{
-		n <- 1
-	}
-}
-
-if(!params$extend){
-	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
 # Copy files to the run directory
@@ -148,11 +136,7 @@ ret <- GenSA(par=params$ini_v,
              control = ctl,
              params = params,
              cl = cl,
-						 seed = init_seed)
-
-# Save final seed
-extend_seed <- .Random.seed
-save(init_seed, extend_seed, n, file = params$seed)
+						 seed = init_seed + 1)
 
 stopCluster(cl)
 # Save the output of the optimization problem to file

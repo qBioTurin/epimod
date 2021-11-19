@@ -20,7 +20,7 @@ model_analysis <-function(
                       solver_type = solver_type,
                       n_run = n_run,
                       ini_v = ini_v,
-                      f_time = f_time, # weeks
+                      f_time = f_time,
                       s_time = s_time,
                       volume = volume,
     									seed = seed,
@@ -87,6 +87,7 @@ model_analysis <-function(
                   ini_v = ini_v,
                   ini_vector_mod = ini_vector_mod,
     							extend = extend)
+
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){

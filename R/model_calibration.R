@@ -48,7 +48,6 @@
 #' } These arguments not always work, actually.
 #' @param reference_data Data to compare with the simulations' results
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param extend If TRUE the actual configuration is extended including n_config new configurations
 #' @param seed .RData file that can be used to initialize the internal random generator
 #' @param out_fname Prefix to the output file name
 #'
@@ -94,8 +93,8 @@ model_calibration <- function(# Parameters to control the simulation
 													    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
 													    # Parameters to control the ranking
 													    reference_data = NULL, distance_measure_fname = NULL,
-													    # Mange reproducibilty and extend previous experiments
-													    extend = FALSE, seed = NULL,
+													    # Mange reproducibility
+													    seed = NULL,
 													    # Directories
 													    out_fname = NULL,
 													    #Flag to enable logging activity
@@ -185,11 +184,10 @@ model_calibration <- function(# Parameters to control the simulation
                    max.call = max.call,
                    max.time = max.time,
                    files = files,
-                   extend = extend,
                    processors = parallel_processors)
 
     res_dir <- paste0(chk_dir(volume), results_dir_name)
-    if(!extend & file.exists(res_dir)){
+    if(file.exists(res_dir)){
     	unlink(res_dir, recursive = TRUE)
     }
     dir.create(res_dir, showWarnings = FALSE)
