@@ -2,45 +2,62 @@ library(parallel)
 library(epimod)
 library(ggplot2)
 
-sensitivity.worker<-function(id,
-                             solver_fname, solver_type, s_time, f_time,
-                             timeout, run_dir, out_fname, out_dir, seed,
-                             files, config){
-    # Setup the environment
-    experiment.env_setup(id = id, files= files, config = config, dest_dir = run_dir)
-    # Environment settled, now run
-    # Change working directory to the one corresponding at the current id
-    pwd <- getwd()
-    setwd(paste0(run_dir,id))
-
-    # Generate the appropriate command to run on the Docker
-    cmd <- experiment.cmd(id = id, solver_fname = solver_fname, solver_type = solver_type, s_time = s_time, f_time = f_time, seed = seed + id, timeout = timeout, out_fname = out_fname)
-    # Introduce a random delay to avoid correlations between runs on different cores
-    system(paste0("sleep ", round(runif(1,min=0,max=10)), "s"))
-    # Measure simulation's run time
-    T1 <- Sys.time()
-    # Launch the simulation on the Doker
-    system(paste(cmd), wait = TRUE)
-    T2 <- difftime(Sys.time(), T1, unit = "secs")
-    cat("\n\n",id,": Execution time ODEs:",T2, "sec.\n")
-    # Change the working directory back to the original one
-    setwd(pwd)
-    # Move relevant files to their final locatio and remove all the temporary files
-    experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-    return(T2)
+sensitivity.worker <- function(id,
+                               solver_fname, solver_type,
+                               i_time, s_time, f_time, seed,
+                               timeout, run_dir, out_fname, out_dir,
+                               event_times, event_function,
+                               files, config,
+															 parallel_processors, greed ){
+	# Setup the environment
+	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
+	# Environment settled, now run
+	# Change working directory to the one corresponding at the current id
+	pwd <- getwd()
+	setwd(paste0(run_dir,id))
+	cmd <- experiment.cmd(solver_fname = solver_fname,
+						  solver_type = solver_type,
+						  taueps = taueps,
+						  timeout = timeout,
+						  seed = seed + id)
+	# Run the experiment
+	if (greed > 0 && runif(1, min = 0, max = 1) > greed)
+	{
+		parallel_processors <- parallel_processors + 1
+	}
+	elapsed <- experiment.run(base_id = id,
+							  cmd = cmd,
+							  i_time = i_time,
+							  f_time = f_time,
+							  s_time = s_time,
+							  n_run = 1,
+							  event_times = event_times,
+							  event_function = event_function,
+							  out_fname = out_fname,
+							  parallel_processors = parallel_processors)
+	cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
+	# Change the working directory back to the original one
+	setwd(pwd)
+	# Move relevant files to their final location and remove all the temporary files
+	experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
+	return(elapsed)
 }
+
 # Function to compute the distance between one simulation trace and the reference data
 sensitivity.distance <- function(id,
-                                 run_dir,
-                                 out_fname,
+                                 ## run_dir,
+                                 ## out_fname,
                                  out_dir,
                                  distance_measure_fname,
                                  distance_measure,
                                  reference_data){
     pwd <- getwd()
     setwd(out_dir)
+    system(paste0("echo \"Trying to open ", id, "\""))
     # Read the output and compute the distance from reference data
-    trace <- read.csv(paste0(out_fname, "-", id, ".trace"), sep = "")
+    ## trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
+    trace <- read.csv(id,
+                      sep = "")
     # Load distance definition
     source(distance_measure_fname)
     # Load reference data (IMPORTANT it has to be a column vector)
@@ -115,19 +132,33 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 
 # Save final seed
 extend_seed <- .Random.seed
-
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
                   # outfile=paste0("log-", params$out_fname, ".txt"),
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
+if(params$parallel_processors != 1)
+{
+	# Run params$parallel_processors configurations in parallel
+	threads.mngr <- min(params$n_config, params$parallel_processors)
+	threads.wrkr <- floor(params$parallel_processors/threads.mngr)
+	threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
+	# The probability to use one worker thread more than specified in by threads.wrkr
+	threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+} else {
+	threads.mngr <- 1
+	threads.wrkr <- 1
+	threads.load <- 1
+	threads.greed <- 0
+}
 # Run simulations
 exec_times <- parLapply( cl,
                          c(n:(n+params$n_config-1)),                # execute n_config istances
                          sensitivity.worker,                  # of sensitivity.worker
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = "LSODA",
+                         i_time = params$i_time,
                          s_time = params$s_time,
                          f_time = params$f_time,
                          timeout = params$timeout,
@@ -135,8 +166,31 @@ exec_times <- parLapply( cl,
                          out_fname = params$out_fname,
                          out_dir = params$out_dir,
 												 seed = init_seed,
+                         event_times = params$event_times,
+                         event_function = params$event_function,
                          files = params$files,
-                         config = params$config)
+						 config = params$config,
+						 parallel_processors = threads.wrkr,
+						 greed = threads.greed)
+# exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
+# 					 sensitivity.worker,                  # of sensitivity.worker
+# 					 solver_fname = params$files$solver_fname,  # using the following parameters
+# 					 solver_type = "LSODA",
+# 					 i_time = params$i_time,
+# 					 s_time = params$s_time,
+# 					 f_time = params$f_time,
+# 					 timeout = params$timeout,
+# 					 run_dir = params$run_dir,
+# 					 out_fname = params$out_fname,
+# 					 out_dir = params$out_dir,
+# 					 seed = init_seed,
+# 					 event_times = params$event_times,
+# 					 event_function = params$event_function,
+# 					 files = params$files,
+# 					 config = params$config,
+# 					 parallel_processors = threads.wrkr,
+# 					 greed = threads.greed)
+
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 
 n <- n + params$n_config
@@ -145,19 +199,18 @@ save(init_seed, extend_seed, n, file = params$seed)
 # List all the traces in the output directory
 if(!is.null(params$files$distance_measure_fname))
 {
-    rank <- parLapply(cl,
-                      c(1:abs(params$config[[1]][[1]][[2]])),
-                      sensitivity.distance,
-                      out_fname = params$out_fname,
-                      out_dir = params$out_dir,
-                      run_dir = params$run_dir,
-                      distance_measure_fname = params$files$distance_measure_fname,
-                      distance_measure = distance_measure,
-                      reference_data = params$files$reference_data)
-    # Sort the rank ascending, according to the distance computed above.
-    rank <- do.call("rbind", rank)
-    rank <- rank[order(rank$measure),]
-    save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
+	rank <- parLapply(cl,
+					  list.files(path = params$out_dir,
+					  		   pattern = paste0(params$out_fname, "(-[0-9]+)+")),
+					  sensitivity.distance,
+					  out_dir = params$out_dir,
+					  distance_measure_fname = params$files$distance_measure_fname,
+					  distance_measure = distance_measure,
+					  reference_data = params$files$reference_data)
+	# Sort the rank ascending, according to the distance computed above.
+	rank <- do.call("rbind", rank)
+	rank <- rank[order(rank$measure),]
+	save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
 }
 stopCluster(cl)
 if(!is.null(params$files$target_value_fname))

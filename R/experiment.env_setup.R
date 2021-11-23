@@ -38,17 +38,40 @@ experiment.env_setup <- function(id = NULL,
         else
             idx <- 1
         # Check how to handle the parameter
-        if(config[[x]][[idx]][[2]] > 0)
+        # if(config[[x]][[idx]][[2]] > 0)
+        if(config[[x]][[idx]][[2]] %in% c("i", "g"))
         {
             # Write the (set of) parameter(s) to file
-            write.table(x = config[[x]][[idx]][[3]], file = config[[x]][[idx]][[1]], col.names = FALSE, row.names = FALSE, sep = ",")
+            write.table(x = config[[x]][[idx]][[3]],
+            			file = config[[x]][[idx]][[1]],
+            			col.names = FALSE,
+            			row.names = FALSE,
+            			sep = ",")
         }
         else
         {
-            # Write single parameter to file (cmdln_params) using the format
-            # <parameter name> <parameter value>
-            # write.table(x = c(config[[x]][[idx]][[1]],config[[x]][[idx]][[3]]), file = "cmdln_params", col.names = FALSE, row.names = FALSE, append = TRUE)
-            write.table(x = paste(config[[x]][[idx]][[1]],config[[x]][[idx]][[3]]), file="cmdln_params", append = TRUE, quote = FALSE, row.names = FALSE, col.names = FALSE)
+            if(config[[x]][[idx]][[2]] == "e")
+            {
+            	# Write single parameter to file (cmdln_params) using the format
+            	# <parameter name> <parameter value>
+            	write.table(x = paste(config[[x]][[idx]][[1]],
+            						  config[[x]][[idx]][[3]]),
+            				file="cmdln_exp",
+            				append = TRUE,
+            				quote = FALSE,
+            				row.names = FALSE,
+            				col.names = FALSE)
+            } else {
+            	# Write single parameter to file (cmdln_params) using the format
+            	# <parameter name> <parameter value>
+            	write.table(x = paste(config[[x]][[idx]][[1]],
+            						  config[[x]][[idx]][[3]]),
+            				file="cmdln_mrk",
+            				append = TRUE,
+            				quote = FALSE,
+            				row.names = FALSE,
+            				col.names = FALSE)
+            }
         }
     })
     setwd(w_dir)

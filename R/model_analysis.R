@@ -1,10 +1,62 @@
-model_analysis <-function(
+#' @title Run model analysis
+#' @description
+#'    solves the system given a specific parameters configuration simulating the behavior of the developed model.
+#'    Furthermore, by changing the input parameters, it is possible to perform a what-if analysis or forecasting the evolution of the diffusion process.
+#'
+#'
+#' @param solver_fname .solver file (generated with the function *model_generation*).
+#' @param i_time Initial solution time.
+#' @param f_time Final solution time.
+#' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
+#' @param n_config Integer for the number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
+#' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
+#' @param solver_type  \itemize{ \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
+#'  \item Stochastic: the Gillespie algorithm,which is an exact stochastic method widely used to simulate chemical systems whose behaviour can be described by the Master equations (SSA); or an approximation method of the SSA called tau-leaping method (TAUG), which provides a good compromise between the solution execution time  and its quality.
+#'  \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
+#'  } Default is LSODA.
+#' @param taueps The error control parameter from the tau-leaping approach.
+#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
+#' @param volume The folder to mount within the Doker image providing all the necessary files.
+#' @param timeout Maximum execution time allowed to each configuration.
+#' @param parallel_processors Integer for the number of available processors to use for parallelizing the simulations.
+#' @param event_times
+#' @param event_function
+#' @param seed Value that can be set to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name.
+#'
+#' @details
+#'
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Daniele Baccega
+
+#'
+#' @examples
+#'\dontrun{
+#' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
+#' model_analysis(out_fname = "sensitivity",
+#'                solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
+#'                parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
+#'                functions_fname = paste0(local_dir, "Configuration/Functions.R"),
+#'                i_time = 0,
+#'                f_time = 365*21,
+#'                s_time = 365,
+#'                n_config = 1,
+#'                n_run = 100,
+#'                solver_type = "SSA",
+#'                volume = "/some/path/to/the/local/output/directory",
+#'                timeout = "1d",
+#'                parallel_processors=2
+#' }
+#' @export
+model_analysis <- function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
+    solver_fname, i_time = 0, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
+    # List of discrete events
+    event_times = NULL, event_function = NULL,
     # Mange reproducibility and extend previous experiments
     extend = FALSE, seed = NULL,
     # Directories
@@ -13,6 +65,7 @@ model_analysis <-function(
     debug = FALSE
 ){
 
+<<<<<<< HEAD
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(solver_fname = solver_fname,
                       parameters_fname = parameters_fname,
@@ -37,7 +90,7 @@ model_analysis <-function(
 
     results_dir_name <- "results_model_analysis/"
 
-    chk_dir<- function(path){
+    chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
@@ -48,17 +101,17 @@ model_analysis <-function(
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
-    if(is.null(out_fname))
+    if (is.null(out_fname))
     {
     	out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-analysis")
     }
     # Fix input parameters path
-    if(!is.null(parameters_fname))
+    if (!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
         files[["parameters_fname"]] <- parameters_fname
     }
-    if(!is.null(functions_fname))
+    if (!is.null(functions_fname))
     {
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
@@ -69,7 +122,7 @@ model_analysis <-function(
     	files[["seed"]] <- seed
     }
 
-    # Global parameters used to manage the dockerized environment
+    # Global parameters used to manage the environment within the docker container
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
                   n_config = n_config,
@@ -78,6 +131,7 @@ model_analysis <-function(
                   out_fname = out_fname,
                   solver_type = solver_type,
                   taueps = taueps,
+                  i_time = i_time,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
@@ -86,8 +140,8 @@ model_analysis <-function(
                   files = files,
                   ini_v = ini_v,
                   ini_vector_mod = ini_vector_mod,
-    							extend = extend)
-
+    							extend = extend,event_times = event_times,
+    							event_function = event_function)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){
@@ -115,4 +169,5 @@ model_analysis <-function(
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+
 }

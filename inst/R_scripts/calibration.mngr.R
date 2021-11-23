@@ -2,86 +2,144 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
-calibration.worker <- function(id, config, params, seed){
-    experiment.env_setup(id = id,
-                         files = params$files,
-                         dest_dir = params$run_dir,
-                         config = config)
-    pwd <- getwd()
-    setwd(paste0(params$run_dir, id))
-
-    cmd <- experiment.cmd(id,
-                          solver_fname = params$files$solver_fname,
-                          solver_type = params$solver_type,
-                          n_run = 1,
-                          s_time = params$s_time,
-                          f_time = params$f_time,
-    											seed = seed + id,
-                          timeout = params$timeout,
-                          out_fname = params$out_fname)
-    # Introduce a random delay to avoid correlations between runs on different cores
-    system(paste0("sleep ", round(runif(1,min=0,max=10)), "s"))
-    # Run simulations
-    system(cmd, wait = TRUE)
-    fnm <- paste0(params$out_fname,"-",id,".trace")
-    # trace <- read.csv(file = fnm , header = TRUE, sep = "")
-    experiment.env_cleanup(id = id,
-                           run_dir = params$run_dir,
-                           out_fname = params$out_fname,
-                           out_dir = params$out_dir)
-    setwd(pwd)
-    return(paste0(params$out_dir,fnm))
+calibration.worker <- function(id, config, params, seed)
+{
+  print("[calibration.worker] Starts with parameters:")
+  print(paste0("[calibration.worker] - id ", id))
+  print(paste0("[calibration.worker] - config ", config))
+  print(paste0("[calibration.worker] - params ", params))
+  # Setup simulation's environment
+  experiment.env_setup(id = id,
+                       files = params$files,
+                       dest_dir = params$run_dir,
+                       config = config)
+  # Store the current working direrctory
+  pwd <- getwd()
+  # Change current directory to the run_dir parameter
+  setwd(paste0(params$run_dir, id))
+  print("[calibration.worer] Generating command template")
+  # Generate the appropriate command to run on the Docker
+  cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
+                        solver_type = params$solver_type,,
+  											seed = seed + id,
+                        taueps = params$taueps,
+                        timeout = params$timeout)
+  print("[calibration.worer] Done generating command template")
+  # Generate the command to run with the required parameters
+  # cmd <- experiment.cmd(id,
+  #                       solver_fname = params$files$solver_fname,
+  #                       solver_type = params$solver_type,
+  #                       n_run = 1,
+  #                       s_time = params$s_time,
+  #                       f_time = params$f_time,
+  #                       event_times = params$event_times,
+  #                       event_function = params$event_function,
+  #                       timeout = params$timeout,
+  #                       out_fname = params$out_fname)
+  # Execute the command
+  # system(cmd, wait = TRUE)
+  print("[calibration.worer] Starting simulations..")
+  experiment.run(base_id = id,
+                 cmd = cmd,
+                 i_time = params$i_time,
+                 f_time = params$f_time,
+                 s_time = params$s_time,
+                 n_run = 1,
+                 event_times = params$event_times,
+                 event_function = params$event_function,
+                 parallel_processors = params$processors,
+                 out_fname = params$out_fname)
+  print("[calibration.worer] Simulation done!")
+  # Set-up the result's file name
+  # fnm <- paste0(params$out_fname,"-",id,".trace")
+  print(paste0("[calibration.worer] Returning file name: ", unlist(list.files(pattern = paste0(params$out_fname,"(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))))
+  fnm <- unlist(list.files(pattern = paste0(params$out_fname,
+  										  "(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))
+  # Clear the simulation's environment
+  experiment.env_cleanup(id = id,
+                         run_dir = params$run_dir,
+                         out_fname = params$out_fname,
+                         out_dir = params$out_dir)
+  # Restore the previous working directory
+  setwd(pwd)
+  return(paste0(params$out_dir,fnm))
 }
 
-objfn <-function(x, params, cl, seed) {
-    # Generate a new configuration using the optimizaton output x
-    id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
-
-    set.seed(kind = "Mersenne-Twister", seed = seed)
-
-    config <- experiment.configurations(n_config = 1,
-                              parm_fname = params$files$functions_fname,
-                              parm_list = params$files$parameters_fname,
-                              out_dir = params$out_dir,
-                              out_fname = params$out_fname,
-                              ini_vector = x,
-                              ini_vector_mod = params$ini_vector_mod)
-    # calibration.worker(id = id, config = config, params = params)
-    # traces <- read.csv(paste0(params$out_dir,params$out_fname,"-",id,".trace"), sep = "")
-    trace_names <- parLapply(cl,
-                        #c(paste0(id,"-",c(1:params$n_run))),
-    										c(1:params$n_run),
-                        calibration.worker,
-                        config = config,
-                        params = params,
-    										seed = seed)
-    traces <- lapply(trace_names,function(x){
-        fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
-        tr <- read.csv(x, sep = "")
-        if(!file.exists(fnm)){
-            write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-        }
-        else{
-            write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-        }
-        file.remove(x)
-        return(tr)
-    })
-    traces <- do.call("rbind", traces)
-
-    source(params$files$distance_measure_fname)
-    # distance <- do.call(params$distance_measure, list(read.csv(file = params$files$reference_data, header = FALSE, sep = ""), trace))
-    distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
-    # Write header to the file
-    optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-trace.csv")
-    if(!file.exists(optim_trace_fname))
-    {
-        nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
-        cat(unlist(nms),"\n", file = optim_trace_fname)
-    }
-    cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
-    return(distance)
+objfn <- function(x, params, cl, seed) {
+	# Generate a new configuration using the configuration provided by the optimization engine
+	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
+	set.seed(kind = "Mersenne-Twister", seed = seed)
+	# Generate the simulation's configuration according to the provided input x
+	config <- experiment.configurations(n_config = 1,
+										parm_fname = params$files$functions_fname,
+										parm_list = params$files$parameters_fname,
+										out_dir = params$out_dir,
+										out_fname = params$out_fname,
+										ini_vector = x,
+										ini_vector_mod = params$ini_vector_mod)
+	# Solve n_run instances of the model
+	print("[objfn] Calling calibration.worer")
+	# traces_name <- parLapply(cl,
+	# 						 c(paste0(id,"-",c(1:params$n_run))),
+	# 						 calibration.worker,
+	# 						 config = config,
+							 # params = params,
+							 # seed = seed)
+	### DEBUG ###
+	traces_name <- lapply(c(paste0(id,"-",c(1:params$n_run))),
+						  calibration.worker,
+						  config = config,
+						  params = params,
+						  seed = seed)
+	### DEBUG ###
+	print("[objfn] Done calibration.worer")
+	# traces_name <- list.files()
+	# traces_name <- traces_name[grep(x = traces_name,
+	# 								pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
+	# Append all the solutions in one single data.frame
+	print("[objfn] Settling files...")
+	print(traces_name)
+	traces <- lapply(traces_name,function(x){
+		print(paste0("[objfn] reading file", x))
+		tr <- read.csv(file = x,
+					   sep = "")
+		file.remove(x)
+		return(tr)
+	})
+	traces <- do.call("rbind", traces)
+	write.table(traces,
+				file = paste0(params$out_dir,
+							  params$out_fname,
+							  "-",
+							  id,
+							  ".trace"),
+				sep = " ",
+				col.names = TRUE,
+				row.names = FALSE,
+				append = FALSE)
+	# fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
+	# if(!file.exists(fnm)){
+	# 	write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+	# } else{
+	# 	write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+	# }
+	print("[objfn] done settling files!")
+	# Compute the score for the current configuration
+	source(params$files$distance_measure_fname)
+	print("[objfn] Computing distance")
+	distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, sep = "")), traces))
+	# Write header to the file
+	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
+	if(!file.exists(optim_trace_fname)) {
+		nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
+		cat(unlist(nms),"\n", file = optim_trace_fname)
+	}
+	cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+	print("[objfn] Done computing distance")
+	return(distance)
 }
+
+# Utility function
 chk_dir<- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
@@ -110,10 +168,13 @@ if(is.null(params$seed)){
 }
 
 # Copy files to the run directory
-experiment.env_setup(files = params$files, dest_dir = params$run_dir)
+experiment.env_setup(files = params$files,
+                     dest_dir = params$run_dir)
 # Create a cluster
-cl <- makeCluster(params$processors, type = "FORK")
-# Call GenSA with init_vector as initial condition, upper_vector and lower_vector as boundaries conditions.
+print(paste0("[calibration.mngr] Availabe processors: ", params$processors))
+cl <- makeCluster(spec = params$processors,
+                  type = "FORK")
+# Call GenSA with init_vector as initail condition, upper_vector and lower_vector as boundaries conditions.
 ctl <- list()
 if(!is.null(params$max.call))
 {

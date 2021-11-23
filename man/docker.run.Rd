@@ -4,7 +4,7 @@
 \alias{docker.run}
 \title{Run docker container}
 \usage{
-docker.run(params = NULL)
+docker.run(params = NULL, changeUID = TRUE)
 }
 \arguments{
 \item{params, }{a character string containing all parameters needed to run the docker container.}

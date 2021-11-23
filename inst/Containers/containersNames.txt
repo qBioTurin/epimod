@@ -3,4 +3,3 @@
 'generation' qbioturin/epimod-generation:latest
 'analysis' qbioturin/epimod-analysis:latest
 'calibration' qbioturin/epimod-calibration:latest
-'display' qbioturin/epimod-display:latest
