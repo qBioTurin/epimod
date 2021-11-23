@@ -1,7 +1,7 @@
 #!/bin/bash
 # IMAGES=$(ls -d */)
-# IMAGES=(Sensitivity Calibration Analysis)
-IMAGES=(Analysis)
+# IMAGES=(Calibration)
+IMAGES=(Sensitivity Calibration Analysis)
 BASEDIR=$(pwd)
 if [ $# -ne 1 ]; then
 	echo "Illegal number of parameters"
@@ -27,12 +27,12 @@ for I in ${IMAGES[@]}; do
 			exit 0
 		fi
 		rm marker
-	# 	echo "Uploading $IMG"
-	#        	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
-	# 	docker push qbioturin/epimod-$IMG:$TAG
-	# 	if [[ $? -ne 0 ]]; then
-	# 		exit 0
-	# 	fi
+	 	echo "Uploading $IMG"
+	        	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
+	 	docker push qbioturin/epimod-$IMG:$TAG
+	 	if [[ $? -ne 0 ]]; then
+	 		exit 0
+	 	fi
 	else
 		echo "Dockerfile missing for image qbioturin/epimod-$IMG"
 	fi
