@@ -1,7 +1,7 @@
 #' @title Run model calibration
-<<<<<<< HEAD
+#' <<<<<<< HEAD
 #' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration, both for deterministic and stochastic models.
-=======
+#' =======
 #' @description
 #'
 #' @param solver_fname .solver file (generated in with the function model_generation).
@@ -37,7 +37,7 @@
 #'
 #' @details
 #' model_calibration takes as input a solver and all the required parameters to set up a dockerized running environment to perform model calibration (both for deterministic and stochastic models).
->>>>>>> dev-de
+#' >>>>>>> dev-de
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
@@ -58,7 +58,7 @@
 #' To drive the optimization, the user has to provide a function to generate a new configuration, starting from a vector of n elements (each one ranging from 0 to 1).
 #' Furthermore, the vector ini_v defines the initial point of the search.
 #'
-<<<<<<< HEAD
+#' <<<<<<< HEAD
 #' IMPORTANT: the length of the vector ini_v defines the number of variables to variate within the search of the optimal configuration.
 #'
 #' @param solver_fname .solver file (generated in with the function model_generation)
