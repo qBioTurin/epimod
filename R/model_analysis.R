@@ -65,7 +65,6 @@ model_analysis <- function(
     debug = FALSE
 ){
 
-<<<<<<< HEAD
     #common_test function receive all the parameters that will be tested for model_calibration function
     ret = common_test(solver_fname = solver_fname,
                       parameters_fname = parameters_fname,

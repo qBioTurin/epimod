@@ -1,10 +1,10 @@
 
 library(ggplot2)
 
-reference <- as.data.frame(read.csv("../Input/reference_data.csv",
+reference <- as.data.frame(read.csv("./Input/reference_data.csv",
                                       header = FALSE,
                                       sep = ""))
-traces <-read.csv("../results_model_analysis/SIR_analysis-1.trace",sep = "")
+traces <-read.csv("./results_model_analysis/SIR_analysis-1.trace",sep = "")
 
 plI<-ggplot( )+
   geom_line(data=traces,
@@ -21,7 +21,7 @@ plI<-ggplot( )+
         legend.key.width = unit(1.3,"cm") )+
   labs(x="Weeks", y="I",col="Distance")
 
-ggsave("../plI_analysis.pdf")
+ggsave("./plI_analysis.pdf")
 
 plS<-ggplot( )+
   geom_line(data=traces,
@@ -38,7 +38,7 @@ plS<-ggplot( )+
         legend.key.width = unit(1.3,"cm") )+
   labs(x="Weeks", y="S",col="Distance")
 
-ggsave("../plS_analysis.pdf")
+ggsave("./plS_analysis.pdf")
 
 plR<-ggplot( )+
   geom_line(data=traces,
@@ -55,4 +55,4 @@ plR<-ggplot( )+
         legend.key.width = unit(1.3,"cm") )+
   labs(x="Weeks", y="R",col="Distance")
 
-ggsave("../plR_analysis.pdf")
+ggsave("./plR_analysis.pdf")

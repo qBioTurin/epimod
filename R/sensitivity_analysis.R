@@ -1,7 +1,4 @@
 #' @title Run sensitivity analisys
-<<<<<<< HEAD
-#' @description This function takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
-=======
 #' @description
 #'  The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior),
 #'  by exploiting the Pearson Ranking Correlation Coefficients (PRCCs). Furthermore, a ranking of simulations is returned in according to the distance of each solution with respect to the reference one.
@@ -23,7 +20,6 @@
 #' @param out_fname Prefix to the output file name.
 #'
 #' @details Sensitivity_analisys takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
->>>>>>> dev-de
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
@@ -37,29 +33,7 @@
 #'
 #' OUTPUT_FILE_NAME, FUNCTION_NAME, LIST OF PARAMETERS (comma separated)
 #'
-<<<<<<< HEAD
 #' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to sensitivity_analysis through the parameter parameters_fname).
-#'
-#' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init".
-#'
-#' @param solver_fname .solver file (generated in with the function model_generation)
-#' @param f_time Final solution time
-#' @param s_time Time step at which explicit estimates for the system are desired
-#' @param n_config Number of configurations to generate
-#' @param parameters_fname File with the definition of user defined functions
-#' @param parm_list File listing the name of the functions, the parameters and the name under which the parameters have to be saved
-#' @param functions_fname File with the user defined functions to generate instances of the parameters
-#' @param volume The folder to mount within the Docker image providing all the necessary files
-#' @param timeout Maximum execution time allowed to each configuration
-#' @param parallel_processors Integer for the number of available processors to use
-#' @param reference_data Data to compare with the simulations' results
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a dataframe with the id of the simulation and its corresponding distance from the reference data
-#' @param extend If TRUE the actual configuration is extended including n_config new configurations
-#' @param seed .RData file that can be used to initialize the internal random generator
-#' @param out_fname Prefix to the output file name
-=======
-#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to run_sensitivity through the parameter parameters_fname).
->>>>>>> dev-de
 #'
 #' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init".
 #' Let us observe that: (i) the distance and target functions must have the same name of the corresponding R file, (ii) sensitivity_analysis exploits also the parallel processing capabilities, and (iii) if the user is not interested on the ranking calculation then the distance_measure_fname and reference_data are not necessary and can be omitted.
@@ -87,7 +61,7 @@
 #'                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 #' }
 #' @export
-<<<<<<< HEAD
+
 sensitivity_analysis <- function(# Parameters to control the simulation
                                  solver_fname, i_time, f_time, s_time,
                                  # User defined simulation's parameters

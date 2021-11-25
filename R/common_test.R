@@ -35,7 +35,7 @@
 #' @export
 
 common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
-                      solver_fname, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
+                      solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
                       solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
                       timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
                       max.call = 1e+07, max.time = NULL, taueps = 0.01, caller_function)
@@ -198,42 +198,51 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
         return("s_time must be greater than zero!")
   	  if(!is.numeric(s_time))
   			return("s_time must be a number!")
-	}
-
-	#if not specified, a runtime error is generated
-  if(!missing(parameters_fname) && !is.null(parameters_fname)){
-    if(!file.exists(parameters_fname)){
-      return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
     }
-    else{
-      if(grepl("unix", .Platform$OS.type))
-        if(!grepl("ASCII text", system(paste("file", parameters_fname), intern = TRUE)))
-          return("parameters_fname must be a textual file! Abort")
 
-      file = file(parameters_fname, "r")
-      while(TRUE){
-        line = readLines(file, n=1)
-        if(length(line) != 0){
-          fname = unlist(strsplit(gsub(" ", "", line), ";"))[3]
-          if(!(exists(fname) || length(find(fname, numeric = TRUE)) >= 1 ||
-               !suppressWarnings(is.na(as.numeric(fname))))){
-            close(file)
-            return(paste(fname, "defined in", basename(parameters_fname), "does not exist! Abort"))
-          }
-        }
-        else
-          break
-      }
-      close(file)
-    }
-  }
+  	if(missing(i_time))
+  		return("i_time parameter is missing! Abort")
+  	else{
+  		if(i_time <= 0)
+  			return("i_time must be greater than zero!")
+  		if(!is.numeric(i_time))
+  			return("i_time must be a number!")
+  	}
 
-	if(!missing(parallel_processors)){
-    if(parallel_processors <= 0)
-      return("parallel_processors must be greater than zero!")
-	  if(!is.numeric(parallel_processors))
-	  	return("parallel_processors must be a number!")
-	}
+		#if not specified, a runtime error is generated
+	  if(!missing(parameters_fname) && !is.null(parameters_fname)){
+	    if(!file.exists(parameters_fname)){
+	      return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
+	    }
+	    else{
+	      if(grepl("unix", .Platform$OS.type))
+	        if(!grepl("ASCII text", system(paste("file", parameters_fname), intern = TRUE)))
+	          return("parameters_fname must be a textual file! Abort")
+
+	      file = file(parameters_fname, "r")
+	      while(TRUE){
+	        line = readLines(file, n=1)
+	        if(length(line) != 0){
+	          fname = unlist(strsplit(gsub(" ", "", line), ";"))[3]
+	          if(!(exists(fname) || length(find(fname, numeric = TRUE)) >= 1 ||
+	               !suppressWarnings(is.na(as.numeric(fname))))){
+	            close(file)
+	            return(paste(fname, "defined in", basename(parameters_fname), "does not exist! Abort"))
+	          }
+	        }
+	        else
+	          break
+	      }
+	      close(file)
+	    }
+	  }
+
+		if(!missing(parallel_processors)){
+	    if(parallel_processors <= 0)
+	      return("parallel_processors must be greater than zero!")
+		  if(!is.numeric(parallel_processors))
+		  	return("parallel_processors must be a number!")
+		}
   }
 
 
