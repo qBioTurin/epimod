@@ -1,25 +1,30 @@
 #' @title Run sensitivity analisys
 #' @description
-#'  The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior),
-#'  by exploiting the Pearson Ranking Correlation Coefficients (PRCCs). Furthermore, a ranking of simulations is returned in according to the distance of each solution with respect to the reference one.
+#'   The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior),
+#'   by exploiting the Pearson Ranking Correlation Coefficients (PRCCs). Furthermore, a ranking of simulations is returned in according to the distance of each solution with respect to the reference one.
 #'
 #' @param solver_fname .solver file (generated with the function *model_generation*).
 #' @param i_time Initial solution time.
 #' @param f_time Final solution time.
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
-#' @param n_config Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
+#' @param n_config Number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
 #' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
 #' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
-#' @param volume The folder to mount within the Doker image providing all the necessary files.
+#' @param volume The folder to mount within the Docker image providing all the necessary files.
 #' @param timeout Maximum execution time allowed to each configuration.
 #' @param parallel_processors Integer for the number of available processors to use.
 #' @param target_value_fname R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.
 #' @param reference_data csv file storing the data to be compared with the simulations’ result.
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param seed Value that can be set to initialize the internal random generator.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param event_times
+#' @param event_function
+#' @param extend If TRUE the actual configuration is extended including n_config new configurations.
+#' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name.
+#' @param debug If TRUE enables logging activity.
 #'
-#' @details Sensitivity_analisys takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
+#' @details
+#' Sensitivity_analysis takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
 #' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 #' The function defining the distance has to be in the following form:
 #'
@@ -40,7 +45,7 @@
 #'
 #' @seealso model_generation
 #'
-#' @author Beccuti Marco, Castagno Paolo, Pernice Simone
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 
 #'
 #' @examples
@@ -50,7 +55,8 @@
 #'                      out_fname = "sensitivity",
 #'                      parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                      functions_fname = paste0(local_dir, "Configuration/Functions.R"),
-#'                      solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
+#'                      solver_fname = paste0(local_dir, "Configuration/Solver.solver"),ù
+#'                      i_time = 0,
 #'                      f_time = 365*21,
 #'                      s_time = 365,
 #'                      volume = "/some/path/to/the/local/output/directory",
@@ -82,7 +88,7 @@ sensitivity_analysis <- function(# Parameters to control the simulation
                                  debug = FALSE
                                 ){
 
-    #common_test function receive all the parameters that will be tested for sensitivity_analysis function
+    # This function receives all the parameters that will be tested for sensitivity_analysis function
     ret = common_test(n_config = n_config,
                       parameters_fname = parameters_fname,
                       functions_fname = functions_fname,
@@ -91,6 +97,7 @@ sensitivity_analysis <- function(# Parameters to control the simulation
                       parallel_processors = parallel_processors,
                       reference_data = reference_data,
                       distance_measure_fname = distance_measure_fname,
+    									i_time = i_time,
                       f_time = f_time,
                       s_time = s_time,
                       volume = volume,
@@ -98,7 +105,7 @@ sensitivity_analysis <- function(# Parameters to control the simulation
     									extend = extend,
                       caller_function = "sensitivity")
 
-    if(ret != "ok")
+    if(ret != TRUE)
         stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
     results_dir_name <- "results_sensitivity_analysis/"

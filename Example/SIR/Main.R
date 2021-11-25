@@ -10,7 +10,7 @@ end_time <- Sys.time()-start_time
 
 start_time <- Sys.time()
 sensitivity_analysis(solver_fname = "SIR.solver",
-										 i_time = 1,
+										 i_time = 0,
 										 f_time = 70,
 										 s_time = 1,
 										 n_config = 1000,
@@ -31,7 +31,7 @@ end_time <- Sys.time()-start_time
 
 start_time <- Sys.time()
 model_calibration(solver_fname = "SIR.solver",
-									i_time = 1,
+									i_time = 0,
 									f_time = 70,
 									s_time = 1,
 									solver_type = "SSA",
@@ -53,7 +53,7 @@ end_time <- Sys.time()-start_time
 
 start_time <- Sys.time()
 model_analysis(solver_fname = "SIR.solver",
-							 i_time = 1,
+							 i_time = 0,
 							 f_time = 70,
 							 s_time = 1,
 							 n_config = 100,

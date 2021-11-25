@@ -1,45 +1,55 @@
 #' @title Test correctness of the parameters before execute a function
-#' @description Check if the passed parameters are well defined to execute the specified function, verifying
-#' the existence of the resource path, the length of the array, the value of solver type etc...
-#' @param net_fname .PNPRO file storing the model as ESPN. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
-#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions.
-#' @param reference_data Data to compare with the simulations' results
-#' @param ini_v Initial values for the parameters to be optimized.
-#' @param lb_v,ub_v Vectors with length equal to the number of paramenters which are varying. Lower/Upper bounds for esch paramenter.
-#' @param solver_fname .solver file (generated in with the function model_generation)
+#' @description
+#'   Check if the passed parameters are well defined to execute the specified function, verifying
+#'   the existence of the resource path, the length of the array, the value of solver type etc.
+#'
+#' @param net_fname .PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
+#' @param solver_fname .solver file (generated in with the function model_generation).
+#' @param i_time Initial solution time.
 #' @param f_time Final solution time.
-#' @param s_time Time step at which explicit estimates for the system are desired
-#' @param parameters_fname file with the definition of user defined functions
-#' @param volume The folder to mount within the Docker image providing all the necessary files
-#' @param parallel_processors Integer for the number of available processors to use
-#' @param solver_type  \itemize{ \item Deterministic: ODE-E, ODE-RKF, ODE45, LSODA,
-#'  \item Stochastic:  SSA or TAUG,
-#'  \item Hybrid: HLSODA or (H)SDE or HODE
+#' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
+#' @param solver_type
+#'  \itemize{
+#'    \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
+#'    \item Stochastic: the Gillespie algorithm,which is an exact stochastic method widely used to simulate chemical systems whose behaviour can be described by the Master equations (SSA); or an approximation method of the SSA called tau-leaping method (TAUG), which provides a good compromise between the solution execution time  and its quality.
+#'    \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
 #'  } Default is LSODA.
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'.
-#' Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output.
-#' It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param n_config, number of configuratons to generate
-#' @param out_fname Prefix to the output file name
-#' @param timeout Maximum execution time allowed to each configuration
-#' @param extend TO BE DONE
-#' @param seed Value that can be set to initialize the internal random generator.
+#' @param taueps The error control parameter from the tau-leaping approach.
+#' @param n_config Number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
+#' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
+#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
+#' @param volume The folder to mount within the Docker image providing all the necessary files.
+#' @param timeout Maximum execution time allowed to each configuration.
+#' @param parallel_processors Integer for the number of available processors to use for parallelizing the simulations.
+#' @param ini_v Initial values for the parameters to be optimized.
+#' @param lb_v,ub_v Vectors with length equal to the number of parameters which are varying. Lower/Upper bounds for each parameter.
 #' @param ini_vector_mod Logical value for ... . Default is FALSE.
 #' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
-#' \itemize{
-#' \item threshold.stop (Numeric) respresents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
-#' \item max.call (Integer) represents the maximum number of call of the objective function. Default is 1e7.
-#' \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.}
+#'  \itemize{
+#'    \item threshold.stop (Numeric) represents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
+#'    \item max.call (Integer) represents the maximum number of call of the objective function. Default is 1e7.
+#'    \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.
+#'  } These arguments not always work, actually.
+#' @param taueps The error control parameter from the tau-leaping approach.
+#' @param target_value_fname R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.
+#' @param reference_data csv file storing the data to be compared with the simulations’ result.
+#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param event_times
+#' @param event_function
+#' @param extend If TRUE the actual configuration is extended including n_config new configurations.
+#' @param seed .RData file that can be used to initialize the internal random generator.
+#' @param out_fname Prefix to the output file name
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
+#'
 #' @author Luca Rosso
 #' @export
 
-common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
-                      solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
-                      solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
-                      timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
-                      max.call = 1e+07, max.time = NULL, taueps = 0.01, caller_function)
-{
+common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
+                        solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
+                        solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
+                        timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
+                        max.call = 1e+07, max.time = NULL, taueps = 0.01, caller_function){
 
   if(!missing(functions_fname) && !is.null(functions_fname)){
     if(!file.exists(functions_fname)){
@@ -74,7 +84,7 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
     if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure_fname) && !is.null(distance_measure_fname)))
       return("distance_measure_fname need the reference_data parameter!")
 
-  	#Maybe it's necessary to use a default distance_measure_fname.
+  	# Maybe it's necessary to use a default distance_measure_fname.
   	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure_fname) || is.null(distance_measure_fname)))
   		return("reference_data need the distance_measure_fname parameter!")
 
@@ -203,13 +213,22 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
   	if(missing(i_time))
   		return("i_time parameter is missing! Abort")
   	else{
-  		if(i_time <= 0)
-  			return("i_time must be greater than zero!")
+  		if(i_time < 0)
+  			return("i_time must be greater than or equal to zero!")
   		if(!is.numeric(i_time))
   			return("i_time must be a number!")
   	}
 
-		#if not specified, a runtime error is generated
+		if(i_time >= f_time)
+			return("f_time must be greater than i_time!")
+
+  	if(s_time >= f_time - i_time)
+  		return("s_time is too large! It must be smaller than f_time - i_time!")
+
+  	if((f_time - i_time) %% s_time != 0)
+  		return("f_time - i_time must be divisible by s_time!")
+
+		#If not specified, a runtime error is generated
 	  if(!missing(parameters_fname) && !is.null(parameters_fname)){
 	    if(!file.exists(parameters_fname)){
 	      return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
@@ -251,7 +270,7 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
 	  	return(paste("The folder", volume, "of volume parameter does not exist!"))
 
   if(caller_function %in% c("sensitivity", "analysis")){
-    #mandatory for sensitivity analysis ?
+    #Mandatory for sensitivity analysis?
     if(!missing(n_config)){
       if(n_config <= 0)
       	return("n_config must be greater than zero!")
@@ -290,5 +309,5 @@ common_test<-function(net_fname, functions_fname = NULL, reference_data = NULL, 
 			return(paste0("The three variables init_seed, extend_seed and n into the seed file (", seed, ") must be a number!"))
 	}
 
-  return("ok")
+  return(TRUE)
 }

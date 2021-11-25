@@ -20,7 +20,7 @@ calibration.worker <- function(id, config, params, seed)
   print("[calibration.worer] Generating command template")
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-                        solver_type = params$solver_type,,
+                        solver_type = params$solver_type,
   											seed = seed + id,
                         taueps = params$taueps,
                         timeout = params$timeout)
