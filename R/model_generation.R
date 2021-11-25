@@ -1,15 +1,17 @@
 #' @title Run model generation
 #' @description
-#' Having constructed the model exploiting the graphical editor, namely GreatSPN, the automatic generation of both the stochastic (the Continuous Time Markov Chain) and
-#' deterministic (ODEs) processes underlying the model is implemented by the model_generation() function.
+#'   Having constructed the model exploiting the graphical editor, namely GreatSPN, the automatic generation of both the stochastic (the Continuous Time Markov Chain) and
+#'   deterministic (ODEs) processes underlying the model is implemented by the model_generation() function.
+#'
 #' @param out_fname Prefix to the output file name.
-#' @param net_fname .PNPRO file storing  the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
-#' @param functions_fname  C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
-#' @param volume The folder to mount within the Doker image providing all the necessary files.
+#' @param net_fname .PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
+#' @param functions_fname C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
+#' @param volume The folder to mount within the Docker image providing all the necessary files.
+#' @param debug If TRUE enables logging activity.
 
-#' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Daniele Baccega
+#' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 
-#' @return Model_generation returns the binary file SIR.solver in which the underlying processes (both deterministic and stochastic) of the Petri Net model and the library used for their simulation are packaged.
+#' @return model_generation returns the binary file SIR.solver in which the underlying processes (both deterministic and stochastic) of the Petri Net model and the library used for their simulation are packaged.
 #'
 #' @examples
 #' \dontrun{
@@ -20,25 +22,25 @@
 #' }
 #'
 #' @details
-#'    GreatSPN GUI, the graphical editor for drawing Petri Nets formalisms, is available online: http://www.di.unito.it/~amparore/mc4cslta/editor.html
+#' GreatSPN GUI, the graphical editor for drawing Petri Nets formalism, is available online: http://www.di.unito.it/~amparore/mc4cslta/editor.html
 #'
 #' @export
 
-model_generation <-function( out_fname = NULL,
-                             net_fname,
-                             functions_fname = NULL,
-                             volume = getwd(),
-														 #Flag to enable logging activity
-														 debug = FALSE){
+model_generation <-function(out_fname = NULL,
+                            net_fname,
+                            functions_fname = NULL,
+                            volume = getwd(),
+														#Flag to enable logging activity
+														debug = FALSE){
 
 
-    #common_test function receive all the parameters that will be tested for model_generation function
+    # This function receives all the parameters that will be tested for model_generation function
     ret = common_test(net_fname = net_fname,
     									functions_fname = functions_fname,
     									volume = volume,
                       caller_function = "generation")
 
-    if(ret != "ok")
+    if(ret != TRUE)
         stop(paste("model_generation_test error:", ret, sep = "\n"))
 
     chk_dir<- function(path){
@@ -67,7 +69,7 @@ model_generation <-function( out_fname = NULL,
     file.copy(from = functions_fname, to = out_dir)
     # Set command line to unfold the PN
 
-    #Reading docker image names
+    # Reading docker image names
     containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
     containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
 
