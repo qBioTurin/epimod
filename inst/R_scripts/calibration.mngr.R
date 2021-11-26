@@ -2,6 +2,10 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
+# Define a variable counter in the .GlobalEnv.
+# This variable will be used to trace the number o f
+.GlobalEnv.counter <- 0
+
 calibration.worker <- function(id, config, params, seed)
 {
   print("[calibration.worker] Starts with parameters:")
@@ -22,23 +26,10 @@ calibration.worker <- function(id, config, params, seed)
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
                         solver_type = params$solver_type,
-  											seed = seed + id,
+  											seed = seed,
                         taueps = params$taueps,
                         timeout = params$timeout)
   print("[calibration.worer] Done generating command template")
-  # Generate the command to run with the required parameters
-  # cmd <- experiment.cmd(id,
-  #                       solver_fname = params$files$solver_fname,
-  #                       solver_type = params$solver_type,
-  #                       n_run = 1,
-  #                       s_time = params$s_time,
-  #                       f_time = params$f_time,
-  #                       event_times = params$event_times,
-  #                       event_function = params$event_function,
-  #                       timeout = params$timeout,
-  #                       out_fname = params$out_fname)
-  # Execute the command
-  # system(cmd, wait = TRUE)
   print("[calibration.worer] Starting simulations..")
   experiment.run(base_id = id,
                  cmd = cmd,
@@ -69,13 +60,6 @@ calibration.worker <- function(id, config, params, seed)
 objfn <- function(x, params, cl, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
-	###########
-	## CHECK ##
-	###########
-	# set.seed(kind = "Mersenne-Twister", seed = seed)
-	###########
-	##  END  ##
-	###########
 	# Generate the simulation's configuration according to the provided input x
 	config <- experiment.configurations(n_config = 1,
 										parm_fname = params$files$functions_fname,
@@ -86,18 +70,21 @@ objfn <- function(x, params, cl, seed) {
 										ini_vector_mod = params$ini_vector_mod)
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
+	cnt <- get(x = "counter", envir = .GlobalEnv)
+	curr_seed = seed + cnt
+	assign('counter', cnt + 1, envir = .GlobalEnv)
 	# traces_name <- parLapply(cl,
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
 	# 						 calibration.worker,
 	# 						 config = config,
 	# 						 params = params,
-	# 						 seed = seed)
+	# 						 seed = curr_seed)
 	### DEBUG ###
 	traces_name <- lapply(c(paste0(id,"-",c(1:params$n_run))),
 						  calibration.worker,
 						  config = config,
 						  params = params,
-						  seed = seed)
+						  seed = curr_seed)
 	### DEBUG ###
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
@@ -121,12 +108,6 @@ objfn <- function(x, params, cl, seed) {
 				col.names = TRUE,
 				row.names = FALSE,
 				append = FALSE)
-	# fnm <- paste0(params$out_dir, params$out_fname,"-", id, ".trace")
-	# if(!file.exists(fnm)){
-	# 	write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-	# } else{
-	# 	write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-	# }
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
 	source(params$files$distance_measure_fname)
@@ -171,6 +152,9 @@ if(is.null(params$seed)){
 	load(params$seed)
 }
 
+# set.seed(kind = "Mersenne-Twister", seed = init_seed)
+# .GlobalEnv.counter <- 1
+
 # Copy files to the run directory
 experiment.env_setup(files = params$files,
                      dest_dir = params$run_dir)
@@ -192,7 +176,8 @@ if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
 }
-ctl$seed <- init_seed
+ctl$seed <- init_seed + .GlobalEnv.counter
+.GlobalEnv.counter <- .GlobalEnv.counter + 1
 
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
@@ -201,7 +186,7 @@ ret <- GenSA(par=params$ini_v,
              control = ctl,
              params = params,
              cl = cl,
-						 seed = init_seed + 1)
+						 seed = init_seed)
 
 stopCluster(cl)
 # Save the output of the optimization problem to file
