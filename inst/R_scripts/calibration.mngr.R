@@ -176,8 +176,8 @@ if(!is.null(params$max.time))
 {
     ctl$max.time <- params$max.time
 }
-ctl$seed <- init_seed + .GlobalEnv.counter
-.GlobalEnv.counter <- .GlobalEnv.counter + 1
+ctl$seed <- init_seed + counter
+counter <- counter + 1
 
 ret <- GenSA(par=params$ini_v,
              fn=objfn,
