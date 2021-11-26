@@ -228,7 +228,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
   	if((f_time - i_time) %% s_time != 0)
   		return("f_time - i_time must be divisible by s_time!")
 
-		#If not specified, a runtime error is generated
+		# If not specified, a runtime error is generated
 	  if(!missing(parameters_fname) && !is.null(parameters_fname)){
 	    if(!file.exists(parameters_fname)){
 	      return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
