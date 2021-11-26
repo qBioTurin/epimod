@@ -7,6 +7,7 @@ calibration.worker <- function(id, config, params, seed)
   print("[calibration.worker] Starts with parameters:")
   print(paste0("[calibration.worker] - id ", id))
   print(paste0("[calibration.worker] - config ", config))
+  print(paste0("[calibration.worker] - seed ", seed))
   print(paste0("[calibration.worker] - params ", params))
   # Setup simulation's environment
   experiment.env_setup(id = id,
@@ -68,7 +69,13 @@ calibration.worker <- function(id, config, params, seed)
 objfn <- function(x, params, cl, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
-	set.seed(kind = "Mersenne-Twister", seed = seed)
+	###########
+	## CHECK ##
+	###########
+	# set.seed(kind = "Mersenne-Twister", seed = seed)
+	###########
+	##  END  ##
+	###########
 	# Generate the simulation's configuration according to the provided input x
 	config <- experiment.configurations(n_config = 1,
 										parm_fname = params$files$functions_fname,
@@ -83,8 +90,8 @@ objfn <- function(x, params, cl, seed) {
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
 	# 						 calibration.worker,
 	# 						 config = config,
-							 # params = params,
-							 # seed = seed)
+	# 						 params = params,
+	# 						 seed = seed)
 	### DEBUG ###
 	traces_name <- lapply(c(paste0(id,"-",c(1:params$n_run))),
 						  calibration.worker,
@@ -93,9 +100,6 @@ objfn <- function(x, params, cl, seed) {
 						  seed = seed)
 	### DEBUG ###
 	print("[objfn] Done calibration.worer")
-	# traces_name <- list.files()
-	# traces_name <- traces_name[grep(x = traces_name,
-	# 								pattern = "([0-9]){1}(-[0-9+])+(.trace){1}")]
 	# Append all the solutions in one single data.frame
 	print("[objfn] Settling files...")
 	print(traces_name)
@@ -174,7 +178,7 @@ experiment.env_setup(files = params$files,
 print(paste0("[calibration.mngr] Availabe processors: ", params$processors))
 cl <- makeCluster(spec = params$processors,
                   type = "FORK")
-# Call GenSA with init_vector as initail condition, upper_vector and lower_vector as boundaries conditions.
+# Call GenSA with init_vector as initial condition, upper_vector and lower_vector as boundaries conditions.
 ctl <- list()
 if(!is.null(params$max.call))
 {

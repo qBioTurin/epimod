@@ -65,19 +65,12 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
     ## to check the Docker container status
     dockerExit <- system(paste("docker inspect -f {{.State.ExitCode}}",dockerid),intern= T)
     cat("\nDocker exit status:",dockerExit,"\n\n")
-    # if(as.numeric(dockerExit)!=0){
-    #     system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
-    #     cat(paste("\nDocker container ", substr(dockerid,1,12), " had exit different from 0\n", sep=""))
-    #     cat("\nExecution is interrupted\n")
-    #     cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
-    #     system("echo 3 > ExitStatusFile 2>&1")
-    #     return(3)
-    # }
 
     if(debug==TRUE){
     	system(paste("docker logs ", substr(dockerid,1,12), " &> ", substr(dockerid,1,12),"_error.log", sep=""))
     	cat("The container's log is saved at: ")
     	system(paste0("docker inspect --format=","'{{.LogPath}}' ",dockerid))
+    	cat(paste("Please send to beccuti@unito.it this error: Docker failed exit 0,\n the description of the function you were using and the following error log file,\n which is saved in your working folder:\n", substr(dockerid,1,12),"_error.log\n", sep=""))
     	system("echo 0 > ExitStatusFile 2>&1")
     	return(0)
     }
