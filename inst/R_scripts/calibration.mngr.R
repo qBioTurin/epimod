@@ -2,10 +2,6 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
-# Define a variable counter in the .GlobalEnv.
-# This variable will be used to trace the number o f
-.GlobalEnv.counter <- 0
-
 calibration.worker <- function(id, config, params, seed)
 {
   print("[calibration.worker] Starts with parameters:")
@@ -72,7 +68,7 @@ objfn <- function(x, params, cl, seed) {
 	print("[objfn] Calling calibration.worer")
 	cnt <- get(x = "counter", envir = .GlobalEnv)
 	curr_seed = seed + cnt
-	assign('counter', cnt + 1, envir = .GlobalEnv)
+	assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
 	# traces_name <- parLapply(cl,
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
 	# 						 calibration.worker,
@@ -137,6 +133,10 @@ params_fname <- args[1]
 # Read the parameters list
 params <- readRDS(params_fname)
 
+# Define a variable counter in the .GlobalEnv.
+counter <- 0
+# This variable will be used to trace the number o f
+# assign(x = "counter", value = 0, envir = .GlobalEnv)
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
 	# Save initial seed value
