@@ -45,12 +45,11 @@ model.worker <- function(id,
   	# setup the environment for each run
   	fns <- list.files()
   	lapply(X = c(1:n_run),
-  				 FUN = function(X, i, fns){
+  				 FUN = function(X, fns){
   				 	dir.create(paste0(X))
   				 	file.copy(from = fns,
-  				 						to = paste0(i,fns))
+  				 						to = paste0(X,fns))
   				 },
-  				 i = i,
   				 fns = fns)
   	print("[calibration.worker] Done creating subdirectories")
   	# Create a cluster
