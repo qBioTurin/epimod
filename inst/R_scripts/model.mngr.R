@@ -30,13 +30,13 @@ model.worker <- function(id,
                         solver_type = solver_type,
                         taueps = taueps,
                         timeout = timeout,
-  			seed = seed + id)
+  											seed = seed + id)
 
   # Compute the number of thread to use (so that the machine workload gets close to one)
-  if (greed > 0 && runif(1, min = 0, max = 1) > greed)
-  {
-    parallel_processors <- parallel_processors + 1
-  }
+  # if (greed > 0 && runif(1, min = 0, max = 1) > greed)
+  # {
+  #   parallel_processors <- parallel_processors + 1
+  # }
   # Run the experiment
   # elapsed <- experiment.run(base_id = id,
   #                           cmd = cmd,
@@ -145,20 +145,20 @@ cl <- makeCluster(params$parallel_processors,
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
-if(params$parallel_processors != 1)
-{
-  # Run params$parallel_processors configurations in parallel
-  threads.mngr <- min(params$n_config, params$parallel_processors)
-  threads.wrkr <- floor(params$parallel_processors/threads.mngr)
-  threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
-  # The probability to use one worker thread more than specified in by threads.wrkr
-  threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
-} else {
-  threads.mngr <- 1
-  threads.wrkr <- 1
-  threads.load <- 1
-  threads.greed <- 0
-}
+# if(params$parallel_processors != 1)
+# {
+#   # Run params$parallel_processors configurations in parallel
+#   threads.mngr <- min(params$n_config, params$parallel_processors)
+#   threads.wrkr <- floor(params$parallel_processors/threads.mngr)
+#   threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
+#   # The probability to use one worker thread more than specified in by threads.wrkr
+#   threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
+# } else {
+#   threads.mngr <- 1
+#   threads.wrkr <- 1
+#   threads.load <- 1
+#   threads.greed <- 0
+# }
 # exec_times <- parLapply( cl = cl,
 #                          X = c(1:threads.mngr),
 #                          fun = model.worker,
@@ -180,7 +180,7 @@ if(params$parallel_processors != 1)
 #                          config = params$config,
 #                          parallel_processors = threads.wrkr,
 #                          greed = threads.greed)
-exec_times <- lapply(X = c(1:threads.mngr),
+exec_times <- lapply(X = params$n_config,
                      FUN = model.worker,
                      solver_fname = params$files$solver_fname,
                      solver_type = params$solver_type,
@@ -198,8 +198,8 @@ exec_times <- lapply(X = c(1:threads.mngr),
                      event_function = params$event_function,
                      files = params$files,
                      config = params$config,
-                     parallel_processors = threads.wrkr,
-                     greed = threads.greed)
+                     parallel_processors = 1,
+                     greed = 1)
 
 stopCluster(cl)
 
