@@ -9,8 +9,11 @@ model.worker <- function(id,
                          files, config = NULL,
                          parallel_processors, greed)
 {
+	print("[calibration.worker] Starts with parameters:")
+	print(paste0("[calibration.worker] - id ", id))
   if (!is.null(config))
   {
+  	print(paste0("[calibration.worker] - config ", config))
     # Setup the environment
     experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
   }
@@ -20,20 +23,25 @@ model.worker <- function(id,
     dir.create(paste0(run_dir, id), recursive = TRUE, showWarnings = FALSE)
     file.copy(from = solver_fname, to = paste0(run_dir, id))
   }
+	print(paste0("[calibration.worker] - seed ", seed))
+	print(paste0("[calibration.worker] - params ", params))
 
   # Change working directory to the one corresponding at the current id
   pwd <- getwd()
   setwd(paste0(run_dir,id))
 
+  print("[calibration.worer] Generating command template")
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = solver_fname,
   											solver_type = solver_type,
   											taueps = taueps,
   											timeout = timeout,
   											seed = seed + id)
-
+  print("[calibration.worer] Done generating command template")
+  print("[calibration.worer] Starting simulations..")
   if(n_run != 1)
   {
+  	print("[calibration.worker] Creating subdirectories...")
   	# setup the environment for each run
   	fns <- list.files()
   	lapply(X = c(1:n_run),
@@ -44,6 +52,7 @@ model.worker <- function(id,
   				 },
   				 i = i,
   				 fns = fns)
+  	print("[calibration.worker] Done creating subdirectories")
   	# Create a cluster
   	cl <- makeCluster(parallel_processors,
   										type = "FORK")
@@ -53,6 +62,7 @@ model.worker <- function(id,
   						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, i){
   							pwd <- getwd()
   							setwd(X)
+  							print(paste0("[calibration.worker] Running simulation ", id, "-", i, "..."))
   							experiment.run(id = id,
   														 cmd = cmd,
   														 i_time = i_time,
@@ -62,6 +72,7 @@ model.worker <- function(id,
   														 event_times = event_times,
   														 event_function = event_function,
   														 out_fname = paste0(out_fname,"-", i))
+  							print(paste0("[calibration.worker] Simulation ", id, "-", i, " done!"))
   							setwd(pwd)
   						},
   						X = c(1:n_run),
@@ -76,25 +87,29 @@ model.worker <- function(id,
   						out_fname = out_fname,
   						i = i)
   	elapsed <-  Sys.time()-start_time
-  	# Move trace files to the parent diirectory
+  	print("[calibration.worker] Merging files..")
+  	# Get file names
   	res <- list.files(pattern = ".trace",
   										recursive = TRUE)
-  	file.copy(from = res, to = basename(res))
   	# Merge all trace files in one
-  	lapply(X = basename(res), function(X, outname)
+  	lapply(X = res, function(X, outname)
   		{
-  			tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", X, ".trace"), sep = "")
-  			if (!file.exists(fnm)) {
-  				write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+  			# tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", basename(X), ".trace"), sep = "")
+  			tr <- read.csv(X,
+  										 sep = "")
+  			if (!file.exists(outname)) {
+  				write.table(tr, file = outname, sep = " ", col.names = TRUE, row.names = FALSE)
 				} else {
-					write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+					write.table(tr, file = outname, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
 				}
   			unlink(x = basename(dirname(X)),
   						 recursive = TRUE,
   						 force = TRUE)
 			},
 			outname = paste0(out_dir, out_fname,"-", id, ".trace"))
+  		print("[calibration.worker] Done merging files")
   } else {
+  	print(paste0("[calibration.worker] Running simulation ", id, "..."))
   	elapsed <- experiment.run(id = id,
   														cmd = cmd,
   														i_time = i_time,
@@ -104,6 +119,7 @@ model.worker <- function(id,
   														event_times = event_times,
   														event_function = event_function,
   														out_fname = out_fname)
+  	print(paste0("[calibration.worker] Simulation ", id, " done!"))
   }
 
   # Compute the number of thread to use (so that the machine workload gets close to one)
