@@ -241,7 +241,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 	      file = file(parameters_fname, "r")
 	      while(TRUE){
 	        line = readLines(file, n=1)
-	        if(length(line) != 0){
+	        if(length(line) != 0 && length(grep(pattern = "(^#){1}", x = gsub(pattern = " ", replacement = "", line))) == 0){
 	          fname = unlist(strsplit(gsub(" ", "", line), ";"))[3]
 	          if(!(exists(fname) || length(find(fname, numeric = TRUE)) >= 1 ||
 	               !suppressWarnings(is.na(as.numeric(fname))))){
