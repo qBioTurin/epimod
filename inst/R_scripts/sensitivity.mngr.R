@@ -9,7 +9,6 @@ sensitivity.worker <- function(id,
                                event_times, event_function,
                                files, config,
 															 parallel_processors, greed ){
-	library(epimod)
 	# Setup the environment
 	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
 	# Environment settled, now run
@@ -154,43 +153,43 @@ if(params$parallel_processors != 1)
 	threads.greed <- 0
 }
 # Run simulations
-exec_times <- parLapply( cl,
-                         c(n:(n+params$n_config-1)),                # execute n_config istances
-                         sensitivity.worker,                  # of sensitivity.worker
-                         solver_fname = params$files$solver_fname,  # using the following parameters
-                         solver_type = "LSODA",
-                         i_time = params$i_time,
-                         s_time = params$s_time,
-                         f_time = params$f_time,
-                         timeout = params$timeout,
-                         run_dir = params$run_dir,
-                         out_fname = params$out_fname,
-                         out_dir = params$out_dir,
-												 seed = init_seed,
-                         event_times = params$event_times,
-                         event_function = params$event_function,
-                         files = params$files,
-						 config = params$config,
-						 parallel_processors = threads.wrkr,
-						 greed = threads.greed)
-# exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
-# 					 sensitivity.worker,                  # of sensitivity.worker
-# 					 solver_fname = params$files$solver_fname,  # using the following parameters
-# 					 solver_type = "LSODA",
-# 					 i_time = params$i_time,
-# 					 s_time = params$s_time,
-# 					 f_time = params$f_time,
-# 					 timeout = params$timeout,
-# 					 run_dir = params$run_dir,
-# 					 out_fname = params$out_fname,
-# 					 out_dir = params$out_dir,
-# 					 seed = init_seed,
-# 					 event_times = params$event_times,
-# 					 event_function = params$event_function,
-# 					 files = params$files,
-# 					 config = params$config,
-# 					 parallel_processors = threads.wrkr,
-# 					 greed = threads.greed)
+# exec_times <- parLapply( cl,
+#                          c(n:(n+params$n_config-1)),                # execute n_config istances
+#                          sensitivity.worker,                  # of sensitivity.worker
+#                          solver_fname = params$files$solver_fname,  # using the following parameters
+#                          solver_type = "LSODA",
+#                          i_time = params$i_time,
+#                          s_time = params$s_time,
+#                          f_time = params$f_time,
+#                          timeout = params$timeout,
+#                          run_dir = params$run_dir,
+#                          out_fname = params$out_fname,
+#                          out_dir = params$out_dir,
+# 												 seed = init_seed,
+#                          event_times = params$event_times,
+#                          event_function = params$event_function,
+#                          files = params$files,
+# 						 config = params$config,
+# 						 parallel_processors = threads.wrkr,
+# 						 greed = threads.greed)
+exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
+					 sensitivity.worker,                  # of sensitivity.worker
+					 solver_fname = params$files$solver_fname,  # using the following parameters
+					 solver_type = "LSODA",
+					 i_time = params$i_time,
+					 s_time = params$s_time,
+					 f_time = params$f_time,
+					 timeout = params$timeout,
+					 run_dir = params$run_dir,
+					 out_fname = params$out_fname,
+					 out_dir = params$out_dir,
+					 seed = init_seed,
+					 event_times = params$event_times,
+					 event_function = params$event_function,
+					 files = params$files,
+					 config = params$config,
+					 parallel_processors = threads.wrkr,
+					 greed = threads.greed)
 
 write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
 
