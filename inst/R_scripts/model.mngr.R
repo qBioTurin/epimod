@@ -30,7 +30,7 @@ model.worker <- function(id,
                         solver_type = solver_type,
                         taueps = taueps,
                         timeout = timeout,
-  											seed = seed + id)
+  			seed = seed + id)
 
   # Compute the number of thread to use (so that the machine workload gets close to one)
   if (greed > 0 && runif(1, min = 0, max = 1) > greed)

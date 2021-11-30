@@ -8,18 +8,20 @@ sensitivity.worker <- function(id,
                                timeout, run_dir, out_fname, out_dir,
                                event_times, event_function,
                                files, config,
-															 parallel_processors, greed ){
+                               parallel_processors, greed ){
 	# Setup the environment
 	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
 	# Environment settled, now run
 	# Change working directory to the one corresponding at the current id
 	pwd <- getwd()
 	setwd(paste0(run_dir,id))
+
+	# Generate the appropriate command to run on the Docker
 	cmd <- experiment.cmd(solver_fname = solver_fname,
-						  solver_type = solver_type,
-						  taueps = taueps,
-						  timeout = timeout,
-						  seed = seed + id)
+				solver_type = solver_type,
+				taueps = taueps,
+				timeout = timeout,
+				seed = seed + id)
 	# Run the experiment
 	if (greed > 0 && runif(1, min = 0, max = 1) > greed)
 	{
