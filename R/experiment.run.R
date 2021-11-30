@@ -22,16 +22,14 @@
 #' @export
 
 library(parallel)
-
-worker <- function(worker_id,
-				   cmd, n_run = 1,
-				   base_id,
-				   i_time, s_time, f_time,
-				   event_times = NULL, event_function = NULL,
-				   out_fname)
+experiment.run <- function(id, cmd,
+													 i_time, f_time, s_time,
+													 n_run = 1,
+													 event_times = NULL, event_function = NULL,
+													 out_fname)
 {
 	# Run's output file name
-	fnm <- paste0(out_fname, "-", base_id, "-", worker_id,".trace")
+	fnm <- paste0(out_fname, "-", id, ".trace")
 
 	# Number of iterations due to discrete events
 	iterations <- 0
@@ -45,8 +43,6 @@ worker <- function(worker_id,
 	cmd <- gsub(x = cmd, pattern = "<OUT_FNAME>", out_fname)
 	for (i in 1:(iterations + 1))
 	{
-		# Define the identifier for the current iteration
-		iter.id <- paste0(worker_id, "-", i)
 		# Setup initial marking, initial and final time
 		if (i == 1)
 		{
@@ -87,7 +83,7 @@ worker <- function(worker_id,
 							replacement = "")
 			}
 			# Generate the init filename for the current iteration
-			init <- paste0("init_iter-", iter.id)
+			init <- paste0("init_iter-", i)
 
 			# Set the event's time as the new initial time
 			i_time <- event_times[i - 1]
@@ -117,8 +113,8 @@ worker <- function(worker_id,
 			final_time <- f_time
 
 		# Generate the command to execute the current iteration simulation's configuration
-		print(paste0("[experiment.run] replacement <ID> ", paste0(base_id, "-", iter.id)))
-		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = paste0(base_id, "-", iter.id))
+		print(paste0("[experiment.run] replacement <ID> ", paste0(id, "-", i)))
+		cmd.iter <- gsub(x = cmd, pattern = "<ID>", replacement = paste0(id, "-", i))
 		print(paste0("[experiment.run] replacement <S_TIME> ", s_time))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<S_TIME>", replacement = s_time)
 		print(paste0("[experiment.run] replacement <I_TIME> ", i_time))
@@ -142,7 +138,7 @@ worker <- function(worker_id,
 		# Run the solver with all necessary parameters
 		system(cmd.iter, wait = TRUE)
 		#############################
-		curr_fnm <- paste0(out_fname, "-", base_id, "-", iter.id, ".trace")
+		curr_fnm <- paste0(out_fname, "-", id, "-", i, ".trace")
 		# DEBUG
 		# write(x = paste(cmd.iter,curr_fnm), file = "~/data/commands.txt", append = TRUE)
 		####### PATCH ########
@@ -183,46 +179,4 @@ worker <- function(worker_id,
 			file.remove(init)
 		}
 	}
-}
-
-experiment.run <- function(base_id, cmd,
-						   i_time, f_time, s_time,
-						   n_run = 1,
-						   event_times = NULL, event_function = NULL,
-						   parallel_processors = 1, out_fname)
-{
-	# Create a cluster
-	print(paste0("[experiment.run] parallel_processors = ", parallel_processors))
-	cl <- makeCluster(parallel_processors,
-					  type = "FORK")
-	# number of run assigned to each thread
-	jobs <- floor(n_run/parallel_processors)
-	#### ##### ####
-	T1 <- Sys.time()
-	# ret <- parLapply(cl = cl,
-	# 		  X = c(1:n_run),
-	# 		  fun = worker,
-	# 		  cmd = cmd,
-	# 		  base_id = base_id,
-	# 		  i_time = i_time,
-	# 		  f_time = f_time,
-	# 		  s_time = s_time,
-	# 		  n_run = jobs,
-	# 		  event_times = event_times,
-	# 		  event_function = event_function,
-	# 		  out_fname = out_fname)
-	ret <- lapply(X = c(1:n_run),
-				  FUN = worker,
-				  cmd = cmd,
-				  base_id = base_id,
-				  i_time = i_time,
-				  f_time = f_time,
-				  s_time = s_time,
-				  n_run = jobs,
-				  event_times = event_times,
-				  event_function = event_function,
-				  out_fname = out_fname)
-	T2 <- difftime(Sys.time(), T1, unit = "secs")
-	stopCluster(cl)
-	return(T2)
 }
