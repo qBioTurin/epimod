@@ -60,7 +60,7 @@ model.worker <- function(id,
   	parLapply(cl = cl,
   						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, id){
   							pwd <- getwd()
-  							setwd(X)
+  							setwd(paste0(X))
   							print(paste0("[calibration.worker] Running simulation ", id, "-", X, "..."))
   							experiment.run(id = X,
   														 cmd = cmd,
