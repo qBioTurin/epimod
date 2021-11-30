@@ -38,7 +38,7 @@ model.worker <- function(id,
   	fns <- list.files()
   	lapply(X=c(1:n_run),
   				 FUN = function(i){
-  				 	dir.create(x)
+  				 	dir.create(X)
   				 	file.copy(from = fns,
   				 						to = paste0(i,fns))
   				 })
@@ -78,15 +78,15 @@ model.worker <- function(id,
   										recursive = TRUE)
   	file.copy(from = res, to = basename(res))
   	# Merge all trace files in one
-  	lapply(basename(res), function(x, outname)
+  	lapply(X = basename(res), function(X, outname)
   		{
-  			tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
+  			tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", X, ".trace"), sep = "")
   			if (!file.exists(fnm)) {
   				write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
 				} else {
 					write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
 				}
-  			unlink(x = basename(dirname(x)),
+  			unlink(x = basename(dirname(X)),
   						 recursive = TRUE,
   						 force = TRUE)
 			},
