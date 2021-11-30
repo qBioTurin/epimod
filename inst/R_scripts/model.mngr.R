@@ -43,7 +43,8 @@ model.worker <- function(id,
   {
   	print("[calibration.worker] Creating subdirectories...")
   	# setup the environment for each run
-  	fns <- list.files()
+  	fns <- list.files(recursive = FALSE)
+  	print(paste0("[calibration.worker] ", fns))
   	lapply(X = c(1:n_run),
   				 FUN = function(X, fns){
   				 	dir.create(paste0(X))
