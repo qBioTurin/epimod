@@ -49,7 +49,7 @@ model.worker <- function(id,
   				 FUN = function(X, fns){
   				 	dir.create(paste0(X))
   				 	file.copy(from = fns,
-  				 						to = paste0(X,fns))
+  				 						to = paste0(X, .Platform$file.sep, fns))
   				 },
   				 fns = fns)
   	print("[calibration.worker] Done creating subdirectories")
