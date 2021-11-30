@@ -160,7 +160,7 @@ experiment.env_setup(files = params$files,
                      dest_dir = params$run_dir)
 # Create a cluster
 print(paste0("[calibration.mngr] Availabe processors: ", params$processors))
-cl <- makeCluster(spec = params$processors,
+cl <- makeCluster(params$processors,
                   type = "FORK")
 # Call GenSA with init_vector as initial condition, upper_vector and lower_vector as boundaries conditions.
 ctl <- list()

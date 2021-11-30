@@ -193,7 +193,7 @@ experiment.run <- function(base_id, cmd,
 {
 	# Create a cluster
 	print(paste0("[experiment.run] parallel_processors = ", parallel_processors))
-	cl <- makeCluster(spec = parallel_processors,
+	cl <- makeCluster(parallel_processors,
 					  type = "FORK")
 	# number of run assigned to each thread
 	jobs <- floor(n_run/parallel_processors)
