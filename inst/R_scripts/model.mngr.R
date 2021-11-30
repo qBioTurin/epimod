@@ -38,16 +38,25 @@ model.worker <- function(id,
     parallel_processors <- parallel_processors + 1
   }
   # Run the experiment
-  elapsed <- experiment.run(base_id = id,
-                            cmd = cmd,
-                            i_time = i_time,
-                            f_time = f_time,
-                            s_time = s_time,
-                            n_run = n_run,
-                            event_times = event_times,
-                            event_function = event_function,
-                            parallel_processors = parallel_processors,
-                            out_fname = out_fname)
+  # elapsed <- experiment.run(base_id = id,
+  #                           cmd = cmd,
+  #                           i_time = i_time,
+  #                           f_time = f_time,
+  #                           s_time = s_time,
+  #                           n_run = n_run,
+  #                           event_times = event_times,
+  #                           event_function = event_function,
+  #                           parallel_processors = parallel_processors,
+  #                           out_fname = out_fname)
+  elapsed <- experiment.run(id = id,
+  													cmd = cmd,
+  													i_time = i_time,
+  													f_time = f_time,
+  													s_time = s_time,
+  													n_run = n_run,
+  													event_times = event_times,
+  													event_function = event_function,
+  													out_fname = out_fname)
 
   # Collect all output in a single output file
   trace_names <- paste0(id, "-", c(1:n_run))
