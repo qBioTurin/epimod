@@ -135,7 +135,7 @@ extend_seed <- .Random.seed
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
                   # outfile=paste0("log-", params$out_fname, ".txt"),
-                  type = "FORK")
+                  type = "PSOCK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 if(params$parallel_processors != 1)
