@@ -180,7 +180,7 @@ clusterEvalQ(cl, sessionInfo())
 #                          config = params$config,
 #                          parallel_processors = threads.wrkr,
 #                          greed = threads.greed)
-exec_times <- lapply(X = params$n_config,
+exec_times <- lapply(X = c(1:params$n_config),
                      FUN = model.worker,
                      solver_fname = params$files$solver_fname,
                      solver_type = params$solver_type,
@@ -198,7 +198,7 @@ exec_times <- lapply(X = params$n_config,
                      event_function = params$event_function,
                      files = params$files,
                      config = params$config,
-                     parallel_processors = 1,
+                     parallel_processors = params$parallel_processors,
                      greed = 1)
 
 stopCluster(cl)
