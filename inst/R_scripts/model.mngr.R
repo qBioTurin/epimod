@@ -46,7 +46,7 @@ model.worker <- function(id,
   	fns <- list.files()
   	lapply(X = c(1:n_run),
   				 FUN = function(X, i, fns){
-  				 	dir.create(X)
+  				 	dir.create(paste0(X))
   				 	file.copy(from = fns,
   				 						to = paste0(i,fns))
   				 },
