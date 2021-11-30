@@ -9,11 +9,11 @@ model.worker <- function(id,
                          files, config = NULL,
                          parallel_processors, greed)
 {
-	print("[calibration.worker] Starts with parameters:")
-	print(paste0("[calibration.worker] - id ", id))
+	print("[analysis.worker] Starts with parameters:")
+	print(paste0("[analysis.worker] - id ", id))
   if (!is.null(config))
   {
-  	print(paste0("[calibration.worker] - config ", config))
+  	print(paste0("[analysis.worker] - config ", config))
     # Setup the environment
     experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
   }
@@ -23,8 +23,8 @@ model.worker <- function(id,
     dir.create(paste0(run_dir, id), recursive = TRUE, showWarnings = FALSE)
     file.copy(from = solver_fname, to = paste0(run_dir, id))
   }
-	print(paste0("[calibration.worker] - seed ", seed))
-	print(paste0("[calibration.worker] - params ", params))
+	print(paste0("[analysis.worker] - seed ", seed))
+	print(paste0("[analysis.worker] - params ", params))
 
   # Change working directory to the one corresponding at the current id
   pwd <- getwd()
@@ -41,10 +41,10 @@ model.worker <- function(id,
   print("[calibration.worer] Starting simulations..")
   if(n_run != 1)
   {
-  	print("[calibration.worker] Creating subdirectories...")
+  	print("[analysis.worker] Creating subdirectories...")
   	# setup the environment for each run
   	fns <- list.files(recursive = FALSE)
-  	print(paste0("[calibration.worker] ", fns))
+  	print(paste0("[analysis.worker] ", fns))
   	lapply(X = c(1:n_run),
   				 FUN = function(X, fns){
   				 	dir.create(paste0(X))
@@ -52,7 +52,7 @@ model.worker <- function(id,
   				 						to = paste0(X, .Platform$file.sep, fns))
   				 },
   				 fns = fns)
-  	print("[calibration.worker] Done creating subdirectories")
+  	print("[analysis.worker] Done creating subdirectories")
   	# Create a cluster
   	cl <- makeCluster(parallel_processors,
   										type = "FORK")
@@ -62,7 +62,7 @@ model.worker <- function(id,
   						fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
   							pwd <- getwd()
   							setwd(paste0(X))
-  							print(paste0("[calibration.worker] Running simulation ", id, "-", X, "..."))
+  							print(paste0("[analysis.worker] Running simulation ", id, "-", X, "..."))
   							experiment.run(id = X,
   														 cmd = cmd,
   														 i_time = i_time,
@@ -72,7 +72,7 @@ model.worker <- function(id,
   														 event_times = event_times,
   														 event_function = event_function,
   														 out_fname = paste0(out_fname,"-", id))
-  							print(paste0("[calibration.worker] Simulation ", id, "-", X, " done!"))
+  							print(paste0("[analysis.worker] Simulation ", id, "-", X, " done!"))
   							setwd(pwd)
   						},
   						X = c(1:n_run),
@@ -85,7 +85,7 @@ model.worker <- function(id,
   						event_function = event_function,
   						out_fname = out_fname)
   	elapsed <-  Sys.time()-start_time
-  	print("[calibration.worker] Merging files..")
+  	print("[analysis.worker] Merging files..")
   	# Get file names
   	res <- list.files(pattern = ".trace",
   										recursive = TRUE)
@@ -105,9 +105,9 @@ model.worker <- function(id,
   						 force = TRUE)
 			},
 			outname = paste0(out_dir, out_fname,"-", id, ".trace"))
-  		print("[calibration.worker] Done merging files")
+  		print("[analysis.worker] Done merging files")
   } else {
-  	print(paste0("[calibration.worker] Running simulation ", id, "..."))
+  	print(paste0("[analysis.worker] Running simulation ", id, "..."))
   	elapsed <- experiment.run(id = id,
   														cmd = cmd,
   														i_time = i_time,
@@ -117,39 +117,8 @@ model.worker <- function(id,
   														event_times = event_times,
   														event_function = event_function,
   														out_fname = out_fname)
-  	print(paste0("[calibration.worker] Simulation ", id, " done!"))
+  	print(paste0("[analysis.worker] Simulation ", id, " done!"))
   }
-
-  # Compute the number of thread to use (so that the machine workload gets close to one)
-  # if (greed > 0 && runif(1, min = 0, max = 1) > greed)
-  # {
-  #   parallel_processors <- parallel_processors + 1
-  # }
-  # Run the experiment
-  # elapsed <- experiment.run(base_id = id,
-  #                           cmd = cmd,
-  #                           i_time = i_time,
-  #                           f_time = f_time,
-  #                           s_time = s_time,
-  #                           n_run = n_run,
-  #                           event_times = event_times,
-  #                           event_function = event_function,
-  #                           parallel_processors = parallel_processors,
-  #                           out_fname = out_fname)
-  # Collect all output in a single output file
-  # trace_names <- paste0(id, "-", c(1:n_run))
-  # lapply(trace_names, function(x){
-  #   fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
-  #   tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
-  #   if (!file.exists(fnm))
-  #   {
-  #     write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-  #   }
-  #   else {
-  #     write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-  #   }
-  #   file.remove(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"))
-  # })
   cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
   # Change the working directory back to the original one
   setwd(pwd)
@@ -223,20 +192,7 @@ cl <- makeCluster(params$parallel_processors,
                   type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
-# if(params$parallel_processors != 1)
-# {
-#   # Run params$parallel_processors configurations in parallel
-#   threads.mngr <- min(params$n_config, params$parallel_processors)
-#   threads.wrkr <- floor(params$parallel_processors/threads.mngr)
-#   threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
-#   # The probability to use one worker thread more than specified in by threads.wrkr
-#   threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
-# } else {
-#   threads.mngr <- 1
-#   threads.wrkr <- 1
-#   threads.load <- 1
-#   threads.greed <- 0
-# }
+
 exec_times <- parLapply( cl = cl,
                          X = c(1:params$n_config),
                          fun = model.worker,
