@@ -83,8 +83,7 @@ model.worker <- function(id,
   						n_run = n_run,
   						event_times = event_times,
   						event_function = event_function,
-  						out_fname = out_fname,
-  						id = id)
+  						out_fname = out_fname)
   	elapsed <-  Sys.time()-start_time
   	print("[calibration.worker] Merging files..")
   	# Get file names
