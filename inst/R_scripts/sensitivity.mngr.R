@@ -9,6 +9,7 @@ sensitivity.worker <- function(id,
                                event_times, event_function,
                                files, config,
 															 parallel_processors, greed ){
+	library(epimod)
 	# Setup the environment
 	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
 	# Environment settled, now run
@@ -135,7 +136,7 @@ extend_seed <- .Random.seed
 # Create a cluster
 cl <- makeCluster(params$parallel_processors,
                   # outfile=paste0("log-", params$out_fname, ".txt"),
-                  type = "PSOCK")
+                  type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 if(params$parallel_processors != 1)
