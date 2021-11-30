@@ -24,5 +24,7 @@ experiment.env_cleanup <- function(id, run_dir,
     								   )
     						),
     		  to = out_dir)
-    unlink(r_dir, recursive = TRUE)
+    unlink(r_dir,
+           recursive = TRUE,
+           force = TRUE)
 }
