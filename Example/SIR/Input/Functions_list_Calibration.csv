@@ -1,5 +1,5 @@
-p;S;1000;
-p;I;1;
-p;R;0;
-p; Recovery; recovery; n=1
-p; Infection; infection; n=1
+m;S;1000;
+m;I;1;
+m;R;0;
+e; Recovery; recovery; n=1
+e; Infection; infection; n=1
