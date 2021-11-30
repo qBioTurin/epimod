@@ -59,19 +59,19 @@ model.worker <- function(id,
   													out_fname = out_fname)
 
   # Collect all output in a single output file
-  trace_names <- paste0(id, "-", c(1:n_run))
-  lapply(trace_names, function(x){
-    fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
-    tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
-    if (!file.exists(fnm))
-    {
-      write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
-    }
-    else {
-      write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
-    }
-    file.remove(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"))
-  })
+  # trace_names <- paste0(id, "-", c(1:n_run))
+  # lapply(trace_names, function(x){
+  #   fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
+  #   tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
+  #   if (!file.exists(fnm))
+  #   {
+  #     write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+  #   }
+  #   else {
+  #     write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+  #   }
+  #   file.remove(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"))
+  # })
   cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
   # Change the working directory back to the original one
   setwd(pwd)
