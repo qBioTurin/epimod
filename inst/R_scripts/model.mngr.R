@@ -59,7 +59,7 @@ model.worker <- function(id,
   	# Launch simulations
   	start_time <- Sys.time()
   	parLapply(cl = cl,
-  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, id){
+  						fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
   							pwd <- getwd()
   							setwd(paste0(X))
   							print(paste0("[calibration.worker] Running simulation ", id, "-", X, "..."))
@@ -68,7 +68,7 @@ model.worker <- function(id,
   														 i_time = i_time,
   														 f_time = f_time,
   														 s_time = s_time,
-  														 n_run = n_run,
+  														 n_run = 1,
   														 event_times = event_times,
   														 event_function = event_function,
   														 out_fname = paste0(out_fname,"-", id))
@@ -81,7 +81,6 @@ model.worker <- function(id,
   						i_time = i_time,
   						f_time = f_time,
   						s_time = s_time,
-  						n_run = n_run,
   						event_times = event_times,
   						event_function = event_function,
   						out_fname = out_fname)
