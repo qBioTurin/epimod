@@ -27,10 +27,81 @@ model.worker <- function(id,
 
   # Generate the appropriate command to run on the Docker
   cmd <- experiment.cmd(solver_fname = solver_fname,
-                        solver_type = solver_type,
-                        taueps = taueps,
-                        timeout = timeout,
+  											solver_type = solver_type,
+  											taueps = taueps,
+  											timeout = timeout,
   											seed = seed + id)
+
+  if(n_run != 1)
+  {
+  	# setup the environment for each run
+  	fns <- list.files()
+  	lapply(X=c(1:n_run),
+  				 FUN = function(i){
+  				 	dir.create(x)
+  				 	file.copy(from = fns,
+  				 						to = paste0(i,fns))
+  				 })
+  	# Create a cluster
+  	cl <- makeCluster(parallel_processors,
+  										type = "FORK")
+  	# Launch simulations
+  	start_time <- Sys.time()
+  	parLapply(cl = cl,
+  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname){
+  							pwd <- getwd()
+  							setwd(x)
+  							experiment.run(id = id,
+  														 cmd = cmd,
+  														 i_time = i_time,
+  														 f_time = f_time,
+  														 s_time = s_time,
+  														 n_run = n_run,
+  														 event_times = event_times,
+  														 event_function = event_function,
+  														 out_fname = out_fname)
+  							setwd(pwd)
+  						},
+  						X = c(1:n_run),
+  						id = id,
+  						cmd = cmd,
+  						i_time = i_time,
+  						f_time = f_time,
+  						s_time = s_time,
+  						n_run = n_run,
+  						event_times = event_times,
+  						event_function = event_function,
+  						out_fname = out_fname)
+  	elapsed <-  Sys.time()-start_time
+  	# Move trace files to the parent diirectory
+  	res <- list.files(pattern = ".trace",
+  										recursive = TRUE)
+  	file.copy(from = res, to = basename(res))
+  	# Merge all trace files in one
+  	lapply(basename(res), function(x, outname)
+  		{
+  			tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", x, ".trace"), sep = "")
+  			if (!file.exists(fnm)) {
+  				write.table(tr, file = fnm, sep = " ", col.names = TRUE, row.names = FALSE)
+				} else {
+					write.table(tr, file = fnm, append = TRUE, sep = " ", col.names = FALSE, row.names = FALSE)
+				}
+  			unlink(x = basename(dirname(x)),
+  						 recursive = TRUE,
+  						 force = TRUE)
+			},
+			outname = paste0(out_dir, out_fname,"-", id, ".trace"))
+  } else {
+  	elapsed <- experiment.run(id = id,
+  														cmd = cmd,
+  														i_time = i_time,
+  														f_time = f_time,
+  														s_time = s_time,
+  														n_run = n_run,
+  														event_times = event_times,
+  														event_function = event_function,
+  														out_fname = out_fname)
+  }
 
   # Compute the number of thread to use (so that the machine workload gets close to one)
   # if (greed > 0 && runif(1, min = 0, max = 1) > greed)
@@ -48,16 +119,6 @@ model.worker <- function(id,
   #                           event_function = event_function,
   #                           parallel_processors = parallel_processors,
   #                           out_fname = out_fname)
-  elapsed <- experiment.run(id = id,
-  													cmd = cmd,
-  													i_time = i_time,
-  													f_time = f_time,
-  													s_time = s_time,
-  													n_run = n_run,
-  													event_times = event_times,
-  													event_function = event_function,
-  													out_fname = out_fname)
-
   # Collect all output in a single output file
   # trace_names <- paste0(id, "-", c(1:n_run))
   # lapply(trace_names, function(x){
