@@ -36,21 +36,23 @@ model.worker <- function(id,
   {
   	# setup the environment for each run
   	fns <- list.files()
-  	lapply(X=c(1:n_run),
-  				 FUN = function(i){
+  	lapply(X = c(1:n_run),
+  				 FUN = function(X, i, fns){
   				 	dir.create(X)
   				 	file.copy(from = fns,
   				 						to = paste0(i,fns))
-  				 })
+  				 },
+  				 i = i,
+  				 fns = fns)
   	# Create a cluster
   	cl <- makeCluster(parallel_processors,
   										type = "FORK")
   	# Launch simulations
   	start_time <- Sys.time()
   	parLapply(cl = cl,
-  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname){
+  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, i){
   							pwd <- getwd()
-  							setwd(x)
+  							setwd(X)
   							experiment.run(id = id,
   														 cmd = cmd,
   														 i_time = i_time,
@@ -59,7 +61,7 @@ model.worker <- function(id,
   														 n_run = n_run,
   														 event_times = event_times,
   														 event_function = event_function,
-  														 out_fname = out_fname)
+  														 out_fname = paste0(out_fname,"-", i))
   							setwd(pwd)
   						},
   						X = c(1:n_run),
@@ -71,7 +73,8 @@ model.worker <- function(id,
   						n_run = n_run,
   						event_times = event_times,
   						event_function = event_function,
-  						out_fname = out_fname)
+  						out_fname = out_fname,
+  						i = i)
   	elapsed <-  Sys.time()-start_time
   	# Move trace files to the parent diirectory
   	res <- list.files(pattern = ".trace",
