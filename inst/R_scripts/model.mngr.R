@@ -58,11 +58,11 @@ model.worker <- function(id,
   	# Launch simulations
   	start_time <- Sys.time()
   	parLapply(cl = cl,
-  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, i){
+  						fun = function(X, cmd, i_time, f_time, s_time, n_run, event_times, event_function, out_fname, id){
   							pwd <- getwd()
   							setwd(X)
-  							print(paste0("[calibration.worker] Running simulation ", id, "-", i, "..."))
-  							experiment.run(id = id,
+  							print(paste0("[calibration.worker] Running simulation ", id, "-", X, "..."))
+  							experiment.run(id = X,
   														 cmd = cmd,
   														 i_time = i_time,
   														 f_time = f_time,
@@ -70,8 +70,8 @@ model.worker <- function(id,
   														 n_run = n_run,
   														 event_times = event_times,
   														 event_function = event_function,
-  														 out_fname = paste0(out_fname,"-", i))
-  							print(paste0("[calibration.worker] Simulation ", id, "-", i, " done!"))
+  														 out_fname = paste0(out_fname,"-", id))
+  							print(paste0("[calibration.worker] Simulation ", id, "-", X, " done!"))
   							setwd(pwd)
   						},
   						X = c(1:n_run),
@@ -84,7 +84,7 @@ model.worker <- function(id,
   						event_times = event_times,
   						event_function = event_function,
   						out_fname = out_fname,
-  						i = i)
+  						id = id)
   	elapsed <-  Sys.time()-start_time
   	print("[calibration.worker] Merging files..")
   	# Get file names
