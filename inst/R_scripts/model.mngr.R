@@ -187,11 +187,6 @@ if(is.null(params$files$parameters_fname)
     																					config = config)
 }
 saveRDS(params,  file = paste0(param_fname), version = 2)
-# Create a cluster
-cl <- makeCluster(params$parallel_processors,
-                  type = "FORK")
-# Save session's info
-clusterEvalQ(cl, sessionInfo())
 
 ### NEW ###
 print("[model.mngr] Generating command template")
@@ -245,53 +240,64 @@ if(params$n_config > params$n_run)
 		}
 	}
 }
-# exec_times <- parLapply( cl = cl,
-#                          X = c(1:params$n_config),
-#                          fun = model.worker,
-#                          solver_fname = params$files$solver_fname,  # using the following parameters
-#                          solver_type = params$solver_type,
-#                          taueps = params$taueps,
-#                          i_time = params$i_time,
-#                          f_time = params$f_time,
-#                          s_time = params$s_time,
-#                          n_run = params$n_run,
-#                          timeout = params$timeout,
-#                          run_dir = params$run_dir,
-#                          out_fname = params$out_fname,
-#                          out_dir = params$out_dir,
-#                          seed = init_seed,
-#                          event_times = params$event_times,
-#                          event_function = params$event_function,
-#                          files = params$files,
-#                          config = params$config,
-#                          # parallel_processors = threads.wrkr,
-#                          # greed = threads.greed
-# 												 parallel_processors = params$parallel_processors,
-# 												 greed = 1)
 
-exec_times <- lapply(X = c(1:config_processors),
-                     FUN = mngr.worker,
-                     solver_fname = params$files$solver_fname,
-                     solver_type = params$solver_type,
-                     taueps = params$taueps,
-                     i_time = params$i_time,
-                     f_time = params$f_time,
-                     s_time = params$s_time,
-                     n_run = params$n_run,
-										 cmd = cmd,
-                     timeout = params$timeout,
-                     run_dir = params$run_dir,
-                     out_fname = params$out_fname,
-                     out_dir = params$out_dir,
-										 seed = init_seed,
-                     event_times = params$event_times,
-                     event_function = params$event_function,
-                     files = params$files,
-                     config = params$config,
-                     parallel_processors = run_processors)
+# Create a cluster
+cl <- makeCluster(config_processors,
+									type = "FORK")
+# Save session's info
+clusterEvalQ(cl, sessionInfo())
+
+exec_times <- parLapply( cl = cl,
+                         X = c(1:config_processors),
+                         fun = mngr.worker,
+                         solver_fname = params$files$solver_fname,  # using the following parameters
+                         solver_type = params$solver_type,
+                         taueps = params$taueps,
+                         i_time = params$i_time,
+                         f_time = params$f_time,
+                         s_time = params$s_time,
+                         n_run = params$n_run,
+												 cmd = cmd,
+                         timeout = params$timeout,
+                         run_dir = params$run_dir,
+                         out_fname = params$out_fname,
+                         out_dir = params$out_dir,
+                         seed = init_seed,
+                         event_times = params$event_times,
+                         event_function = params$event_function,
+                         files = params$files,
+                         config = params$config,
+												 parallel_processors = run_processors)
+
+# exec_times <- lapply(X = c(1:config_processors),
+#                      FUN = mngr.worker,
+#                      solver_fname = params$files$solver_fname,
+#                      solver_type = params$solver_type,
+#                      taueps = params$taueps,
+#                      i_time = params$i_time,
+#                      f_time = params$f_time,
+#                      s_time = params$s_time,
+#                      n_run = params$n_run,
+# 										 cmd = cmd,
+#                      timeout = params$timeout,
+#                      run_dir = params$run_dir,
+#                      out_fname = params$out_fname,
+#                      out_dir = params$out_dir,
+# 										 seed = init_seed,
+#                      event_times = params$event_times,
+#                      event_function = params$event_function,
+#                      files = params$files,
+#                      config = params$config,
+#                      parallel_processors = run_processors)
 
 ### NEW ###
 #~~ OLD ~~#
+# Create a cluster
+# cl <- makeCluster(params$parallel_processors,
+# 									type = "FORK")
+# # Save session's info
+# clusterEvalQ(cl, sessionInfo())
+#
 # exec_times <- parLapply( cl = cl,
 #                          X = c(1:params$n_config),
 #                          fun = model.worker,
