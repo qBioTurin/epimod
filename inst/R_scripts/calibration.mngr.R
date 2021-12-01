@@ -1,6 +1,5 @@
 library(GenSA)
 library(epimod)
-library(parallel)
 
 objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine

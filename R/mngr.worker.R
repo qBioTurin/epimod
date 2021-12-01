@@ -1,3 +1,4 @@
+library(parallel)
 mngr.worker <- function(id,
 												solver_fname, cmd,
 												i_time, f_time, s_time, n_run,
