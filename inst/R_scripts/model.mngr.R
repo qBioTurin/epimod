@@ -196,49 +196,49 @@ clusterEvalQ(cl, sessionInfo())
 ### NEW ###
 print("[model.mngr] Generating command template")
 # Generate the appropriate command to run on the Docker
-cmd <- experiment.cmd(solver_fname = solver_fname,
-											solver_type = solver_type,
-											taueps = taueps,
-											timeout = timeout)
+cmd <- experiment.cmd(solver_fname = params$solver_fname,
+											solver_type = params$solver_type,
+											taueps = params$taueps,
+											timeout = params$timeout)
 print("[model.mngr] Done generating command template")
 # Choose where and how to run parallel
-if(n_config > n_run)
+if(params$n_config > params$n_run)
 {
-	if(n_config >= parallel_processors)
+	if(params$n_config >= params$parallel_processors)
 	{
 		# Run configurations in parallel
-		config_processors <- parallel_processors
+		config_processors <- params$parallel_processors
 		# if there are multiple run for each configuration, then run them one after the other
 		run_processorors <- 1
 	}
 	else
 	{
 		# Run configurations in parallel
-		config_processors <- n_config
-		if(n_run > 1 && n_run < parallel_processors - n_config) {
+		config_processors <- params$n_config
+		if(params$n_run > 1 && params$n_run < params$parallel_processors - params$n_config) {
 
 			# If there are enough processors, run in parallel the configuration runs
-			run_processors = floor((parallel_processors - n_config)/n_run)
+			run_processors = floor((params$parallel_processors - params$n_config)/params$n_run)
 		}
 		else {
 			run_processors = 1
 		}
 	}
 } else {
-	if(n_run >= parallel_processors)
+	if(params$n_run >= params$parallel_processors)
 	{
 		# Run configurations one after the other
 		config_processors <- 1
 		# Run in parallel the configuratio runs
-		run_processorors <- parallel_processors
+		run_processorors <- params$parallel_processors
 	}
 	else
 	{
 		# Execute configurations runs in parallel
-		run_processors <- n_run
-		if(n_config > 1 && n_config < parallel_processors - n_run) {
+		run_processors <- params$n_run
+		if(params$n_config > 1 && params$n_config < params$parallel_processors - params$n_run) {
 			# If there are enough processors, run in parallel the some configurations
-			config_processors = floor((parallel_processors - n_run)/n_config)
+			config_processors = floor((params$parallel_processors - params$n_run)/params$n_config)
 		}
 		else {
 			config_processors = 1
@@ -288,7 +288,7 @@ exec_times <- lapply(X = c(1:config_processors),
                      event_function = params$event_function,
                      files = params$files,
                      config = params$config,
-										 seed = seed,
+										 seed = params$seed,
                      parallel_processors = run_processors)
 
 ### NEW ###
