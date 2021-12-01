@@ -11,7 +11,7 @@
 #' @param event_function, specifies the rule to update the marking
 #' @param timeout, string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax
 #' @param out_fname, output filename prefix
-#' @return a string
+#' @return the name of the trace file
 #' @author Paolo Castagno, Simone Pernice
 #'
 #' @examples
@@ -181,4 +181,5 @@ experiment.run <- function(id, cmd,
 			file.remove(init)
 		}
 	}
+	return(fnm)
 }
