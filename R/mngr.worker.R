@@ -48,8 +48,8 @@ mngr.worker <- function(id,
 					 fns = fns)
 		print("[mngr.worker] Done creating subdirectories")
 		# Create a cluster
-		cl <- makeCluster(parallel_processors,
-											type = "FORK")
+		# cl <- makeCluster(parallel_processors,
+		# 									type = "FORK")
 		# Launch simulations
 		start_time <- Sys.time()
 		# parLapply(cl = cl,
