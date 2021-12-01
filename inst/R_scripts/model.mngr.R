@@ -196,7 +196,7 @@ clusterEvalQ(cl, sessionInfo())
 ### NEW ###
 print("[model.mngr] Generating command template")
 # Generate the appropriate command to run on the Docker
-cmd <- experiment.cmd(solver_fname = params$solver_fname,
+cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
 											solver_type = params$solver_type,
 											taueps = params$taueps,
 											timeout = params$timeout)
