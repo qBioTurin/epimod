@@ -8,6 +8,12 @@ mngr.worker <- function(id,
 {
 	print("[mngr.worker] Starts with parameters:")
 	print(paste0("[mngr.worker] - id ", id))
+	print(paste0("[mngr.worker] - solver_fname ", solver_fname))
+	print(paste0("[mngr.worker] - cmd ", cmd))
+	print(paste0("[mngr.worker] - i_time ", i_time))
+	print(paste0("[mngr.worker] - f_time ", f_time))
+	print(paste0("[mngr.worker] - s_time ", s_time))
+	print(paste0("[mngr.worker] - parallel_processors ", parallel_processors))
 	if (!is.null(config))
 	{
 		print(paste0("[mngr.worker] - config ", config))
