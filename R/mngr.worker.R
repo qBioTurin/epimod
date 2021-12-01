@@ -7,11 +7,11 @@ mngr.worker <- function(id,
 												files, config = NULL,
 												parallel_processors)
 {
-	print("[analysis.worker] Starts with parameters:")
-	print(paste0("[analysis.worker] - id ", id))
+	print("[mngr.worker] Starts with parameters:")
+	print(paste0("[mngr.worker] - id ", id))
 	if (!is.null(config))
 	{
-		print(paste0("[analysis.worker] - config ", config))
+		print(paste0("[mngr.worker] - config ", config))
 		# Setup the environment
 		experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
 	}
@@ -21,20 +21,20 @@ mngr.worker <- function(id,
 		dir.create(paste0(run_dir, id), recursive = TRUE, showWarnings = FALSE)
 		file.copy(from = solver_fname, to = paste0(run_dir, id))
 	}
-	print(paste0("[analysis.worker] - seed ", seed))
-	print(paste0("[analysis.worker] - params ", params))
+	print(paste0("[mngr.worker] - seed ", seed))
+	print(paste0("[mngr.worker] - params ", params))
 
 	# Change working directory to the one corresponding at the current id
 	pwd <- getwd()
 	setwd(paste0(run_dir,id))
 
-	print("[calibration.worer] Starting simulations..")
+	print("[mngr.worker] Starting simulations..")
 	if(n_run != 1)
 	{
-		print("[analysis.worker] Creating subdirectories...")
+		print("[mngr.worker] Creating subdirectories...")
 		# setup the environment for each run
 		fns <- list.files(recursive = FALSE)
-		print(paste0("[analysis.worker] ", fns))
+		print(paste0("[mngr.worker] ", fns))
 		lapply(X = c(1:n_run),
 					 FUN = function(X, fns){
 					 	dir.create(paste0(X))
@@ -42,11 +42,9 @@ mngr.worker <- function(id,
 					 						to = paste0(X, .Platform$file.sep, fns))
 					 },
 					 fns = fns)
-		print("[analysis.worker] Done creating subdirectories")
+		print("[mngr.worker] Done creating subdirectories")
 		# Create a cluster
-		# cl <- makeCluster(parallel_processors,
-		# 									type = "FORK")
-		cl <- makeCluster(1,
+		cl <- makeCluster(parallel_processors,
 											type = "FORK")
 		# Launch simulations
 		start_time <- Sys.time()
@@ -54,7 +52,7 @@ mngr.worker <- function(id,
 							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
 								pwd <- getwd()
 								setwd(paste0(X))
-								print(paste0("[analysis.worker] Running simulation ", id, "-", X, "..."))
+								print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
 								experiment.run(id = X,
 															 cmd = cmd,
 															 i_time = i_time,
@@ -65,7 +63,7 @@ mngr.worker <- function(id,
 															 event_times = event_times,
 															 event_function = event_function,
 															 out_fname = paste0(out_fname,"-", id))
-								print(paste0("[analysis.worker] Simulation ", id, "-", X, " done!"))
+								print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
 								setwd(pwd)
 							},
 							X = c(1:n_run),
@@ -78,7 +76,7 @@ mngr.worker <- function(id,
 							event_function = event_function,
 							out_fname = out_fname)
 		elapsed <-  Sys.time()-start_time
-		print("[analysis.worker] Merging files..")
+		print("[mngr.worker] Merging files..")
 		# Get file names
 		res <- list.files(pattern = ".trace",
 											recursive = TRUE)
@@ -98,9 +96,9 @@ mngr.worker <- function(id,
 						 force = TRUE)
 		},
 		outname = paste0(out_dir, out_fname,"-", id, ".trace"))
-		print("[analysis.worker] Done merging files")
+		print("[mngr.worker] Done merging files")
 	} else {
-		print(paste0("[analysis.worker] Running simulation ", id, "..."))
+		print(paste0("[mngr.worker] Running simulation ", id, "..."))
 		elapsed <- experiment.run(id = id,
 															cmd = cmd,
 															i_time = i_time,
@@ -110,7 +108,7 @@ mngr.worker <- function(id,
 															event_times = event_times,
 															event_function = event_function,
 															out_fname = out_fname)
-		print(paste0("[analysis.worker] Simulation ", id, " done!"))
+		print(paste0("[mngr.worker] Simulation ", id, " done!"))
 	}
 	cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
 	# Change the working directory back to the original one
