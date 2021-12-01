@@ -112,24 +112,28 @@ objfn <- function(x, params, seed) {
 	print(paste0("[objfn] Settling files...", traces_name))
 	print(paste0("[objfcn] Current directory ", getwd()))
 	print(paste0("[objfcn] ... ", list.files()))
-	traces <- lapply(traces_name,function(x){
-		print(paste0("[objfn] reading file ", x))
-		tr <- read.csv(file = x,
-					   sep = "")
-		file.remove(x)
-		return(tr)
-	})
-	traces <- do.call("rbind", traces)
-	write.table(traces,
-				file = paste0(params$out_dir,
-							  params$out_fname,
-							  "-",
-							  id,
-							  ".trace"),
-				sep = " ",
-				col.names = TRUE,
-				row.names = FALSE,
-				append = FALSE)
+	# traces <- lapply(traces_name,function(x){
+	# 	print(paste0("[objfn] reading file ", x))
+	# 	tr <- read.csv(file = x,
+	# 				   sep = "")
+	# 	file.remove(x)
+	# 	return(tr)
+	# })
+	# traces <- do.call("rbind", traces)
+	# write.table(traces,
+	# 			file = paste0(params$out_dir,
+	# 						  params$out_fname,
+	# 						  "-",
+	# 						  id,
+	# 						  ".trace"),
+	# 			sep = " ",
+	# 			col.names = TRUE,
+	# 			row.names = FALSE,
+	# 			append = FALSE)
+	traces <- read.csv(file = paste0(params$out_dir,
+																	 .Platform$path.sep,
+																	 traces_name),
+										 sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
 	source(params$files$distance_measure_fname)
