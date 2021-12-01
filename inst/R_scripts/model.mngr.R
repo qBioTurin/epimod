@@ -251,7 +251,7 @@ cl <- makeCluster(config_processors,
 clusterEvalQ(cl, sessionInfo())
 
 exec_times <- parLapply( cl = cl,
-                         X = c(1:config_processors),
+                         X = c(1:params$n_config),
                          fun = mngr.worker,
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = params$solver_type,
