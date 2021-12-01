@@ -2,57 +2,6 @@ library(GenSA)
 library(epimod)
 library(parallel)
 
-# calibration.worker <- function(id, config, params, seed)
-# {
-#   print("[calibration.worker] Starts with parameters:")
-#   print(paste0("[calibration.worker] - id ", id))
-#   print(paste0("[calibration.worker] - config ", config))
-#   print(paste0("[calibration.worker] - seed ", seed))
-#   print(paste0("[calibration.worker] - params ", params))
-#   # Setup simulation's environment
-#   experiment.env_setup(id = id,
-#                        files = params$files,
-#                        dest_dir = params$run_dir,
-#                        config = config)
-#   # Store the current working direrctory
-#   pwd <- getwd()
-#   # Change current directory to the run_dir parameter
-#   setwd(paste0(params$run_dir, id))
-#   print("[calibration.worer] Generating command template")
-#   # Generate the appropriate command to run on the Docker
-#   cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-#                         solver_type = params$solver_type,
-#   											seed = seed,
-#                         taueps = params$taueps,
-#                         timeout = params$timeout)
-#   print("[calibration.worer] Done generating command template")
-#   print("[calibration.worer] Starting simulations..")
-#   experiment.run(base_id = id,
-#                  cmd = cmd,
-#                  i_time = params$i_time,
-#                  f_time = params$f_time,
-#                  s_time = params$s_time,
-#                  n_run = 1,
-#                  event_times = params$event_times,
-#                  event_function = params$event_function,
-#                  parallel_processors = params$processors,
-#                  out_fname = params$out_fname)
-#   print("[calibration.worer] Simulation done!")
-#   # Set-up the result's file name
-#   # fnm <- paste0(params$out_fname,"-",id,".trace")
-#   print(paste0("[calibration.worer] Returning file name: ", unlist(list.files(pattern = paste0(params$out_fname,"(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))))
-#   fnm <- unlist(list.files(pattern = paste0(params$out_fname,
-#   										  "(-[0-9]+){1}(-[0-9]+)+(.trace){1}")))
-#   # Clear the simulation's environment
-#   experiment.env_cleanup(id = id,
-#                          run_dir = params$run_dir,
-#                          out_fname = params$out_fname,
-#                          out_dir = params$out_dir)
-#   # Restore the previous working directory
-#   setwd(pwd)
-#   return(paste0(params$out_dir,fnm))
-# }
-
 objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
@@ -73,7 +22,6 @@ objfn <- function(x, params, seed) {
 	# ????????????????????? #
 	assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
 
-	### NEW ###
 	print(paste0("[objfcn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
 														 solver_fname = params$files$solver_fname,
@@ -101,41 +49,9 @@ objfn <- function(x, params, seed) {
 	traces_name <- gsub(pattern = "(-0.trace)",
 											replacement = paste0("-", (cnt-1), ".trace"),
 											x = traces_name)
-	### NEW ###
-	# traces_name <- parLapply(cl,
-	# 						 c(paste0(id,"-",c(1:params$n_run))),
-	# 						 calibration.worker,
-	# 						 config = config,
-	# 						 params = params,
-	# 						 seed = curr_seed)
-	### DEBUG ###
-	# traces_name <- lapply(c(paste0(id,"-",c(1:params$n_run))),
-	# 					  calibration.worker,
-	# 					  config = config,
-	# 					  params = params,
-	# 					  seed = curr_seed)
-	### DEBUG ###
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
 	print(paste0("[objfn] Settling files...", traces_name))
-	# traces <- lapply(traces_name,function(x){
-	# 	print(paste0("[objfn] reading file ", x))
-	# 	tr <- read.csv(file = x,
-	# 				   sep = "")
-	# 	file.remove(x)
-	# 	return(tr)
-	# })
-	# traces <- do.call("rbind", traces)
-	# write.table(traces,
-	# 			file = paste0(params$out_dir,
-	# 						  params$out_fname,
-	# 						  "-",
-	# 						  id,
-	# 						  ".trace"),
-	# 			sep = " ",
-	# 			col.names = TRUE,
-	# 			row.names = FALSE,
-	# 			append = FALSE)
 	traces <- read.csv(file = traces_name,sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
@@ -208,7 +124,6 @@ if(!is.null(params$max.time))
 ctl$seed <- init_seed + counter
 counter <- counter + 1
 
-### NEW ###
 print("[calibration.mngr] Generating command template")
 params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
 														 solver_type = params$solver_type,
@@ -223,22 +138,5 @@ ret <- GenSA(par=params$ini_v,
 						 control = ctl,
 						 params = params,
 						 seed = init_seed)
-### NEW ###
-#~~ OLD ~~#
-# Create a cluster
-# print(paste0("[calibration.mngr] Availabe processors: ", params$processors))
-# cl <- makeCluster(params$processors,
-# 									type = "FORK")
-#
-# ret <- GenSA(par=params$ini_v,
-#              fn=objfn,
-#              upper=params$ub_v,
-#              lower=params$lb_v,
-#              control = ctl,
-#              params = params,
-#              cl = cl,
-# 						 seed = init_seed)
-# stopCluster(cl)
-#~~ OLD ~~#
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
