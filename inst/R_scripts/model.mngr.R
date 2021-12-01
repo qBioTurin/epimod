@@ -204,7 +204,7 @@ if(params$n_config > params$n_run)
 		# Run configurations in parallel
 		config_processors <- params$parallel_processors
 		# if there are multiple run for each configuration, then run them one after the other
-		run_processorors <- 1
+		run_processors <- 1
 	}
 	else
 	{
@@ -225,7 +225,7 @@ if(params$n_config > params$n_run)
 		# Run configurations one after the other
 		config_processors <- 1
 		# Run in parallel the configuratio runs
-		run_processorors <- params$parallel_processors
+		run_processors <- params$parallel_processors
 	}
 	else
 	{
