@@ -105,6 +105,7 @@ mngr.worker <- function(id,
 															f_time = f_time,
 															s_time = s_time,
 															n_run = n_run,
+															seed = seed + id,
 															event_times = event_times,
 															event_function = event_function,
 															out_fname = out_fname)
