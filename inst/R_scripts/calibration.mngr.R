@@ -25,8 +25,6 @@ objfn <- function(x, params, seed) {
 	print(paste0("[objfcn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
 														 solver_fname = params$files$solver_fname,
-														 solver_type = params$solver_type,
-														 taueps = params$taueps,
 														 i_time = params$i_time,
 														 f_time = params$f_time,
 														 s_time = params$s_time,

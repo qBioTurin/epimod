@@ -124,9 +124,7 @@ clusterEvalQ(cl, sessionInfo())
 parLapply( cl = cl,
 					 X = c(1:params$n_config),
 					 fun = mngr.worker,
-					 solver_fname = params$files$solver_fname,  # using the following parameters
-					 solver_type = params$solver_type,
-					 taueps = params$taueps,
+					 solver_fname = params$files$solver_fname,
 					 i_time = params$i_time,
 					 f_time = params$f_time,
 					 s_time = params$s_time,

@@ -1,6 +1,5 @@
 mngr.worker <- function(id,
-												solver_fname, solver_type,taueps,
-												cmd,
+												solver_fname, cmd,
 												i_time, f_time, s_time, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times, event_function,
@@ -22,7 +21,6 @@ mngr.worker <- function(id,
 		file.copy(from = solver_fname, to = paste0(run_dir, id))
 	}
 	print(paste0("[mngr.worker] - seed ", seed))
-	print(paste0("[mngr.worker] - params ", params))
 
 	# Change working directory to the one corresponding at the current id
 	pwd <- getwd()
