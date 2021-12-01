@@ -130,9 +130,7 @@ objfn <- function(x, params, seed) {
 	# 			col.names = TRUE,
 	# 			row.names = FALSE,
 	# 			append = FALSE)
-	traces <- read.csv(file = paste0(params$out_dir,
-																	 .Platform$path.sep,
-																	 traces_name),
+	traces <- read.csv(file = file.path(params$out_dir, traces_name),
 										 sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
