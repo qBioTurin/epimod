@@ -240,7 +240,7 @@ if(params$n_config > params$n_run)
 		}
 	}
 }
-n_config <- params$nconfig / config_processors
+n_config <- params$n_config / config_processors
 n_run <- params$n_run / run_processors
 print(paste0("[model.mngr] Running ", config_processors, " first level threads to handle ", run_processors, " each running ", n_run, " simulation."))
 print(paste0("[model.mngr] Overall, running ", (n_config*config_processors*run_processors*n_run)," simulation."))
