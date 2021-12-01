@@ -240,9 +240,10 @@ if(params$n_config > params$n_run)
 		}
 	}
 }
+n_config <- params$nconfig / config_processors
 n_run <- params$n_run / run_processors
 print(paste0("[model.mngr] Running ", config_processors, " first level threads to handle ", run_processors, " each running ", n_run, " simulation."))
-print(paste0("[model.mngr] Overall, running ", (config_processors*run_processors*n_run)," simulation."))
+print(paste0("[model.mngr] Overall, running ", (n_config*config_processors*run_processors*n_run)," simulation."))
 
 # Create a cluster
 cl <- makeCluster(config_processors,
@@ -251,7 +252,7 @@ cl <- makeCluster(config_processors,
 clusterEvalQ(cl, sessionInfo())
 
 exec_times <- parLapply( cl = cl,
-                         X = c(1:params$n_config),
+                         X = c(1:n_config),
                          fun = mngr.worker,
                          solver_fname = params$files$solver_fname,  # using the following parameters
                          solver_type = params$solver_type,
