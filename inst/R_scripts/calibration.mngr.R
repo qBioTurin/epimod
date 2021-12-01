@@ -97,6 +97,9 @@ objfn <- function(x, params, seed) {
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
 																replacement = paste0("-", (cnt-1), ".trace"),
 																x = traces_name))
+	traces_name <- gsub(pattern = "(-0.trace)",
+											replacement = paste0("-", (cnt-1), ".trace"),
+											x = traces_name)
 	### NEW ###
 	# traces_name <- parLapply(cl,
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
@@ -132,8 +135,7 @@ objfn <- function(x, params, seed) {
 	# 			col.names = TRUE,
 	# 			row.names = FALSE,
 	# 			append = FALSE)
-	traces <- read.csv(file = traces_name,
-										 sep = "")
+	traces <- read.csv(file = traces_name,sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
 	source(params$files$distance_measure_fname)
