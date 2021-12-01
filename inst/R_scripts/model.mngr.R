@@ -224,7 +224,7 @@ if(params$n_config > params$n_run)
 	{
 		# Run configurations one after the other
 		config_processors <- 1
-		# Run in parallel the configuratio runs
+		# Run in parallel the configuration runs
 		run_processors <- params$parallel_processors
 	}
 	else
@@ -240,6 +240,9 @@ if(params$n_config > params$n_run)
 		}
 	}
 }
+n_run <- params$n_run / run_processors
+print(paste0("[model.mngr] Running ", config_processors, " first level threads to handle ", run_processors, " each running ", n_run, " simulation."))
+print(paste0("[model.mngr] Overall, running ", (config_processors*run_processors*n_run)," simulation."))
 
 # Create a cluster
 cl <- makeCluster(config_processors,
@@ -256,7 +259,7 @@ exec_times <- parLapply( cl = cl,
                          i_time = params$i_time,
                          f_time = params$f_time,
                          s_time = params$s_time,
-                         n_run = params$n_run,
+                         n_run = n_run,
 												 cmd = cmd,
                          timeout = params$timeout,
                          run_dir = params$run_dir,
@@ -277,7 +280,7 @@ exec_times <- parLapply( cl = cl,
 #                      i_time = params$i_time,
 #                      f_time = params$f_time,
 #                      s_time = params$s_time,
-#                      n_run = params$n_run,
+#                      n_run = n_run,
 # 										 cmd = cmd,
 #                      timeout = params$timeout,
 #                      run_dir = params$run_dir,
@@ -290,59 +293,6 @@ exec_times <- parLapply( cl = cl,
 #                      config = params$config,
 #                      parallel_processors = run_processors)
 
-### NEW ###
-#~~ OLD ~~#
-# Create a cluster
-# cl <- makeCluster(params$parallel_processors,
-# 									type = "FORK")
-# # Save session's info
-# clusterEvalQ(cl, sessionInfo())
-#
-# exec_times <- parLapply( cl = cl,
-#                          X = c(1:params$n_config),
-#                          fun = model.worker,
-#                          solver_fname = params$files$solver_fname,  # using the following parameters
-#                          solver_type = params$solver_type,
-#                          taueps = params$taueps,
-#                          i_time = params$i_time,
-#                          f_time = params$f_time,
-#                          s_time = params$s_time,
-#                          n_run = params$n_run,
-#                          timeout = params$timeout,
-#                          run_dir = params$run_dir,
-#                          out_fname = params$out_fname,
-#                          out_dir = params$out_dir,
-#                          seed = init_seed,
-#                          event_times = params$event_times,
-#                          event_function = params$event_function,
-#                          files = params$files,
-#                          config = params$config,
-#                          # parallel_processors = threads.wrkr,
-#                          # greed = threads.greed
-# 												 parallel_processors = params$parallel_processors,
-# 												 greed = 1)
-
-# exec_times <- lapply(X = c(1:params$n_config),
-#                      FUN = model.worker,
-#                      solver_fname = params$files$solver_fname,
-#                      solver_type = params$solver_type,
-#                      taueps = params$taueps,
-#                      i_time = params$i_time,
-#                      f_time = params$f_time,
-#                      s_time = params$s_time,
-#                      n_run = params$n_run,
-#                      timeout = params$timeout,
-#                      run_dir = params$run_dir,
-#                      out_fname = params$out_fname,
-#                      out_dir = params$out_dir,
-# 										 seed = init_seed,
-#                      event_times = params$event_times,
-#                      event_function = params$event_function,
-#                      files = params$files,
-#                      config = params$config,
-#                      parallel_processors = params$parallel_processors,
-#                      greed = 1)
-#~~ OLD ~~#
 stopCluster(cl)
 
 # Save final seed
