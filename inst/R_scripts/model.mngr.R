@@ -288,7 +288,6 @@ exec_times <- lapply(X = c(1:config_processors),
                      event_function = params$event_function,
                      files = params$files,
                      config = params$config,
-										 seed = params$seed,
                      parallel_processors = run_processors)
 
 ### NEW ###
