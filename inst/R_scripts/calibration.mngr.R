@@ -53,7 +53,7 @@ library(parallel)
 #   return(paste0(params$out_dir,fnm))
 # }
 
-objfn <- function(x, params, cl, seed) {
+objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
 	# Generate the simulation's configuration according to the provided input x
@@ -74,27 +74,25 @@ objfn <- function(x, params, cl, seed) {
 	assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
 
 	### NEW ###
-	traces_name <- parLapply( cl = cl,
-														X = 0,
-														fun = mngr.worker,
-														solver_fname = params$files$solver_fname,  # using the following parameters
-														solver_type = params$solver_type,
-														taueps = params$taueps,
-														i_time = params$i_time,
-														f_time = params$f_time,
-														s_time = params$s_time,
-														n_run = params$n_run,
-														cmd = params$cmd,
-														timeout = params$timeout,
-														run_dir = params$run_dir,
-														out_fname = params$out_fname,
-														out_dir = params$out_dir,
-														seed = curr_seed,
-														event_times = params$event_times,
-														event_function = params$event_function,
-														files = params$files,
-														config = params$config,
-														parallel_processors = params$run_processors)
+	traces_name <- mngr.worker(id = 0,
+														 solver_fname = params$files$solver_fname,
+														 solver_type = params$solver_type,
+														 taueps = params$taueps,
+														 i_time = params$i_time,
+														 f_time = params$f_time,
+														 s_time = params$s_time,
+														 n_run = params$n_run,
+														 cmd = params$cmd,
+														 timeout = params$timeout,
+														 run_dir = params$run_dir,
+														 out_fname = params$out_fname,
+														 out_dir = params$out_dir,
+														 seed = curr_seed,
+														 event_times = params$event_times,
+														 event_function = params$event_function,
+														 files = params$files,
+														 config = params$config,
+														 parallel_processors = params$parallel_processors)
 	### NEW ###
 	# traces_name <- parLapply(cl,
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
@@ -208,56 +206,7 @@ cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
                       solver_type = params$solver_type,
                       taueps = params$taueps,
                       timeout = params$timeout)
-print("[calibration.worer] Done generating command template")
-# Choose where and how to run parallel
-if(params$n_config > params$n_run)
-{
-	if(params$n_config >= params$parallel_processors)
-	{
-		# Run configurations in parallel
-		config_processors <- params$parallel_processors
-		# if there are multiple run for each configuration, then run them one after the other
-		params$run_processors <- 1
-	}
-	else
-	{
-		# Run configurations in parallel
-		config_processors <- params$n_config
-		if(params$n_run > 1 && params$n_run < params$parallel_processors - params$n_config) {
-
-			# If there are enough processors, run in parallel the configuration runs
-			params$run_processors = floor((params$parallel_processors - params$n_config)/params$n_run)
-		}
-		else {
-			params$run_processors = 1
-		}
-	}
-} else {
-	if(params$n_run >= params$parallel_processors)
-	{
-		# Run configurations one after the other
-		config_processors <- 1
-		# Run in parallel the configuration runs
-		params$run_processors <- params$parallel_processors
-	}
-	else
-	{
-		# Execute configurations runs in parallel
-		params$run_processors <- params$n_run
-		if(params$n_config > 1 && params$n_config < params$parallel_processors - params$n_run) {
-			# If there are enough processors, run in parallel the some configurations
-			config_processors = floor((params$parallel_processors - params$n_run)/params$n_config)
-		}
-		else {
-			config_processors = 1
-		}
-	}
-}
-
-# Create a cluster
-print(paste0("[calibration.mngr] Availabe processors: ", params$processors))
-cl <- makeCluster(config_processors,
-									type = "FORK")
+print("[calibration.mngr] Done generating command template")
 
 ret <- GenSA(par=params$ini_v,
 						 fn=objfn,
@@ -265,7 +214,6 @@ ret <- GenSA(par=params$ini_v,
 						 lower=params$lb_v,
 						 control = ctl,
 						 params = params,
-						 cl = cl,
 						 seed = init_seed)
 ### NEW ###
 #~~ OLD ~~#
@@ -282,7 +230,7 @@ ret <- GenSA(par=params$ini_v,
 #              params = params,
 #              cl = cl,
 # 						 seed = init_seed)
+# stopCluster(cl)
 #~~ OLD ~~#
-stopCluster(cl)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
