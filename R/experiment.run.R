@@ -24,7 +24,7 @@
 library(parallel)
 experiment.run <- function(id, cmd,
 													 i_time, f_time, s_time,
-													 n_run = 1,
+													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
 													 out_fname)
 {
@@ -123,6 +123,8 @@ experiment.run <- function(id, cmd,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<F_TIME>", replacement = final_time)
 		print(paste0("[experiment.run] replacement <N_RUN> ", n_run))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
+		print(paste0("[experiment.run] replacement <SEED> ", n_run))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<SEED>", replacement = seed)
 		if (file.exists(init))
 		{
 			print(paste0("[experiment.run] replacement <INIT> ", init))
