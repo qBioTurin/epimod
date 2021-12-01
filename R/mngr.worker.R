@@ -52,8 +52,34 @@ mngr.worker <- function(id,
 											type = "FORK")
 		# Launch simulations
 		start_time <- Sys.time()
-		parLapply(cl = cl,
-							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
+		# parLapply(cl = cl,
+		# 					fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
+		# 						pwd <- getwd()
+		# 						setwd(paste0(X))
+		# 						print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
+		# 						experiment.run(id = X,
+		# 													 cmd = cmd,
+		# 													 i_time = i_time,
+		# 													 f_time = f_time,
+		# 													 s_time = s_time,
+		# 													 n_run = 1,
+		# 													 seed = seed + ((id-1)*n_run+X),
+		# 													 event_times = event_times,
+		# 													 event_function = event_function,
+		# 													 out_fname = paste0(out_fname,"-", id))
+		# 						print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
+		# 						setwd(pwd)
+		# 					},
+		# 					X = c(1:n_run),
+		# 					id = id,
+		# 					cmd = cmd,
+		# 					i_time = i_time,
+		# 					f_time = f_time,
+		# 					s_time = s_time,
+		# 					event_times = event_times,
+		# 					event_function = event_function,
+		# 					out_fname = out_fname)
+		lapply(FUN = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
 								pwd <- getwd()
 								setwd(paste0(X))
 								print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
