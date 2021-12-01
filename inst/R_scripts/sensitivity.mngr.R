@@ -174,7 +174,7 @@ if(params$parallel_processors != 1)
 # 						 config = params$config,
 # 						 parallel_processors = threads.wrkr,
 # 						 greed = threads.greed)
-exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
+exec_times <- lapply(c(n:(n+params$n_config-1)),                # execute n_config istances
 					 sensitivity.worker,                  # of sensitivity.worker
 					 solver_fname = params$files$solver_fname,  # using the following parameters
 					 solver_type = "LSODA",
