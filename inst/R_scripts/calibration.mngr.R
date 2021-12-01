@@ -93,6 +93,10 @@ objfn <- function(x, params, seed) {
 														 files = params$files,
 														 config = params$config,
 														 parallel_processors = params$parallel_processors)
+	traces_name <- file.path(params$out_dir, traces_name)
+	file.rename(traces_name, gsub(pattern = "(-0.trace)",
+																replacement = paste0("-", (cnt-1), ".trace"),
+																x = traces_name))
 	### NEW ###
 	# traces_name <- parLapply(cl,
 	# 						 c(paste0(id,"-",c(1:params$n_run))),
@@ -110,8 +114,6 @@ objfn <- function(x, params, seed) {
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
 	print(paste0("[objfn] Settling files...", traces_name))
-	print(paste0("[objfcn] Current directory ", getwd()))
-	print(paste0("[objfcn] ... ", list.files()))
 	# traces <- lapply(traces_name,function(x){
 	# 	print(paste0("[objfn] reading file ", x))
 	# 	tr <- read.csv(file = x,
@@ -130,7 +132,7 @@ objfn <- function(x, params, seed) {
 	# 			col.names = TRUE,
 	# 			row.names = FALSE,
 	# 			append = FALSE)
-	traces <- read.csv(file = file.path(params$out_dir, traces_name),
+	traces <- read.csv(file = traces_name,
 										 sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
