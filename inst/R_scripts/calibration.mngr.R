@@ -109,10 +109,11 @@ objfn <- function(x, params, seed) {
 	### DEBUG ###
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
-	print("[objfn] Settling files...")
-	print(traces_name)
+	print(paste0("[objfn] Settling files...", traces_name))
+	print(paste0("[objfcn] Current directory ", getwd()))
+	print(paste0("[objfcn] ... ", list.files()))
 	traces <- lapply(traces_name,function(x){
-		print(paste0("[objfn] reading file", x))
+		print(paste0("[objfn] reading file ", x))
 		tr <- read.csv(file = x,
 					   sep = "")
 		file.remove(x)
