@@ -194,7 +194,7 @@ model_calibration <- function(# Parameters to control the simulation
                    max.call = max.call,
                    max.time = max.time,
                    files = files,
-                   processors = parallel_processors,
+                   parallel_processors = parallel_processors,
                    event_times = event_times,
                    event_function = event_function)
     res_dir <- paste0(chk_dir(volume), results_dir_name)
