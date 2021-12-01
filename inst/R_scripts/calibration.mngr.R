@@ -202,10 +202,10 @@ counter <- counter + 1
 
 ### NEW ###
 print("[calibration.mngr] Generating command template")
-cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-                      solver_type = params$solver_type,
-                      taueps = params$taueps,
-                      timeout = params$timeout)
+params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
+														 solver_type = params$solver_type,
+														 taueps = params$taueps,
+														 timeout = params$timeout)
 print("[calibration.mngr] Done generating command template")
 
 ret <- GenSA(par=params$ini_v,
