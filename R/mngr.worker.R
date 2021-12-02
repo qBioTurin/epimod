@@ -1,4 +1,3 @@
-library(parallel)
 mngr.worker <- function(id,
 												solver_fname, cmd,
 												i_time, f_time, s_time, n_run,
@@ -49,6 +48,7 @@ mngr.worker <- function(id,
 					 fns = fns)
 		print("[mngr.worker] Done creating subdirectories")
 		# Create a cluster
+		library(parallel)
 		cl <- makeCluster(parallel_processors,
 											type = "FORK")
 		# Launch simulations
