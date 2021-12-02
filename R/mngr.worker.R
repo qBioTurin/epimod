@@ -83,6 +83,7 @@ mngr.worker <- function(id,
 							out_fname = out_fname)
 		# Print all the output to the stdout
 		system(paste0("cat ", out_fname,".log >&2"))
+		unlink(x = paste0(out_fname,".log"), force = TRUE)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
 		# Merge all trace files in one
