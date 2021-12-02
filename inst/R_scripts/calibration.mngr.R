@@ -43,9 +43,9 @@ objfn <- function(x, params, seed) {
 														 parallel_processors = params$parallel_processors)
 	traces_name <- file.path(params$out_dir, traces_name)
 	print(paste0("[objfn] Counter ", cnt))
-	print("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
+	print(paste0("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
 																								 replacement = paste0("-", as.numeric(cnt), ".trace"),
-																								 x = traces_name))
+																								 x = traces_name)))
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
 																replacement = paste0("-", cnt, ".trace"),
 																x = traces_name))
