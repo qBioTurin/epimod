@@ -115,8 +115,8 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 
   if(caller_function == "sensitivity"){
-    if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value_fname) && !is.null(target_value_fname)))
-      return("target_value_fname need the reference_data parameter!")
+    # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value_fname) && !is.null(target_value_fname)))
+    #   return("target_value_fname need the reference_data parameter!")
 
 
     if(!missing(target_value_fname) && !is.null(target_value_fname)){
