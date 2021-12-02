@@ -26,11 +26,12 @@ objfn <- function(x, params, seed) {
 	print(paste0("[objfn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
 														 solver_fname = params$files$solver_fname,
+														 solver_type = params$solver_type,
+														 taueps = params$taueps,
 														 i_time = params$i_time,
 														 f_time = params$f_time,
 														 s_time = params$s_time,
 														 n_run = params$n_run,
-														 cmd = params$cmd,
 														 timeout = params$timeout,
 														 run_dir = params$run_dir,
 														 out_fname = params$out_fname,
@@ -74,22 +75,19 @@ objfn <- function(x, params, seed) {
 }
 
 # Utility function
-chk_dir<- function(path){
+chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
-
-# Read commandline arguments (i.e. the location of the parameters list)
+# Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
 params_fname <- args[1]
-# Read the parameters list
+# Load parameters
 params <- readRDS(params_fname)
 
 # Define a variable counter in the .GlobalEnv.
 counter <- 0
-# This variable will be used to trace the number o f
-# assign(x = "counter", value = 0, envir = .GlobalEnv)
 # Load seed and previous configuration, if required.
 if(is.null(params$seed)){
 	# Save initial seed value
@@ -106,7 +104,7 @@ if(is.null(params$seed)){
 }
 
 # set.seed(kind = "Mersenne-Twister", seed = init_seed)
-# .GlobalEnv.counter <- 1
+# counter <- 1
 
 # Copy files to the run directory
 experiment.env_setup(files = params$files,
@@ -128,12 +126,12 @@ if(!is.null(params$max.time))
 ctl$seed <- init_seed + counter
 counter <- counter + 1
 
-print("[calibration.mngr] Generating command template")
-params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-														 solver_type = params$solver_type,
-														 taueps = params$taueps,
-														 timeout = params$timeout)
-print("[calibration.mngr] Done generating command template")
+# print("[calibration.mngr] Generating command template")
+# params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
+# 														 solver_type = params$solver_type,
+# 														 taueps = params$taueps,
+# 														 timeout = params$timeout)
+# print("[calibration.mngr] Done generating command template")
 
 ret <- GenSA(par=params$ini_v,
 						 fn=objfn,
