@@ -41,10 +41,10 @@ objfn <- function(x, params, seed) {
 														 parallel_processors = params$parallel_processors)
 	traces_name <- file.path(params$out_dir, traces_name)
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
-																replacement = paste0("-", (cnt-1), ".trace"),
+																replacement = paste0("-", cnt, ".trace"),
 																x = traces_name))
 	traces_name <- gsub(pattern = "(-0.trace)",
-											replacement = paste0("-", (cnt-1), ".trace"),
+											replacement = paste0("-", cnt, ".trace"),
 											x = traces_name)
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
