@@ -97,7 +97,7 @@ mngr.worker <- function(id,
 						 recursive = TRUE,
 						 force = TRUE)
 		},
-		outname = paste0(out_dir, out_fname,"-", id, ".trace"))
+		fnm = paste0(out_dir, out_fname,"-", id, ".trace"))
 		print("[mngr.worker] Done merging files")
 	} else {
 		print(paste0("[mngr.worker] Running simulation ", id, "..."))
