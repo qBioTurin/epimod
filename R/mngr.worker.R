@@ -51,7 +51,7 @@ mngr.worker <- function(id,
 		library(parallel)
 		cl <- makeCluster(parallel_processors,
 											type = "FORK",
-											outfile = paste0(out_fname,".log"))
+											outfile = paste0(out_fname,".worker.log"))
 		# Launch simulations
 		res <- parLapply(cl = cl,
 							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
