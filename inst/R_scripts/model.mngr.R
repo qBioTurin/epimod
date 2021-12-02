@@ -109,7 +109,7 @@ if(params$n_config > params$n_run)
 		}
 	}
 }
-
+run_processors <- 1
 # Create a cluster
 cl <- makeCluster(config_processors,
 									type = "FORK",
