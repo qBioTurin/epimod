@@ -168,7 +168,7 @@ sensitivity_analysis <- function(# Parameters to control the simulation
                   s_time = s_time,
                   parallel_processors = parallel_processors,
                   volume = volume,
-    							extend = extend,
+                  extend = extend,
                   timeout = timeout,
                   files = files,
                   event_times = event_times,
