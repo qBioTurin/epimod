@@ -82,8 +82,8 @@ mngr.worker <- function(id,
 							event_function = event_function,
 							out_fname = out_fname)
 		# Print all the output to the stdout
-		system(paste0("cat ", out_fname,".log >&2"))
-		unlink(x = paste0(out_fname,".log"), force = TRUE)
+		system(paste0("cat ", out_fname,".worker.log >&2"))
+		unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
 		stopCluster(cs)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
