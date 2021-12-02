@@ -21,7 +21,7 @@ objfn <- function(x, params, seed) {
 	# ????????????????????? #
 	assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
 
-	print(paste0("[objfcn] Parameter n_run ", params$n_run))
+	print(paste0("[objfn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
 														 solver_fname = params$files$solver_fname,
 														 i_time = params$i_time,
