@@ -143,6 +143,7 @@ if(params$n_config > params$n_run)
 lapply(X = c(1:params$n_config),
 			 FUN = mngr.worker,
 			 solver_fname = params$files$solver_fname,
+			 solver_type = params$solver_type,
 			 i_time = params$i_time,
 			 f_time = params$f_time,
 			 s_time = params$s_time,
