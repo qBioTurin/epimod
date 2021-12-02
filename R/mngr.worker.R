@@ -49,11 +49,11 @@ mngr.worker <- function(id,
 		print("[mngr.worker] Done creating subdirectories")
 		# Create a cluster
 		library(parallel)
-		cl <- makeCluster(parallel_processors,
+		cs <- makeCluster(parallel_processors,
 											type = "FORK",
 											outfile = paste0(out_fname,".worker.log"))
 		# Launch simulations
-		res <- parLapply(cl = cl,
+		res <- parLapply(cl = cs,
 							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
 								pwd <- getwd()
 								setwd(paste0(X))
@@ -84,6 +84,7 @@ mngr.worker <- function(id,
 		# Print all the output to the stdout
 		system(paste0("cat ", out_fname,".log >&2"))
 		unlink(x = paste0(out_fname,".log"), force = TRUE)
+		stopCluster(cs)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
 		# Merge all trace files in one
