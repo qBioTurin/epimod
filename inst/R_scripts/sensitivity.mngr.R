@@ -160,8 +160,6 @@ if(!is.null(params$files$distance_measure_fname))
 }
 stopCluster(cl)
 ### NEW ###
-write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
-
 n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
@@ -201,6 +199,5 @@ if(!is.null(params$files$target_value_fname))
             fill="yellow")
     ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
     # Get final time
-    exec_time <- difftime(Sys.time(), t1, unit = "secs")
-    save(prcc, plt, exec_time, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
+    save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
 }
