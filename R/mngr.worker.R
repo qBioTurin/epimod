@@ -1,4 +1,4 @@
-mngr.worker <- function(id,
+mngr.worker <- function(id, cs,
 												solver_fname, solver_type, taueps,
 												i_time, f_time, s_time, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
@@ -6,7 +6,7 @@ mngr.worker <- function(id,
 												files, config = NULL,
 												parallel_processors)
 {
-	set.seed(kind = "Mersenne-Twister", seed = seed+id)
+	# set.seed(kind = "Mersenne-Twister", seed = seed+id)
 
 	print("[mngr.worker] Starts with parameters:")
 	print(paste0("[mngr.worker] - id ", id))
@@ -58,9 +58,9 @@ mngr.worker <- function(id,
 		print("[mngr.worker] Done creating subdirectories")
 		# Create a cluster
 		library(parallel)
-		cs <- makeCluster(parallel_processors,
-											type = "FORK",
-											outfile = paste0(out_fname,".worker.log"))
+		# cs <- makeCluster(parallel_processors,
+		# 									type = "FORK",
+		# 									outfile = paste0(out_fname,".worker.log"))
 		# Launch simulations
 		res <- parLapply(cl = cs,
 							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
@@ -91,9 +91,9 @@ mngr.worker <- function(id,
 							event_function = event_function,
 							out_fname = out_fname)
 		# Print all the output to the stdout
-		system(paste0("cat ", out_fname,".worker.log >&2"))
-		unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
-		stopCluster(cs)
+		# system(paste0("cat ", out_fname,".worker.log >&2"))
+		# unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
+		# stopCluster(cs)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
 		# Merge all trace files in one
