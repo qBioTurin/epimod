@@ -87,8 +87,9 @@ if(params$n_config >= params$parallel_processors)
 
 # Create a cluster
 cl <- makeCluster(config_processors,
-									type = "FORK") #,
-									# outfile = paste0(params$out_fname,".log"))
+									type = "FORK",
+									# outfile = paste0(params$out_fname,".log"),
+									port = 11000)
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 
