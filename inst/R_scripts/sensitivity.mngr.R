@@ -2,31 +2,8 @@ library(parallel)
 library(epimod)
 library(ggplot2)
 
-# Function to compute the distance between one simulation trace and the reference data
-sensitivity.distance <- function(id,
-                                 ## run_dir,
-                                 ## out_fname,
-                                 out_dir,
-                                 distance_measure_fname,
-                                 distance_measure,
-                                 reference_data){
-    pwd <- getwd()
-    setwd(out_dir)
-    system(paste0("echo \"Trying to open ", id, "\""))
-    # Read the output and compute the distance from reference data
-    ## trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
-    trace <- read.csv(id,
-                      sep = "")
-    # Load distance definition
-    source(distance_measure_fname)
-    # Load reference data (IMPORTANT it has to be a column vector)
-    reference <- as.data.frame(t(read.csv(reference_data, header = FALSE, sep = "")))
-    # Compute the user defined distance measure
-    measure <- do.call(distance_measure, list(reference, trace))
-    setwd(pwd)
-    return(data.frame(measure=measure, id=id))
-}
-chk_dir<- function(path){
+# Utility function
+chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
@@ -52,27 +29,27 @@ if(!is.null(params$files$target_value_fname))
 # Load seed and previous configuration, if required.
 config <- list()
 if(is.null(params$seed)){
-    # Save initial seed value
-		params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+	# Save initial seed value
+	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
 
-		timestamp <- as.numeric(Sys.time())
-		set.seed(kind = "Super-Duper", seed = timestamp)
+	timestamp <- as.numeric(Sys.time())
+	set.seed(kind = "Super-Duper", seed = timestamp)
 
-		init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
-		extend_seed <- init_seed
-		n <- 1
+	init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
+	extend_seed <- init_seed
+	n <- 1
 
-		save(init_seed, extend_seed, n, file = params$seed)
+	save(init_seed, extend_seed, n, file = params$seed)
 }else{
-    load(params$seed)
-    if(params$extend){
-        # We want to extend a previous experiment
-        assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
-    		load(paste0(params$out_dir, params$out_fname, ".RData"))
-    }
-		else{
-			n <- 1
-		}
+	load(params$seed)
+	if(params$extend){
+		# We want to extend a previous experiment
+		assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+		load(paste0(params$out_dir, params$out_fname, ".RData"))
+	}
+	else{
+		n <- 1
+	}
 }
 
 if(!params$extend){
@@ -197,7 +174,7 @@ if(!is.null(params$files$distance_measure_fname))
 	rank <- parLapply(cl,
 										list.files(path = params$out_dir,
 															 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
-										sensitivity.distance,
+										tool.distance,
 										out_dir = params$out_dir,
 										distance_measure_fname = params$files$distance_measure_fname,
 										distance_measure = distance_measure,
