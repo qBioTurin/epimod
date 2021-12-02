@@ -45,7 +45,7 @@ objfn <- function(x, params, seed) {
 	print(paste0("[objfn] Counter ", cnt))
 	print(paste0("[objfn] File ", traces_name))
 	print(paste0("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
-																								 replacement = paste0("-", as.numeric(cnt), ".trace"),
+																								 replacement = paste0("-", cnt, ".trace"),
 																								 x = traces_name)))
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
 																replacement = paste0("-", cnt, ".trace"),
