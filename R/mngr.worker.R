@@ -57,18 +57,19 @@ mngr.worker <- function(id,
 								pwd <- getwd()
 								setwd(paste0(X))
 								print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
-								experiment.run(id = X,
-															 cmd = cmd,
-															 i_time = i_time,
-															 f_time = f_time,
-															 s_time = s_time,
-															 n_run = 1,
-															 seed = seed + ((id-1)*n_run+X),
-															 event_times = event_times,
-															 event_function = event_function,
-															 out_fname = paste0(out_fname,"-", id))
+								fn <- experiment.run(id = X,
+																		 cmd = cmd,
+																		 i_time = i_time,
+																		 f_time = f_time,
+																		 s_time = s_time,
+																		 n_run = 1,
+																		 seed = seed + ((id-1)*n_run+X),
+																		 event_times = event_times,
+																		 event_function = event_function,
+																		 out_fname = paste0(out_fname,"-", id))
 								print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
 								setwd(pwd)
+								return(file.path(X,fn))
 							},
 							X = c(1:n_run),
 							id = id,
@@ -81,9 +82,6 @@ mngr.worker <- function(id,
 							out_fname = out_fname)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
-		# Get file names
-		# res <- list.files(pattern = ".trace",
-		# 									recursive = TRUE)
 		# Merge all trace files in one
 		lapply(X = res, function(X, outname)
 		{
