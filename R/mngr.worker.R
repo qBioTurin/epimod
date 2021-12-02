@@ -83,6 +83,7 @@ mngr.worker <- function(id,
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
 		# Merge all trace files in one
+		fnm <- paste0(out_dir, out_fname,"-", id, ".trace")
 		lapply(X = res, function(X, outname)
 		{
 			# tr <- read.csv(paste0(run_dir, id, .Platform$file.sep, out_fname, "-", basename(X), ".trace"), sep = "")
@@ -97,7 +98,7 @@ mngr.worker <- function(id,
 						 recursive = TRUE,
 						 force = TRUE)
 		},
-		fnm = paste0(out_dir, out_fname,"-", id, ".trace"))
+		outname = fnm)
 		print("[mngr.worker] Done merging files")
 	} else {
 		print(paste0("[mngr.worker] Running simulation ", id, "..."))
