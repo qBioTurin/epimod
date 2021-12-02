@@ -52,8 +52,7 @@ mngr.worker <- function(id,
 		cl <- makeCluster(parallel_processors,
 											type = "FORK")
 		# Launch simulations
-		start_time <- Sys.time()
-		parLapply(cl = cl,
+		res <- parLapply(cl = cl,
 							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
 								pwd <- getwd()
 								setwd(paste0(X))
@@ -80,37 +79,11 @@ mngr.worker <- function(id,
 							event_times = event_times,
 							event_function = event_function,
 							out_fname = out_fname)
-		# lapply(FUN = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
-		# 						pwd <- getwd()
-		# 						setwd(paste0(X))
-		# 						print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
-		# 						experiment.run(id = X,
-		# 													 cmd = cmd,
-		# 													 i_time = i_time,
-		# 													 f_time = f_time,
-		# 													 s_time = s_time,
-		# 													 n_run = 1,
-		# 													 seed = seed + ((id-1)*n_run+X),
-		# 													 event_times = event_times,
-		# 													 event_function = event_function,
-		# 													 out_fname = paste0(out_fname,"-", id))
-		# 						print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
-		# 						setwd(pwd)
-		# 					},
-		# 					X = c(1:n_run),
-		# 					id = id,
-		# 					cmd = cmd,
-		# 					i_time = i_time,
-		# 					f_time = f_time,
-		# 					s_time = s_time,
-		# 					event_times = event_times,
-		# 					event_function = event_function,
-		# 					out_fname = out_fname)
-		elapsed <-  Sys.time()-start_time
+		res <- unlist(res)
 		print("[mngr.worker] Merging files..")
 		# Get file names
-		res <- list.files(pattern = ".trace",
-											recursive = TRUE)
+		# res <- list.files(pattern = ".trace",
+		# 									recursive = TRUE)
 		# Merge all trace files in one
 		lapply(X = res, function(X, outname)
 		{
@@ -130,7 +103,7 @@ mngr.worker <- function(id,
 		print("[mngr.worker] Done merging files")
 	} else {
 		print(paste0("[mngr.worker] Running simulation ", id, "..."))
-		elapsed <- experiment.run(id = id,
+		fnm <- experiment.run(id = id,
 															cmd = cmd,
 															i_time = i_time,
 															f_time = f_time,
@@ -142,10 +115,10 @@ mngr.worker <- function(id,
 															out_fname = out_fname)
 		print(paste0("[mngr.worker] Simulation ", id, " done!"))
 	}
-	cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
+	# cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
 	# Change the working directory back to the original one
 	setwd(pwd)
 	# Move relevant files to their final location and remove all the temporary files
 	experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-	return(elapsed)
+	return(fnm)
 }
