@@ -60,7 +60,7 @@ mngr.worker <- function(id,
 		library(parallel)
 		cs <- makeCluster(parallel_processors,
 											type = "FORK",
-											outfile = paste0(out_fname,".worker.log"),
+											# outfile = paste0(out_fname,".worker.log"),
 											port = 11000+id)
 		# Launch simulations
 		res <- parLapply(cl = cs,
@@ -92,8 +92,8 @@ mngr.worker <- function(id,
 							event_function = event_function,
 							out_fname = out_fname)
 		# Print all the output to the stdout
-		system(paste0("cat ", out_fname,".worker.log >&2"))
-		unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
+		# system(paste0("cat ", out_fname,".worker.log >&2"))
+		# unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
 		stopCluster(cs)
 		res <- unlist(res)
 		print("[mngr.worker] Merging files..")

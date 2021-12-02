@@ -113,7 +113,7 @@ run_processors <- 1
 # Create a cluster
 cl <- makeCluster(config_processors,
 									type = "FORK",
-									outfile = paste0(params$out_fname,".log"),
+									# outfile = paste0(params$out_fname,".log"),
 									port = 11000)
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
@@ -138,8 +138,8 @@ parLapply( cl = cl,
 					 config = params$config,
 					 parallel_processors = run_processors)
 # Print all the output to the stdout
-system(paste0("cat ", params$out_fname,".log >&2"))
-unlink(x = paste0(params$out_fname,".log"), force = TRUE)
+# system(paste0("cat ", params$out_fname,".log >&2"))
+# unlink(x = paste0(params$out_fname,".log"), force = TRUE)
 
 # lapply(X = c(1:params$n_config),
 # 			 FUN = mngr.worker,
