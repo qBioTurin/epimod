@@ -119,5 +119,5 @@ mngr.worker <- function(id,
 	setwd(pwd)
 	# Move relevant files to their final location and remove all the temporary files
 	experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-	return(fnm)
+	return(basename(fnm))
 }
