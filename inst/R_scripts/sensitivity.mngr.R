@@ -77,47 +77,21 @@ cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
 											timeout = params$timeout)
 print("[model.mngr] Done generating command template")
 # Choose where and how to run parallel
-if(params$n_config > params$n_run)
-{
-	if(params$n_config >= params$parallel_processors)
-	{
-		# Run configurations in parallel
-		config_processors <- params$parallel_processors
-		# if there are multiple run for each configuration, then run them one after the other
-		run_processors <- 1
-	}
-	else
-	{
-		# Run configurations in parallel
-		config_processors <- params$n_config
-		if(params$n_run > 1 && params$n_run < params$parallel_processors - params$n_config) {
 
-			# If there are enough processors, run in parallel the configuration runs
-			run_processors = floor((params$parallel_processors - params$n_config)/params$n_run)
-		}
-		else {
-			run_processors = 1
-		}
-	}
+if(params$n_config >= params$parallel_processors)
+{
+	# Run configurations in parallel
+	config_processors <- params$parallel_processors
+	# if there are multiple run for each configuration, then run them one after the other
+	run_processors <- 1
 } else {
-	if(params$n_run >= params$parallel_processors)
-	{
-		# Run configurations one after the other
-		config_processors <- 1
-		# Run in parallel the configuration runs
-		run_processors <- params$parallel_processors
-	}
-	else
-	{
-		# Execute configurations runs in parallel
-		run_processors <- params$n_run
-		if(params$n_config > 1 && params$n_config < params$parallel_processors - params$n_run) {
-			# If there are enough processors, run in parallel the some configurations
-			config_processors = floor((params$parallel_processors - params$n_run)/params$n_config)
-		}
-		else {
-			config_processors = 1
-		}
+	# Run configurations in parallel
+	config_processors <- params$n_config
+	if(params$n_run > 1) {
+		# If there are enough processors, run in parallel the configuration runs
+		run_processors = floor((params$parallel_processors - params$n_config)/params$n_run)
+	} else {
+		run_processors = 1
 	}
 }
 
