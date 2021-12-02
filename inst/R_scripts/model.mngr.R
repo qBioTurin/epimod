@@ -64,12 +64,7 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 
 ### NEW ###
 print("[model.mngr] Generating command template")
-# Generate the appropriate command to run on the Docker
-cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-											solver_type = params$solver_type,
-											taueps = params$taueps,
-											timeout = params$timeout)
-print("[model.mngr] Done generating command template")
+
 # Choose where and how to run parallel
 if(params$n_config > params$n_run)
 {
@@ -152,7 +147,6 @@ lapply(X = c(1:params$n_config),
 			 f_time = params$f_time,
 			 s_time = params$s_time,
 			 n_run = params$n_run,
-			 cmd = cmd,
 			 timeout = params$timeout,
 			 run_dir = params$run_dir,
 			 out_fname = params$out_fname,

@@ -69,15 +69,7 @@ saveRDS(params,  file = paste0(param_fname), version = 2)
 # Save final seed
 extend_seed <- .Random.seed
 ### NEW ###
-print("[model.mngr] Generating command template")
-# Generate the appropriate command to run on the Docker
-cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
-											solver_type = params$solver_type,
-											taueps = params$taueps,
-											timeout = params$timeout)
-print("[model.mngr] Done generating command template")
 # Choose where and how to run parallel
-
 if(params$n_config >= params$parallel_processors)
 {
 	# Run configurations in parallel

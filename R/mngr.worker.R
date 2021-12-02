@@ -1,5 +1,5 @@
 mngr.worker <- function(id,
-												solver_fname, cmd,
+												solver_fname, solver_type, taueps,
 												i_time, f_time, s_time, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times, event_function,
@@ -9,7 +9,6 @@ mngr.worker <- function(id,
 	print("[mngr.worker] Starts with parameters:")
 	print(paste0("[mngr.worker] - id ", id))
 	print(paste0("[mngr.worker] - solver_fname ", solver_fname))
-	print(paste0("[mngr.worker] - cmd ", cmd))
 	print(paste0("[mngr.worker] - i_time ", i_time))
 	print(paste0("[mngr.worker] - f_time ", f_time))
 	print(paste0("[mngr.worker] - s_time ", s_time))
@@ -31,6 +30,14 @@ mngr.worker <- function(id,
 	# Change working directory to the one corresponding at the current id
 	pwd <- getwd()
 	setwd(paste0(run_dir,id))
+
+	print("[mngr.worker] Generating command template")
+	# Generate the appropriate command to run on the Docker
+	cmd <- experiment.cmd(solver_fname =solver_fname,
+												solver_type = solver_type,
+												taueps = taueps,
+												timeout = timeout)
+	print("[mngr.worker] Done generating command template")
 
 	print("[mngr.worker] Starting simulations..")
 	if(n_run != 1)
