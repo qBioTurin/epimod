@@ -6,6 +6,8 @@ mngr.worker <- function(id,
 												files, config = NULL,
 												parallel_processors)
 {
+	set.seed(kind = "Mersenne-Twister", seed = seed+id)
+
 	print("[mngr.worker] Starts with parameters:")
 	print(paste0("[mngr.worker] - id ", id))
 	print(paste0("[mngr.worker] - solver_fname ", solver_fname))
