@@ -15,13 +15,13 @@ objfn <- function(x, params, seed) {
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
 	#cnt <- get(x = "counter", envir = .GlobalEnv)
-	cnt <- params$env$counter
+	cnt <- counter
 	curr_seed = seed + cnt
 	# ????????????????????? #
 	# ?? COUNTER + N_RUN ?? #
 	# ????????????????????? #
 	# assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
-	params$env$counter <- cnt + 1
+	counter <<- counter+1
 
 	print(paste0("[objfn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
@@ -132,9 +132,6 @@ params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
 														 taueps = params$taueps,
 														 timeout = params$timeout)
 print("[calibration.mngr] Done generating command template")
-
-params$env <- new.env()
-params$env$counter <- counter
 
 ret <- GenSA(par=params$ini_v,
 						 fn=objfn,
