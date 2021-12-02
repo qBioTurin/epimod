@@ -169,5 +169,4 @@ extend_seed <- .Random.seed
 n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
-write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".csv"), col.names = TRUE, row.names = TRUE, sep = " ")
 file.copy(from = params$target_value_fname, to = params$run_dir)
