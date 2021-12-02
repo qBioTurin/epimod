@@ -7,8 +7,6 @@ chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
-# Get initial time
-t1 <- Sys.time()
 # Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
@@ -98,11 +96,12 @@ parLapply( cl = cl,
 					 X = c(1:params$n_config),
 					 fun = mngr.worker,
 					 solver_fname = params$files$solver_fname,
+					 solver_type = params$solver_type,
+					 taueps = params$taueps,
 					 i_time = params$i_time,
 					 f_time = params$f_time,
 					 s_time = params$s_time,
 					 n_run = 1,
-					 cmd = cmd,
 					 timeout = params$timeout,
 					 run_dir = params$run_dir,
 					 out_fname = params$out_fname,
@@ -114,8 +113,8 @@ parLapply( cl = cl,
 					 config = params$config,
 					 parallel_processors = run_processors)
 # Print all the output to the stdout
-system(paste0("cat ", params$out_fname,".log >&2"))
-unlink(x = paste0(params$out_fname,".log"), force = TRUE)
+# system(paste0("cat ", params$out_fname,".log >&2"))
+# unlink(x = paste0(params$out_fname,".log"), force = TRUE)
 
 # lapply(X = c(1:params$n_config),
 # 			 FUN = mngr.worker,
@@ -125,8 +124,7 @@ unlink(x = paste0(params$out_fname,".log"), force = TRUE)
 # 			 i_time = params$i_time,
 # 			 f_time = params$f_time,
 # 			 s_time = params$s_time,
-# 			 n_run = n_run,
-# 			 cmd = cmd,
+# 			 n_run = 1,
 # 			 timeout = params$timeout,
 # 			 run_dir = params$run_dir,
 # 			 out_fname = params$out_fname,
