@@ -29,7 +29,7 @@ for I in ${IMAGES[@]}; do
 		rm marker
 	 	echo "Uploading $IMG"
 	        	echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
-	 	docker push qbioturin/epimod-$IMG:$TAG
+	 	#docker push qbioturin/epimod-$IMG:$TAG
 	 	if [[ $? -ne 0 ]]; then
 	 		exit 0
 	 	fi

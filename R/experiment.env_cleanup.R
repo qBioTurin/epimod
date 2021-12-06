@@ -20,9 +20,11 @@ experiment.env_cleanup <- function(id, run_dir,
     						.Platform$file.sep,
     						list.files(path = r_dir,
     								   pattern = paste0(out_fname,
-    								   				 "(-[0-9]+)+")
+    								   				 "(-[0-9]+)+(.trace){1}")
     								   )
     						),
     		  to = out_dir)
-    unlink(r_dir, recursive = TRUE)
+    unlink(r_dir,
+           recursive = TRUE,
+           force = TRUE)
 }
