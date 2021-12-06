@@ -76,6 +76,11 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
                    paste(unlist(pnpro_files), collapse = "\n\t")))
       }
     }
+
+  	if(length(Filter(function(file) any(grepl("type=\"GEN\"", readLines(file, warn = FALSE))), net_fname)) != 0 &&
+  		 is.null(functions_fname)){
+  		return(paste0("There is at least one generic transition in ", net_fname, ". Provide a function_fame! Abort"))
+  	}
   }
 
 
@@ -159,7 +164,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
       return("One or more of these parameters ini_v , lb_v or ub_v was not specified! Abort")
     else{
       if(!is.numeric(ini_v) || !is.numeric(lb_v) || !is.numeric(ub_v))
-      	return("ini_v , lb_v and ub_v must be numbers")
+      	return("ini_v, lb_v and ub_v must be numbers")
 
       if(length(ini_v) != length(lb_v) || length(ini_v) != length(ub_v) || length(lb_v) != length(ub_v)){
         return("ini_v , lb_v and ub_v must have the same number of elements")
@@ -177,6 +182,12 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
   if(caller_function == "analysis"){
     if(missing(ini_v))
       return("WARNING: ini_v parameter is missing!")
+
+  	if(!is.numeric(ini_v))
+  		return("ini_v must be a numbers")
+
+  	if(taueps < 0 || taueps > 1)
+  		return("taueps must be in range [0, 1]! Abort")
   }
 
 
