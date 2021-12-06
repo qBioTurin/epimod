@@ -126,6 +126,8 @@ if(!is.null(params$max.time))
 ctl$seed <- init_seed + counter
 counter <- counter + 1
 
+set.seed(kind = "Mersenne-Twister", seed = init_seed + 1)
+
 # print("[calibration.mngr] Generating command template")
 # params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
 # 														 solver_type = params$solver_type,
