@@ -4,6 +4,9 @@ library(epimod)
 objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
+
+	set.seed(kind = "Mersenne-Twister", seed = seed)
+
 	# Generate the simulation's configuration according to the provided input x
 	config <- experiment.configurations(n_config = 1,
 										parm_fname = params$files$functions_fname,
@@ -16,7 +19,7 @@ objfn <- function(x, params, seed) {
 	print("[objfn] Calling calibration.worer")
 	#cnt <- get(x = "counter", envir = .GlobalEnv)
 	cnt <- counter
-	curr_seed = seed + cnt
+	curr_seed = seed
 	# ????????????????????? #
 	# ?? COUNTER + N_RUN ?? #
 	# ????????????????????? #
@@ -125,8 +128,6 @@ if(!is.null(params$max.time))
 }
 ctl$seed <- init_seed + counter
 counter <- counter + 1
-
-set.seed(kind = "Mersenne-Twister", seed = init_seed + 1)
 
 # print("[calibration.mngr] Generating command template")
 # params$cmd <- experiment.cmd(solver_fname = params$files$solver_fname,
