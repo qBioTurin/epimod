@@ -103,7 +103,7 @@ if(is.null(params$seed)){
 	load(params$seed)
 }
 
-# set.seed(kind = "Mersenne-Twister", seed = init_seed)
+set.seed(kind = "Mersenne-Twister", seed = init_seed + 1)
 # counter <- 1
 
 # Copy files to the run directory
@@ -139,6 +139,6 @@ ret <- GenSA(par=params$ini_v,
 						 lower=params$lb_v,
 						 control = ctl,
 						 params = params,
-						 seed = init_seed)
+						 seed = init_seed + counter)
 # Save the output of the optimization problem to file
 save(ret, file = paste0(params$out_dir,params$out_fname,"_optim.RData"))
