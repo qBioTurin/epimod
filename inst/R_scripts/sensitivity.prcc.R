@@ -4,7 +4,6 @@ sensitivity.prcc<-function(config,
                            out_fname, out_dir,
                            parallel_processors
 ){
-    library(parallel)
     # Prepare the dataset to compute PRCC.
     # Only parameters changing within the configuration will be used
     # Function to flatten a matrix
@@ -53,6 +52,10 @@ sensitivity.prcc<-function(config,
     # Extracts the target value from the simulations' trace
     target <- function(id, target_value_fname, target_value, out_fname, out_dir){
         # Read the output and compute the distance from reference data
+    		print(paste0("[sensitivity.prcc] Reading trace ",
+    								 out_dir,
+    								 out_fname,"-",
+    								 id,".trace") )
         trace <- read.csv(paste0(out_dir,out_fname,"-", id,".trace"), sep = "", header = TRUE)
         # Load distance definition
         source(target_value_fname)
@@ -70,7 +73,6 @@ sensitivity.prcc<-function(config,
         dat<-do.call("cbind",dat)
         dat <- as.data.frame(dat)
         names(dat) <- c(names(config)[!is.na(names(config))],"Output")
-        # prcc<-epi.prcc(dat)
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
@@ -99,21 +101,23 @@ sensitivity.prcc<-function(config,
     parms <- parms[,pos]
     names(parms)<-pnames
     # Create a cluster
-    cl <- makeCluster(parallel_processors, type = "FORK")
+    cl <- parallel::makeCluster(parallel_processors, type = "FORK")
     # Extract data
-    tval <- parLapply( cl,
-    				   c(1:n_config),
-    				   target,
-    				   target_value_fname = target_value_fname,
-    				   target_value = target_value,
-    				   out_fname = out_fname,
-    				   out_dir = out_dir)
-    # tval <- lapply( c(1:n_config),function(x){
-    #                    target(id=x,target_value_fname = target_value_fname,
-    #                    target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
-    stopCluster(cl)
+    # tval <- parallel::parLapply( cl,
+    # 														 c(1:n_config),
+    # 														 target,
+    # 														 target_value_fname = target_value_fname,
+    # 														 target_value = target_value,
+    # 														 out_fname = out_fname,
+    # 														 out_dir = out_dir)
+    tval <- lapply( c(1:n_config),
+    								target,
+    								target_value_fname = target_value_fname,
+    								target_value = target_value,
+    								out_fname = out_fname,
+    								out_dir = out_dir)
+    # parallel::stopCluster(cl)
     # Make it a data.frame
-    # * tval <- t(do.call("rbind",tval))
     tval <- do.call("cbind",tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
