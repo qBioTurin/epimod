@@ -52,7 +52,7 @@ sensitivity.prcc<-function(config,
     # Extracts the target value from the simulations' trace
     target <- function(id, target_value_fname, target_value, out_fname, out_dir){
         # Read the output and compute the distance from reference data
-    		print(paste0("[sensitivity.prcc] Reading trace ",
+    		print(paste0("[sensitivity.prcc.target] Reading trace ",
     								 out_dir,
     								 out_fname,"-",
     								 id,".trace") )
@@ -60,7 +60,9 @@ sensitivity.prcc<-function(config,
         # Load distance definition
         source(target_value_fname)
         # Read target fields and return a single column data serie
+        print("[sensitivity.prcc.target] computing distance ...")
         tgt <- do.call(target_value, list(trace))
+        print("[sensitivity.prcc.target] Done!" )
         return(tgt)
     }
     compute_prcc <- function(time,config,data){
@@ -77,7 +79,7 @@ sensitivity.prcc<-function(config,
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
     # n_config <- abs(config[[1]][[1]][[2]])
-    n_config <- length(config[[1]][[1]][[1]])
+    n_config <- length(config[[1]])
     # Flatten all the parameters in the configuration
     config <- lapply(c(1:length(config)),function(x){
         inner_config <- lapply(c(1:n_config),function(k){
