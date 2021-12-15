@@ -7,47 +7,68 @@ sensitivity.prcc<-function(config,
     # Prepare the dataset to compute PRCC.
     # Only parameters changing within the configuration will be used
     # Function to flatten a matrix
-    flatten <- function(x, name){
-        x <- as.data.frame(x)
-        d <- dim(x)
-        if(d[1] > 1)
-        {
-            ##### Check if there are equal rows in the matrix and remove them
-            x <- unique(x)
-            d <- dim(x)
-            ###
-        }
-        nms<-c()
-        ret<-NULL
-        if(d[1] > 1)
-        {
-        	##### Check if there are equal rows in the matrix
-        	x <- unique(x)
-        	d <- dim(x)
-        	###
-
-            for(i in 1:d[1]){
-                for(j in 1:d[2])
-                    nms <- c(nms, paste0(name,"_",i,"-",j))
-                    if(i == 1)
-                        ret <- x[i,]
-                    else
-                        ret <- c(ret,x[i,])
-            }
-            # ret<-as.data.frame(ret)
-            ret<- as.data.frame(matrix(ret,nrow = 1))
-            names(ret)<-nms
-        }
-        else{
-            ret <- as.data.frame(x)
-            if(d[2] > 1){
-                names(ret) <- paste0(name,c(1:length(ret)))
-            }
-            else{
-                names(ret) <- name
-            }
-        }
-        return(ret)
+    # flatten <- function(x, name){
+    #     x <- as.data.frame(x)
+    #     d <- dim(x)
+    #     if(d[1] > 1)
+    #     {
+    #         ##### Check if there are equal rows in the matrix and remove them
+    #         x <- unique(x)
+    #         d <- dim(x)
+    #         ###
+    #     }
+    #     nms<-c()
+    #     ret<-NULL
+    #     if(d[1] > 1)
+    #     {
+    #     	##### Check if there are equal rows in the matrix
+    #     	x <- unique(x)
+    #     	d <- dim(x)
+    #     	###
+    #
+    #         for(i in 1:d[1]){
+    #             for(j in 1:d[2])
+    #                 nms <- c(nms, paste0(name,"_",i,"-",j))
+    #                 if(i == 1)
+    #                     ret <- x[i,]
+    #                 else
+    #                     ret <- c(ret,x[i,])
+    #         }
+    #         # ret<-as.data.frame(ret)
+    #         ret<- as.data.frame(matrix(ret,nrow = 1))
+    #         names(ret)<-nms
+    #     }
+    #     else{
+    #         ret <- as.data.frame(x)
+    #         if(d[2] > 1){
+    #             names(ret) <- paste0(name,c(1:length(ret)))
+    #         }
+    #         else{
+    #             names(ret) <- name
+    #         }
+    #     }
+    #     return(ret)
+    # }
+    flatten <- function(x, name)
+  	{
+    	ret <- data.frame()
+    	if(!is.null(nrow(x))){
+    		for(i in c(1:nrow(x)))
+    		{
+    			r <- as.data.frame(t(x[i,]))
+    			names(r) <- paste0(name,"-", i, "-", c(1:ncol(x)))
+    			if(i == 1)
+    			{
+    				ret <- r
+    			} else {
+    				ret <- cbind(r)
+    			}
+    		}
+    	} else {
+    		ret <- data.frame(x)
+    		names(ret) <- paste0(name, "-1")
+    	}
+    	return(ret)
     }
     # Extracts the target value from the simulations' trace
     target <- function(id, target_value_fname, target_value, out_fname, out_dir){
@@ -85,13 +106,17 @@ sensitivity.prcc<-function(config,
     						 n_config," model realizations.") )
     # Flatten all the parameters in the configuration
     print("[sensitivity.prcc] Creating data structure..." )
-    config <- lapply(c(1:n_var),function(x){
-        inner_config <- lapply(c(1:n_config),function(k){
-            return(flatten(config[[x]][[k]][[3]],name = config[[x]][[k]][[1]]))
-        })
+    config <- lapply(c(1:n_var),function(x, config)
+  		{
+    		print(paste0("[sensitivity.prcc] Flattening variable #", x, " ..."))
+    		inner_config <- lapply(c(1:n_config),function(k, cfg){
+    			print(paste0("\t[sensitivity.prcc] ... configuration ", k))
+    			return(flatten(cfg[[k]][[3]], name = cfg[[k]][[1]]))
+        },
+        cfg = config[[x]])
         return(do.call("rbind",inner_config))
-    })
-    print(paste0("[sensitivity.prcc] Done creating data structure!") )
+    }, config = config)
+    print("[sensitivity.prcc] Done creating data structure!")
     # Filter out the parameters that do not chage within the configuration provided
     parms <- NULL
     print("[sensitivity.prcc] Filtering constant variables.")
