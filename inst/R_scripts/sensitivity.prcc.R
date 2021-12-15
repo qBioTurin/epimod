@@ -78,17 +78,23 @@ sensitivity.prcc<-function(config,
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
-    # n_config <- abs(config[[1]][[1]][[2]])
+    n_var <- length(config)
     n_config <- length(config[[1]])
+    print(paste0("[sensitivity.prcc] Computing PRCC using ",
+    						 n_var, " variables and ",
+    						 n_config," model realizations.") )
     # Flatten all the parameters in the configuration
-    config <- lapply(c(1:length(config)),function(x){
+    print("[sensitivity.prcc] Creating data structure..." )
+    config <- lapply(c(1:n_var),function(x){
         inner_config <- lapply(c(1:n_config),function(k){
             return(flatten(config[[x]][[k]][[3]],name = config[[x]][[k]][[1]]))
         })
         return(do.call("rbind",inner_config))
     })
+    print(paste0("[sensitivity.prcc] Done creating data structure!") )
     # Filter out the parameters that do not chage within the configuration provided
     parms <- NULL
+    print("[sensitivity.prcc] Filtering constant variables.")
     for(i in c(1:length(config)))
     {
         if(dim(unique(config[[i]]))[1] > 1)
@@ -97,13 +103,18 @@ sensitivity.prcc<-function(config,
             else
                 parms <- cbind(parms,config[[i]])
     }
+    print("[sensitivity.prcc] Done filtering Variables!")
+    print(paste0("[sensitivity.prcc] Computing PRCC using ",
+    						 length(parms), " variables and ",
+    						 n_config," model realizations.") )
     pos<- sapply(1:length(parms[1,]), function(k){
         if(length(unique(parms[,k]))==1) return(FALSE) else return(TRUE)})
     pnames <- names(parms)[pos]
     parms <- parms[,pos]
     names(parms)<-pnames
+    print("[sensitivity.prcc] Extracting target variable...")
     # Create a cluster
-    cl <- parallel::makeCluster(parallel_processors, type = "FORK")
+    # cl <- parallel::makeCluster(parallel_processors, type = "FORK")
     # Extract data
     # tval <- parallel::parLapply( cl,
     # 														 c(1:n_config),
@@ -119,6 +130,7 @@ sensitivity.prcc<-function(config,
     								out_fname = out_fname,
     								out_dir = out_dir)
     # parallel::stopCluster(cl)
+    print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
     tval <- do.call("cbind",tval)
     # Add a column for the time
@@ -126,11 +138,12 @@ sensitivity.prcc<-function(config,
     tval <- as.data.frame(cbind(c(0,1:(f_time%/%s_time))*s_time, tval))
     tval <- tval[-1,]
     names(tval)[1] <- "Time"
-    # save(tval, parms, pnames, file = paste0(params$out_dir,"parms_prcc_",params$out_fname,".RData"))
+    print("[sensitivity.prcc] Computing PRCC...")
     PRCC.info<-lapply(tval$Time,
                       compute_prcc,
                       config = parms,
                       data = tval)
+    print("[sensitivity.prcc] Done computing PRCC!")
     PRCC<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
     P.values<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
     PRCC <- as.data.frame(t(as.data.frame(PRCC)))
