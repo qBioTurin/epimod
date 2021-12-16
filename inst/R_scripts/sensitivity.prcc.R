@@ -68,6 +68,7 @@ sensitivity.prcc<-function(config,
     		ret <- data.frame(x)
     		names(ret) <- paste0(name, "-1")
     	}
+    	ret[vapply(ret, function(x) length(unique(x)) > 1, logical(1L))]
     	return(ret)
     }
     # Extracts the target value from the simulations' trace
