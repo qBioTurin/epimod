@@ -53,22 +53,25 @@ sensitivity.prcc<-function(config,
   	{
     	ret <- data.frame()
     	if(!is.null(nrow(x))){
+    		x <- as.data.frame(x)
+    		names(x) <- paste0(name,"-", i, "-", c(1:ncol(x)))
+    		x <- x[vapply(x, function(k) length(unique(k)) > 1, logical(1L))]
+    		nms <- names(x)
     		for(i in c(1:nrow(x)))
     		{
-    			r <- as.data.frame(t(x[i,]))
-    			names(r) <- paste0(name,"-", i, "-", c(1:ncol(x)))
+    			r <- as.data.frame(x[i,])
+    			names(r) <- nms
     			if(i == 1)
     			{
     				ret <- r
     			} else {
-    				ret <- cbind(r)
+    				ret <- cbind(ret, r)
     			}
     		}
     	} else {
     		ret <- data.frame(x)
     		names(ret) <- paste0(name, "-1")
     	}
-    	ret[vapply(ret, function(x) length(unique(x)) > 1, logical(1L))]
     	return(ret)
     }
     # Extracts the target value from the simulations' trace
