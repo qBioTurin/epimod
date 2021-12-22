@@ -54,13 +54,16 @@ sensitivity.prcc<-function(config,
     	ret <- data.frame()
     	if(!is.null(nrow(x))){
     		x <- as.data.frame(x)
-    		names(x) <- paste0(name,"-", i, "-", c(1:ncol(x)))
+    		names(x) <- paste0(name,"-<I>-", c(1:ncol(x)))
     		x <- x[vapply(x, function(k) length(unique(k)) > 1, logical(1L))]
     		nms <- names(x)
     		for(i in c(1:nrow(x)))
     		{
     			r <- as.data.frame(x[i,])
     			names(r) <- nms
+    			names(r) <- gsub(x = names(r),
+    											 pattern = "<I>",
+    											 replacement = i)
     			if(i == 1)
     			{
     				ret <- r
