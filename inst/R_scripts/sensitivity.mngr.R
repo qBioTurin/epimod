@@ -77,12 +77,7 @@ if(params$n_config >= params$parallel_processors)
 } else {
 	# Run configurations in parallel
 	config_processors <- params$n_config
-	if(params$n_run > 1) {
-		# If there are enough processors, run in parallel the configuration runs
-		run_processors = floor((params$parallel_processors - params$n_config)/params$n_run)
-	} else {
-		run_processors = 1
-	}
+	run_processors <- 1
 }
 
 # Create a cluster
