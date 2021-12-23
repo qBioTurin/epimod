@@ -90,12 +90,18 @@ sensitivity.prcc<-function(config,
         # Read target fields and return a single column data serie
         print("[sensitivity.prcc.target] computing distance ...")
         tgt <- do.call(target_value, list(trace))
-        print("[sensitivity.prcc.target] Done!" )
+        print("[sensitivity.prcc.target] Done!")
         return(tgt)
     }
     compute_prcc <- function(time,config,data){
         # Dataframe containing the configuration generated and, as last column, the corresponding model output
-        dat<-cbind(config,t(data[which(data$Time==time),][-1]))
+    		config.table <- table(gsub(x=names(config), pattern="(-[0-9]+-){1}", replacement = "-"))
+    		config.names <- names(config.table)
+    		config.names[config.table > 1] <- gsub(pattern = "-",
+    																					 replacement = paste0("-", id, "-"),
+    																					 x = config.names[config.table > 1])
+    		config <- config[,which(names(config) %in% config.names)]
+    		dat<-cbind(config,t(data[which(data$Time==time),][-1]))
         dat<- lapply(1:length(dat[1,]),
         			 function(x){
         			 	unlist(dat[,x])
@@ -135,15 +141,16 @@ sensitivity.prcc<-function(config,
             else
                 parms <- cbind(parms,config[[i]])
     }
-    print("[sensitivity.prcc] Done filtering Variables!")
-    print(paste0("[sensitivity.prcc] Computing PRCC using ",
-    						 length(parms), " variables and ",
-    						 n_config," model realizations.") )
     pos<- sapply(1:length(parms[1,]), function(k){
         if(length(unique(parms[,k]))==1) return(FALSE) else return(TRUE)})
     pnames <- names(parms)[pos]
     parms <- parms[,pos]
-    names(parms)<-pnames
+    pnames.unique <- unique(gsub(x=pnames, pattern="(-[0-9]+-){1}", replacement = "-"))
+    print("[sensitivity.prcc] Done filtering Variables!")
+    print(paste0("[sensitivity.prcc] Computing PRCC using ",
+    						 length(pnames.unique), " variables and ",
+    						 n_config," model realizations.") )
+    # names(parms)<-pnames
     print("[sensitivity.prcc] Extracting target variable...")
     # Create a cluster
     # cl <- parallel::makeCluster(parallel_processors, type = "FORK")
@@ -171,8 +178,8 @@ sensitivity.prcc<-function(config,
     tval <- tval[-1,]
     names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
-    PRCC.info<-lapply(tval$Time,
-                      compute_prcc,
+    PRCC.info<-lapply(X = tval$Time,
+                      FUN = compute_prcc,
                       config = parms,
                       data = tval)
     print("[sensitivity.prcc] Done computing PRCC!")
@@ -180,7 +187,7 @@ sensitivity.prcc<-function(config,
     P.values<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
     PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     p.values <- as.data.frame(t(as.data.frame(P.values)))
-    names(PRCC) <- pnames
-    names(P.values) <- pnames
+    names(PRCC) <- pnames.unique
+    names(P.values) <- pnames.unique
     return(list(PRCC=PRCC,P.values=P.values))
 }
