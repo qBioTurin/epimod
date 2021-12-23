@@ -51,7 +51,8 @@ sensitivity.prcc<-function(config,
     # }
     flatten <- function(x, name)
   	{
-    	ret <- data.frame(x)
+    	ret <- data.frame()
+    	x <- data.frame(x)
     	if(nrow(x) == 1 & ncol(x) > 1)
     		x <- t(x)
     	if(nrow(x) > 1){
