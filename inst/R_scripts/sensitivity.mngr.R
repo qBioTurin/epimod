@@ -165,6 +165,7 @@ if(!is.null(params$files$target_value_fname))
     prcc <- sensitivity.prcc(config = params$config,
                              target_value_fname = params$files$target_value_fname,
                              target_value = target_value,
+    												 i_time = params$i_time,
                              s_time = params$s_time,
                              f_time = params$f_time,
                              out_fname = params$out_fname,

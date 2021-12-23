@@ -1,6 +1,6 @@
 sensitivity.prcc<-function(config,
                            target_value_fname, target_value,
-                           s_time, f_time,
+                           i_time, s_time, f_time,
                            out_fname, out_dir,
                            parallel_processors
 ){
@@ -152,6 +152,7 @@ sensitivity.prcc<-function(config,
     						 n_config," model realizations.") )
     # names(parms)<-pnames
     print("[sensitivity.prcc] Extracting target variable...")
+    source(target_value_fname)
     # Create a cluster
     # cl <- parallel::makeCluster(parallel_processors, type = "FORK")
     # Extract data
@@ -174,7 +175,7 @@ sensitivity.prcc<-function(config,
     tval <- do.call("cbind",tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
-    tval <- as.data.frame(cbind(c(0,1:(f_time%/%s_time))*s_time, tval))
+    tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
     tval <- tval[-1,]
     names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
