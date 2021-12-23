@@ -98,7 +98,7 @@ sensitivity.prcc<-function(config,
     		config.table <- table(gsub(x=names(config), pattern="(-[0-9]+-){1}", replacement = "-"))
     		config.names <- names(config.table)
     		config.names[config.table > 1] <- gsub(pattern = "-",
-    																					 replacement = paste0("-", id, "-"),
+    																					 replacement = paste0("-", time, "-"),
     																					 x = config.names[config.table > 1])
     		config <- config[,which(names(config) %in% config.names)]
     		dat<-cbind(config,t(data[which(data$Time==time),][-1]))
