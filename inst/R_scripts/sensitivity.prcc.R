@@ -51,8 +51,10 @@ sensitivity.prcc<-function(config,
     # }
     flatten <- function(x, name)
   	{
-    	ret <- data.frame()
-    	if(!is.null(nrow(x))){
+    	ret <- data.frame(x)
+    	if(nrow(x) == 1 && ncol(x) > 1)
+    		x <- t(x)
+    	if(nrow(x) > 1){
     		x <- as.data.frame(x)
     		names(x) <- paste0(name,"-<I>-", c(1:ncol(x)))
     		x <- x[vapply(x, function(k) length(unique(k)) > 1, logical(1L))]
