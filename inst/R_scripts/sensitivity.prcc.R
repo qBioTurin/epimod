@@ -194,9 +194,11 @@ sensitivity.prcc<-function(config,
                       data = tval)
     print("[sensitivity.prcc] Done computing PRCC!")
     PRCC<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
-    P.values<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
+    P.values<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
+    P.values <- do.call("rbind", P.values)
     PRCC <- as.data.frame(t(as.data.frame(PRCC)))
-    p.values <- as.data.frame(t(as.data.frame(P.values)))
+    # p.values <- as.data.frame(t(as.data.frame(P.values)))
+    P.values <- as.data.frame(as.data.frame(P.values))
     names(PRCC) <- pnames.unique
     names(P.values) <- pnames.unique
     return(list(PRCC=PRCC,P.values=P.values))
