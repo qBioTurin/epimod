@@ -170,8 +170,8 @@ if(!is.null(params$files$target_value_fname))
     # Get the parameter names and the total number of parameters
     names_param= names(prcc$PRCC)
     n_params = length(names_param)
-    # Get the istants of time at which the PRCC is evaluated
-    time <- c(1:(params$f_time %/% params$s_time)) * params$s_time
+    # Setup time
+    time <- seq(from = i_time, to = f_time, by = s_time)
     # Modify the prcc data structure to ease the plotting
     prcc_frame <- lapply(c(1:n_params),function(x){
         return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),

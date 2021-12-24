@@ -147,7 +147,7 @@ sensitivity.prcc<-function(config,
                       FUN = function(X, config, data){
                       	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
                       					error = function(e){
-                      						return(list(PRCC=rep(NA, length(pnames.unique)), P.values=rep(NA, length(pnames.unique))))
+                      						return(list(prcc=rep(NA, length(pnames.unique)), P.values=rep(NA, length(pnames.unique))))
                       					})
                       },
                       config = parms,
