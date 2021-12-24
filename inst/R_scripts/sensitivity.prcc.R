@@ -4,51 +4,6 @@ sensitivity.prcc<-function(config,
                            out_fname, out_dir,
                            parallel_processors
 ){
-    # Prepare the dataset to compute PRCC.
-    # Only parameters changing within the configuration will be used
-    # Function to flatten a matrix
-    # flatten <- function(x, name){
-    #     x <- as.data.frame(x)
-    #     d <- dim(x)
-    #     if(d[1] > 1)
-    #     {
-    #         ##### Check if there are equal rows in the matrix and remove them
-    #         x <- unique(x)
-    #         d <- dim(x)
-    #         ###
-    #     }
-    #     nms<-c()
-    #     ret<-NULL
-    #     if(d[1] > 1)
-    #     {
-    #     	##### Check if there are equal rows in the matrix
-    #     	x <- unique(x)
-    #     	d <- dim(x)
-    #     	###
-    #
-    #         for(i in 1:d[1]){
-    #             for(j in 1:d[2])
-    #                 nms <- c(nms, paste0(name,"_",i,"-",j))
-    #                 if(i == 1)
-    #                     ret <- x[i,]
-    #                 else
-    #                     ret <- c(ret,x[i,])
-    #         }
-    #         # ret<-as.data.frame(ret)
-    #         ret<- as.data.frame(matrix(ret,nrow = 1))
-    #         names(ret)<-nms
-    #     }
-    #     else{
-    #         ret <- as.data.frame(x)
-    #         if(d[2] > 1){
-    #             names(ret) <- paste0(name,c(1:length(ret)))
-    #         }
-    #         else{
-    #             names(ret) <- name
-    #         }
-    #     }
-    #     return(ret)
-    # }
     flatten <- function(x, name)
   	{
     	ret <- data.frame()
@@ -189,17 +144,24 @@ sensitivity.prcc<-function(config,
     names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
     PRCC.info<-lapply(X = tval$Time,
-                      FUN = compute_prcc,
+                      FUN = function(X, config, data){
+                      	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
+                      					error = function(e){
+                      						return(list(PRCC=rep(NA, length(pnames.unique)), P.values=rep(NA, length(pnames.unique))))
+                      					})
+                      },
                       config = parms,
                       data = tval)
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
+    PRCC<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
+    # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
+    PRCC <- do.call("rbind", PRCC)
+    PRCC <- as.data.frame(PRCC)
+    names(PRCC) <- pnames.unique
     P.values<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
     P.values <- do.call("rbind", P.values)
-    PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
     P.values <- as.data.frame(as.data.frame(P.values))
-    names(PRCC) <- pnames.unique
     names(P.values) <- pnames.unique
     return(list(PRCC=PRCC,P.values=P.values))
 }
