@@ -171,7 +171,7 @@ if(!is.null(params$files$target_value_fname))
     names_param= names(prcc$PRCC)
     n_params = length(names_param)
     # Setup time
-    time <- seq(from = i_time, to = f_time, by = s_time)
+    time <- seq(from = params$i_time, to = params$f_time, by = params$s_time)
     # Modify the prcc data structure to ease the plotting
     prcc_frame <- lapply(c(1:n_params),function(x){
         return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
