@@ -53,7 +53,7 @@ sensitivity.prcc<-function(config,
   	{
     	ret <- data.frame()
     	x <- data.frame(x)
-    	if(nrow(x) == 1 & ncol(x) > 1)
+    	if(nrow(x) > 1 & ncol(x) == 1)
     		x <- t(x)
     	if(nrow(x) > 1){
     		x <- as.data.frame(x)
@@ -75,8 +75,13 @@ sensitivity.prcc<-function(config,
     			}
     		}
     	} else {
-    		ret <- data.frame(x)
-    		names(ret) <- paste0(name, "-1")
+    		ret <- as.data.frame(x)
+    		# names(ret) <- paste0(name, "-1")
+    		if(ncol(x) > 1){
+    			names(ret) <- paste0(name,"-", c(1:ncol(x)))
+    		} else {
+    			names(ret) <- name
+    		}
     	}
     	return(ret)
     }
@@ -111,7 +116,8 @@ sensitivity.prcc<-function(config,
         			 })
         dat<-do.call("cbind",dat)
         dat <- as.data.frame(dat)
-        names(dat) <- c(names(config)[!is.na(names(config))],"Output")
+        # names(dat) <- c(names(config)[!is.na(names(config))],"Output")
+        names(dat) <- c(config.names,"Output")
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
@@ -179,7 +185,7 @@ sensitivity.prcc<-function(config,
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
     tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
-    tval <- tval[-1,]
+    # tval <- tval[-1,]
     names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
     PRCC.info<-lapply(X = tval$Time,
