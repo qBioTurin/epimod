@@ -119,7 +119,7 @@ sensitivity.prcc<-function(config,
         # names(dat) <- c(names(config)[!is.na(names(config))],"Output")
         names(dat) <- c(config.names,"Output")
         prcc<-epiR::epi.prcc(dat)
-        return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
+        return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
     n_var <- length(config)
     n_config <- length(config[[1]])
