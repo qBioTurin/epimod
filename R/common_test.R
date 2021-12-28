@@ -183,8 +183,8 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
     if(missing(ini_v))
       return("WARNING: ini_v parameter is missing!")
 
-  	if(!is.numeric(ini_v))
-  		return("ini_v must be a numbers")
+  	if(!is.null & !is.numeric(ini_v))
+  		return("ini_v must be numeric")
 
   	if(taueps < 0 || taueps > 1)
   		return("taueps must be in range [0, 1]! Abort")
