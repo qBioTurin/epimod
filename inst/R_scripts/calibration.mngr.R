@@ -6,12 +6,12 @@ objfn <- function(x, params, seed) {
 	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
 	# Generate the simulation's configuration according to the provided input x
 	config <- experiment.configurations(n_config = 1,
-										parm_fname = params$files$functions_fname,
-										parm_list = params$files$parameters_fname,
-										out_dir = params$out_dir,
-										out_fname = params$out_fname,
-										ini_vector = x,
-										ini_vector_mod = params$ini_vector_mod)
+																			parm_fname = params$files$functions_fname,
+																			parm_list = params$files$parameters_fname,
+																			out_dir = params$out_dir,
+																			out_fname = params$out_fname,
+																			ini_vector = x,
+																			ini_vector_mod = params$ini_vector_mod)
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
 	#cnt <- get(x = "counter", envir = .GlobalEnv)
@@ -40,7 +40,7 @@ objfn <- function(x, params, seed) {
 														 event_times = params$event_times,
 														 event_function = params$event_function,
 														 files = params$files,
-														 config = params$config,
+														 config = config,
 														 parallel_processors = params$parallel_processors)
 	traces_name <- file.path(params$out_dir, traces_name)
 	print(paste0("[objfn] Counter ", cnt))
