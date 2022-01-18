@@ -22,6 +22,7 @@ experiment.configurations <- function(n_config,
                                       ini_vector = NULL, ini_vector_mod = FALSE,
 																			extend = FALSE, config = list()){
 
+		print("[experiment.configurations] Generating configurations...")
     if(is.null(parm_fname)) # ini_vector_mod)
     {
         stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
@@ -34,6 +35,7 @@ experiment.configurations <- function(n_config,
     # Read file
     if(!is.null(parm_list))
     {
+    		print("[experiment.configurations] Reading parameters file")
         conn <- file(parm_list,open="r")
         lines <-readLines(conn)
         close(conn)
@@ -43,14 +45,15 @@ experiment.configurations <- function(n_config,
         {
             lines <- lines[-rmv]
         }
+        print("[experiment.configurations] Done reading parameters file")
     }
-    # TBD: Add the feature to expand an existing configuration
     # For each line the file defines how to generate a (set of) parameter(s)
 		config_length <- 0
 		if(length(config) != 0)
 			config_length <- length(config[[1]])
-
+		print("[experiment.configurations] Parsing parameters...")
     for (i in 1:length(lines)){
+    		print(paste0("[experiment.configurations] Parsing parameter ", lines[i]))
         # Create an environment to evaluate the parameters read from file
         env <-new.env()
         is_function <- FALSE
@@ -111,17 +114,14 @@ experiment.configurations <- function(n_config,
             {
             	config[[i]][[j]] <- list(file, "m", data)
             }
-            # Initial marking
-            # else if(!ini_vector_mod)
-            # {
-            #     config[[i]][[j]] <- list("init", "i", ini_vector)
-            # }
             else
             {
                 stop("Wrong parameter configuration: please check parameters controlling the generation of experiments' configurations.\n Abort!\n")
             }
         }
     }
+		print("[experiment.configurations] Done parsing parameters")
     save(config, file = paste0(out_dir, out_fname,".RData"))
+    print("[experiment.configurations] Done generating configurations")
     return(config)
 }
