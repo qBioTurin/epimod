@@ -23,10 +23,10 @@ experiment.configurations <- function(n_config,
 																			extend = FALSE, config = list()){
 
 		print("[experiment.configurations] Generating configurations...")
-    if(is.null(parm_fname)) # ini_vector_mod)
-    {
-        stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
-    }
+    # if(is.null(parm_fname)) # ini_vector_mod)
+    # {
+    #     stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
+    # }
     # Initialize an empty list of configurations
     if(!is.null(parm_fname))
     {
