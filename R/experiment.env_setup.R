@@ -15,6 +15,7 @@ experiment.env_setup <- function(id = NULL,
                                  dest_dir,
                                  config = NULL)
 {
+		print("[experiment.env_setup] Setting up environment")
     # Set the directory
     if(!is.null(id))
         dest_dir <- paste0(dest_dir, id)
@@ -41,6 +42,7 @@ experiment.env_setup <- function(id = NULL,
         # if(config[[x]][[idx]][[2]] > 0)
         if(config[[x]][[idx]][[2]] %in% c("i", "g"))
         {
+        		print(paste0("[experiment.env_setup] Creating file for parameter ",config[[x]][[idx]][[1]], "(", config[[x]][[idx]][[1]],")"))
             # Write the (set of) parameter(s) to file
             write.table(x = config[[x]][[idx]][[3]],
             			file = config[[x]][[idx]][[1]],
@@ -52,6 +54,7 @@ experiment.env_setup <- function(id = NULL,
         {
             if(config[[x]][[idx]][[2]] == "e")
             {
+            	print(paste0("[experiment.env_setup] Adding parameter to transitions' file ",config[[x]][[idx]][[1]], "(", config[[x]][[idx]][[1]],")"))
             	# Write single parameter to file (cmdln_params) using the format
             	# <parameter name> <parameter value>
             	write.table(x = paste(config[[x]][[idx]][[1]],
@@ -64,6 +67,7 @@ experiment.env_setup <- function(id = NULL,
             } else {
             	# Write single parameter to file (cmdln_params) using the format
             	# <parameter name> <parameter value>
+            	print(paste0("[experiment.env_setup] Adding parameter to places' file ",config[[x]][[idx]][[1]], "(", config[[x]][[idx]][[1]],")"))
             	write.table(x = paste(config[[x]][[idx]][[1]],
             						  config[[x]][[idx]][[3]]),
             				file="cmdln_mrk",
@@ -75,4 +79,5 @@ experiment.env_setup <- function(id = NULL,
         }
     })
     setwd(w_dir)
+    print("[experiment.env_setup] Done setting up environment")
 }
