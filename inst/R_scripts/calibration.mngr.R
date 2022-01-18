@@ -10,8 +10,7 @@ objfn <- function(x, params, seed) {
 																			parm_list = params$files$parameters_fname,
 																			out_dir = params$out_dir,
 																			out_fname = params$out_fname,
-																			ini_vector = x,
-																			ini_vector_mod = params$ini_vector_mod)
+																			ini_vector = x)
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
 	#cnt <- get(x = "counter", envir = .GlobalEnv)
