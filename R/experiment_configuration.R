@@ -22,7 +22,7 @@ experiment.configurations <- function(n_config,
                                       ini_vector = NULL, ini_vector_mod = FALSE,
 																			extend = FALSE, config = list()){
 
-    if(is.null(parm_fname) && ini_vector_mod)
+    if(is.null(parm_fname)) # ini_vector_mod)
     {
         stop("Wrong parameters: impossible to generate a configuration to run!\n Please provide a file with parameter generating functions or allow to use the optimization vector without modification.\n Abort!\n")
     }
@@ -112,10 +112,10 @@ experiment.configurations <- function(n_config,
             	config[[i]][[j]] <- list(file, "m", data)
             }
             # Initial marking
-            else if(!ini_vector_mod)
-            {
-                config[[i]][[j]] <- list("init", "i", ini_vector)
-            }
+            # else if(!ini_vector_mod)
+            # {
+            #     config[[i]][[j]] <- list("init", "i", ini_vector)
+            # }
             else
             {
                 stop("Wrong parameter configuration: please check parameters controlling the generation of experiments' configurations.\n Abort!\n")
