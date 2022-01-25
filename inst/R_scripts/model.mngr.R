@@ -112,15 +112,29 @@ if(params$n_config > params$n_run)
 run_processors <- 1
 # Create a cluster
 cl <- makeCluster(config_processors,
-									type = "FORK",
-									# outfile = paste0(params$out_fname,".log"),
-									port = 11000)
+									type = "FORK")
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 
 parLapply( cl = cl,
 					 X = c(1:params$n_config),
-					 fun = mngr.worker,
+					 fun = function(X, solver_fname, solver_type, tau_eps, i_time, f_time,
+					 							 s_time, n_run, timeout, run_dir, out_fname, out_dir, seed,
+					 							 event_times, event_function, files, config, paralle_processors)
+					 {
+					 	if(length(event_times) != 0)
+					 	{
+					 		i_s = seed + (X - 1)*(n_run * length(event_times))
+					 	} else {
+					 		i_s = seed + (X - 1)*n_run
+					 	}
+					 	mngr.worker(id = X, solver_fname = solver_fname, solver_type = solver_type,
+					 							taueps = taueps, i_time = i_time, f_time = f_time, s_time = s_time,
+					 							n_run = n_run, timeout = timeout, run_dir = run_dir, out_fname = out_fname,
+					 							out_dir = out_dir, seed = i_s, event_times = event_times,
+					 							event_function = event_function, files = files, config = config,
+					 							parallel_processors = parallel_processors)
+					 },
 					 solver_fname = params$files$solver_fname,
 					 solver_type = params$solver_type,
 					 taueps = params$taueps,
@@ -143,7 +157,23 @@ parLapply( cl = cl,
 # unlink(x = paste0(params$out_fname,".log"), force = TRUE)
 
 # lapply(X = c(1:params$n_config),
-# 			 FUN = mngr.worker,
+			 # FUN = function(X, solver_fname, solver_type, tau_eps, i_time, f_time,
+			 # 							 s_time, n_run, timeout, run_dir, out_fname, out_dir, seed,
+			 # 							 event_times, event_function, files, config, paralle_processors)
+			 # {
+			 # 	if(length(event_times) != 0)
+			 # 	{
+			 # 		i_s = seed + (X - 1)*(n_run * length(event_times))
+			 # 	} else {
+			 # 		i_s = seed + (X - 1)*n_run
+			 # 	}
+			 # 	mngr.worker(id = X, solver_fname = solver_fname, solver_type = solver_type,
+			 # 							taueps = taueps, i_time = i_time, f_time = f_time, s_time = s_time,
+			 # 							n_run = n_run, timeout = timeout, run_dir = run_dir, out_fname = out_fname,
+			 # 							out_dir = out_dir, seed = i_s, event_times = event_times,
+			 # 							event_function = event_function, files = files, config = config,
+			 # 							parallel_processors = parallel_processors)
+			 # },
 # 			 solver_fname = params$files$solver_fname,
 # 			 solver_type = params$solver_type,
 # 			 i_time = params$i_time,
