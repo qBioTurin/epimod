@@ -1,8 +1,0 @@
-#PLACE  ID
-Prey	0
-Predator	1
-#TRANSITION  ID
-BirthPrey	0
-DeathPrey	1
-BirthPredator	2
-DeathPredator	3

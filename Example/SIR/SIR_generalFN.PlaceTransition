@@ -1,7 +1,0 @@
-#PLACE  ID
-S	0
-I	1
-R	2
-#TRANSITION  ID
-Infection	0
-Recovery	1
