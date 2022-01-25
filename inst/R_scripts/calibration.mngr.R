@@ -13,14 +13,13 @@ objfn <- function(x, params, seed) {
 																			ini_vector = x)
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
-	#cnt <- get(x = "counter", envir = .GlobalEnv)
-	cnt <- counter
-	curr_seed = seed + cnt
-	# ????????????????????? #
-	# ?? COUNTER + N_RUN ?? #
-	# ????????????????????? #
-	# assign(x = "counter", value = cnt + 1, envir = .GlobalEnv)
-	counter <<- counter+1
+	curr_seed <- seed + counter
+	if(length(params$event_times) != 0)
+	{
+		counter <<- counter+length(params$event_times)
+	} else {
+		counter <<- counter+1
+	}
 
 	print(paste0("[objfn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
@@ -102,8 +101,8 @@ if(is.null(params$seed)){
 	load(params$seed)
 }
 
-set.seed(kind = "Mersenne-Twister", seed = init_seed + 1)
-# counter <- 1
+set.seed(kind = "Mersenne-Twister", seed = init_seed)
+counter <- 1
 
 # Copy files to the run directory
 experiment.env_setup(files = params$files,
