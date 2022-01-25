@@ -92,11 +92,11 @@ parLapply( cl = cl,
 					 X = c(1:params$n_config),
 					 fun = function(X, params, seed, parallel_processors)
 					 {
-					 	if(length(event_times) != 0)
+					 	if(length(params$event_times) != 0)
 					 	{
-					 		i_s = seed + (X - 1)*(n_run * length(event_times))
+					 		i_s = seed + (X - 1)*(params$n_run * length(params$event_times))
 					 	} else {
-					 		i_s = seed + (X - 1)*n_run
+					 		i_s = seed + (X - 1)*params$n_run
 					 	}
 					 	mngr.worker(id = X, solver_fname = params$files$solver_fname,
 					 							solver_type = params$solver_type, taueps = params$taueps,
