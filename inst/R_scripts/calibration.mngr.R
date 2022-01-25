@@ -14,12 +14,6 @@ objfn <- function(x, params, seed) {
 	# Solve n_run instances of the model
 	print("[objfn] Calling calibration.worer")
 	curr_seed <- seed + counter
-	if(length(params$event_times) != 0)
-	{
-		counter <<- counter+length(params$event_times)
-	} else {
-		counter <<- counter+1
-	}
 
 	print(paste0("[objfn] Parameter n_run ", params$n_run))
 	traces_name <- mngr.worker(id = 0,
@@ -41,16 +35,16 @@ objfn <- function(x, params, seed) {
 														 config = config,
 														 parallel_processors = params$parallel_processors)
 	traces_name <- file.path(params$out_dir, traces_name)
-	print(paste0("[objfn] Counter ", cnt))
+	print(paste0("[objfn] Counter ", counter))
 	print(paste0("[objfn] File ", traces_name))
 	print(paste0("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
-																								 replacement = paste0("-", cnt, ".trace"),
+																								 replacement = paste0("-", counter, ".trace"),
 																								 x = traces_name)))
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
-																replacement = paste0("-", cnt, ".trace"),
+																replacement = paste0("-", counter, ".trace"),
 																x = traces_name))
 	traces_name <- gsub(pattern = "(-0.trace)",
-											replacement = paste0("-", cnt, ".trace"),
+											replacement = paste0("-", counter, ".trace"),
 											x = traces_name)
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
@@ -68,6 +62,14 @@ objfn <- function(x, params, seed) {
 		cat(unlist(nms),"\n", file = optim_trace_fname)
 	}
 	cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+	print("[objfcn] Updating counter..")
+
+	if(length(params$event_times) != 0)
+	{
+		counter <<- counter+length(params$event_times)
+	} else {
+		counter <<- counter+1
+	}
 	print("[objfn] Done computing distance")
 	return(distance)
 }
