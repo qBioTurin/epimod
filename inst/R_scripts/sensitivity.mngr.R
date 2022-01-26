@@ -88,53 +88,58 @@ cl <- makeCluster(config_processors,
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
 
-parLapply(cl = cl,
-					X = c(1:params$n_config),
-					fun = function(id, params, seed, parallel_processors)
-					{
-					 	if(length(params$event_times) != 0)
-					 	{
-					 		i_s = seed + (id - 1)*length(params$event_times)
-					 	} else {
-					 		i_s = seed + (id - 1)
-					 	}
-					 	mngr.worker(id = id, solver_fname = params$files$solver_fname,
-					 							solver_type = params$solver_type, taueps = params$taueps,
-					 							i_time = params$i_time, f_time = params$f_time,
-					 							s_time = params$s_time, n_run = 1,
-					 							timeout = params$timeout, run_dir = params$run_dir,
-					 							out_fname = params$out_fname, out_dir = params$out_dir,
-					 							seed = i_s, event_times = params$event_times,
-					 							event_function = params$event_function,
-					 							files = params$files, config = params$config,
-					 							parallel_processors = parallel_processors)
-					},
-					params = params,
-					seed = init_seed,
-					parallel_processors = run_processors)
+# parLapply(cl = cl,
+# 					X = c(1:params$n_config),
+# 					fun = function(id, params, seed, parallel_processors)
+# 					{
+# 					 	if(length(params$event_times) != 0)
+# 					 	{
+# 					 		i_s = seed + (id - 1)*length(params$event_times)
+# 					 	} else {
+# 					 		i_s = seed + (id - 1)
+# 					 	}
+# 					 	mngr.worker(id = id, solver_fname = params$files$solver_fname,
+# 					 							solver_type = params$solver_type, taueps = params$taueps,
+# 					 							i_time = params$i_time, f_time = params$f_time,
+# 					 							s_time = params$s_time, n_run = 1,
+# 					 							timeout = params$timeout, run_dir = params$run_dir,
+# 					 							out_fname = params$out_fname, out_dir = params$out_dir,
+# 					 							seed = i_s, event_times = params$event_times,
+# 					 							event_function = params$event_function,
+# 					 							files = params$files, config = params$config,
+# 					 							parallel_processors = parallel_processors)
+# 					},
+# 					params = params,
+# 					seed = init_seed,
+# 					parallel_processors = run_processors)
+
 # Print all the output to the stdout
 # system(paste0("cat ", params$out_fname,".log >&2"))
 # unlink(x = paste0(params$out_fname,".log"), force = TRUE)
 
-# lapply(X = c(1:params$n_config),
-# 			 FUN = mngr.worker,
-# 			 solver_fname = params$files$solver_fname,
-# 			 solver_type = params$solver_type,
-# 			 taueps = params$taueps,
-# 			 i_time = params$i_time,
-# 			 f_time = params$f_time,
-# 			 s_time = params$s_time,
-# 			 n_run = 1,
-# 			 timeout = params$timeout,
-# 			 run_dir = params$run_dir,
-# 			 out_fname = params$out_fname,
-# 			 out_dir = params$out_dir,
-# 			 seed = init_seed,
-# 			 event_times = params$event_times,
-# 			 event_function = params$event_function,
-# 			 files = params$files,
-# 			 config = params$config,
-# 			 parallel_processors = run_processors)
+lapply(X = c(1:params$n_config),
+			 FUN = function(id, params, seed, parallel_processors)
+			 {
+					if(length(params$event_times) != 0)
+					{
+						i_s = seed + (id - 1)*length(params$event_times)
+					} else {
+						i_s = seed + (id - 1)
+					}
+					mngr.worker(id = id, solver_fname = params$files$solver_fname,
+											solver_type = params$solver_type, taueps = params$taueps,
+											i_time = params$i_time, f_time = params$f_time,
+											s_time = params$s_time, n_run = 1,
+											timeout = params$timeout, run_dir = params$run_dir,
+											out_fname = params$out_fname, out_dir = params$out_dir,
+											seed = i_s, event_times = params$event_times,
+											event_function = params$event_function,
+											files = params$files, config = params$config,
+											parallel_processors = parallel_processors)
+					},
+					params = params,
+					seed = init_seed,
+					parallel_processors = run_processors)
 
 # List all the traces in the output directory
 # if(!is.null(params$files$distance_measure_fname))
