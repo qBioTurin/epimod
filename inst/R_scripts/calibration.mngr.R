@@ -72,7 +72,7 @@ objfn <- function(x, params, seed) {
 		cat(unlist(nms),"\n", file = optim_trace_fname)
 	}
 	cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
-	print("[objfcn] Updating counter..")
+	print("[objfn] Updating counter..")
 
 	if(length(params$event_times) != 0)
 	{
@@ -81,6 +81,7 @@ objfn <- function(x, params, seed) {
 		counter <<- counter+1
 	}
 	print("[objfn] Done computing distance")
+	print(paste0("[objfn] Done computing distance ", distance))
 	return(distance)
 }
 
