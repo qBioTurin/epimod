@@ -54,7 +54,12 @@ objfn <- function(x, params, seed) {
 	# Compute the score for the current configuration
 	# source(params$files$distance_measure_fname)
 	print("[objfn] Computing distance")
-	distance <- do.call(params$distance_measure, list(t(read.csv(file = params$files$reference_data, header = FALSE, function_fname = params$files$functions_fname, sep = "")), traces))
+	distance <- do.call(params$distance_measure,
+											list(t(read.csv(file = params$files$reference_data,
+																			header = FALSE,
+																			sep = "")),
+													 traces),
+											function_fname = params$files$functions_fname)
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
