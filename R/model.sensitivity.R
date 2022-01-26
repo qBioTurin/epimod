@@ -254,10 +254,6 @@ model.sensitivity <- function(# Parameters to control the simulation
         })
     }
 
-    # removed parms$target_value_fname and inserted in files -> check if it works
-    # file.copy(target_value_fname, to = paste0(res_dir, basename(target_value_fname)))
-    # parms$target_value_fname <- paste0(parms$out_dir, basename(target_value_fname))
-
     # Manage experiments reproducibility
     if(!is.null(seed)){
 			parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
