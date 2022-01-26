@@ -49,17 +49,21 @@ objfn <- function(x, params, seed) {
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
 	print(paste0("[objfn] Settling files...", traces_name))
-	traces <- read.csv(file = traces_name,sep = "")
+	# traces <- read.csv(file = traces_name,sep = "")
 	print("[objfn] done settling files!")
 	# Compute the score for the current configuration
 	# source(params$files$distance_measure_fname)
 	print("[objfn] Computing distance")
-	distance <- do.call(params$distance_measure,
-											list(t(read.csv(file = params$files$reference_data,
-																			header = FALSE,
-																			sep = "")),
-													 traces,
-													 function_fname = params$files$functions_fname))
+	# distance <- do.call(params$distance_measure,
+	# 										list(t(read.csv(file = params$files$reference_data,
+	# 																		header = FALSE,
+	# 																		sep = "")),
+	# 												 traces))
+	distance <- do.call(tool.distance(id = counter,
+																		out_dir = params$out_dir,
+																		distance_measure = params$distance_measure,
+																		reference_data = params$reference_data,
+																		function_fname = params$functions_fname))
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
