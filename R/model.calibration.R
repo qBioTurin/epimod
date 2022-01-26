@@ -67,7 +67,7 @@
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
 #' base_dir <- "/root/scratch/"
 #' library(epimod)
-#' model_calibration(out_fname = "calibration",
+#' model.calibration(out_fname = "calibration",
 #'                   parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                   functions_fname = paste0(local_dir, "Configuration/Functions.R"),
 #'                   solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
@@ -89,7 +89,7 @@
 #' }
 #' @export
 
-model_calibration <- function(# Parameters to control the simulation
+model.calibration <- function(# Parameters to control the simulation
 															solver_fname, i_time, f_time, s_time, solver_type = "LSODA", taueps = 0.01, n_run = 1,
 													    # User defined simulation's parameters
 													    parameters_fname = NULL, functions_fname = NULL,
@@ -100,7 +100,8 @@ model_calibration <- function(# Parameters to control the simulation
 													    # Variables controlling optimization termination
 													    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
 													    # Parameters to control the ranking
-													    reference_data = NULL, distance_measure_fname = NULL,
+													    # reference_data = NULL, distance_measure_fname = NULL,
+															reference_data = NULL, distance_measure = NULL,
 															# List of discrete events
 															event_times = NULL, event_function = NULL,
 													    # Mange reproducibility
@@ -116,7 +117,7 @@ model_calibration <- function(# Parameters to control the simulation
                       functions_fname = functions_fname,
                       solver_fname = solver_fname,
                       reference_data = reference_data,
-                      distance_measure_fname = distance_measure_fname ,
+                      # distance_measure_fname = distance_measure_fname ,
                       solver_type = solver_type,
                       n_run = n_run,
     									i_time = i_time,
@@ -132,7 +133,7 @@ model_calibration <- function(# Parameters to control the simulation
     if(ret != TRUE)
         stop(paste("model_calibration_test error:", ret, sep = "\n"))
 
-    results_dir_name <- "results_model_calibration/"
+    results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_calibration/")
     chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
@@ -164,11 +165,11 @@ model_calibration <- function(# Parameters to control the simulation
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
     }
-    if(!is.null(distance_measure_fname))
-    {
-        distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
-        files[["distance_measure_fname"]] <- distance_measure_fname
-    }
+    # if(!is.null(distance_measure_fname))
+    # {
+    #     distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
+    #     files[["distance_measure_fname"]] <- distance_measure_fname
+    # }
     if(!is.null(seed))
     {
     	seed <- tools::file_path_as_absolute(seed)
@@ -186,7 +187,8 @@ model_calibration <- function(# Parameters to control the simulation
                    n_run = n_run,
                    volume = volume,
                    timeout = timeout,
-                   distance_measure = tools::file_path_sans_ext(basename(distance_measure_fname)),
+                   # distance_measure = tools::file_path_sans_ext(basename(distance_measure_fname)),
+                   distance_measure = distance_measure,
                    ini_v = ini_v,
                    lb_v = lb_v,
                    ub_v = ub_v,
