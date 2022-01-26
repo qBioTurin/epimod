@@ -22,8 +22,18 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
                                  header = TRUE,
                                  row.names = 1)
     }
-    if(!is.null(tag))
+    if(is.null(tag))
     {
+
+    		tag <- packageVersion("epimod")
+	    	curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
+	    									 replacement = "",
+	    									 x = containers$names)
+	    	curr.tag <- unique(curr.tag)
+	    	containers$names <- gsub(pattern = curr.tag,
+	    													 replacement = tag,
+	    													 x = containers$names)
+    } else {
         curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
                          replacement = "",
                          x = containers$names)
