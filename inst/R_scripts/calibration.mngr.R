@@ -81,7 +81,7 @@ objfn <- function(x, params, seed) {
 		counter <<- counter+1
 	}
 	print("[objfn] Done computing distance")
-	return(distance[1])
+	return(distance[[1]])
 }
 
 # Utility function
