@@ -8,7 +8,7 @@ tool.distance <- function(id,
 	print("[tool.distance] Begin computing distance")
 	pwd <- getwd()
 	setwd(out_dir)
-	print(paste0("[tool.distance] opening file ", out_dir, .Platform$path.sep, id))
+	print(paste0("[tool.distance] opening file ", out_dir, id))
 	# Read the output and compute the distance from reference data
 	trace <- read.csv(id,
 										sep = "")
