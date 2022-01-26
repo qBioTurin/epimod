@@ -38,13 +38,13 @@ objfn <- function(x, params, seed) {
 	print(paste0("[objfn] Counter ", counter))
 	print(paste0("[objfn] File ", traces_name))
 	print(paste0("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
-																								 replacement = paste0("-", counter, ".trace"),
+																								 replacement = paste0("-", (counter-1), ".trace"),
 																								 x = traces_name)))
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
-																replacement = paste0("-", counter, ".trace"),
+																replacement = paste0("-", (counter-1), ".trace"),
 																x = traces_name))
 	traces_name <- gsub(pattern = "(-0.trace)",
-											replacement = paste0("-", counter, ".trace"),
+											replacement = paste0("-", (counter-1), ".trace"),
 											x = traces_name)
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
