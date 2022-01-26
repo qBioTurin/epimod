@@ -59,11 +59,12 @@ objfn <- function(x, params, seed) {
 	# 																		header = FALSE,
 	# 																		sep = "")),
 	# 												 traces))
-	distance <- do.call(tool.distance(id = counter,
-																		out_dir = params$out_dir,
-																		distance_measure = params$distance_measure,
-																		reference_data = params$reference_data,
-																		function_fname = params$functions_fname))
+	distance <- do.call("tool.distance",
+											list(id = traces_name,
+													 out_dir = params$out_dir,
+													 distance_measure = params$distance_measure,
+													 reference_data = params$reference_data,
+													 function_fname = params$functions_fname))
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
