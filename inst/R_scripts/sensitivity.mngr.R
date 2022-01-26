@@ -14,15 +14,15 @@ param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
 # Get functions name from file path
-if(!is.null(params$files$distance_measure_fname))
-{
-    distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
-}
-if(!is.null(params$files$target_value_fname))
-{
-    target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
-    file.copy(from = params$files$target_value_fname, to = params$run_dir)
-}
+# if(!is.null(params$files$distance_measure_fname))
+# {
+#     distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
+# }
+# if(!is.null(params$files$target_value_fname))
+# {
+#     target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
+#     file.copy(from = params$files$target_value_fname, to = params$run_dir)
+# }
 
 # Load seed and previous configuration, if required.
 config <- list()
@@ -137,16 +137,18 @@ parLapply(cl = cl,
 # 			 parallel_processors = run_processors)
 
 # List all the traces in the output directory
-if(!is.null(params$files$distance_measure_fname))
+# if(!is.null(params$files$distance_measure_fname))
+if(!is.null(params$files$distance_measure) && !is.null(parm_fname))
 {
 	rank <- parLapply(cl,
 										list.files(path = params$out_dir,
 															 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
 										tool.distance,
 										out_dir = params$out_dir,
-										distance_measure_fname = params$files$distance_measure_fname,
+										# distance_measure_f_name = params$files$distance_measure_fname,
 										distance_measure = distance_measure,
-										reference_data = params$files$reference_data)
+										reference_data = params$files$reference_data,
+										function_fname = paramsfile$functions_fname)
 	# Sort the rank ascending, according to the distance computed above.
 	rank <- do.call("rbind", rank)
 	rank <- rank[order(rank$measure),]
@@ -157,12 +159,14 @@ stopCluster(cl)
 n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
-if(!is.null(params$files$target_value_fname))
+# if(!is.null(params$files$target_value_fname))
+if(!is.null(params$files$target_value))
 {
     # Load external function to compute prcc
     source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
     prcc <- sensitivity.prcc(config = params$config,
-                             target_value_fname = params$files$target_value_fname,
+                             # target_value_fname = params$files$target_value_fname,
+    												 function_fname = params$file$functions_fname,
                              target_value = target_value,
     												 i_time = params$i_time,
                              s_time = params$s_time,

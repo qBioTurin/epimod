@@ -1,5 +1,6 @@
 sensitivity.prcc<-function(config,
-                           target_value_fname, target_value,
+                           # target_value_fname, target_value,
+													 functions_fname, target_value,
                            i_time, s_time, f_time,
                            out_fname, out_dir,
                            parallel_processors
@@ -41,7 +42,7 @@ sensitivity.prcc<-function(config,
     	return(ret)
     }
     # Extracts the target value from the simulations' trace
-    target <- function(id, target_value_fname, target_value, out_fname, out_dir){
+    target <- function(id, functions_fname, target_value, out_fname, out_dir){
         # Read the output and compute the distance from reference data
     		print(paste0("[sensitivity.prcc.target] Reading trace ",
     								 out_dir,
@@ -49,7 +50,7 @@ sensitivity.prcc<-function(config,
     								 id,".trace") )
         trace <- read.csv(paste0(out_dir,out_fname,"-", id,".trace"), sep = "", header = TRUE)
         # Load distance definition
-        source(target_value_fname)
+        source(functions_fname)
         # Read target fields and return a single column data serie
         print("[sensitivity.prcc.target] computing distance ...")
         tgt <- do.call(target_value, list(trace))
