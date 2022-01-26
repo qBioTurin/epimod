@@ -90,7 +90,7 @@
 #' @export
 
 model_calibration <- function(# Parameters to control the simulation
-															solver_fname, i_time, f_time, s_time, solver_type = "LSODA", n_run = 1,
+															solver_fname, i_time, f_time, s_time, solver_type = "LSODA", taueps = 0.01, n_run = 1,
 													    # User defined simulation's parameters
 													    parameters_fname = NULL, functions_fname = NULL,
 													    # Parameters to manage the simulations' execution
@@ -179,6 +179,7 @@ model_calibration <- function(# Parameters to control the simulation
                    out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
                    out_fname = out_fname,
                    solver_type = solver_type,
+                   taueps = taueps,
                    i_time = i_time,
                    f_time = f_time,
                    s_time = s_time,
