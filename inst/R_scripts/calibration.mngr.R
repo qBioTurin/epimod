@@ -60,7 +60,7 @@ objfn <- function(x, params, seed) {
 	# 																		sep = "")),
 	# 												 traces))
 	distance <- do.call("tool.distance",
-											list(id = traces_name,
+											list(id = basename(traces_name),
 													 out_dir = params$out_dir,
 													 distance_measure = params$distance_measure,
 													 reference_data = params$reference_data,
