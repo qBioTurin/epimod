@@ -2,76 +2,11 @@ library(parallel)
 library(epimod)
 library(ggplot2)
 
-sensitivity.worker <- function(id,
-                               solver_fname, solver_type,
-                               i_time, s_time, f_time,
-                               timeout, run_dir, out_fname, out_dir,
-                               event_times, event_function,
-                               files, config,
-							   parallel_processors, greed ){
-	# Setup the environment
-	experiment.env_setup(id = id, files = files, config = config, dest_dir = run_dir)
-	# Environment settled, now run
-	# Change working directory to the one corresponding at the current id
-	pwd <- getwd()
-	setwd(paste0(run_dir,id))
-	cmd <- experiment.cmd(solver_fname = solver_fname,
-						  solver_type = solver_type,
-						  taueps = taueps,
-						  timeout = timeout)
-	# Run the experiment
-	if (greed > 0 && runif(1, min = 0, max = 1) > greed)
-	{
-		parallel_processors <- parallel_processors + 1
-	}
-	elapsed <- experiment.run(base_id = id,
-							  cmd = cmd,
-							  i_time = i_time,
-							  f_time = f_time,
-							  s_time = s_time,
-							  n_run = 1,
-							  event_times = event_times,
-							  event_function = event_function,
-							  out_fname = out_fname,
-							  parallel_processors = parallel_processors)
-	cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")
-	# Change the working directory back to the original one
-	setwd(pwd)
-	# Move relevant files to their final location and remove all the temporary files
-	experiment.env_cleanup(id = id, run_dir = run_dir, out_fname = out_fname, out_dir = out_dir)
-	return(elapsed)
-}
-
-# Function to compute the distance between one simulation trace and the reference data
-sensitivity.distance <- function(id,
-                                 ## run_dir,
-                                 ## out_fname,
-                                 out_dir,
-                                 distance_measure_fname,
-                                 distance_measure,
-                                 reference_data){
-    pwd <- getwd()
-    setwd(out_dir)
-    system(paste0("echo \"Trying to open ", id, "\""))
-    # Read the output and compute the distance from reference data
-    ## trace <- read.csv(paste0(out_fname, "-", id, "-1-1.trace"), sep = "")
-    trace <- read.csv(id,
-                      sep = "")
-    # Load distance definition
-    source(distance_measure_fname)
-    # Load reference data (IMPORTANT it has to be a column vector)
-    reference <- as.data.frame(t(read.csv(reference_data, header = FALSE, sep = "")))
-    # Compute the user defined distance measure
-    measure <- do.call(distance_measure, list(reference, trace))
-    setwd(pwd)
-    return(data.frame(measure=measure, id=id))
-}
-chk_dir<- function(path){
+# Utility function
+chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
-# Get initial time
-t1 <- Sys.time()
 # Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
@@ -79,125 +14,166 @@ param_fname <- args[1]
 # Load parameters
 params <- readRDS(param_fname)
 # Get functions name from file path
-if(!is.null(params$files$distance_measure_fname))
-{
-    distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
-}
-if(!is.null(params$files$target_value_fname))
-{
-    target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
-    file.copy(from = params$files$target_value_fname, to = params$run_dir)
-}
+# if(!is.null(params$files$distance_measure_fname))
+# {
+#     distance_measure <- tools::file_path_sans_ext(basename(params$files$distance_measure_fname))
+# }
+# if(!is.null(params$files$target_value_fname))
+# {
+#     target_value <- tools::file_path_sans_ext(basename(params$files$target_value_fname))
+#     file.copy(from = params$files$target_value_fname, to = params$run_dir)
+# }
+
 # Load seed and previous configuration, if required.
+config <- list()
 if(is.null(params$seed)){
-    # Save initial seed value
-    set.seed(kind = "Mersenne-Twister", seed = NULL)
-    init_seed <- .Random.seed
+	# Save initial seed value
+	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
+
+	timestamp <- as.numeric(Sys.time())
+	set.seed(kind = "Super-Duper", seed = timestamp)
+
+	init_seed <- runif(min = 1, max = .Machine$integer.max, n = 1)
+	extend_seed <- init_seed
+	n <- 1
+
+	save(init_seed, extend_seed, n, file = params$seed)
 }else{
-    load(params$seed)
-    if(is.null(params$extend))
-    {
-        # We want to reproduce the output of a previous set of experiments
-        assign(x = ".Random.seed", value = init_seed, envir = .GlobalEnv)
-        params$extend <- ""
-    }
-    else
-        # We want to extend a previous experiment
-        assign(x = ".Random.seed", value = final_seed, envir = .GlobalEnv)
+	load(params$seed)
+	if(params$extend){
+		# We want to extend a previous experiment
+		assign(x = ".Random.seed", value = extend_seed, envir = .GlobalEnv)
+		load(paste0(params$out_dir, params$out_fname, ".RData"))
+	}
+	else{
+		n <- 1
+	}
 }
+
+if(!params$extend){
+	set.seed(kind = "Mersenne-Twister", seed = init_seed)
+}
+
 # Generate configuration
-params$config <- experiment.configurations(n_config = params$n_config,
-                                           parm_fname = params$files$functions_fname,
-                                           parm_list = params$files$parameters_fname,
-                                           out_dir = chk_dir(params$out_dir),
-                                           out_fname = params$out_fname,
-                                           extend = params$extend)
+params$config <-experiment.configurations(n_config = params$n_config,
+                                   parm_fname = params$files$functions_fname,
+                                   parm_list = params$files$parameters_fname,
+                                   out_dir = chk_dir(params$out_dir),
+                                   out_fname = params$out_fname,
+                                   extend = params$extend,
+																	 config = config)
 saveRDS(params,  file = paste0(param_fname), version = 2)
+
 # Save final seed
-final_seed <- .Random.seed
-save(init_seed, final_seed, file = paste0(params$out_dir,"seeds-",params$out_fname,".RData"))
+extend_seed <- .Random.seed
+### NEW ###
+# Choose where and how to run parallel
+if(params$n_config >= params$parallel_processors)
+{
+	# Run configurations in parallel
+	config_processors <- params$parallel_processors
+	# if there are multiple run for each configuration, then run them one after the other
+	run_processors <- 1
+} else {
+	# Run configurations in parallel
+	config_processors <- params$n_config
+	run_processors <- 1
+}
+
 # Create a cluster
-cl <- makeCluster(params$parallel_processors,
-                  # outfile=paste0("log-", params$out_fname, ".txt"),
-                  type = "FORK")
+cl <- makeCluster(config_processors,
+									type = "FORK",
+									# outfile = paste0(params$out_fname,".log"),
+									port = 11000)
 # Save session's info
 clusterEvalQ(cl, sessionInfo())
-if(params$parallel_processors != 1)
-{
-	# Run params$parallel_processors configurations in parallel
-	threads.mngr <- min(params$n_config, params$parallel_processors)
-	threads.wrkr <- floor(params$parallel_processors/threads.mngr)
-	threads.load <- 1 - (threads.mngr*threads.wrkr)/params$parallel_processors
-	# The probability to use one worker thread more than specified in by threads.wrkr
-	threads.greed <- 1 - (1 - threads.load)^(1/threads.mngr)
-} else {
-	threads.mngr <- 1
-	threads.wrkr <- 1
-	threads.load <- 1
-	threads.greed <- 0
-}
-# Run simulations
-exec_times <- parLapply( cl,
-                         c(1:params$n_config),                # execute n_config istances
-                         sensitivity.worker,                  # of sensitivity.worker
-                         solver_fname = params$files$solver_fname,  # using the following parameters
-                         solver_type = "LSODA",
-                         i_time = params$i_time,
-                         s_time = params$s_time,
-                         f_time = params$f_time,
-                         timeout = params$timeout,
-                         run_dir = params$run_dir,
-                         out_fname = params$out_fname,
-                         out_dir = params$out_dir,
-                         event_times = params$event_times,
-                         event_function = params$event_function,
-                         files = params$files,
-						 config = params$config,
-						 parallel_processors = threads.wrkr,
-						 greed = threads.greed)
-# exec_times <- lapply(c(1:params$n_config),                # execute n_config istances
-# 					 sensitivity.worker,                  # of sensitivity.worker
-# 					 solver_fname = params$files$solver_fname,  # using the following parameters
-# 					 solver_type = "LSODA",
-# 					 i_time = params$i_time,
-# 					 s_time = params$s_time,
-# 					 f_time = params$f_time,
-# 					 timeout = params$timeout,
-# 					 run_dir = params$run_dir,
-# 					 out_fname = params$out_fname,
-# 					 out_dir = params$out_dir,
-# 					 event_times = params$event_times,
-# 					 event_function = params$event_function,
-# 					 files = params$files,
-# 					 config = params$config,
-# 					 parallel_processors = threads.wrkr,
-# 					 greed = threads.greed)
 
-write.table(x = exec_times, file = paste0(params$out_dir,"exec-times_",params$out_fname,".RData"), col.names = TRUE, row.names = TRUE, sep = ",")
+parLapply(cl = cl,
+					X = c(1:params$n_config),
+					fun = function(id, params, seed, parallel_processors)
+					{
+					 	if(length(params$event_times) != 0)
+					 	{
+					 		i_s = seed + (id - 1)*length(params$event_times)
+					 	} else {
+					 		i_s = seed + (id - 1)
+					 	}
+					 	mngr.worker(id = id, solver_fname = params$files$solver_fname,
+					 							solver_type = params$solver_type, taueps = params$taueps,
+					 							i_time = params$i_time, f_time = params$f_time,
+					 							s_time = params$s_time, n_run = 1,
+					 							timeout = params$timeout, run_dir = params$run_dir,
+					 							out_fname = params$out_fname, out_dir = params$out_dir,
+					 							seed = i_s, event_times = params$event_times,
+					 							event_function = params$event_function,
+					 							files = params$files, config = params$config,
+					 							parallel_processors = parallel_processors)
+					},
+					params = params,
+					seed = init_seed,
+					parallel_processors = run_processors)
+
+# Print all the output to the stdout
+# system(paste0("cat ", params$out_fname,".log >&2"))
+# unlink(x = paste0(params$out_fname,".log"), force = TRUE)
+
+# lapply(X = c(1:params$n_config),
+# 			 FUN = function(id, params, seed, parallel_processors)
+# 			 {
+# 					if(length(params$event_times) != 0)
+# 					{
+# 						i_s = seed + (id - 1)*length(params$event_times)
+# 					} else {
+# 						i_s = seed + (id - 1)
+# 					}
+# 					mngr.worker(id = id, solver_fname = params$files$solver_fname,
+# 											solver_type = params$solver_type, taueps = params$taueps,
+# 											i_time = params$i_time, f_time = params$f_time,
+# 											s_time = params$s_time, n_run = 1,
+# 											timeout = params$timeout, run_dir = params$run_dir,
+# 											out_fname = params$out_fname, out_dir = params$out_dir,
+# 											seed = i_s, event_times = params$event_times,
+# 											event_function = params$event_function,
+# 											files = params$files, config = params$config,
+# 											parallel_processors = parallel_processors)
+# 					},
+# 					params = params,
+# 					seed = init_seed,
+# 					parallel_processors = run_processors)
+
 # List all the traces in the output directory
-if(!is.null(params$files$distance_measure_fname))
+# if(!is.null(params$files$distance_measure_fname))
+if(!is.null(params$files$distance_measure) && !is.null(parm_fname))
 {
 	rank <- parLapply(cl,
-					  list.files(path = params$out_dir,
-					  		   pattern = paste0(params$out_fname, "(-[0-9]+)+")),
-					  sensitivity.distance,
-					  out_dir = params$out_dir,
-					  distance_measure_fname = params$files$distance_measure_fname,
-					  distance_measure = distance_measure,
-					  reference_data = params$files$reference_data)
+										list.files(path = params$out_dir,
+															 pattern = paste0(params$out_fname, "(-[0-9]+)+")),
+										tool.distance,
+										out_dir = params$out_dir,
+										# distance_measure_f_name = params$files$distance_measure_fname,
+										distance_measure = distance_measure,
+										reference_data = params$files$reference_data,
+										function_fname = paramsfile$functions_fname)
 	# Sort the rank ascending, according to the distance computed above.
 	rank <- do.call("rbind", rank)
 	rank <- rank[order(rank$measure),]
 	save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
 }
 stopCluster(cl)
-if(!is.null(params$files$target_value_fname))
+### NEW ###
+n <- n + params$n_config
+save(init_seed, extend_seed, n, file = params$seed)
+
+# if(!is.null(params$files$target_value_fname))
+if(!is.null(params$files$target_value))
 {
     # Load external function to compute prcc
     source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
     prcc <- sensitivity.prcc(config = params$config,
-                             target_value_fname = params$files$target_value_fname,
+                             # target_value_fname = params$files$target_value_fname,
+    												 function_fname = params$file$functions_fname,
                              target_value = target_value,
+    												 i_time = params$i_time,
                              s_time = params$s_time,
                              f_time = params$f_time,
                              out_fname = params$out_fname,
@@ -207,8 +183,8 @@ if(!is.null(params$files$target_value_fname))
     # Get the parameter names and the total number of parameters
     names_param= names(prcc$PRCC)
     n_params = length(names_param)
-    # Get the istants of time at which the PRCC is evaluated
-    time <- c(1:(params$f_time %/% params$s_time)) * params$s_time
+    # Setup time
+    time <- seq(from = params$i_time, to = params$f_time, by = params$s_time)
     # Modify the prcc data structure to ease the plotting
     prcc_frame <- lapply(c(1:n_params),function(x){
         return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
@@ -227,6 +203,5 @@ if(!is.null(params$files$target_value_fname))
             fill="yellow")
     ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
     # Get final time
-    exec_time <- difftime(Sys.time(), t1, unit = "secs")
-    save(prcc, plt, exec_time, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
+    save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
 }

@@ -1,90 +1,103 @@
 sensitivity.prcc<-function(config,
-                           target_value_fname, target_value,
-                           s_time, f_time,
+                           # target_value_fname, target_value,
+													 functions_fname, target_value,
+                           i_time, s_time, f_time,
                            out_fname, out_dir,
                            parallel_processors
 ){
-    library(parallel)
-    # Prepare the dataset to compute PRCC.
-    # Only parameters changing within the configuration will be used
-    # Function to flatten a matrix
-    flatten <- function(x, name){
-        x <- as.data.frame(x)
-        d <- dim(x)
-        if(d[1] > 1)
-        {
-            ##### Check if there are equal rows in the matrix and remove them
-            x <- unique(x)
-            d <- dim(x)
-            ###
-        }
-        nms<-c()
-        ret<-NULL
-        if(d[1] > 1)
-        {
-        	##### Check if there are equal rows in the matrix
-        	x <- unique(x)
-        	d <- dim(x)
-        	###
-
-            for(i in 1:d[1]){
-                for(j in 1:d[2])
-                    nms <- c(nms, paste0(name,"_",i,"-",j))
-                    if(i == 1)
-                        ret <- x[i,]
-                    else
-                        ret <- c(ret,x[i,])
-            }
-            # ret<-as.data.frame(ret)
-            ret<- as.data.frame(matrix(ret,nrow = 1))
-            names(ret)<-nms
-        }
-        else{
-            ret <- as.data.frame(x)
-            if(d[2] > 1){
-                names(ret) <- paste0(name,c(1:length(ret)))
-            }
-            else{
-                names(ret) <- name
-            }
-        }
-        return(ret)
+    flatten <- function(x, name)
+  	{
+    	ret <- data.frame()
+    	x <- data.frame(x)
+    	if(nrow(x) > 1 & ncol(x) == 1)
+    		x <- t(x)
+    	if(nrow(x) > 1){
+    		x <- as.data.frame(x)
+    		names(x) <- paste0(name,"-<I>-", c(1:ncol(x)))
+    		x <- x[vapply(x, function(k) length(unique(k)) > 1, logical(1L))]
+    		nms <- names(x)
+    		for(i in c(1:nrow(x)))
+    		{
+    			r <- as.data.frame(x[i,])
+    			names(r) <- nms
+    			names(r) <- gsub(x = names(r),
+    											 pattern = "<I>",
+    											 replacement = i)
+    			if(i == 1)
+    			{
+    				ret <- r
+    			} else {
+    				ret <- cbind(ret, r)
+    			}
+    		}
+    	} else {
+    		ret <- as.data.frame(x)
+    		# names(ret) <- paste0(name, "-1")
+    		if(ncol(x) > 1){
+    			names(ret) <- paste0(name,"-", c(1:ncol(x)))
+    		} else {
+    			names(ret) <- name
+    		}
+    	}
+    	return(ret)
     }
     # Extracts the target value from the simulations' trace
-    target <- function(id, target_value_fname, target_value, out_fname, out_dir){
+    target <- function(id, functions_fname, target_value, out_fname, out_dir){
         # Read the output and compute the distance from reference data
+    		print(paste0("[sensitivity.prcc.target] Reading trace ",
+    								 out_dir,
+    								 out_fname,"-",
+    								 id,".trace") )
         trace <- read.csv(paste0(out_dir,out_fname,"-", id,".trace"), sep = "", header = TRUE)
         # Load distance definition
-        source(target_value_fname)
+        source(functions_fname)
         # Read target fields and return a single column data serie
+        print("[sensitivity.prcc.target] computing distance ...")
         tgt <- do.call(target_value, list(trace))
+        print("[sensitivity.prcc.target] Done!")
         return(tgt)
     }
     compute_prcc <- function(time,config,data){
         # Dataframe containing the configuration generated and, as last column, the corresponding model output
-        dat<-cbind(config,t(data[which(data$Time==time),][-1]))
+    		config.table <- table(gsub(x=names(config), pattern="(-[0-9]+-){1}", replacement = "-"))
+    		config.names <- names(config.table)
+    		config.names[config.table > 1] <- gsub(pattern = "-",
+    																					 replacement = paste0("-", time, "-"),
+    																					 x = config.names[config.table > 1])
+    		config <- config[,which(names(config) %in% config.names)]
+    		dat<-cbind(config,t(data[which(data$Time==time),][-1]))
         dat<- lapply(1:length(dat[1,]),
         			 function(x){
         			 	unlist(dat[,x])
         			 })
         dat<-do.call("cbind",dat)
         dat <- as.data.frame(dat)
-        names(dat) <- c(names(config)[!is.na(names(config))],"Output")
-        # prcc<-epi.prcc(dat)
+        # names(dat) <- c(names(config)[!is.na(names(config))],"Output")
+        names(dat) <- c(config.names,"Output")
         prcc<-epiR::epi.prcc(dat)
-        return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
+        return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
-    # n_config <- abs(config[[1]][[1]][[2]])
-    n_config <- length(config[[1]][[1]][[1]])
+    n_var <- length(config)
+    n_config <- length(config[[1]])
+    print(paste0("[sensitivity.prcc] Computing PRCC using ",
+    						 n_var, " variables and ",
+    						 n_config," model realizations.") )
     # Flatten all the parameters in the configuration
-    config <- lapply(c(1:length(config)),function(x){
-        inner_config <- lapply(c(1:n_config),function(k){
-            return(flatten(config[[x]][[k]][[3]],name = config[[x]][[k]][[1]]))
-        })
+    print("[sensitivity.prcc] Creating data structure..." )
+    config <- lapply(c(1:n_var),function(x, config)
+  		{
+    		print(paste0("[sensitivity.prcc] Flattening variable #", x, " ..."))
+    		inner_config <- lapply(c(1:n_config),function(k, cfg){
+    			print(paste0("\t[sensitivity.prcc] ... configuration ", k))
+    			return(flatten(cfg[[k]][[3]], name = cfg[[k]][[1]]))
+        },
+        cfg = config[[x]])
         return(do.call("rbind",inner_config))
-    })
+    }, config = config)
+    print("[sensitivity.prcc] Done creating data structure!")
     # Filter out the parameters that do not chage within the configuration provided
     parms <- NULL
+    print("[sensitivity.prcc] Filtering constant variables.")
     for(i in c(1:length(config)))
     {
         if(dim(unique(config[[i]]))[1] > 1)
@@ -97,39 +110,59 @@ sensitivity.prcc<-function(config,
         if(length(unique(parms[,k]))==1) return(FALSE) else return(TRUE)})
     pnames <- names(parms)[pos]
     parms <- parms[,pos]
-    names(parms)<-pnames
+    pnames.unique <- unique(gsub(x=pnames, pattern="(-[0-9]+-){1}", replacement = "-"))
+    print("[sensitivity.prcc] Done filtering Variables!")
+    print(paste0("[sensitivity.prcc] Computing PRCC using ",
+    						 length(pnames.unique), " variables and ",
+    						 n_config," model realizations.") )
+    # names(parms)<-pnames
+    print("[sensitivity.prcc] Extracting target variable...")
+    source(target_value_fname)
     # Create a cluster
-    cl <- makeCluster(parallel_processors, type = "FORK")
+    # cl <- parallel::makeCluster(parallel_processors, type = "FORK")
     # Extract data
-    tval <- parLapply( cl,
-    				   c(1:n_config),
-    				   target,
-    				   target_value_fname = target_value_fname,
-    				   target_value = target_value,
-    				   out_fname = out_fname,
-    				   out_dir = out_dir)
-    # tval <- lapply( c(1:n_config),function(x){
-    #                    target(id=x,target_value_fname = target_value_fname,
-    #                    target_value = target_value,out_fname = out_fname,out_dir = out_dir)})
-    stopCluster(cl)
+    # tval <- parallel::parLapply( cl,
+    # 														 c(1:n_config),
+    # 														 target,
+    # 														 target_value_fname = target_value_fname,
+    # 														 target_value = target_value,
+    # 														 out_fname = out_fname,
+    # 														 out_dir = out_dir)
+    tval <- lapply( c(1:n_config),
+    								target,
+    								target_value_fname = target_value_fname,
+    								target_value = target_value,
+    								out_fname = out_fname,
+    								out_dir = out_dir)
+    # parallel::stopCluster(cl)
+    print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
-    # * tval <- t(do.call("rbind",tval))
     tval <- do.call("cbind",tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
-    tval <- as.data.frame(cbind(c(0,1:(f_time%/%s_time))*s_time, tval))
-    tval <- tval[-1,]
+    tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
+    # tval <- tval[-1,]
     names(tval)[1] <- "Time"
-    # save(tval, parms, pnames, file = paste0(params$out_dir,"parms_prcc_",params$out_fname,".RData"))
-    PRCC.info<-lapply(tval$Time,
-                      compute_prcc,
+    print("[sensitivity.prcc] Computing PRCC...")
+    PRCC.info<-lapply(X = tval$Time,
+                      FUN = function(X, config, data){
+                      	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
+                      					error = function(e){
+                      						return(list(prcc=rep(NA, length(pnames.unique)), P.values=rep(NA, length(pnames.unique))))
+                      					})
+                      },
                       config = parms,
                       data = tval)
-    PRCC<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
-    P.values<-sapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
-    PRCC <- as.data.frame(t(as.data.frame(PRCC)))
-    p.values <- as.data.frame(t(as.data.frame(P.values)))
-    names(PRCC) <- pnames
-    names(P.values) <- pnames
+    print("[sensitivity.prcc] Done computing PRCC!")
+    PRCC<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
+    # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
+    PRCC <- do.call("rbind", PRCC)
+    PRCC <- as.data.frame(PRCC)
+    names(PRCC) <- pnames.unique
+    P.values<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
+    P.values <- do.call("rbind", P.values)
+    # p.values <- as.data.frame(t(as.data.frame(P.values)))
+    P.values <- as.data.frame(as.data.frame(P.values))
+    names(P.values) <- pnames.unique
     return(list(PRCC=PRCC,P.values=P.values))
 }
