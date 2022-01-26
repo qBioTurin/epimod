@@ -64,7 +64,7 @@ objfn <- function(x, params, seed) {
 													 out_dir = params$out_dir,
 													 distance_measure = params$distance_measure,
 													 reference_data = params$files$reference_data,
-													 function_fname = params$functions_fname))
+													 function_fname = params$files$functions_fname))
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
