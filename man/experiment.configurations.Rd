@@ -4,16 +4,9 @@
 \alias{experiment.configurations}
 \title{Generates a set of simulation's configurations}
 \usage{
-experiment.configurations(
-  n_config,
-  parm_fname = NULL,
-  parm_list = NULL,
-  out_dir,
-  out_fname,
-  extend = NULL,
-  ini_vector = NULL,
-  ini_vector_mod = FALSE
-)
+experiment.configurations(n_config, parm_fname = NULL,
+  parm_list = NULL, out_dir, out_fname, extend = NULL,
+  ini_vector = NULL, ini_vector_mod = FALSE)
 }
 \arguments{
 \item{n_config, }{number of configuratons to generate}
@@ -42,4 +35,3 @@ experiment.configurations(nconfig = 10,
 \author{
 Marco Beccuti, Paolo Castagno, Simone Pernice
 }
-\keyword{internal}

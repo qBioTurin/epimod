@@ -4,65 +4,49 @@
 \alias{sensitivity_analysis}
 \title{Run sensitivity analisys}
 \usage{
-sensitivity_analysis(
-  solver_fname,
-  f_time,
-  s_time,
-  n_config,
-  parameters_fname = NULL,
-  functions_fname = NULL,
-  volume = getwd(),
-  timeout = "1d",
-  parallel_processors = 1,
-  reference_data = NULL,
-  distance_measure_fname = NULL,
-  target_value_fname = NULL,
-  extend = NULL,
-  seed = NULL,
-  out_fname = NULL
-)
+sensitivity_analysis(solver_fname, f_time, s_time, n_config,
+  parameters_fname = NULL, functions_fname = NULL, volume = getwd(),
+  timeout = "1d", parallel_processors = 1, reference_data = NULL,
+  distance_measure_fname = NULL, target_value_fname = NULL,
+  extend = NULL, seed = NULL, out_fname = NULL, event.list = NULL)
 }
 \arguments{
-\item{solver_fname}{.solver file (generated with the function *model_generation*).}
+\item{solver_fname}{.solver file (generated in with the function model_generation)}
 
 \item{f_time}{Final solution time.}
 
-\item{s_time}{Time step defining the frequency at which explicit estimates for the system values are desired.}
+\item{s_time}{Time step at whicch explicit estimates for the system are desired}
 
-\item{n_config}{Number of configurations to generate, to use only if some paramters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.}
+\item{n_config, }{number of configuratons to generate}
 
-\item{parameters_fname}{Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.}
+\item{parameters_fname}{file with the definition of user defined functions}
 
-\item{functions_fname}{R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.}
+\item{functions_fname}{File with the user defined functions to generate istances of the parameters}
 
-\item{volume}{The folder to mount within the Doker image providing all the necessary files.}
+\item{volume}{The folder to mount within the Doker image providing all the necessary files}
 
-\item{timeout}{Maximum execution time allowed to each configuration.}
+\item{timeout}{Maximum execution time allowed to each configuration}
 
-\item{parallel_processors}{Integer for the number of available processors to use.}
+\item{parallel_processors}{Integer for the number of available processors to use}
 
-\item{reference_data}{csv file storing the data to be compared with the simulations’ result.}
+\item{reference_data}{Data to compare with the simulations' results}
 
 \item{distance_measure_fname}{File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.}
 
-\item{target_value_fname}{R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.}
+\item{extend}{TO BE DONE}
 
 \item{seed}{Value that can be set to initialize the internal random generator.}
 
-\item{out_fname}{Prefix to the output file name.}
+\item{out_fname}{Prefix to the output file name}
 
-\item{i_time}{Initial solution time.}
+\item{parm_list, }{file listing the name of the functions, the parameters and the name under which the parameters have to be saved}
 }
 \description{
-The deterministic process is solved several times varying the values of the unknown parameters to identify which are the sensitive ones (i.e., those that have a greater effect on the model behavior),
- by exploiting the Pearson Ranking Correlation Coefficients (PRCCs). Furthermore, a ranking of simulations is returned in according to the distance of each solution with respect to the reference one.
-}
-\details{
-Sensitivity_analisys takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
+this functon takes as input a solver and all the required parameters to set up a dockerized running environment to perform the sensitivity analysis of the model.
 In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
 The function defining the distance has to be in the following form:
 
-FUNCTION_NAME(reference_dataset, simulation_output)
+FUNCTION_NAME(reference_dataset, siulation_output)
 
 Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries)
 in addiction to that, the user is asked to provide a function that, given the output of the solver, returns the releveant measure (one column) used to evalaute the quality of the solution.
@@ -72,10 +56,9 @@ the parameters involved in the sensitivity analysis have to be listed in a cvs f
 
 OUTPUT_FILE_NAME, FUNCTION_NAME, LIST OF PARAMETERS (comma separated)
 
-The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to run_sensitivity through the parameter parameters_fname).
+The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to run_sensitivity through the parameter parameters_fname)
 
-Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init".
-Let us observe that: (i) the distance and target functions must have the same name of the corresponding R file, (ii) sensitivity_analysis exploits also the parallel processing capabilities, and (iii) if the user is not interested on the ranking calculation then the distance_measure_fname and reference_data are not necessary and can be omitted.
+Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
 }
 \examples{
 \dontrun{
@@ -94,9 +77,6 @@ sensitivity_analysis(n_config = 2^4,
                      distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
                      target_value_fname = paste0(local_dir, "Configuration/Select.R"))
 }
-}
-\seealso{
-model_generation
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone

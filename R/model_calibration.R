@@ -1,5 +1,5 @@
 #' @title Run model calibration
-#' @description 
+#' @description
 #'
 #' @param solver_fname .solver file (generated in with the function model_generation).
 #' @param f_time Final solution time.
@@ -9,8 +9,8 @@
 #'  \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
 #'  } Default is LSODA.
 #' @param taueps The error control parameter from the tau-leaping approach.
-#' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated. 
-#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns (*which must separeted using ;*): (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
+#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
 #' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
 #' @param volume The folder to mount within the Doker image providing all the necessary files.
 #' @param timeout Maximum execution time allowed to each configuration.
@@ -85,7 +85,7 @@
 #' @export
 model_calibration <-function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, solver_type = "LSODA", n_run=1,
+    solver_fname, i_time, f_time, s_time, solver_type = "LSODA", n_run=1,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL,
     # Parameters to manage the simulations' execution
@@ -96,19 +96,21 @@ model_calibration <-function(
     threshold.stop = NULL, max.call = 1e7, max.time = NULL,
     # Parameters to control the ranking
     reference_data = NULL, distance_measure_fname = NULL,
+    # List of discrete events
+    event_times = NULL, event_function = NULL,
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
     out_fname=NULL){
 
-    chk_dir<- function(path){
+    chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
 
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
+    if (is.null(solver_fname))
     {
         stop("Missing solver file! Abort")
     }
@@ -117,22 +119,22 @@ model_calibration <-function(
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
-    if(is.null(out_fname))
+    if (is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-calibration")
     }
     # Fix input parameters path
-    if(!is.null(parameters_fname))
+    if (!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
         files[["parameters_fname"]] <- parameters_fname
     }
-    if(!is.null(functions_fname))
+    if (!is.null(functions_fname))
     {
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
     }
-    if(!is.null(reference_data))
+    if  (!is.null(reference_data))
     {
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
@@ -148,6 +150,7 @@ model_calibration <-function(
                    out_dir = chk_dir("/home/docker/data/results_model_calibration/"),
                    out_fname = out_fname,
                    solver_type = solver_type,
+                   i_time = i_time,
                    f_time = f_time,
                    s_time = s_time,
                    n_run = n_run,
@@ -164,7 +167,9 @@ model_calibration <-function(
                    files = files,
                    extend = extend,
                    seed = seed,
-                   processors = parallel_processors)
+                   processors = parallel_processors,
+                   event_times = event_times,
+                   event_function = event_function)
 
     res_dir <- paste0(chk_dir(volume),"results_model_calibration/")
     dir.create(res_dir, showWarnings = FALSE)
@@ -179,17 +184,19 @@ model_calibration <-function(
     saveRDS(params, file = parms_fname, version = 2)
     # file.copy(from = target_value_fname, to = res_dir)
     # Manage experiments reproducibility
-    if(!is.null(seed)){
+    if (!is.null(seed))
+    {
         params$seed <- paste0(params$out_dir,basename(seed))
         file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
+        if (!is.null(extend))
+        {
             params$extend <- paste0(params$out_dir,basename(extend))
             file.copy(from = extend, to = res_dir )
         }
     }
     parms_fname <- paste0(params$out_dir, basename(parms_fname))
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt",sep = "/")
+    containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(params$out_dir), " -d ", containers.names["calibration",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname))
 }

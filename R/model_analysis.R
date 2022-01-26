@@ -15,7 +15,7 @@
 #'  \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
 #'  } Default is LSODA.
 #' @param taueps The error control parameter from the tau-leaping approach.
-#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns (*which must separeted using ;*): (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
 #' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
 #' @param volume The folder to mount within the Doker image providing all the necessary files.
 #' @param timeout Maximum execution time allowed to each configuration.
@@ -48,50 +48,52 @@
 #'                parallel_processors=2
 #' }
 #' @export
-model_analysis <-function(
+model_analysis <- function(
     # Parameters to control the simulation
-    solver_fname, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps=0.01,
+    solver_fname, i_time = 0, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps=0.01,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
     volume = getwd(), timeout = '1d', parallel_processors = 1,
+    # List of discrete events
+    event_times = NULL, event_function = NULL,
     # Mange reproducibilty and extend previous experiments
     extend = NULL, seed = NULL,
     # Directories
     out_fname = NULL
 ){
 
-    chk_dir<- function(path){
+    chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
     }
     # Parameters used to set up the runing environment
     files <- list()
     # Fix input parameter out_fname
-    if(is.null(solver_fname))
+    if (is.null(solver_fname))
     {
         stop("Missing solver file! Abort")
     } else {
         solver_fname <- tools::file_path_as_absolute(solver_fname)
         files[["solver_fname"]] <- solver_fname
     }
-    if(is.null(out_fname))
+    if (is.null(out_fname))
     {
         out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)),"-analysis")
     }
     # Fix input parameters path
-    if(!is.null(parameters_fname))
+    if (!is.null(parameters_fname))
     {
         parameters_fname <- tools::file_path_as_absolute(parameters_fname)
         files[["parameters_fname"]] <- parameters_fname
     }
-    if(!is.null(functions_fname))
+    if (!is.null(functions_fname))
     {
         functions_fname <- tools::file_path_as_absolute(functions_fname)
         files[["functions_fname"]] <- functions_fname
     }
 
-    # Global parameters used to manage the dockerized environment
+    # Global parameters used to manage the environment within the docker container
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
     parms <- list(n_run = n_run,
                   n_config = n_config,
@@ -100,6 +102,7 @@ model_analysis <-function(
                   out_fname = out_fname,
                   solver_type = solver_type,
                   taueps = taueps,
+                  i_time = i_time,
                   f_time = f_time,
                   s_time = s_time,
                   parallel_processors = parallel_processors,
@@ -107,7 +110,9 @@ model_analysis <-function(
                   timeout = timeout,
                   files = files,
                   ini_v = ini_v,
-                  ini_vector_mod = ini_vector_mod)
+                  ini_vector_mod = ini_vector_mod,
+                  event_times = event_times,
+                  event_function = event_function)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume),"results_model_analysis/")
     dir.create(res_dir, showWarnings = FALSE)
@@ -118,10 +123,12 @@ model_analysis <-function(
         return(paste0(parms$out_dir,basename(x)))
     })
     # Manage experiments reproducibility
-    if(!is.null(seed)){
+    if (!is.null(seed))
+    {
         parms$seed <- paste0(parms$out_dir,basename(seed))
         file.copy(from = seed, to = res_dir )
-        if(!is.null(extend)){
+        if (!is.null(extend))
+        {
             parms$extend <- paste0(parms$out_dir,basename(extend))
             file.copy(from = extend, to = volume )
         }
@@ -132,7 +139,7 @@ model_analysis <-function(
     saveRDS(parms,  file = p_fname, version = 2)
     p_fname <- paste0( parms$out_dir, parms_fname,".RDS") # location in the docker image file system
     # Run the docker image
-    containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-    containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
+    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+    containers.names = read.table(containers.file,header = T, stringsAsFactors = F)
     docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname))
 }

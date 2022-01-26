@@ -20,9 +20,13 @@ sensitivity.prcc<-function(config,
         }
         nms<-c()
         ret<-NULL
-
         if(d[1] > 1)
         {
+        	##### Check if there are equal rows in the matrix
+        	x <- unique(x)
+        	d <- dim(x)
+        	###
+
             for(i in 1:d[1]){
                 for(j in 1:d[2])
                     nms <- c(nms, paste0(name,"_",i,"-",j))
@@ -70,7 +74,8 @@ sensitivity.prcc<-function(config,
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$gamma, p.value=prcc$p.value ) )
     }
-    n_config <- abs(config[[1]][[1]][[2]])
+    # n_config <- abs(config[[1]][[1]][[2]])
+    n_config <- length(config[[1]][[1]][[1]])
     # Flatten all the parameters in the configuration
     config <- lapply(c(1:length(config)),function(x){
         inner_config <- lapply(c(1:n_config),function(k){

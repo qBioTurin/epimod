@@ -10,18 +10,38 @@
 #'
 #' }
 #' @export
-downloadContainers <- function(containers.file=NULL){
-    if(is.null(containers.file)){
-        containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-        containers <-read.table(containers.file,header=TRUE,row.names = 1)
+downloadContainers <- function(containers.file=NULL, tag = NULL){
+    if (is.null(containers.file))
+    {
+        containers.file = paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+        containers <- read.table(containers.file,
+                                 header = TRUE,
+                                 row.names = 1)
+    } else {
+        containers <- read.table(containers.file,
+                                 header = TRUE,
+                                 row.names = 1)
     }
-    else{
-        containers <-read.table(containers.file,header=TRUE,row.names = 1)
+    if(!is.null(tag))
+    {
+        curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
+                         replacement = "",
+                         x = containers$names)
+        curr.tag <- unique(curr.tag)
+        containers$names <- gsub(pattern = curr.tag,
+                                 replacement = tag,
+                                 x = containers$names)
     }
-
-
-    for(i in 1:dim(containers)[1]){
-        system(paste("docker pull ",containers[i,1], sep=""))
+    for (i in dim(containers)[1]:1)
+    {
+        status <- system(paste("docker pull ",containers[i,1],
+                               sep = ""))
+        if (status)
+        {
+            containers <- containers[-i]
+        }
     }
-    write.table(containers, paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/"))
+    write.table(containers,
+                paste(path.package(package = "epimod"),"Containers/containersNames.txt",
+                      sep = "/"))
 }

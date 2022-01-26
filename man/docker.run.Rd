@@ -21,9 +21,7 @@ This is an internal function executing a docker container. Not to be used by use
      docker.run(params=NULL)
 
 }
-
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone
 }
-\keyword{internal}

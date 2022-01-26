@@ -22,4 +22,3 @@ experiment.env_cleanup(id=1, run_dir="/run/directory", out_fname="simulation", o
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone
 }
-\keyword{internal}
