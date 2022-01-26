@@ -37,7 +37,7 @@
 #' @examples
 #' \dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-#' model_analysis(out_fname = "sensitivity",
+#' model.analysis(out_fname = "sensitivity",
 #'                solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
 #'                parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
 #'                functions_fname = paste0(local_dir, "Configuration/Functions.R"),
@@ -53,7 +53,7 @@
 #' }
 #' @export
 
-model_analysis <- function(
+model.analysis <- function(
     # Parameters to control the simulation
     solver_fname, i_time = 0, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
     # User defined simulation's parameters
