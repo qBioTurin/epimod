@@ -3,14 +3,17 @@
 # IMAGES=(Calibration)
 IMAGES=(Sensitivity Calibration Analysis)
 BASEDIR=$(pwd)
-if [ $# -ne 1 ]; then
+if [ $# -eq 0 ] || [ $# -ge 3 ]; then
 	echo "Illegal number of parameters"
 	echo "Usage:"
-	echo "\tbuild_images TAGNAME"
+	echo "\tbuild_images TAGNAME IMAGE"
 	echo "where TAGNAME will be used to tag the images uploaded to Docker Hub."
 	exit 1
 else
 	TAG=$1
+fi
+if [ $# -eq 2 ]; then
+	IMAGES=($2)
 fi
 # for I in $IMAGES; do
 for I in ${IMAGES[@]}; do
