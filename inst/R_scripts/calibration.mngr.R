@@ -58,8 +58,8 @@ objfn <- function(x, params, seed) {
 											list(t(read.csv(file = params$files$reference_data,
 																			header = FALSE,
 																			sep = "")),
-													 traces),
-											function_fname = params$files$functions_fname)
+													 traces,
+													 function_fname = params$files$functions_fname))
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
