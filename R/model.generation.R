@@ -11,12 +11,12 @@
 
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 
-#' @return model_generation returns the binary file SIR.solver in which the underlying processes (both deterministic and stochastic) of the Petri Net model and the library used for their simulation are packaged.
+#' @return model.generation returns the binary file SIR.solver in which the underlying processes (both deterministic and stochastic) of the Petri Net model and the library used for their simulation are packaged.
 #'
 #' @examples
 #' \dontrun{
 #' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-#' model_generation(out_fname = "Solver",
+#' model.generation(out_fname = "Solver",
 #'                  net_fname = paste0(local_dir, "Configuration/Pertussis"),
 #'                  transitions_fname = "transitions.cpp")
 #' }
@@ -26,7 +26,7 @@
 #'
 #' @export
 
-model_generation <-function(out_fname = NULL,
+model.generation <-function(out_fname = NULL,
                             net_fname,
                             transitions_fname = NULL,
                             volume = getwd(),
