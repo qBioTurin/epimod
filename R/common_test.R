@@ -42,12 +42,14 @@
 #' @param out_fname Prefix to the output file name
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
 #'
-#' @author Luca Rosso
+#' @author Paolo Castagno, Luca Rosso
 #' @export
 
-common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
+# common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
+common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, ini_v, lb_v, ub_v,
                         solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
-                        solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
+                        # solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
+												solver_type = "LSODA", n_run = 1, n_config = 1, out_fname = NULL,
                         timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
                         max.call = 1e+07, max.time = NULL, taueps = 0.01, caller_function){
 
@@ -85,60 +87,60 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 
 
-  if(caller_function %in% c("sensitivity", "calibration")){
-    if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure_fname) && !is.null(distance_measure_fname)))
-      return("distance_measure_fname need the reference_data parameter!")
-
-  	# Maybe it's necessary to use a default distance_measure_fname.
-  	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure_fname) || is.null(distance_measure_fname)))
-  		return("reference_data need the distance_measure_fname parameter!")
-
-    if(!missing(reference_data) && !is.null(reference_data)){
-      if(!file.exists(reference_data)){
-        R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
-        return(paste("File",reference_data,"of reference_data parameter not exists,",
-                     "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
-      }else{
-        if(!missing(distance_measure_fname) && !is.null(distance_measure_fname)){
-          if(!file.exists(distance_measure_fname)){
-            R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
-            return(paste("File", distance_measure_fname,"of distance_measure_fname parameter not exists,",
-                         "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
-          }
-          else{
-            fname_without_ext = unlist(strsplit(basename(distance_measure_fname), "\\."))[1]
-            source(distance_measure_fname)
-            if(!exists(fname_without_ext))
-              return(paste("The name of the function in distance_measure_fname is not the same as the file name",
-                           basename(distance_measure_fname), "!"))
-          }
-        }
-      }
-    }
-  }
-
-
-
-  if(caller_function == "sensitivity"){
-    # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value_fname) && !is.null(target_value_fname)))
-    #   return("target_value_fname need the reference_data parameter!")
+  # if(caller_function %in% c("sensitivity", "calibration")){
+  #   if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure_fname) && !is.null(distance_measure_fname)))
+  #     return("distance_measure_fname need the reference_data parameter!")
+  #
+  # 	# Maybe it's necessary to use a default distance_measure_fname.
+  # 	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure_fname) || is.null(distance_measure_fname)))
+  # 		return("reference_data need the distance_measure_fname parameter!")
+  #
+  #   if(!missing(reference_data) && !is.null(reference_data)){
+  #     if(!file.exists(reference_data)){
+  #       R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
+  #       return(paste("File",reference_data,"of reference_data parameter not exists,",
+  #                    "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+  #     }else{
+  #       if(!missing(distance_measure_fname) && !is.null(distance_measure_fname)){
+  #         if(!file.exists(distance_measure_fname)){
+  #           R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
+  #           return(paste("File", distance_measure_fname,"of distance_measure_fname parameter not exists,",
+  #                        "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
+  #         }
+  #         else{
+  #           fname_without_ext = unlist(strsplit(basename(distance_measure_fname), "\\."))[1]
+  #           source(distance_measure_fname)
+  #           if(!exists(fname_without_ext))
+  #             return(paste("The name of the function in distance_measure_fname is not the same as the file name",
+  #                          basename(distance_measure_fname), "!"))
+  #         }
+  #       }
+  #     }
+  #   }
+  # }
 
 
-    if(!missing(target_value_fname) && !is.null(target_value_fname)){
-      if(!file.exists(target_value_fname)){
-        R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
-        return(paste("File", target_value_fname, "of target_value_fname parameter not exists,",
-                   "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
-      }
-      else{
-        fname_without_ext = unlist(strsplit(basename(target_value_fname), "\\."))[1]
-        source(target_value_fname)
-        if(!exists(fname_without_ext))
-          return(paste("The name of the function in target_value_fname is not the same as the file name",
-                     basename(target_value_fname), "!"))
-      }
-    }
-  }
+
+  # if(caller_function == "sensitivity"){
+  #   # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value_fname) && !is.null(target_value_fname)))
+  #   #   return("target_value_fname need the reference_data parameter!")
+  #
+  #
+  #   if(!missing(target_value_fname) && !is.null(target_value_fname)){
+  #     if(!file.exists(target_value_fname)){
+  #       R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
+  #       return(paste("File", target_value_fname, "of target_value_fname parameter not exists,",
+  #                  "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
+  #     }
+  #     else{
+  #       fname_without_ext = unlist(strsplit(basename(target_value_fname), "\\."))[1]
+  #       source(target_value_fname)
+  #       if(!exists(fname_without_ext))
+  #         return(paste("The name of the function in target_value_fname is not the same as the file name",
+  #                    basename(target_value_fname), "!"))
+  #     }
+  #   }
+  # }
 
 
 
@@ -236,8 +238,8 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
   	if(s_time >= f_time - i_time)
   		return("s_time is too large! It must be smaller than f_time - i_time!")
 
-  	if((f_time - i_time) %% s_time != 0)
-  		return("f_time - i_time must be divisible by s_time!")
+  	# if((f_time - i_time) %% s_time != 0)
+  	# 	return("f_time - i_time must be divisible by s_time!")
 
 		# If not specified, a runtime error is generated
 	  if(!missing(parameters_fname) && !is.null(parameters_fname)){
