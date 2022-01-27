@@ -92,8 +92,7 @@ model.analysis <- function(
         if(ret != TRUE)
             warning(paste("model_analysis_test", ret))
     }
-
-    results_dir_name <- "results_model_analysis/"
+    results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/")
 
     chk_dir <- function(path){
         pwd <- basename(path)
