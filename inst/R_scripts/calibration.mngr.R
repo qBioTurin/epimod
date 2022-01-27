@@ -3,7 +3,6 @@ library(epimod)
 
 objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
-	id <- length(list.files(path = params$out_dir, pattern = ".trace")) + 1
 	# Generate the simulation's configuration according to the provided input x
 	config <- experiment.configurations(n_config = 1,
 																			parm_fname = params$files$functions_fname,
@@ -71,7 +70,7 @@ objfn <- function(x, params, seed) {
 		nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
 		cat(unlist(nms),"\n", file = optim_trace_fname)
 	}
-	cat(unlist(c(distance,x)),"\n", file = optim_trace_fname ,append=TRUE)
+	cat(unlist(c(distance[[1]],(counter-1), x)),"\n", file = optim_trace_fname ,append=TRUE)
 	print("[objfn] Updating counter..")
 
 	if(length(params$event_times) != 0)
