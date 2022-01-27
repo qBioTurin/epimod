@@ -71,7 +71,7 @@ objfn <- function(x, params, seed) {
 		nms <- c("distance", "id", paste0("optim_v-",c(1:length(x))))
 		cat(unlist(nms),"\n", file = optim_trace_fname)
 	}
-	cat(unlist(c(distance,id, x)),"\n", file = optim_trace_fname ,append=TRUE)
+	cat(unlist(c(distance,x)),"\n", file = optim_trace_fname ,append=TRUE)
 	print("[objfn] Updating counter..")
 
 	if(length(params$event_times) != 0)
