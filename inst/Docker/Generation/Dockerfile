@@ -6,14 +6,14 @@ FROM fedora AS builder
 RUN dnf -y install git wget
 
 RUN sudo dnf -y install gcc gcc-c++ gmp-devel gmp-c++ gmp boost-devel flex-devel \
-		ant glib2-devel patch python glpk-devel lpsolve-devel autoconf automake \
-		libtool zip flex byacc time graphviz suitesparse-devel motif-devel make \
-		libxml++-devel glibmm24-devel lpsolve texlive-epstopdf cmake diff
+      ant glib2-devel patch python glpk-devel lpsolve-devel autoconf automake \
+      libtool zip flex byacc time graphviz suitesparse-devel motif-devel make \
+      libxml++-devel glibmm24-devel lpsolve texlive-epstopdf cmake diffutils
 
 ENV MAKE_ARGS=-j16
 
 # Install Meddly
-RUN git clone https://github.com/asminer/meddly.git meddly ;\
+RUN git clone  https://github.com/asminer/meddly.git meddly ;\
 	cd meddly ;\
 	./autogen.sh ;\
 	./configure --prefix=/usr/local ;\
@@ -52,9 +52,9 @@ RUN mkdir ~/GreatSPN ;\
 FROM fedora AS deploy_base
 
 RUN sudo dnf -y install gmp gmp-c++ gmp boost flex \
-		glib2 patch glpk lpsolve \
-		time graphviz suitesparse motif make \
-		libxml++ glibmm24 
+      glib2 patch glpk lpsolve  \
+      time graphviz suitesparse motif make \
+      libxml++ glibmm24 
 # texlive-epstopdf python ant autoconf automake libtool zip byacc
 
 RUN sudo dnf -y install java-11-openjdk gcc gcc-c++ make
@@ -66,11 +66,11 @@ FROM builder AS updater
 
 ARG update_version
 RUN cd ~/GreatSPN/SOURCES ;\
-		git pull ;\
-		make ${MAKE_ARGS} -k derived_objects ;\
-		make ${MAKE_ARGS} ;\
-		make ;\
-		sudo make install
+    git pull ;\
+    make ${MAKE_ARGS} -k derived_objects ;\
+    make ${MAKE_ARGS} ;\
+    make ;\
+    sudo make install
 
 #================================================================================
 # Stage 4: Copy the compiled binaries into the deployment image
@@ -85,8 +85,6 @@ RUN rm -rf /usr/local/lib/*.a /usr/local/lib/*.la
 # add library & binary paths
 RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/greatspn.conf ; ldconfig
 RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' > /etc/bashrc
-
-
 
 
 
