@@ -212,6 +212,10 @@ model.sensitivity <- function(# Parameters to control the simulation
     #     target_value_fname <- tools::file_path_as_absolute(target_value_fname)
     #     files[["target_value_fname"]] <- target_value_fname
     # }
+    if (target_value == "targetExtr")
+    {
+      stop("The target_value must be different from the string: target ")
+    }
     if(!is.null(seed))
     {
     	seed <- tools::file_path_as_absolute(seed)
