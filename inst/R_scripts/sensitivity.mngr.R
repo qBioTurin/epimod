@@ -153,7 +153,7 @@ if(!is.null(params$distance_measure) && !is.null(param_fname))
 										# distance_measure_f_name = params$files$distance_measure_fname,
 										distance_measure = params$distance_measure,
 										reference_data = params$files$reference_data,
-										function_fname = paramsfile$functions_fname)
+										function_fname = params$file$functions_fname)
 	# Sort the rank ascending, according to the distance computed above.
 	rank <- do.call("rbind", rank)
 	rank <- rank[order(rank$measure),]
