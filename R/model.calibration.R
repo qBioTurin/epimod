@@ -15,7 +15,9 @@
 #' @param taueps The error control parameter from the tau-leaping approach.
 #' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
 #' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
-#' @param functions_fname R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.
+#' @param functions_fname an R file storing: 1) the user defined functions to generate instances of the parameters summarized in the *parameters_fname* file, and
+#'  2) the functions to compute: the distance (or error) between the model output and the reference dataset itself (see *reference_data* and *distance_measure_fname*), and
+#'  the discrete events which may modify the marking of the net at specific time points (see *event_function*).
 #' @param volume The folder to mount within the Docker image providing all the necessary files.
 #' @param timeout Maximum execution time allowed to each configuration.
 #' @param parallel_processors Integer for the number of available processors to use for parallelizing the simulations.
@@ -29,9 +31,14 @@
 #'    \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.
 #'  } These arguments not always work, actually.
 #' @param reference_data csv file storing the data to be compared with the simulations’ result.
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param event_times
-#' @param event_function
+#' @param distance_measure_fname String reporting the distance function, implemented in *functions_fname*, to exploit for ranking the simulations.
+#'  Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output.
+#'  It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param event_times Vector representing the time points at which the simulation has to stop in order to
+#' simulate a discrete event that modifies the marking of the net given a specific rule defined in *functions_fname*.
+#' @param event_function String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
+#' Such function takes in input: 1) a vector representing the marking of the net (called *marking*), and 2) the time point at which the simulation has stopped (called *time*).
+#' In particular, *time* takes values from *event_times*.
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
@@ -90,7 +97,9 @@
 #' @export
 
 model.calibration <- function(# Parameters to control the simulation
-															solver_fname, i_time, f_time, s_time, solver_type = "LSODA", taueps = 0.01, n_run = 1,
+															solver_fname,
+															i_time = 0, f_time, s_time,
+															solver_type = "LSODA", taueps = 0.01, n_run = 1,
 													    # User defined simulation's parameters
 													    parameters_fname = NULL, functions_fname = NULL,
 													    # Parameters to manage the simulations' execution

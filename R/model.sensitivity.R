@@ -127,7 +127,8 @@
 #' @export
 
 model.sensitivity <- function(# Parameters to control the simulation
-                                 solver_fname, i_time, f_time, s_time,
+                                 solver_fname,
+                                 i_time = 0, f_time, s_time,
                                  # User defined simulation's parameters
                                  n_config, parameters_fname = NULL, functions_fname = NULL,
                                  # Parameters to manage the simulations' execution

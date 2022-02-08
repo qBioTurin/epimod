@@ -143,7 +143,7 @@ parLapply(cl = cl,
 
 # List all the traces in the output directory
 # if(!is.null(params$files$distance_measure_fname))
-if(!is.null(params$files$distance_measure) && !is.null(parm_fname))
+if(!is.null(params$distance_measure) && !is.null(parm_fname))
 {
 	rank <- parLapply(cl,
 										list.files(path = params$out_dir,
