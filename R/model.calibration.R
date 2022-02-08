@@ -14,9 +14,18 @@
 #'  } Default is LSODA.
 #' @param taueps The error control parameter from the tau-leaping approach.
 #' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
-#' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
+#' @param parameters_fname a textual file in which the  parameters to be studied are listed associated with their range of variability.
+#' This file is defined by three mandatory columns (*which must separeted using ;*):
+#'  (1) a tag representing the parameter type: *i* for the complete initial marking (or condition),
+#'   *m* for the initial marking of a specific place, *c* for a single constant rate,
+#'   and *g* for a rate associated with general transitions (Pernice et al. 2019)  (the user must define a file name coherently with the one used in the  general transitions file);
+#'    (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered
+#'    (i.e., with tag *i*) then by default the name *init*  is used; (3) the function used for sampling the value of the variable considered,
+#'     it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the *functions_fname* input parameter).
+#'      Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags *m*, *c* or *g* are used,
+#'       and the size of the marking (number of places) when *i* is used.  The remaining columns represent the input parameters needed by the functions defined in the third column.
 #' @param functions_fname an R file storing: 1) the user defined functions to generate instances of the parameters summarized in the *parameters_fname* file, and
-#'  2) the functions to compute: the distance (or error) between the model output and the reference dataset itself (see *reference_data* and *distance_measure_fname*), and
+#'  2) the functions to compute: the distance (or error) between the model output and the reference dataset itself (see *reference_data* and *distance_measure*), and
 #'  the discrete events which may modify the marking of the net at specific time points (see *event_function*).
 #' @param volume The folder to mount within the Docker image providing all the necessary files.
 #' @param timeout Maximum execution time allowed to each configuration.
@@ -44,30 +53,15 @@
 #' @param debug If TRUE enables logging activity.
 #'
 #' @details
-#' In order to run the simulations, the user must provide a reference dataset and the definition of a function to compute the distance (or error) between the models' output and the reference dataset itself.
-#' The function defining the distance has to be in the following form:
 #'
-#' FUNCTION_NAME(reference_dataset, simulation_output)
+#' The functions to generate instances of the parameters summarized in the *parameters_fname* file are defined in order
+#'  to return the value (or a linear transformation) of the vector of the unknown parameters generated from the optimization algorithm,
+#'  namely **optim_v**, whose size is equal to number of varying parameters in *parameters_fname*.
+#'  Let us note that the output of these functions must return a value for each input parameter.
+#'  The order of values in **optim_v** is given by the order of the parameters in *parameters_fname*.
 #'
-#' Moreover, the function must return a column vector with one entry for each evaluation point (i.e. f_time/s_time entries).
-#' In addition to that, the user is asked to provide a function that, given the output of the solver, returns the relevant measure (one column) used to evaluate the quality of the solution.
-#'
-#' The sensitivity analysis will be performed through a Monte Carlo sampling through user defined functions.
-#' The parameters involved in the sensitivity analysis have to be listed in a cvs file using the following structure:
-#'
-#' OUTPUT_FILE_NAME, FUNCTION_NAME, LIST OF PARAMETERS (comma separated)
-#'
-#' The functions allowed to compute the parameters are either R functions or user defined functions. In the latter case, all the user defined functions must be provided in a single .R file (which will be passed to model_calibration through the parameter parameters_fname)
-#'
-#' Exploiting the same mechanism, user can provide an initial marking to the solver. However, if it is the case the corresponding file name in the parameter list must be set to "init"
-#'
-#' To drive the optimization, the user has to provide a function to generate a new configuration, starting from a vector of n elements (each one ranging from 0 to 1).
-#' Furthermore, the vector ini_v defines the initial point of the search.
-#'
-#' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 #'
-#' @example SIR
 #'
 #' @export
 
@@ -84,7 +78,7 @@ model.calibration <- function(# Parameters to control the simulation
 													    # Variables controlling optimization termination
 													    threshold.stop = NULL, max.call = 1e7, max.time = NULL,
 													    # Parameters to control the ranking
-													    # reference_data = NULL, distance_measure_fname = NULL,
+													    # reference_data = NULL, distance_measure = NULL,
 															reference_data = NULL, distance_measure = NULL,
 															# List of discrete events
 															event_times = NULL, event_function = NULL,
@@ -101,7 +95,7 @@ model.calibration <- function(# Parameters to control the simulation
                       functions_fname = functions_fname,
                       solver_fname = solver_fname,
                       reference_data = reference_data,
-                      # distance_measure_fname = distance_measure_fname ,
+                      # distance_measure = distance_measure ,
                       solver_type = solver_type,
                       n_run = n_run,
     									i_time = i_time,
@@ -149,10 +143,10 @@ model.calibration <- function(# Parameters to control the simulation
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
     }
-    # if(!is.null(distance_measure_fname))
+    # if(!is.null(distance_measure))
     # {
-    #     distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
-    #     files[["distance_measure_fname"]] <- distance_measure_fname
+    #     distance_measure <- tools::file_path_as_absolute(distance_measure)
+    #     files[["distance_measure"]] <- distance_measure
     # }
     if(!is.null(seed))
     {
@@ -171,7 +165,7 @@ model.calibration <- function(# Parameters to control the simulation
                    n_run = n_run,
                    volume = volume,
                    timeout = timeout,
-                   # distance_measure = tools::file_path_sans_ext(basename(distance_measure_fname)),
+                   # distance_measure = tools::file_path_sans_ext(basename(distance_measure)),
                    distance_measure = distance_measure,
                    ini_v = ini_v,
                    lb_v = lb_v,

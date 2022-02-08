@@ -49,17 +49,32 @@ model.analysis(
 
 \item{taueps}{The error control parameter from the tau-leaping approach.}
 
-\item{parameters_fname}{Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.}
+\item{parameters_fname}{a textual file in which the  parameters to be studied are listed associated with their range of variability.
+This file is defined by three mandatory columns (*which must separeted using ;*):
+ (1) a tag representing the parameter type: *i* for the complete initial marking (or condition),
+  *m* for the initial marking of a specific place, *c* for a single constant rate,
+  and *g* for a rate associated with general transitions (Pernice et al. 2019)  (the user must define a file name coherently with the one used in the  general transitions file);
+   (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered
+   (i.e., with tag *i*) then by default the name *init*  is used; (3) the function used for sampling the value of the variable considered,
+    it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the *functions_fname* input parameter).
+     Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags *m*, *c* or *g* are used,
+      and the size of the marking (number of places) when *i* is used.  The remaining columns represent the input parameters needed by the functions defined in the third column.}
 
-\item{functions_fname}{R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.}
-
-\item{ini_vector_mod}{Logical value for ... . Default is FALSE.}
+\item{functions_fname}{an R file storing: 1) the user defined functions to generate instances of the parameters summarized in the *parameters_fname* file, and
+the discrete events which may modify the marking of the net at specific time points (see *event_function*).}
 
 \item{volume}{The folder to mount within the Docker image providing all the necessary files.}
 
 \item{timeout}{Maximum execution time allowed to each configuration.}
 
 \item{parallel_processors}{Integer for the number of available processors to use for parallelizing the simulations.}
+
+\item{event_times}{Vector representing the time points at which the simulation has to stop in order to
+simulate a discrete event that modifies the marking of the net given a specific rule defined in *functions_fname*.}
+
+\item{event_function}{String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
+Such function takes in input: 1) a vector representing the marking of the net (called *marking*), and 2) the time point at which the simulation has stopped (called *time*).
+In particular, *time* takes values from *event_times*.}
 
 \item{extend}{If TRUE the actual configuration is extended including n_config new configurations.}
 
@@ -75,24 +90,6 @@ Solves the system given a specific parameters configuration simulating the behav
 }
 \details{
 
-}
-\examples{
-\dontrun{
-local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-model.analysis(out_fname = "sensitivity",
-               solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
-               parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
-               functions_fname = paste0(local_dir, "Configuration/Functions.R"),
-               i_time = 0,
-               f_time = 365*21,
-               s_time = 365,
-               n_config = 1,
-               n_run = 100,
-               solver_type = "SSA",
-               volume = "/some/path/to/the/local/output/directory",
-               timeout = "1d",
-               parallel_processors=2
-}
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele

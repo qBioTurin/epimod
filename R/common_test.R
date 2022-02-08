@@ -35,15 +35,17 @@
 #' @param target_value_fname R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.
 #' @param reference_data csv file storing the data to be compared with the simulations’ result.
 #' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
-#' @param event_times
-#' @param event_function
+#' @param event_times Vector representing the time points at which the simulation has to stop in order to
+#' simulate a discrete event that modifies the marking of the net given a specific rule defined in *functions_fname*.
+#' @param event_function String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
+#' Such function takes in input: 1) a vector representing the marking of the net (called *marking*), and 2) the time point at which the simulation has stopped (called *time*).
+#' In particular, *time* takes values from *event_times*.
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
 #'
 #' @author Paolo Castagno, Luca Rosso
-#' @export
 
 # common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
 common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, ini_v, lb_v, ub_v,

@@ -15,7 +15,7 @@
 #' experiment.cmd(id=1, solver_fname="Solver.solver", s_time=365, f_time=730, timeout="1d", out_fname="simulation")
 #'
 #' }
-#' @export
+
 experiment.cmd <- function(solver_fname, solver_type = "LSODA", taueps = 0.01, seed,
                            timeout){
     if (solver_type == "TAUG")

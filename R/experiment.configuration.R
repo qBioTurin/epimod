@@ -15,7 +15,7 @@
 #'                           out_dir="/path/to/output/directory",
 #'                           out_fname="example")
 #' }
-#' @export
+
 experiment.configurations <- function(n_config,
                                       parm_fname = NULL, parm_list = NULL,
                                       out_dir,out_fname,

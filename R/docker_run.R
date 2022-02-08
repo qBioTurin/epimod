@@ -10,7 +10,7 @@
 #'      docker.run(params=NULL, changeUID=TRUE, debug=FALSE)
 #'
 #' }
-#' @export
+
 docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
 
     if(is.null(params)){

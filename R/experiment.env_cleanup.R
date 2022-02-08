@@ -10,7 +10,6 @@
 #'\dontrun{
 #' experiment.env_cleanup(id=1, run_dir="/run/directory", out_fname="simulation", out_dir="/out/directory",)
 #' }
-#' @export
 
 experiment.env_cleanup <- function(id, run_dir,
                                    out_fname, out_dir){

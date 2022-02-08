@@ -12,7 +12,6 @@
 #'
 #'
 #' @author Luca Rosso
-#' @export
 
 library(fdatest)
 
