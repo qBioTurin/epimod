@@ -171,7 +171,7 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
     source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
     prcc <- sensitivity.prcc(config = params$config,
                              # target_value_fname = params$files$target_value_fname,
-    												 function_fname = params$file$functions_fname,
+    												 functions_fname = params$file$functions_fname,
                              target_value = params$target_value,
     												 i_time = params$i_time,
                              s_time = params$s_time,
