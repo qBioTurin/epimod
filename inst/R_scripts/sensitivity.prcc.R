@@ -117,7 +117,8 @@ sensitivity.prcc<-function(config,
     						 n_config," model realizations.") )
     # names(parms)<-pnames
     print("[sensitivity.prcc] Extracting target variable...")
-    source(target_value_fname)
+
+    # source(target_value_fname)
     # Create a cluster
     # cl <- parallel::makeCluster(parallel_processors, type = "FORK")
     # Extract data
@@ -130,7 +131,7 @@ sensitivity.prcc<-function(config,
     # 														 out_dir = out_dir)
     tval <- lapply( c(1:n_config),
     								target,
-    								target_value_fname = target_value_fname,
+    								functions_fname = functions_fname,
     								target_value = target_value,
     								out_fname = out_fname,
     								out_dir = out_dir)
