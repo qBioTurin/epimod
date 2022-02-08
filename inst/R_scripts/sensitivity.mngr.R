@@ -151,7 +151,7 @@ if(!is.null(params$distance_measure) && !is.null(param_fname))
 										tool.distance,
 										out_dir = params$out_dir,
 										# distance_measure_f_name = params$files$distance_measure_fname,
-										distance_measure = distance_measure,
+										distance_measure = params$distance_measure,
 										reference_data = params$files$reference_data,
 										function_fname = paramsfile$functions_fname)
 	# Sort the rank ascending, according to the distance computed above.
@@ -172,7 +172,7 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
     prcc <- sensitivity.prcc(config = params$config,
                              # target_value_fname = params$files$target_value_fname,
     												 function_fname = params$file$functions_fname,
-                             target_value = target_value,
+                             target_value = params$target_value,
     												 i_time = params$i_time,
                              s_time = params$s_time,
                              f_time = params$f_time,
