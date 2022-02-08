@@ -4,7 +4,7 @@
 \alias{docker.run}
 \title{Run docker container}
 \usage{
-docker.run(params = NULL, changeUID = TRUE)
+docker.run(params = NULL, changeUID = TRUE, debug = FALSE)
 }
 \arguments{
 \item{params, }{a character string containing all parameters needed to run the docker container.}
@@ -18,7 +18,7 @@ This is an internal function executing a docker container. Not to be used by use
 \examples{
 \dontrun{
     #running runDocker
-     docker.run(params=NULL)
+     docker.run(params=NULL, changeUID=TRUE, debug=FALSE)
 
 }
 }

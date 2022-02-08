@@ -4,7 +4,7 @@
 \alias{downloadContainers}
 \title{Download for the first time all containers embedded in the workflows}
 \usage{
-downloadContainers(containers.file = NULL)
+downloadContainers(containers.file = NULL, tag = NULL)
 }
 \arguments{
 \item{containers.file, }{a character string with the name of the file which indicate which are the initial set of containers to be downloaded. If NULL then the set is given by a file called "containersNames.txt" located in the folder inst/Containers of epimod package.}

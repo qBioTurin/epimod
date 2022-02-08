@@ -2,25 +2,28 @@
 % Please edit documentation in R/experiment.cmd.R
 \name{experiment.cmd}
 \alias{experiment.cmd}
-\title{Generate the commandline to configure and run a simulation}
+\title{Generate the command template to configure and run a simulation}
 \usage{
-experiment.cmd(id, solver_fname, solver_type = "LSODA", s_time, f_time,
-  n_run = 1, taueps = 0.01, timeout, out_fname)
+experiment.cmd(
+  solver_fname,
+  solver_type = "LSODA",
+  taueps = 0.01,
+  seed,
+  timeout
+)
 }
 \arguments{
-\item{id, }{a numeric identifier used to format the output's file name}
+\item{solver_fname, }{the solver executable file}
 
-\item{solver_fname, }{the name of the solver executable file}
+\item{solver_type, }{the type of solver (LSODA, HLSODA, ..)}
 
-\item{solver_type, }{a string definig what solver to apply (LSODA, HLSODA, ..)}
+\item{taueps, }{controls the time step for tau-leap algorithm}
 
-\item{s_time, }{step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)}
+\item{timeout, }{available time to run n_run simulations (See TIMEOUT(1) to check the syntax)}
 
-\item{f_time, }{simulation's final time}
+\item{event_times, }{times at which the marking is updated through the event_function}
 
-\item{n_run, }{when performing stochastic simulations this parameters controls the number of runs per each set of input parameters}
-
-\item{timeout, }{string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax}
+\item{event_function, }{specifies the rule to update the marking}
 
 \item{out_fname, }{output filename prefix}
 }
@@ -28,7 +31,7 @@ experiment.cmd(id, solver_fname, solver_type = "LSODA", s_time, f_time,
 a string
 }
 \description{
-This is an internal function generating the command line to run the solver with the appropriate configuration
+Function generating the command line used to run the solver with the appropriate configuration
 }
 \examples{
 \dontrun{
@@ -37,5 +40,5 @@ experiment.cmd(id=1, solver_fname="Solver.solver", s_time=365, f_time=730, timeo
 }
 }
 \author{
-Paolo Castagno
+Paolo Castagno, Simone Pernice
 }
