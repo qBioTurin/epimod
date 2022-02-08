@@ -165,7 +165,7 @@ n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
 # if(!is.null(params$files$target_value_fname))
-if(!is.null(params$files$target_value))
+if(!is.null(params$target_value)  && !is.null(parm_fname) )
 {
     # Load external function to compute prcc
     source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")

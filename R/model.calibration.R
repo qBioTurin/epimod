@@ -23,7 +23,6 @@
 #' @param parallel_processors Integer for the number of available processors to use for parallelizing the simulations.
 #' @param ini_v Initial values for the parameters to be optimized.
 #' @param lb_v,ub_v Vectors with length equal to the number of parameters which are varying. Lower/Upper bounds for each parameter.
-#' @param ini_vector_mod Logical value for ... . Default is FALSE.
 #' @param threshold.stop,max.call,max.time These are GenSA arguments, which can be used to control the behavior of the algorithm. (see \code{\link{GenSA}})
 #'  \itemize{
 #'    \item threshold.stop (Numeric) represents the threshold for which the program will stop when the expected objective function value will reach it. Default value is NULL.
@@ -31,7 +30,7 @@
 #'    \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.
 #'  } These arguments not always work, actually.
 #' @param reference_data csv file storing the data to be compared with the simulations’ result.
-#' @param distance_measure_fname String reporting the distance function, implemented in *functions_fname*, to exploit for ranking the simulations.
+#' @param distance_measure String reporting the distance function, implemented in *functions_fname*, to exploit for ranking the simulations.
 #'  Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output.
 #'  It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
 #' @param event_times Vector representing the time points at which the simulation has to stop in order to
@@ -68,32 +67,8 @@
 #' IMPORTANT: the length of the vector init_v defines the number of variables to variate within the search of the optimal configuration.
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 #'
+#' @example SIR
 #'
-#' @examples
-#' \dontrun{
-#' local_dir <- "/some/path/to/the/directory/hosting/the/input/files/"
-#' base_dir <- "/root/scratch/"
-#' library(epimod)
-#' model.calibration(out_fname = "calibration",
-#'                   parameters_fname = paste0(local_dir, "Configuration/Functions_list.csv"),
-#'                   functions_fname = paste0(local_dir, "Configuration/Functions.R"),
-#'                   solver_fname = paste0(local_dir, "Configuration/Solver.solver"),
-#'                   init_fname = "init",
-#'                   i_time = 0,
-#'                   f_time = 365*21,
-#'                   s_time = 365,
-#'                   volume = volume = "/some/path/to/the/local/output/directory",
-#'                   timeout = "1d",
-#'                   parallel_processors = 4,
-#'                   reference_data = paste0(local_dir, "Configuration/reference_data.csv"),
-#'                   distance_measure_fname = paste0(local_dir, "Configuration/Measures.R"),
-#'                   target_value_fname = paste0(local_dir, "Configuration/Select.R"),
-#'                   target_value_f = "infects",
-#'                   ini_v = c(0.48264229, 0.17799173, 0.43572218, 0.06540719, 0.49887063, 0.36793130, 0.01818745, 0.18572619, 0.42815506, 0.07962422, 0.35074813, 0.35074813, 0.36386227),
-#'                   ub_v = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-#'                   lb_v = c(0, 0, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7, 1e-7),
-#'                   nb.stop.improvement = 3000000)
-#' }
 #' @export
 
 model.calibration <- function(# Parameters to control the simulation

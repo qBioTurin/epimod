@@ -105,9 +105,9 @@ experiment.configurations <- function(n_config,
                 config[[i]][[j]] <- list(file, "g", data)
             }
             # Exponential rate
-            else if(exists("tag") && tag == "e")
+            else if(exists("tag") && tag == "c")
             {
-                config[[i]][[j]] <- list(file, "e", data)
+                config[[i]][[j]] <- list(file, "c", data)
             }
             # Marking for a specific place
             else if(exists("tag") && tag == "m")
