@@ -143,7 +143,7 @@ parLapply(cl = cl,
 
 # List all the traces in the output directory
 # if(!is.null(params$files$distance_measure_fname))
-if(!is.null(params$distance_measure) && !is.null(parm_fname))
+if(!is.null(params$distance_measure) && !is.null(param_fname))
 {
 	rank <- parLapply(cl,
 										list.files(path = params$out_dir,
@@ -165,7 +165,7 @@ n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
 # if(!is.null(params$files$target_value_fname))
-if(!is.null(params$target_value)  && !is.null(parm_fname) )
+if(!is.null(params$target_value)  && !is.null(param_fname) )
 {
     # Load external function to compute prcc
     source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
