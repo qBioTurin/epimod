@@ -9,7 +9,7 @@
 #' @param furl_st Url of the first file to compare
 #' @param threshold A threshold used to compare the p-values generated in functional data analysis
 #'
-#'
+#' @export
 #'
 #' @author Luca Rosso
 

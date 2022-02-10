@@ -10,6 +10,8 @@
 #' @return a string
 #' @author Paolo Castagno, Simone Pernice
 #'
+#' @export
+#'
 #' @examples
 #'\dontrun{
 #' experiment.cmd(id=1, solver_fname="Solver.solver", s_time=365, f_time=730, timeout="1d", out_fname="simulation")

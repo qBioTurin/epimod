@@ -8,6 +8,7 @@
 #' @param extend, unused parameter. Placeholder for future development
 #' @author Marco Beccuti, Paolo Castagno, Simone Pernice
 #'
+#' @export
 #' @examples
 #'\dontrun{
 #' experiment.configurations(nconfig = 10,

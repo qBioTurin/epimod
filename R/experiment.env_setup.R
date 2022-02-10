@@ -4,7 +4,7 @@
 #' @param confg, configuration provided by the function experiment.configurations
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone
 
-#'
+#' @export
 #' @examples
 #'\dontrun{
 #' experiment.env_cleanup(id=1, run_dir="/run/directory", out_fname="simulation", out_dir="/out/directory",)
