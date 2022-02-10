@@ -1,3 +1,5 @@
+#' @export
+#'
 mngr.worker <- function(id,
 												solver_fname, solver_type, taueps,
 												i_time, f_time, s_time, n_run,
