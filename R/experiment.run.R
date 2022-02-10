@@ -179,6 +179,7 @@ experiment.run <- function(id, cmd,
 		{
 			file.remove(init)
 		}
+
 	}
 	return(fnm)
 }

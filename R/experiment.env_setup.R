@@ -52,7 +52,7 @@ experiment.env_setup <- function(id = NULL,
         }
         else
         {
-            if(config[[x]][[idx]][[2]] == "e")
+            if(config[[x]][[idx]][[2]] == "c")
             {
             	print(paste0("[experiment.env_setup] Adding parameter to transitions' file ",config[[x]][[idx]][[1]], "(", config[[x]][[idx]][[1]],")"))
             	# Write single parameter to file (cmdln_params) using the format
