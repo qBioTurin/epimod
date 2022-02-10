@@ -1,3 +1,5 @@
+#' @export
+#'
 # Function to compute the distance between one simulation trace and the reference data
 tool.distance <- function(id,
 													out_dir,
