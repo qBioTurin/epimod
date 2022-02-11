@@ -42,9 +42,10 @@ brew install openjdk
 ```
 3. Open the *.bash_profile* and add the following two paths:
 ```
-export PATH=/usr/local/opt/openjdk/bin/:$PATH #il path in cui è stato installato openjdk
-alias GreatSPN='java -jar /Users/xxx/Documents/GreatSPN/Editor.jar’ 
+export PATH=/usr/local/opt/openjdk/bin/:$PATH 
+alias GreatSPN='java -jar /Users/xxx/GreatSPN/Editor.jar’ 
 ```
+where `$PATH` is the openjdk path.
 4. Open GreatSPN by using the terminal command line: 
 ```
 greatspn_editor
