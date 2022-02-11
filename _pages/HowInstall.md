@@ -30,6 +30,26 @@ Ensure your user has the rights to run docker (witout the use of ```sudo```). To
 ## GreatSPN
 The installation of the workflow requires the downloading of the extended version of the [*GreatSPN* editor](http://www.di.unito.it/~amparore/mc4cslta/editor.html).
 
+### macOS installation instructions
+
+GreatSPN compiles and runs successfully on macOS. 
+
+1. Install [*HomeBrew*](https://brew.sh/)
+2. Install *openjdk* by using the following terminal command lines:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install openjdk
+```
+3. Open the *.bash_profile* and add the following two paths:
+```
+export PATH=/usr/local/opt/openjdk/bin/:$PATH #il path in cui è stato installato openjdk
+alias GreatSPN='java -jar /Users/xxx/Documents/GreatSPN/Editor.jar’ 
+```
+4. Open GreatSPN by using the terminal command line: 
+```
+greatspn_editor
+```
+
 ## EPIMOD
 To install **EPIMOD** you can use use **devtools**:
 
