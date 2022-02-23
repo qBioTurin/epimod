@@ -39,3 +39,7 @@ Ph.D. [Pernice Simone](http://www.di.unito.it/~pernice/)
 Licheri Nicola
 
 Nosi Vladimir
+
+Aucello Riccardo 
+
+Rossi Elena

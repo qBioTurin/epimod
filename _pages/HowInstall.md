@@ -32,7 +32,7 @@ The installation of the workflow requires the downloading of the extended versio
 
 ### macOS installation instructions
 
-GreatSPN compiles and runs successfully on macOS. 
+GreatSPN compiles and runs successfully on macOS. After downloading the GreatSPN GUI 
 
 1. Install [*HomeBrew*](https://brew.sh/)
 2. Install *openjdk* by using the following terminal command lines:
