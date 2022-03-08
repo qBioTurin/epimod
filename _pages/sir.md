@@ -110,7 +110,7 @@ mathematical point of view, the system behaviors can be investigated by
 exploiting the deterministic approach (Kurtz 1970) which approximates
 its dynamics through a system of ordinary differential equations (ODEs):
 
-<img src="./Images/equation1.png" width="295" style="display: block; margin: auto;" />
+<img src="../assets/imagess/equation1.png" width="295" style="display: block; margin: auto;" />
 
 where:
 
@@ -140,7 +140,7 @@ and recovered individuals respectively), and one transition for each
 possible event (i.e., *Infection* and *Recovery*). Finally, we save the
 PN model as a file with extension *.PNPRO* .
 
-<img src="./Images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
+<img src="../assets/imagess/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
 <p class="caption">
 Petri Net representation of the SIR model.
 </p>
@@ -168,7 +168,7 @@ corresponding rate name as **FN:NameGeneralFN**, where in this case the
 the transition type is set to *General* and the delay (i.e., the rate)
 to **FN:InfectionFunction**.
 
-<img src="./Images/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+<img src="../assets/imagess/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
 <p class="caption">
 Petri Net representation of the SIR model, modelling the Infection
 transition as a general transition.
@@ -481,7 +481,7 @@ plot we can observe that lower squared errors are obtained when
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="./Images/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
+<img src="../assets/imagess/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
 <p class="caption">
 PRCC for the I place over time.
 </p>
