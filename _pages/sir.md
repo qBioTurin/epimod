@@ -6,7 +6,7 @@ author_profile: true
 header:
   overlay_color: "#000"
   overlay_filter: "0.5"
-  overlay_image: /assets/images/SIR/SIRimg.png
+  overlay_image: /assets/images/SIR/SIR/SIRimg.png
   actions:
     - label: "Github"
       url: https://github.com/qBioTurin/SIR
@@ -110,7 +110,7 @@ mathematical point of view, the system behaviors can be investigated by
 exploiting the deterministic approach (Kurtz 1970) which approximates
 its dynamics through a system of ordinary differential equations (ODEs):
 
-<img src="../assets/images/equation1.png" width="295" style="display: block; margin: auto;" />
+<img src="../assets/images/SIR/equation1.png" width="295" style="display: block; margin: auto;" />
 
 where:
 
@@ -140,7 +140,7 @@ and recovered individuals respectively), and one transition for each
 possible event (i.e., *Infection* and *Recovery*). Finally, we save the
 PN model as a file with extension *.PNPRO* .
 
-<img src="../assets/images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
+<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
 <p class="caption">
 Petri Net representation of the SIR model.
 </p>
@@ -168,7 +168,7 @@ corresponding rate name as **FN:NameGeneralFN**, where in this case the
 the transition type is set to *General* and the delay (i.e., the rate)
 to **FN:InfectionFunction**.
 
-<img src="../assets/images/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+<img src="../assets/images/SIR/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
 <p class="caption">
 Petri Net representation of the SIR model, modelling the Infection
 transition as a general transition.
@@ -481,7 +481,7 @@ plot we can observe that lower squared errors are obtained when
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="../assets/images/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
+<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
 <p class="caption">
 PRCC for the I place over time.
 </p>
