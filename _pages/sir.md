@@ -442,25 +442,25 @@ Hence, considering the SIR model we can run the *model.sensitivity*
 varying the *Infection* and *Recovery* transitions rates in order to
 characterized their effect on the number of infected individuals.
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
+<img src="../assets/images/SIR/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
 <p class="caption">
 The 200 trajectories considering the I place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
+<img src="../assets/images/SIR/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
 <p class="caption">
 The 200 trajectories considering the S place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
+<img src="../assets/images/SIR/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
 <p class="caption">
 The 200 trajectories considering the R place obtained from different
 parameters configuration.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
+<img src="../assets/images/SIR/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
 <p class="caption">
 Scatter plot showing the squared error between the reference data and
 simulated number of infected. The dark blue points represent the
@@ -821,17 +821,17 @@ Thus, these three functions are defined as follows:
     plots$plI
     plots$plR
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
 <p class="caption">
 Trajectories considering the S place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
 <p class="caption">
 Trajectories considering the I place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
 <p class="caption">
 Trajectories considering the R place.
 </p>
@@ -931,7 +931,7 @@ the diffusion process.
                                      print=F)
     AnalysisPlot$plAll
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  />
+<img src="../assets/images/SIR/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  />
 <p class="caption">
 Deterministic Trajectory considering all places
 </p>
@@ -970,12 +970,12 @@ behavior can be described by the Master equations.
     AnalysisPlot$plAll
     AnalysisPlot$plAllMean
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  />
+<img src="../assets/images/SIR/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  />
 <p class="caption">
 Stochastic Trajectories considering the S place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  />
+<img src="../assets/images/SIR/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  />
 <p class="caption">
 Stochastic Trajectories considering the I place.
 </p>
