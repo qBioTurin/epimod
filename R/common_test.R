@@ -296,16 +296,16 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 
 
-	path_to_seed <- paste0("results_", caller_function, "_analysis")
+	path_to_seed <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
 	if(extend){
 		if(caller_function %in% c("sensitivity"))
-			if(!file.exists(paste0("results_", caller_function, "_analysis/")))
-				return(paste0("results_", caller_function, "_analysis directory not found!"))
+			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")))
+				return(paste0(basename(tools::file_path_sans_ext(solver_fname), "_sensitivity/", "directory not found!")))
 
 		if(caller_function %in% c("calibration", "analysis")){
-			path_to_seed <- paste0("results_model_", caller_function)
-			if(!file.exists(paste0("results_model_", caller_function, "/")))
-				return(paste0("results_model_", caller_function, " directory not found!"))
+			path_to_seed <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/")
+			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/")))
+				return(paste0(basename(tools::file_path_sans_ext(solver_fname), "_analysis/", "directory not found!")))
 		}
 	}
 
