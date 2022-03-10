@@ -139,7 +139,7 @@ parLapply( cl = cl,
 					 							parallel_processors = parallel_processors)
 					 },
 					 params = params,
-					 seed = init_seed,
+					 seed = extend_seed,
 					 parallel_processors = run_processors)
 # Print all the output to the stdout
 # system(paste0("cat ", params$out_fname,".log >&2"))
@@ -172,7 +172,6 @@ stopCluster(cl)
 
 # Save final seed
 extend_seed <- .Random.seed
-n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
 
 file.copy(from = params$target_value_fname, to = params$run_dir)
