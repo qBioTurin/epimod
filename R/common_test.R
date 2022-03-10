@@ -299,11 +299,11 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 	if(extend){
 		if(caller_function %in% c("sensitivity"))
 			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")))
-				return(paste0(basename(tools::file_path_sans_ext(solver_fname), "_sensitivity/", "directory not found!")))
+				return(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/", "directory not found!"))
 
 		if(caller_function %in% c("analysis"))
 			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/")))
-				return(paste0(basename(tools::file_path_sans_ext(solver_fname), "_analysis/", "directory not found!")))
+				return(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/", "directory not found!"))
 	}
 
 	if(!is.null(seed)){
