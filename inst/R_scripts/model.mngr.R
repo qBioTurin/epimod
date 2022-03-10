@@ -118,7 +118,7 @@ clusterEvalQ(cl, sessionInfo())
 
 
 parLapply( cl = cl,
-					 X = c(n:(n+params$n_config-1)),
+					 X = c(1:params$n_config),
 					 fun = function(X, params, seed, parallel_processors)
 					 {
 					 	if(length(params$event_times) != 0)
