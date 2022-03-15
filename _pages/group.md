@@ -26,6 +26,8 @@ Prof. [Beccuti Marco](https://www.cs.unito.it/do/docenti.pl/Show?_id=mbeccuti#ta
 
 Prof. [Sereno Matteo](https://www.cs.unito.it/do/docenti.pl/Show?_id=msereno#tab-profilo)
 
+Ph.D. [Amparore Elvio](https://www.cs.unito.it/do/docenti.pl/Alias?elviogilberto.amparore#tab-profilo)
+
 Ph.D. Ferrero Giulio
 
 Ph.D. Follia Laura 
@@ -37,8 +39,6 @@ Ph.D. Piaggeschi Giulia
 Ph.D. [Pernice Simone](http://www.di.unito.it/~pernice/)
 
 Licheri Nicola
-
-Nosi Vladimir
 
 Aucello Riccardo 
 
