@@ -17,6 +17,9 @@ Ph.D. Castagno Paolo
 
 Ph.D. [Pernice Simone](https://www.cs.unito.it/do/docenti.pl/Show?_id=spernice#tab-profilo)
 
+### Graphical Editor Developer
+
+Ph.D. [Amparore Elvio](https://www.cs.unito.it/do/docenti.pl/Alias?elviogilberto.amparore#tab-profilo)
 
 ### Q-Bio Group
 
