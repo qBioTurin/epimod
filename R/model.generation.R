@@ -78,7 +78,7 @@ model.generation <-function(out_fname = NULL,
     pwd <- getwd()
     setwd(out_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
+    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
 
     if ( err_code != 0 )
     {
@@ -97,7 +97,7 @@ model.generation <-function(out_fname = NULL,
     if(LP)
     	cmd= paste0(cmd," -H")
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]

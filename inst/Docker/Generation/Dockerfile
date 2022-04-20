@@ -82,13 +82,14 @@ RUN cd ~/GreatSPN/SOURCES ;\
 FROM deploy_base
 
 # copy the compiled binaries
-COPY --from=updater /usr/local/GreatSPN /usr/local/GreatSPN 
+COPY --from=updater /usr/local/GreatSPN /usr/local/GreatSPN
 COPY --from=updater /usr/local/lib /usr/local/lib
 RUN rm -rf /usr/local/lib/*.a /usr/local/lib/*.la
 
 # add library & binary paths
 RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/greatspn.conf ; ldconfig
-RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' > /etc/bashrc
+RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' >> /etc/bashrc
+RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' > /etc/profile.d/greatspnpath.sh
 
 
 
