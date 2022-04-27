@@ -14,7 +14,6 @@
 #'    \item Stochastic: the Gillespie algorithm,which is an exact stochastic method widely used to simulate chemical systems whose behaviour can be described by the Master equations (SSA); or an approximation method of the SSA called tau-leaping method (TAUG), which provides a good compromise between the solution execution time  and its quality.
 #'    \item Hybrid: Stochastic  Hybrid  Simulation, based on the co-simulation of discrete and continuous events (HLSODA).
 #'  } Default is LSODA.
-#' @param taueps The error control parameter from the tau-leaping approach.
 #' @param n_config Number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
 #' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
 #' @param parameters_fname Textual file in which the parameters to be studied are listed associated with their range of variability. This file is defined by three mandatory columns: (1) a tag representing the parameter type: i for the complete initial marking (or condition), p for a single parameter (either a single rate or initial marking), and g for a rate associated with general transitions (Pernice et al. 2019) (the user must define a file name coherently with the one used in the general transitions file); (2) the name of the transition which is varying (this must correspond to name used in the PN draw in GreatSPN editor), if the complete initial marking is considered (i.e., with tag i) then by default the name init is used; (3) the function used for sampling the value of the variable considered, it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the functions_fname input parameter). Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags p or g are used, and the size of the marking (number of places) when i is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
@@ -32,9 +31,9 @@
 #'    \item max.time (Numeric) is the maximum running time in seconds. Default value is NULL.
 #'  } These arguments not always work, actually.
 #' @param taueps The error control parameter from the tau-leaping approach.
-#' @param target_value_fname R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.
+#' @param target_value String reporting the target function, implemented in *functions_fname*, to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.
 #' @param reference_data csv file storing the data to be compared with the simulations’ result.
-#' @param distance_measure_fname File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
+#' @param distance_measure String reporting the distance function, implemented in *functions_fname*, to exploit for ranking the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.
 #' @param event_times Vector representing the time points at which the simulation has to stop in order to
 #' simulate a discrete event that modifies the marking of the net given a specific rule defined in *functions_fname*.
 #' @param event_function String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
@@ -43,17 +42,19 @@
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
+#' @param user_files Vector of user files to copy inside the docker directory
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
 #'
-#' @author Paolo Castagno, Luca Rosso
+#' @author Paolo Castagno, Daniele Baccega, Luca Rosso
 
-# common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value_fname = NULL, ini_v, lb_v, ub_v,
-common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, ini_v, lb_v, ub_v,
+common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value = NULL, ini_v, lb_v, ub_v,
+#common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, ini_v, lb_v, ub_v,
                         solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
-                        # solver_type = "LSODA", n_run = 1, distance_measure_fname = NULL, n_config = 1, out_fname = NULL,
-												solver_type = "LSODA", n_run = 1, n_config = 1, out_fname = NULL,
+                        solver_type = "LSODA", n_run = 1, distance_measure = NULL, n_config = 1, out_fname = NULL,
+												#solver_type = "LSODA", n_run = 1, n_config = 1, out_fname = NULL,
                         timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
-                        max.call = 1e+07, max.time = NULL, taueps = 0.01, caller_function){
+                        max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
+												caller_function){
 
   if(!missing(functions_fname) && !is.null(functions_fname)){
     if(!file.exists(functions_fname)){
@@ -89,60 +90,43 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 
 
-  # if(caller_function %in% c("sensitivity", "calibration")){
-  #   if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure_fname) && !is.null(distance_measure_fname)))
-  #     return("distance_measure_fname need the reference_data parameter!")
-  #
-  # 	# Maybe it's necessary to use a default distance_measure_fname.
-  # 	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure_fname) || is.null(distance_measure_fname)))
-  # 		return("reference_data need the distance_measure_fname parameter!")
-  #
-  #   if(!missing(reference_data) && !is.null(reference_data)){
-  #     if(!file.exists(reference_data)){
-  #       R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
-  #       return(paste("File",reference_data,"of reference_data parameter not exists,",
-  #                    "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
-  #     }else{
-  #       if(!missing(distance_measure_fname) && !is.null(distance_measure_fname)){
-  #         if(!file.exists(distance_measure_fname)){
-  #           R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
-  #           return(paste("File", distance_measure_fname,"of distance_measure_fname parameter not exists,",
-  #                        "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
-  #         }
-  #         else{
-  #           fname_without_ext = unlist(strsplit(basename(distance_measure_fname), "\\."))[1]
-  #           source(distance_measure_fname)
-  #           if(!exists(fname_without_ext))
-  #             return(paste("The name of the function in distance_measure_fname is not the same as the file name",
-  #                          basename(distance_measure_fname), "!"))
-  #         }
-  #       }
-  #     }
-  #   }
-  # }
+	# if(caller_function == "sensitivity"){
+	#   # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value) && !is.null(target_value)))
+	#   #   return("target_value need the reference_data parameter!")
+	# }
+
+	# if(caller_function %in% c("sensitivity", "calibration")){
+	#   if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure) && !is.null(distance_measure)))
+	#     return("distance_measure need the reference_data parameter!")
+	#
+	# 	# Maybe it's necessary to use a default distance_measure.
+	# 	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure) || is.null(distance_measure)))
+	# 		return("reference_data need the distance_measure parameter!")
+	# }
 
 
 
-  # if(caller_function == "sensitivity"){
-  #   # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value_fname) && !is.null(target_value_fname)))
-  #   #   return("target_value_fname need the reference_data parameter!")
-  #
-  #
-  #   if(!missing(target_value_fname) && !is.null(target_value_fname)){
-  #     if(!file.exists(target_value_fname)){
-  #       R_files = list.files(path = getwd(), pattern = "*.R$", recursive = TRUE)
-  #       return(paste("File", target_value_fname, "of target_value_fname parameter not exists,",
-  #                  "list of .R files found:\n\t", paste(unlist(R_files), collapse = "\n\t")))
-  #     }
-  #     else{
-  #       fname_without_ext = unlist(strsplit(basename(target_value_fname), "\\."))[1]
-  #       source(target_value_fname)
-  #       if(!exists(fname_without_ext))
-  #         return(paste("The name of the function in target_value_fname is not the same as the file name",
-  #                    basename(target_value_fname), "!"))
-  #     }
-  #   }
-  # }
+	if(caller_function %in% c("sensitivity", "calibration")){
+		if(!missing(reference_data) && !is.null(reference_data)){
+	    if(!file.exists(reference_data)){
+	      R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
+	      return(paste("File",reference_data,"of reference_data parameter not exists,",
+	                   "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+	    }
+		}
+
+    if(!missing(distance_measure) && !is.null(distance_measure)){
+    	if(length(grep(distance_measure, readLines(functions_fname), value = FALSE)) == 0)
+    		return(paste("File", functions_fname, "must contain a function named", distance_measure))
+    }
+	}
+
+	if(caller_function == "sensitivity"){
+		if(!missing(target_value) && !is.null(target_value)){
+			if(length(grep(target_value, readLines(functions_fname), value = FALSE)) == 0)
+				return(paste("File", functions_fname, "must contain a function named", target_value))
+		}
+	}
 
 
 
@@ -296,6 +280,28 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 
 
+  if(((missing(event_times) || is.null(event_times)) && (!missing(event_function) && !is.null(event_function))) ||
+  	 ((missing(event_function) || is.null(event_function)) && (!missing(event_times) && !is.null(event_times))))
+  	return("event_times and event_function must both be specified!")
+
+	if(!missing(event_times) && !is.null(event_times)){
+		if(!is.vector(event_times))
+			return(paste0("The event_times argument must be a vector!"))
+
+		if(!all(is.numeric(event_times), TRUE))
+			return("The event_times argument must be a vector of numbers!")
+
+		if(!all(is.numeric(event_times >= i_time && event_times <= f_time), TRUE))
+			return("The event_times argument must be a vector of numbers in [i_time, f_time]!")
+	}
+
+	if(!missing(event_function) && !is.null(event_function)){
+		if(length(grep(event_function, readLines(functions_fname), value = FALSE)) == 0)
+			return(paste("File", functions_fname, "must contain a function named", event_function))
+	}
+
+
+
 	if(extend){
 		if(caller_function %in% c("sensitivity"))
 			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")))
@@ -319,6 +325,17 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 		if(!is.numeric(init_seed) || (!(caller_function %in% c("calibration")) && !is.numeric(extend_seed)) || (!(caller_function %in% c("calibration")) && !is.numeric(n)))
 			return(paste0("The three variables init_seed, extend_seed and n into the seed file (", seed, ") must be a number!"))
+	}
+
+	if(!is.null(user_files)){
+		if(!is.vector(user_files))
+			return(paste0("The user_files (", user_files , ") argument must be a vector of strings (file names)!"))
+
+		if(!all(is.character(user_files), TRUE))
+			return(paste0("The user_files (", user_files , ") argument must be a vector of strings (file names)!"))
+
+		if(!all(file.exists(user_files), TRUE))
+			return(paste0("The file ", file , " does not exist!"))
 	}
 
   return(TRUE)

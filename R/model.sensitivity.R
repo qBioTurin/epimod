@@ -1,4 +1,4 @@
-#' @title Run sensitivity analisys
+#' @title Run sensitivity analysis
 #' @description The deterministic process is solved several times varying the
 #' values of the unknown parameters to identify which are the sensitive ones
 #' (i.e., those that have a greater effect on the model behavior), by exploiting
@@ -25,8 +25,7 @@
 #' (i.e., with tag *i*) then by default the name *init*  is used; (3) the function used for sampling the value of the variable considered,
 #'  it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the *functions_fname* input parameter).
 #'  Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags *m*, *c* or *g* are used,
-#'  and the size of the marking (number of places) when *i* is used. The remaining columns represent the input parameters needed by the functions defined in the third column.
-#'
+#'  and the size of the marking (number of places) when *i* is used. The remaining columns represent the input parameters needed by the functions defined in the third column
 #' @param functions_fname an R file storing: 1) the user defined functions to generate instances of the parameters summarized in the *parameters_fname* file, and
 #'  2) the functions to compute: the distance (or error) between the model output and the reference dataset itself (see *reference_data* and *distance_measure*),
 #'  the discrete events which may modify the marking of the net at specific time points (see *event_function*), and
@@ -36,7 +35,8 @@
 #' @param timeout Maximum execution time allowed to each configuration.
 #' @param parallel_processors Integer for the number of available processors to
 #'   use.
-#' @param target_value_fname R file providing the function to obtain the place
+#' @param target_value_fname String reporting the distance function, implemented
+#'   in *functions_fname*, to obtain the place
 #'   or a combination of places from which the PRCCs over the time have to be
 #'   calculated. In details, the function takes in input a data.frame, namely
 #'   output, defined by a number of columns equal to the number of places plus
@@ -60,6 +60,7 @@
 #' @param seed .RData file that can be used to initialize the internal random
 #'   generator.
 #' @param out_fname Prefix to the output file name.
+#' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #'
 #' @details
@@ -104,43 +105,46 @@
 #' @export
 
 model.sensitivity <- function(# Parameters to control the simulation
-                                 solver_fname,
-                                 i_time = 0, f_time, s_time,
-                                 # User defined simulation's parameters
-                                 n_config, parameters_fname = NULL, functions_fname = NULL,
-                                 # Parameters to manage the simulations' execution
-                                 volume = getwd(), timeout = '1d', parallel_processors = 1,
-                                 # Parameters to control the ranking
-                                 # reference_data = NULL, distance_measure = NULL,
-                                 reference_data = NULL, distance_measure = NULL,
-                                 # Parameters to control PRCC
-                                 # target_value_fname = NULL,
-                                 target_value = NULL,
-                                 # List of discrete events
-                                 event_times = NULL, event_function = NULL,
-                                 # Mange reproducibilty and extend previous experiments
-                                 extend = FALSE, seed = NULL,
-                                 # Directories
-                                 out_fname = NULL,
-                                 #Flag to enable logging activity
-                                 debug = FALSE
-                                ){
+                              solver_fname,
+                              i_time = 0, f_time, s_time,
+                              # User defined simulation's parameters
+                              n_config, parameters_fname = NULL, functions_fname = NULL,
+                              # Parameters to manage the simulations' execution
+                              volume = getwd(), timeout = '1d', parallel_processors = 1,
+                              # Parameters to control the ranking
+                              reference_data = NULL, distance_measure = NULL,
+                              # Parameters to control PRCC
+                              target_value = NULL,
+                              # List of discrete events
+                              event_times = NULL, event_function = NULL,
+                              # Mange reproducibility and extend previous experiments
+                              extend = FALSE, seed = NULL,
+                              # Directories
+                              out_fname = NULL,
+                              #Vector of user files to copy inside the docker directory
+                              user_files = NULL,
+                              #Flag to enable logging activity
+                              debug = FALSE
+                             ){
 
     # This function receives all the parameters that will be tested for sensitivity_analysis function
 		ret = common_test(n_config = n_config,
 											parameters_fname = parameters_fname,
 											functions_fname = functions_fname,
 											solver_fname = solver_fname,
-											# target_value_fname = target_value_fname,
+											target_valu = target_value,
 											parallel_processors = parallel_processors,
 											reference_data = reference_data,
-											# distance_measure = distance_measure,
+											distance_measure = distance_measure,
 											i_time = i_time,
 											f_time = f_time,
 											s_time = s_time,
 											volume = volume,
 											seed = seed,
 											extend = extend,
+											event_times = event_times,
+											event_function = event_function,
+											user_files = user_files,
 											caller_function = "sensitivity")
 
 
@@ -197,6 +201,11 @@ model.sensitivity <- function(# Parameters to control the simulation
     {
     	seed <- tools::file_path_as_absolute(seed)
     	files[["seed"]] <- seed
+    }
+    if(!is.null(user_files)){
+    	for(file in user_files){
+    		files[[file]] <- tools::file_path_as_absolute(file)
+    	}
     }
 
     # Global parameters used to manage the dockerized environment

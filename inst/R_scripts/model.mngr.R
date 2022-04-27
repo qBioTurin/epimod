@@ -123,9 +123,9 @@ parLapply( cl = cl,
 					 {
 					 	if(length(params$event_times) != 0)
 					 	{
-					 		i_s = seed + (X - 1)*(params$n_run * length(params$event_times))
+					 		i_s = seed + (X - 1)*(params$n_run * length(params$event_times)) #i_s = seed + (n-1)*params$n_config*params$n_run + ((X - 1)*(params$n_run * length(params$event_times))) ??
 					 	} else {
-					 		i_s = seed + (X - 1)*params$n_run
+					 		i_s = seed + (X - 1)*params$n_run # i_s = seed + (n-1)*params$n_config*params$n_run + ((X - 1)*params$n_run) ??
 					 	}
 					 	mngr.worker(id = X, solver_fname = params$files$solver_fname,
 					 							solver_type = params$solver_type, taueps = params$taueps,

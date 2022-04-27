@@ -11,7 +11,7 @@
 #'
 #' @export
 #'
-#' @author Luca Rosso
+#' @author Daniele Baccega, Luca Rosso
 
 library(fdatest)
 
