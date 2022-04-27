@@ -6,6 +6,7 @@
 #' @param out_fname Prefix to the output file name.
 #' @param net_fname .PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
 #' @param transitions_fname C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
+#' @param LP Enabling the FBA solution encoded in the general transitions. (default is FALSE)
 #' @param volume The folder to mount within the Docker image providing all the necessary files.
 #' @param debug If TRUE enables logging activity.
 
@@ -29,6 +30,7 @@
 model.generation <-function(out_fname = NULL,
                             net_fname,
                             transitions_fname = NULL,
+														LP = F,
                             volume = getwd(),
 														#Flag to enable logging activity
 														debug = FALSE){
@@ -76,7 +78,7 @@ model.generation <-function(out_fname = NULL,
     pwd <- getwd()
     setwd(out_dir)
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
+    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
 
     if ( err_code != 0 )
     {
@@ -92,7 +94,10 @@ model.generation <-function(out_fname = NULL,
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug)
+    if(LP)
+    	cmd= paste0(cmd," -H")
+
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
