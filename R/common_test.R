@@ -291,7 +291,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 		if(!all(is.numeric(event_times), TRUE))
 			return("The event_times argument must be a vector of numbers!")
 
-		if(!all(is.numeric(event_times >= i_time && event_times <= f_time), TRUE))
+		if(all(event_times >= i_time && event_times <= f_time, TRUE))
 			return("The event_times argument must be a vector of numbers in [i_time, f_time]!")
 	}
 
