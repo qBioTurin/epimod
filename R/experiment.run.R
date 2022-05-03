@@ -125,7 +125,7 @@ experiment.run <- function(id, cmd,
 		print(paste0("[experiment.run] replacement <N_RUN> ", n_run))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
 		print(paste0("[experiment.run] replacement <SEED> ", n_run))
-		cmd.iter <- gsub(x = cmd.iter, pattern = "<SEED>", replacement = seed)
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<SEED>", replacement = seed+i)
 		if (file.exists(init))
 		{
 			print(paste0("[experiment.run] replacement <INIT> ", init))

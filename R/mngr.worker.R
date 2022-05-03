@@ -4,7 +4,7 @@ mngr.worker <- function(id,
 												solver_fname, solver_type, taueps,
 												i_time, f_time, s_time, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
-												event_times, event_function,
+												event_times = NULL, event_function,
 												files, config = NULL,
 												parallel_processors)
 {
@@ -76,7 +76,8 @@ mngr.worker <- function(id,
 																		 f_time = f_time,
 																		 s_time = s_time,
 																		 n_run = 1,
-																		 seed = seed + (id-1)*n_run+X,
+																		 # seed = seed + (id-1)*n_run+X,
+																		 seed = seed + (X-1)*length(params$event_times),
 																		 event_times = event_times,
 																		 event_function = event_function,
 																		 out_fname = paste0(out_fname,"-", id))
