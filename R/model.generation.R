@@ -78,7 +78,7 @@ model.generation <-function(out_fname = NULL,
     pwd <- getwd()
     setwd(out_dir)
 
-    cmd = paste0("/usr/local/GreatSPN/scripts/unfolding2 /home/", basename(netname), " -long-names")
+    cmd = paste0("bash export PATH=$PATH:/usr/local/GreatSPN/scripts; unfolding2 /home/", basename(netname), " -long-names")
     err_code = docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
 
     if ( err_code != 0 )
@@ -90,7 +90,7 @@ model.generation <-function(out_fname = NULL,
         stop()
     }
 
-    cmd = paste0("/usr/local/GreatSPN/scripts/PN2ODE.sh /home/", basename(netname), " -M")
+    cmd = paste0("bash export PATH=$PATH:/usr/local/GreatSPN/scripts; PN2ODE.sh /home/", basename(netname), " -M")
     if (!is.null(transitions_fname)){
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
