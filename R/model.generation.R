@@ -98,7 +98,7 @@ model.generation <-function(out_fname = NULL,
     if(LP)
     	cmd= paste0(cmd," -H")
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
