@@ -92,9 +92,7 @@ RUN sudo dnf -y install glpk-devel
 
 # add library & binary paths
 RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/greatspn.conf ; ldconfig
-RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' >> /etc/bashrc
-RUN echo 'export PATH=$PATH:/usr/local/GreatSPN/scripts' > /etc/profile.d/greatspnpath.sh
-
+ENV PATH="$PATH:/usr/local/GreatSPN/scripts"
 
 
 
