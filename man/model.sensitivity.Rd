@@ -2,7 +2,7 @@
 % Please edit documentation in R/model.sensitivity.R
 \name{model.sensitivity}
 \alias{model.sensitivity}
-\title{Run sensitivity analisys}
+\title{Run sensitivity analysis}
 \usage{
 model.sensitivity(
   solver_fname,
@@ -23,6 +23,7 @@ model.sensitivity(
   extend = FALSE,
   seed = NULL,
   out_fname = NULL,
+  user_files = NULL,
   debug = FALSE
 )
 }
@@ -51,7 +52,7 @@ and *g* for a rate associated with general transitions (Pernice et al. 2019)  (t
 (i.e., with tag *i*) then by default the name *init*  is used; (3) the function used for sampling the value of the variable considered,
  it could be either a R function or an user-defined function (in this case it has to be implemented into the R script passed through the *functions_fname* input parameter).
  Let us note that the output of this function must have size equal to the length of the varying parameter, that is 1 when tags *m*, *c* or *g* are used,
- and the size of the marking (number of places) when *i* is used. The remaining columns represent the input parameters needed by the functions defined in the third column.}
+ and the size of the marking (number of places) when *i* is used. The remaining columns represent the input parameters needed by the functions defined in the third column}
 
 \item{functions_fname}{an R file storing: 1) the user defined functions to generate instances of the parameters summarized in the *parameters_fname* file, and
 2) the functions to compute: the distance (or error) between the model output and the reference dataset itself (see *reference_data* and *distance_measure*),
@@ -89,9 +90,12 @@ generator.}
 
 \item{out_fname}{Prefix to the output file name.}
 
+\item{user_files}{Vector of user files to copy inside the docker directory}
+
 \item{debug}{If TRUE enables logging activity.}
 
-\item{target_value_fname}{R file providing the function to obtain the place
+\item{target_value_fname}{String reporting the distance function, implemented
+in *functions_fname*, to obtain the place
 or a combination of places from which the PRCCs over the time have to be
 calculated. In details, the function takes in input a data.frame, namely
 output, defined by a number of columns equal to the number of places plus

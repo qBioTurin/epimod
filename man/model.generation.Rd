@@ -8,6 +8,7 @@ model.generation(
   out_fname = NULL,
   net_fname,
   transitions_fname = NULL,
+  LP = F,
   volume = getwd(),
   debug = FALSE
 )
@@ -18,6 +19,8 @@ model.generation(
 \item{net_fname}{.PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.}
 
 \item{transitions_fname}{C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.}
+
+\item{LP}{Enabling the FBA solution encoded in the general transitions. (default is FALSE)}
 
 \item{volume}{The folder to mount within the Docker image providing all the necessary files.}
 

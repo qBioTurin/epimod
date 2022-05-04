@@ -39,6 +39,7 @@
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name.
+#' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #'
 #' @details
@@ -61,6 +62,8 @@ model.analysis <- function(
     extend = FALSE, seed = NULL,
     # Directories
     out_fname = NULL,
+    #Vector of user files to copy inside the docker directory
+    user_files = NULL,
     #Flag to enable logging activity
     debug = FALSE
 ){
@@ -77,6 +80,10 @@ model.analysis <- function(
                       s_time = s_time,
                       volume = volume,
     									seed = seed,
+    									extend = extend,
+    									event_times = event_times,
+    									event_function = event_function,
+    									user_files = user_files,
                       parallel_processors = parallel_processors,
                       n_config = n_config,
                       caller_function = "analysis")
@@ -120,6 +127,12 @@ model.analysis <- function(
     	seed <- tools::file_path_as_absolute(seed)
     	files[["seed"]] <- seed
     }
+    if(!is.null(user_files)){
+    	for(file in user_files){
+    		files[[file]] <- tools::file_path_as_absolute(file)
+    	}
+    }
+
 
     # Global parameters used to manage the environment within the docker container
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)

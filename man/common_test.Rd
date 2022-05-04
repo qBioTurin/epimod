@@ -8,6 +8,7 @@ common_test(
   net_fname,
   functions_fname = NULL,
   reference_data = NULL,
+  target_value = NULL,
   ini_v,
   lb_v,
   ub_v,
@@ -20,6 +21,7 @@ common_test(
   parallel_processors = 1,
   solver_type = "LSODA",
   n_run = 1,
+  distance_measure = NULL,
   n_config = 1,
   out_fname = NULL,
   timeout = "1d",
@@ -30,6 +32,9 @@ common_test(
   max.call = 1e+07,
   max.time = NULL,
   taueps = 0.01,
+  user_files = NULL,
+  event_times = NULL,
+  event_function = NULL,
   caller_function
 )
 }
@@ -39,6 +44,8 @@ common_test(
 \item{functions_fname}{R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.}
 
 \item{reference_data}{csv file storing the data to be compared with the simulations’ result.}
+
+\item{target_value}{String reporting the target function, implemented in *functions_fname*, to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.}
 
 \item{ini_v}{Initial values for the parameters to be optimized.}
 
@@ -66,6 +73,8 @@ common_test(
 
 \item{n_run}{Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.}
 
+\item{distance_measure}{String reporting the distance function, implemented in *functions_fname*, to exploit for ranking the simulations. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.}
+
 \item{n_config}{Number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.}
 
 \item{out_fname}{Prefix to the output file name}
@@ -87,11 +96,7 @@ common_test(
 
 \item{taueps}{The error control parameter from the tau-leaping approach.}
 
-\item{caller_function}{a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)}
-
-\item{target_value_fname}{R file providing the function to obtain the place or a combination of places from which the PRCCs over the time have to be calculated. In details, the function takes in input a data.frame, namely output, defined by a number of columns equal to the number of places plus one corresponding to the time, and number of rows equals to number of time steps defined previously. Finally, it must return the column (or a combination of columns) corresponding to the place (or combination of places) for which the PRCCs have to be calculated for each time step.}
-
-\item{distance_measure_fname}{File containing the definition of a distance measure to rank the simulations'. Such function takes 2 arguments: the reference data and a list of data_frames containing simulations' output. It has to return a data.frame with the id of the simulation and its corresponding distance from the reference data.}
+\item{user_files}{Vector of user files to copy inside the docker directory}
 
 \item{event_times}{Vector representing the time points at which the simulation has to stop in order to
 simulate a discrete event that modifies the marking of the net given a specific rule defined in *functions_fname*.}
@@ -99,11 +104,13 @@ simulate a discrete event that modifies the marking of the net given a specific 
 \item{event_function}{String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
 Such function takes in input: 1) a vector representing the marking of the net (called *marking*), and 2) the time point at which the simulation has stopped (called *time*).
 In particular, *time* takes values from *event_times*.}
+
+\item{caller_function}{a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)}
 }
 \description{
 Check if the passed parameters are well defined to execute the specified function, verifying
   the existence of the resource path, the length of the array, the value of solver type etc.
 }
 \author{
-Paolo Castagno, Luca Rosso
+Paolo Castagno, Daniele Baccega, Luca Rosso
 }
