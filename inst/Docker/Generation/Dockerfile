@@ -1,7 +1,7 @@
 #================================================================================
 # Stage 1: build all the GreatSPN modules and their dependencies
 #================================================================================
-FROM fedora AS builder
+FROM fedora:34 AS builder
 
 RUN dnf -y install git wget
 
@@ -41,12 +41,15 @@ RUN wget https://datacloud.di.unito.it/index.php/s/cx9oJ5wjsgEjKcs/download/lp_s
 	tar xzf lp_solve_5.5.2.11_source.tar.gz ;\
 	sh ./build_lpsolve.sh
 
+
 # Install GreatSPN
 RUN mkdir ~/GreatSPN ;\
+
     cd ~/GreatSPN ;\
+
     git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
     cd ~/GreatSPN/SOURCES ;\
-	git pull ;\
+	  git pull ;\
     make ${MAKE_ARGS} -k derived_objects ;\
     make ${MAKE_ARGS} ;\
     make ;\
@@ -55,13 +58,13 @@ RUN mkdir ~/GreatSPN ;\
 #================================================================================
 # Stage 2: prepare the deployment image with the non-devel packages
 #================================================================================
-FROM fedora AS deploy_base
+FROM fedora:34 AS deploy_base
 
 RUN sudo dnf -y install gmp gmp-c++ gmp boost flex \
     glib2 patch glpk lpsolve  \
     time graphviz suitesparse motif make \
     libxml++ glibmm24 ghostscript java-latest-openjdk \
-    gcc gcc-c++ make
+    gcc gcc-c++ make perl
 
 #================================================================================
 # Stage 3: Update the GreatSPN framework by pulling/remaking the latest changes
@@ -85,6 +88,7 @@ FROM deploy_base
 COPY --from=updater /usr/local/GreatSPN /usr/local/GreatSPN
 COPY --from=updater /usr/local/lib /usr/local/lib
 RUN rm -rf /usr/local/lib/*.a /usr/local/lib/*.la
+RUN sudo dnf -y install glpk-devel
 
 # add library & binary paths
 RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/greatspn.conf ; ldconfig
