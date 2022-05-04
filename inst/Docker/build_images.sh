@@ -1,7 +1,5 @@
 #!/bin/bash
-# IMAGES=$(ls -d */)
-# IMAGES=(Calibration)
-IMAGES=(Sensitivity Calibration Analysis)
+IMAGES=$(ls -d */)
 BASEDIR=$(pwd)
 if [ $# -eq 0 ] || [ $# -ge 3 ]; then
 	echo "Illegal number of parameters"
@@ -24,10 +22,14 @@ for I in ${IMAGES[@]}; do
 	if [ -f $DIR/Dockerfile ]; then
 		date > marker
 		echo "Building $IMG"
-		echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
-		docker build -t qbioturin/epimod-$IMG:$TAG .
-		if [[ $? -ne 0 ]]; then
-			exit 0
+		if [[ $IMG == "Generation" ]]; then
+			bash $DIR/do.sh build
+		else
+			echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG ."
+			docker build -t qbioturin/epimod-$IMG:$TAG .
+			if [[ $? -ne 0 ]]; then
+				exit 0
+			fi
 		fi
 		rm marker
 	 	echo "Uploading $IMG"
