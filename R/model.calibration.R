@@ -50,6 +50,7 @@
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
+#' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #'
 #' @details
@@ -86,6 +87,8 @@ model.calibration <- function(# Parameters to control the simulation
 													    seed = NULL,
 													    # Directories
 													    out_fname = NULL,
+															#Vector of user files to copy inside the docker directory
+															user_files = NULL,
 													    #Flag to enable logging activity
 													    debug = FALSE
 														 ){
@@ -106,6 +109,9 @@ model.calibration <- function(# Parameters to control the simulation
                       lb_v = lb_v,
                       volume = volume,
     									seed = seed,
+    									event_times = event_times,
+    									event_function = event_function,
+    									user_files = user_files,
                       parallel_processors = parallel_processors,
                       caller_function = "calibration")
     if(ret != TRUE)
@@ -153,6 +159,13 @@ model.calibration <- function(# Parameters to control the simulation
     	seed <- tools::file_path_as_absolute(seed)
     	files[["seed"]] <- seed
     }
+    if(!is.null(user_files)){
+    	for(file in user_files){
+    		files[[file]] <- tools::file_path_as_absolute(file)
+    	}
+    }
+
+
     params <- list(
                    run_dir = chk_dir("/home/docker/scratch/"),
                    out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),

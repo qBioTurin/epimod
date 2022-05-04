@@ -48,10 +48,8 @@
 #' @author Paolo Castagno, Daniele Baccega, Luca Rosso
 
 common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value = NULL, ini_v, lb_v, ub_v,
-#common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, ini_v, lb_v, ub_v,
                         solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
                         solver_type = "LSODA", n_run = 1, distance_measure = NULL, n_config = 1, out_fname = NULL,
-												#solver_type = "LSODA", n_run = 1, n_config = 1, out_fname = NULL,
                         timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
                         max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
 												caller_function){
@@ -291,7 +289,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 		if(!all(is.numeric(event_times), TRUE))
 			return("The event_times argument must be a vector of numbers!")
 
-		if(!all(event_times >= i_time && event_times <= f_time, TRUE))
+		if(!all(event_times >= i_time, event_times <= f_time, TRUE))
 			return("The event_times argument must be a vector of numbers in [i_time, f_time]!")
 	}
 
@@ -329,13 +327,13 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 	if(!is.null(user_files)){
 		if(!is.vector(user_files))
-			return(paste0("The user_files (", user_files , ") argument must be a vector of strings (file names)!"))
+			return(paste0("The user_files argument must be a vector of strings (file names)!"))
 
 		if(!all(is.character(user_files), TRUE))
-			return(paste0("The user_files (", user_files , ") argument must be a vector of strings (file names)!"))
+			return(paste0("The user_files argument must be a vector of strings (file names)!"))
 
 		if(!all(file.exists(user_files), TRUE))
-			return(paste0("The file ", file , " does not exist!"))
+			return(paste0("There is at least one file in user_files that does not exist!"))
 	}
 
   return(TRUE)

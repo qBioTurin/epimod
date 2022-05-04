@@ -117,7 +117,7 @@ parLapply(cl = cl,
 					 							parallel_processors = parallel_processors)
 					},
 					params = params,
-					seed = init_seed,
+					seed = init_seed+1,
 					parallel_processors = run_processors)
 
 # Print all the output to the stdout
