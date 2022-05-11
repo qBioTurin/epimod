@@ -3,7 +3,9 @@ main:
   - title: "How to install"
     url: /HowInstall/
   - title: "Applications"
-    url: /examples/  
+    url: /examples/ 
+  - title: "Functionalities"
+    url: /functionalities/ 
   - title: "Team"
     url: /group/
   - title: "Collaborations"
