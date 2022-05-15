@@ -19,7 +19,7 @@ feature_rowEasy:
     url: "/Lotka/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
-feature_rowComplex:
+feature_rowComplex1:
   - image_path: /assets/images/COVID/COVIDmodel.png
     alt: "placeholder image 2"
     title: "COVID-19"
@@ -39,6 +39,14 @@ feature_rowComplex:
     title: "Multiple Sclerosis"
     excerpt: "Analysis of the immune response in Multiple Sclerosis given specific treatments"
     url: "/ms/"
+    btn_label: "Read More"
+    btn_class: "btn--primary"  
+feature_rowComplex2:
+  - image_path: /assets/images/WNV/PN.png
+    alt: "placeholder image 2"
+    title: "West Nile Virus"
+    excerpt: "Creation of a computational framework to model and study West Nile Virus"
+    url: "/wnv/"
     btn_label: "Read More"
     btn_class: "btn--primary"  
 ---
