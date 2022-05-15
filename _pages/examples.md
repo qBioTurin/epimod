@@ -60,4 +60,5 @@ These simple models are presented as an introduction to the **GreatMod** usage, 
 {% include feature_row id="feature_rowEasy" %}
 
 ##  Complex Applications
-{% include feature_row id="feature_rowComplex" %}
+{% include feature_row id="feature_rowComplex1" %}
+{% include feature_row id="feature_rowComplex2" %}
