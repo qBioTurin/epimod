@@ -25,6 +25,7 @@ model.analysis(
   extend = FALSE,
   seed = NULL,
   out_fname = NULL,
+  user_files = NULL,
   debug = FALSE
 )
 }
@@ -81,6 +82,8 @@ In particular, *time* takes values from *event_times*.}
 \item{seed}{.RData file that can be used to initialize the internal random generator.}
 
 \item{out_fname}{Prefix to the output file name.}
+
+\item{user_files}{Vector of user files to copy inside the docker directory}
 
 \item{debug}{If TRUE enables logging activity.}
 }
