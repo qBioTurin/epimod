@@ -2,7 +2,7 @@
 #'
 mngr.worker <- function(id,
 												solver_fname, solver_type, taueps,
-												i_time, f_time, s_time, n_run,
+												i_time, f_time, s_time,	atol, rtol, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times = NULL, event_function,
 												files, config = NULL,
@@ -16,6 +16,8 @@ mngr.worker <- function(id,
 	print(paste0("[mngr.worker] - i_time ", i_time))
 	print(paste0("[mngr.worker] - f_time ", f_time))
 	print(paste0("[mngr.worker] - s_time ", s_time))
+	print(paste0("[mngr.worker] - atol ", atol))
+	print(paste0("[mngr.worker] - rtol ", rtol))
 	print(paste0("[mngr.worker] - parallel_processors ", parallel_processors))
 	if (!is.null(config))
 	{
@@ -66,34 +68,38 @@ mngr.worker <- function(id,
 											port = 11000+id)
 		# Launch simulations
 		res <- parLapply(cl = cs,
-							fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
-								pwd <- getwd()
-								setwd(paste0(X))
-								print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
-								fn <- experiment.run(id = X,
-																		 cmd = cmd,
-																		 i_time = i_time,
-																		 f_time = f_time,
-																		 s_time = s_time,
-																		 n_run = 1,
-																		 # seed = seed + (id-1)*n_run+X,
-																		 seed = seed + (X-1)*length(params$event_times),
-																		 event_times = event_times,
-																		 event_function = event_function,
-																		 out_fname = paste0(out_fname,"-", id))
-								print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
-								setwd(pwd)
-								return(file.path(X,fn))
-							},
-							X = c(1:n_run),
-							id = id,
-							cmd = cmd,
-							i_time = i_time,
-							f_time = f_time,
-							s_time = s_time,
-							event_times = event_times,
-							event_function = event_function,
-							out_fname = out_fname)
+										 fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
+										 	pwd <- getwd()
+										 	setwd(paste0(X))
+										 	print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
+										 	fn <- experiment.run(id = X,
+										 											 cmd = cmd,
+										 											 i_time = i_time,
+										 											 f_time = f_time,
+										 											 s_time = s_time,
+										 											 atol = atol,
+										 											 rtol = rtol,
+										 											 n_run = 1,
+										 											 # seed = seed + (id-1)*n_run+X,
+										 											 seed = seed + (X-1)*length(params$event_times),
+										 											 event_times = event_times,
+										 											 event_function = event_function,
+										 											 out_fname = paste0(out_fname,"-", id))
+										 	print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
+										 	setwd(pwd)
+										 	return(file.path(X,fn))
+										 },
+										 X = c(1:n_run),
+										 id = id,
+										 cmd = cmd,
+										 i_time = i_time,
+										 f_time = f_time,
+										 s_time = s_time,
+										 atol = atol,
+										 rtol = rtol,
+										 event_times = event_times,
+										 event_function = event_function,
+										 out_fname = out_fname)
 		# Print all the output to the stdout
 		# system(paste0("cat ", out_fname,".worker.log >&2"))
 		# unlink(x = paste0(out_fname,".worker.log"), force = TRUE)
@@ -121,15 +127,17 @@ mngr.worker <- function(id,
 	} else {
 		print(paste0("[mngr.worker] Running simulation ", id, "..."))
 		fnm <- experiment.run(id = id,
-															cmd = cmd,
-															i_time = i_time,
-															f_time = f_time,
-															s_time = s_time,
-															n_run = n_run,
-															seed = seed + id,
-															event_times = event_times,
-															event_function = event_function,
-															out_fname = out_fname)
+													cmd = cmd,
+													i_time = i_time,
+													f_time = f_time,
+													s_time = s_time,
+													atol = atol,
+													rtol = rtol,
+													n_run = n_run,
+													seed = seed + id,
+													event_times = event_times,
+													event_function = event_function,
+													out_fname = out_fname)
 		print(paste0("[mngr.worker] Simulation ", id, " done!"))
 	}
 	# cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")

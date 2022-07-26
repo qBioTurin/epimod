@@ -8,7 +8,7 @@ model.generation(
   out_fname = NULL,
   net_fname,
   transitions_fname = NULL,
-  LP = F,
+  fba_fname = NULL,
   volume = getwd(),
   debug = FALSE
 )
@@ -20,7 +20,7 @@ model.generation(
 
 \item{transitions_fname}{C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.}
 
-\item{LP}{Enabling the FBA solution encoded in the general transitions. (default is FALSE)}
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)}
 
 \item{volume}{The folder to mount within the Docker image providing all the necessary files.}
 

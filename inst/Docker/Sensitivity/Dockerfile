@@ -2,7 +2,7 @@
 FROM r-base
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev
+RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev libglpk-dev
 
 # Install all required R packages
 RUN R -e "install.packages('devtools')"

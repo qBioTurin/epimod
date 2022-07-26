@@ -7,6 +7,8 @@
 #' @param i_time Initial solution time.
 #' @param f_time Final solution time.
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
+#' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
+#' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
 #' @param n_config Integer for the number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
 #' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
 #' @param solver_type
@@ -41,6 +43,8 @@
 #' @param out_fname Prefix to the output file name.
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
+#' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+#' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
 #'
@@ -51,7 +55,7 @@
 
 model.analysis <- function(
     # Parameters to control the simulation
-    solver_fname, i_time = 0, f_time, s_time, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
+    solver_fname, i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
@@ -65,7 +69,8 @@ model.analysis <- function(
     #Vector of user files to copy inside the docker directory
     user_files = NULL,
     #Flag to enable logging activity
-    debug = FALSE
+    debug = FALSE,
+    fba_fname = NULL
 ){
 
     # This function receives all the parameters that will be tested for model_analysis function
@@ -132,6 +137,10 @@ model.analysis <- function(
     		files[[file]] <- tools::file_path_as_absolute(file)
     	}
     }
+    if(!is.null(fba_fname)){
+    	fba_fname <- tools::file_path_as_absolute(fba_fname)
+    	files[["fba_fname"]] <- fba_fname
+    }
 
 
     # Global parameters used to manage the environment within the docker container
@@ -146,6 +155,8 @@ model.analysis <- function(
                   i_time = i_time,
                   f_time = f_time,
                   s_time = s_time,
+    							atol = atol,
+    							rtol = rtol,
                   parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,

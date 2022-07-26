@@ -62,10 +62,11 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
       return(paste("File", functions_fname, "of functions_fname parameter not exists, list of",
                    ifelse(caller_function == "generation", ".cpp", ".R"), "files found:\n\t",
                    paste(unlist(suggested_files), collapse = "\n\t")))
-    }else{
-      if(caller_function != "generation")
-        source(functions_fname)
     }
+  # 	else{
+  #     if(caller_function != "generation")
+  #       source(functions_fname)
+  #   }
   }
 
 

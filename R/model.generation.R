@@ -6,7 +6,7 @@
 #' @param out_fname Prefix to the output file name.
 #' @param net_fname .PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
 #' @param transitions_fname C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
-#' @param LP Enabling the FBA solution encoded in the general transitions. (default is FALSE)
+#' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)
 #' @param volume The folder to mount within the Docker image providing all the necessary files.
 #' @param debug If TRUE enables logging activity.
 
@@ -30,7 +30,7 @@
 model.generation <-function(out_fname = NULL,
                             net_fname,
                             transitions_fname = NULL,
-														LP = F,
+														fba_fname = NULL,
                             volume = getwd(),
 														#Flag to enable logging activity
 														debug = FALSE){
@@ -95,8 +95,8 @@ model.generation <-function(out_fname = NULL,
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
 
-    if(LP)
-    	cmd= paste0(cmd," -H")
+    if(!is.null(fba_fname))
+    	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
 
     err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )

@@ -5,6 +5,8 @@
 #' @param solver_type, a string definig what solver to apply (LSODA, HLSODA, ..)
 #' @param s_time, step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)
 #' @param f_time, simulation's final time
+#' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
+#' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
 #' @param n_run, when performing stochastic simulations this parameters controls the number of runs per each set of input parameters
 #' @param taueps, controls the step of the approximation introduced by the tau-leap algorithm
 #' @param event_times, controls the time at which the simulation is stopped to update the marking
@@ -25,6 +27,7 @@
 library(parallel)
 experiment.run <- function(id, cmd,
 													 i_time, f_time, s_time,
+													 atol,rtol,
 													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
 													 out_fname)
@@ -126,6 +129,12 @@ experiment.run <- function(id, cmd,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<N_RUN>", replacement = n_run)
 		print(paste0("[experiment.run] replacement <SEED> ", n_run))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<SEED>", replacement = seed+i)
+
+		print(paste0("[experiment.run] replacement <ATOL> ", atol))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<ATOL>", replacement = atol)
+		print(paste0("[experiment.run] replacement <RTOL> ", rtol))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<RTOL>", replacement = rtol)
+
 		if (file.exists(init))
 		{
 			print(paste0("[experiment.run] replacement <INIT> ", init))

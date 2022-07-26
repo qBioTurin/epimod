@@ -9,6 +9,8 @@ model.analysis(
   i_time = 0,
   f_time,
   s_time,
+  atol = 1e-06,
+  rtol = 1e-06,
   n_config = 1,
   n_run = 1,
   solver_type = "LSODA",
@@ -26,7 +28,8 @@ model.analysis(
   seed = NULL,
   out_fname = NULL,
   user_files = NULL,
-  debug = FALSE
+  debug = FALSE,
+  fba_fname = NULL
 )
 }
 \arguments{
@@ -37,6 +40,10 @@ model.analysis(
 \item{f_time}{Final solution time.}
 
 \item{s_time}{Time step defining the frequency at which explicit estimates for the system values are desired.}
+
+\item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
+
+\item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
 
 \item{n_config}{Integer for the number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.}
 
@@ -86,6 +93,8 @@ In particular, *time* takes values from *event_times*.}
 \item{user_files}{Vector of user files to copy inside the docker directory}
 
 \item{debug}{If TRUE enables logging activity.}
+
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)}
 }
 \description{
 Solves the system given a specific parameters configuration simulating the behavior of the developed model.

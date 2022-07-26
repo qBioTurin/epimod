@@ -100,7 +100,7 @@ if(params$n_config > params$n_run)
 	{
 		# Execute configurations runs in parallel
 		run_processors <- params$n_run
-		if(params$n_config > 1 && params$n_config < params$parallel_processors - params$n_run) {
+		if(params$n_config > 1 && params$n_config < (params$parallel_processors - params$n_run) ){
 			# If there are enough processors, run in parallel the some configurations
 			config_processors = floor((params$parallel_processors - params$n_run)/params$n_config)
 		}
@@ -130,13 +130,14 @@ parLapply( cl = cl,
 					 	}
 					 	mngr.worker(id = X, solver_fname = params$files$solver_fname,
 					 							solver_type = params$solver_type, taueps = params$taueps,
-					 							i_time = params$i_time, f_time = params$f_time,
-					 							s_time = params$s_time, n_run = params$n_run,
+					 							i_time = params$i_time, f_time = params$f_time,s_time = params$s_time,
+					 							atol = params$atol, rtol = params$rtol, n_run = params$n_run,
 					 							timeout = params$timeout, run_dir = params$run_dir,
 					 							out_fname = params$out_fname, out_dir = params$out_dir,
 					 							seed = i_s, event_times = params$event_times,
 					 							event_function = params$event_function,
-					 							files = params$files, config = params$config,
+					 							files = params$files,
+					 							config = params$config,
 					 							parallel_processors = parallel_processors)
 					 },
 					 params = params,

@@ -30,6 +30,8 @@ experiment.cmd <- function(solver_fname, solver_type = "LSODA", taueps = 0.01, s
                   " -stime <S_TIME>",
                   " -itime <I_TIME>",
                   " -ftime <F_TIME>",
+    							" -atol <ATOL>",
+    							" -rtol <RTOL>",
                   " -type ", solver_type,
                   " -seed ", "<SEED>",
                   " -runs <N_RUN>")
