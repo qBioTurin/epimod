@@ -6,6 +6,8 @@
 #' @param i_time Initial solution time.
 #' @param f_time Final solution time.
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
+#' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
+#' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
 #' @param solver_type
 #'  \itemize{
 #'    \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
@@ -68,7 +70,7 @@
 
 model.calibration <- function(# Parameters to control the simulation
 															solver_fname,
-															i_time = 0, f_time, s_time,
+															i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
 															solver_type = "LSODA", taueps = 0.01, n_run = 1,
 													    # User defined simulation's parameters
 													    parameters_fname = NULL, functions_fname = NULL,
@@ -175,6 +177,8 @@ model.calibration <- function(# Parameters to control the simulation
                    i_time = i_time,
                    f_time = f_time,
                    s_time = s_time,
+                   atol = atol,
+                   rtol = rtol,
                    n_run = n_run,
                    volume = volume,
                    timeout = timeout,

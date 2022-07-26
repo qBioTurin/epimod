@@ -63,10 +63,10 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
                    ifelse(caller_function == "generation", ".cpp", ".R"), "files found:\n\t",
                    paste(unlist(suggested_files), collapse = "\n\t")))
     }
-  # 	else{
-  #     if(caller_function != "generation")
-  #       source(functions_fname)
-  #   }
+  	else{
+      if(caller_function != "generation")
+        source(functions_fname)
+    }
   }
 
 
@@ -336,6 +336,9 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 		if(!all(file.exists(user_files), TRUE))
 			return(paste0("There is at least one file in user_files that does not exist!"))
 	}
+
+	## Removing the functions sourced at the beginning
+	rm(list = ls(envir = globalenv()) ,envir = globalenv())
 
   return(TRUE)
 }

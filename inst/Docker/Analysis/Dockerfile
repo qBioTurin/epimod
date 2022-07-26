@@ -18,7 +18,6 @@ RUN apt-get update
 
 # date > marker
 COPY marker /dev/null
-
 RUN R -e "install.packages('devtools', dependencies=TRUE)"
 RUN R -e "devtools::install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 

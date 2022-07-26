@@ -9,6 +9,8 @@ model.sensitivity(
   i_time = 0,
   f_time,
   s_time,
+  atol = 1e-06,
+  rtol = 1e-06,
   n_config,
   parameters_fname = NULL,
   functions_fname = NULL,
@@ -37,6 +39,10 @@ model.sensitivity(
 
 \item{s_time}{Time step defining the frequency at which explicit estimates
 for the system values are desired.}
+
+\item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
+
+\item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
 
 \item{n_config}{Number of configurations to generate, to use only if some
 parameters are generated from a stochastic distribution, which has to be

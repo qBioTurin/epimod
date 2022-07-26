@@ -94,7 +94,8 @@ In particular, *time* takes values from *event_times*.}
 
 \item{debug}{If TRUE enables logging activity.}
 
-\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)}
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)}
 }
 \description{
 Solves the system given a specific parameters configuration simulating the behavior of the developed model.

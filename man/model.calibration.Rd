@@ -9,6 +9,8 @@ model.calibration(
   i_time = 0,
   f_time,
   s_time,
+  atol = 1e-06,
+  rtol = 1e-06,
   solver_type = "LSODA",
   taueps = 0.01,
   n_run = 1,
@@ -42,6 +44,10 @@ model.calibration(
 \item{f_time}{Final solution time.}
 
 \item{s_time}{Time step defining the frequency at which explicit estimates for the system values are desired.}
+
+\item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
+
+\item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
 
 \item{solver_type}{\itemize{
   \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
