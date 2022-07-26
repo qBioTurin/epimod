@@ -156,10 +156,10 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
       if(length(ini_v) != length(lb_v) || length(ini_v) != length(ub_v) || length(lb_v) != length(ub_v)){
         return("ini_v , lb_v and ub_v must have the same number of elements")
       }else{
-        if(!all(ini_v > lb_v, TRUE))
-          return("Some element of ini_v is less than or equal to the corresponding element of lb_v")
-        if(!all(ini_v < ub_v, TRUE))
-          return("Some element of ini_v is greather than or equal to the corresponding element of ub_v")
+        if(!all(ini_v >= lb_v, TRUE))
+          return("Some element of ini_v is less than the corresponding element of lb_v")
+        if(!all(ini_v <= ub_v, TRUE))
+          return("Some element of ini_v is greather than the corresponding element of ub_v")
       }
     }
   }
