@@ -163,7 +163,7 @@ sensitivity.prcc<-function(config,
     P.values<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
     P.values <- do.call("rbind", P.values)
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
-    P.values <- as.data.frame(as.data.frame(P.values))
+    P.values <- as.data.frame(P.values)
     names(P.values) <- pnames.unique
     return(list(PRCC=PRCC,P.values=P.values))
 }
