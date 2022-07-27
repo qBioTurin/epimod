@@ -338,7 +338,8 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 	}
 
 	## Removing the functions sourced at the beginning
-	rm(list = ls(envir = globalenv()) ,envir = globalenv())
+	if(!missing(functions_fname) && !is.null(functions_fname))
+		rm(list=lsf.str(envir = .GlobalEnv), envir = .GlobalEnv)
 
   return(TRUE)
 }

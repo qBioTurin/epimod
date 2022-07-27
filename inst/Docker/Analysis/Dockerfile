@@ -6,6 +6,7 @@ RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev l
 
 # Install all required R packages
 RUN R -e "install.packages('fdatest')"
+RUN R -e "install.packages('devtools', dependencies=TRUE)"
 
 # Create scratch directory
 RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
@@ -18,7 +19,6 @@ RUN apt-get update
 
 # date > marker
 COPY marker /dev/null
-RUN R -e "install.packages('devtools', dependencies=TRUE)"
 RUN R -e "devtools::install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 
 # Dump all packages installed with it's version

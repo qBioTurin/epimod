@@ -68,7 +68,7 @@ mngr.worker <- function(id,
 											port = 11000+id)
 		# Launch simulations
 		res <- parLapply(cl = cs,
-										 fun = function(X, cmd, i_time, f_time, s_time, event_times, event_function, out_fname, id){
+										 fun = function(X, cmd, i_time, f_time, s_time, atol, rtol, event_times, event_function, out_fname, id){
 										 	pwd <- getwd()
 										 	setwd(paste0(X))
 										 	print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
