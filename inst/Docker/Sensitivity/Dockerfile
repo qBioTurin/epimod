@@ -8,7 +8,7 @@ RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev l
 RUN R -e "install.packages('devtools')"
 RUN R -e "install.packages('fdatest')"
 RUN R -e "install.packages('ggplot2')"
-RUN apt install -y libudunits2-dev libgdal-dev
+RUN apt install -y libudunits2-dev libgdal-dev libcairo2-dev
 RUN R -e "install.packages('epiR')"
 
 # Create scratch directory
