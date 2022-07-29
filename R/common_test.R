@@ -54,6 +54,9 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
                         max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
 												caller_function){
 
+	# saving the functions of the environment
+	listFun = lsf.str(envir = .GlobalEnv)
+
   if(!missing(functions_fname) && !is.null(functions_fname)){
     if(!file.exists(functions_fname)){
       suggested_files = list.files(path = getwd(),
@@ -118,6 +121,11 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
     	if(length(grep(distance_measure, readLines(functions_fname), value = FALSE)) == 0)
     		return(paste("File", functions_fname, "must contain a function named", distance_measure))
     }
+
+		# if(!is.null(reference_data) && !is.null(distance_measure)){
+		# 		return(paste("File", functions_fname,
+		# 								 "must contain a both the distance_measure and reference_data. "))
+		# }
 	}
 
 	if(caller_function == "sensitivity"){
@@ -339,7 +347,7 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 
 	## Removing the functions sourced at the beginning
 	if(!missing(functions_fname) && !is.null(functions_fname))
-		rm(list=lsf.str(envir = .GlobalEnv), envir = .GlobalEnv)
+		rm(list= lsf.str(envir = .GlobalEnv)[!lsf.str(envir = .GlobalEnv) %in% listFun], envir = .GlobalEnv)
 
   return(TRUE)
 }
