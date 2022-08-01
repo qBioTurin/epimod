@@ -26,7 +26,8 @@ model.sensitivity(
   seed = NULL,
   out_fname = NULL,
   user_files = NULL,
-  debug = FALSE
+  debug = FALSE,
+  fba_fname = NULL
 )
 }
 \arguments{
@@ -99,6 +100,9 @@ generator.}
 \item{user_files}{Vector of user files to copy inside the docker directory}
 
 \item{debug}{If TRUE enables logging activity.}
+
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)}
 
 \item{target_value_fname}{String reporting the distance function, implemented
 in *functions_fname*, to obtain the place

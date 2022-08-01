@@ -64,6 +64,8 @@
 #' @param out_fname Prefix to the output file name.
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
+#' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+#' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
 #' Sensitivity_analysis takes as input a solver and all the required parameters
@@ -126,7 +128,8 @@ model.sensitivity <- function(# Parameters to control the simulation
                               #Vector of user files to copy inside the docker directory
                               user_files = NULL,
                               #Flag to enable logging activity
-                              debug = FALSE
+                              debug = FALSE,
+                              fba_fname = NULL
                              ){
 
     # This function receives all the parameters that will be tested for sensitivity_analysis function
@@ -184,6 +187,10 @@ model.sensitivity <- function(# Parameters to control the simulation
     {
         reference_data <- tools::file_path_as_absolute(reference_data)
         files[["reference_data"]] <- reference_data
+    }
+    if(!is.null(fba_fname)){
+    	fba_fname <- tools::file_path_as_absolute(fba_fname)
+    	files[["fba_fname"]] <- fba_fname
     }
     # if (!is.null(distance_measure_fname))
     # {

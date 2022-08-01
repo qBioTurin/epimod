@@ -33,7 +33,8 @@ model.calibration(
   seed = NULL,
   out_fname = NULL,
   user_files = NULL,
-  debug = FALSE
+  debug = FALSE,
+  fba_fname = NULL
 )
 }
 \arguments{
@@ -111,6 +112,9 @@ In particular, *time* takes values from *event_times*.}
 \item{user_files}{Vector of user files to copy inside the docker directory}
 
 \item{debug}{If TRUE enables logging activity.}
+
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)}
 
 \item{extend}{If TRUE the actual configuration is extended including n_config new configurations.}
 }
