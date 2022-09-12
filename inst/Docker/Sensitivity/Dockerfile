@@ -2,13 +2,12 @@
 FROM r-base
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev libglpk-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libc6-dev libglib2.0-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev
+RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev libglpk-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libc6-dev libglib2.0-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev libgdal-dev libcairo2-dev
 
 # Install all required R packages
 RUN R -e "install.packages('devtools')"
 RUN R -e "install.packages('fdatest')"
 RUN R -e "install.packages('ggplot2')"
-RUN apt install -y libudunits2-dev libgdal-dev libcairo2-dev
 RUN R -e "install.packages('epiR')"
 
 # Create scratch directory

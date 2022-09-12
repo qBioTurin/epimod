@@ -54,6 +54,8 @@ sensitivity.prcc<-function(config,
         # Read target fields and return a single column data serie
         print("[sensitivity.prcc.target] computing target ...")
         tgt <- do.call(target_value, list(trace))
+        tgt <- data.frame(Time = trace$Time, Target = tgt)
+        colnames(tgt) = c("Time",paste0("Target",id))
         print("[sensitivity.prcc.target] Done!")
         return(tgt)
     }
@@ -138,29 +140,30 @@ sensitivity.prcc<-function(config,
     # parallel::stopCluster(cl)
     print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
-    tval <- do.call("cbind",tval)
+    #tval <- do.call("cbind",tval)
+    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
-    tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
+    #tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
     # tval <- tval[-1,]
     names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
-    PRCC.info<-lapply(X = tval$Time,
+    PRCC.info<-lapply(X = tvalMerged$Time,
                       FUN = function(X, config, data){
                       	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
                       					error = function(e){
-                      						return(list(prcc=rep(NA, length(pnames.unique)), P.values=rep(NA, length(pnames.unique))))
+                      						return(list(prcc=rep(NA, length(pnames.unique)), p.values=rep(NA, length(pnames.unique))))
                       					})
                       },
                       config = parms,
-                      data = tval)
+                      data = tvalMerged)
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$prcc )
+    PRCC<-lapply(1:length(tvalMerged$Time),function(x) PRCC.info[[x]]$prcc )
     # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     PRCC <- do.call("rbind", PRCC)
     PRCC <- as.data.frame(PRCC)
     names(PRCC) <- pnames.unique
-    P.values<-lapply(1:length(tval$Time),function(x) PRCC.info[[x]]$p.value )
+    P.values<-lapply(1:length(tvalMerged$Time),function(x) PRCC.info[[x]]$p.value )
     P.values <- do.call("rbind", P.values)
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
     P.values <- as.data.frame(P.values)
