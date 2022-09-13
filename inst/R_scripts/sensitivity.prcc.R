@@ -158,14 +158,14 @@ sensitivity.prcc<-function(config,
                       config = parms,
                       data = tvalMerged)
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-lapply(1:length(tvalMerged$Time),function(x) data.frame(Time = tvalMerged$Time[x], PRCC.info[[x]]$prcc) )
+    PRCC<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$prcc),nrow = 1 ) )
     # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     PRCC <- do.call("rbind", PRCC)
-    #PRCC <- as.data.frame(PRCC)
-    P.values<-lapply(1:length(tvalMerged$Time),function(x) data.frame(Time = tvalMerged$Time[x], PRCC.info[[x]]$p.value ) )
+    PRCC <- as.data.frame(PRCC)
+    P.values<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$p.value),nrow = 1 ) )
     P.values <- do.call("rbind", P.values)
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
-    # P.values <- as.data.frame(P.values)
+    P.values <- as.data.frame(P.values)
     names(P.values) <- colnames(PRCC) <- c("Time", pnames.unique )
     return(list(PRCC=PRCC,P.values=P.values))
 }

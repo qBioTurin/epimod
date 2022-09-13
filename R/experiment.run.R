@@ -184,7 +184,6 @@ experiment.run <- function(id, cmd,
 			### DEBUG ###
 			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
-
 		}
 		if (init != "init")
 		{
