@@ -1,11 +1,13 @@
 library(parallel)
 library(epimod)
 library(ggplot2)
+library(tidyr)
+library(dplyr)
 
 # Utility function
 chk_dir <- function(path){
-    pwd <- basename(path)
-    return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+	pwd <- basename(path)
+	return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
 # Read commandline arguments
 args <- commandArgs(TRUE)
@@ -56,12 +58,12 @@ if(!params$extend){
 
 # Generate configuration
 params$config <-experiment.configurations(n_config = params$n_config,
-                                   parm_fname = params$files$functions_fname,
-                                   parm_list = params$files$parameters_fname,
-                                   out_dir = chk_dir(params$out_dir),
-                                   out_fname = params$out_fname,
-                                   extend = params$extend,
-																	 config = config)
+																					parm_fname = params$files$functions_fname,
+																					parm_list = params$files$parameters_fname,
+																					out_dir = chk_dir(params$out_dir),
+																					out_fname = params$out_fname,
+																					extend = params$extend,
+																					config = config)
 saveRDS(params,  file = paste0(param_fname), version = 2)
 
 # Save final seed
@@ -92,30 +94,30 @@ parLapply(cl = cl,
 					X = c(n:(n+params$n_config-1)),
 					fun = function(id, params, seed, parallel_processors)
 					{
-					 	if(length(params$event_times) != 0)
-					 	{
-					 		i_s = seed + (id - 1)*length(params$event_times)
-					 	} else {
-					 		i_s = seed + (id - 1)
-					 	}
-					 	mngr.worker(id = id, solver_fname = params$files$solver_fname,
-					 							solver_type = params$solver_type,
-					 							taueps = params$taueps,
-					 							i_time = params$i_time,
-					 							f_time = params$f_time,
-					 							s_time = params$s_time,
-					 							atol = params$atol, rtol = params$rtol,
-					 							n_run = 1,
-					 							timeout = params$timeout,
-					 							run_dir = params$run_dir,
-					 							out_fname = params$out_fname,
-					 							out_dir = params$out_dir,
-					 							seed = i_s,
-					 							event_times = params$event_times,
-					 							event_function = params$event_function,
-					 							files = params$files,
-					 							config = params$config,
-					 							parallel_processors = parallel_processors)
+						if(length(params$event_times) != 0)
+						{
+							i_s = seed + (id - 1)*length(params$event_times)
+						} else {
+							i_s = seed + (id - 1)
+						}
+						mngr.worker(id = id, solver_fname = params$files$solver_fname,
+												solver_type = params$solver_type,
+												taueps = params$taueps,
+												i_time = params$i_time,
+												f_time = params$f_time,
+												s_time = params$s_time,
+												atol = params$atol, rtol = params$rtol,
+												n_run = 1,
+												timeout = params$timeout,
+												run_dir = params$run_dir,
+												out_fname = params$out_fname,
+												out_dir = params$out_dir,
+												seed = i_s,
+												event_times = params$event_times,
+												event_function = params$event_function,
+												files = params$files,
+												config = params$config,
+												parallel_processors = parallel_processors)
 					},
 					params = params,
 					seed = init_seed+1,
@@ -175,41 +177,43 @@ save(init_seed, extend_seed, n, file = params$seed)
 # if(!is.null(params$files$target_value_fname))
 if(!is.null(params$target_value)  && !is.null(param_fname) )
 {
-    # Load external function to compute prcc
-    source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
-    prcc <- sensitivity.prcc(config = params$config,
-                             # target_value_fname = params$files$target_value_fname,
-    												 functions_fname = params$file$functions_fname,
-                             target_value = params$target_value,
-    												 i_time = params$i_time,
-                             s_time = params$s_time,
-                             f_time = params$f_time,
-                             out_fname = params$out_fname,
-                             out_dir = params$out_dir,
-                             parallel_processors = params$parallel_processors)
-    # Plot PRCC
-    # Get the parameter names and the total number of parameters
-    names_param= names(prcc$PRCC)
-    n_params = length(names_param)
-    # Setup time
-    time <- seq(from = params$i_time, to = params$f_time, by = params$s_time)
-    # Modify the prcc data structure to ease the plotting
-    prcc_frame <- lapply(c(1:n_params),function(x){
-        return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
-                          Param = matrix(rep(names_param[x],length(prcc$PRCC[,x])), ncol = 1),
-                          Time = matrix(time, ncol = 1)))
-        })
-    prcc_frame <- do.call("rbind",prcc_frame)
-    plt <- ggplot(prcc_frame, aes(x=Time/params$s_time))+
-        geom_line(aes(y=PRCC,group=Param,col=Param)) +
-        ylim(-1,1) +
-        xlab("Time")+
-        ylab("PRCC")+
-        geom_rect(
-            mapping=aes(xmin=-Inf, xmax=Inf, ymin=-.2, ymax=.2),
-            alpha=0.001961,
-            fill="yellow")
-    ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
-    # Get final time
-    save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
+	# Load external function to compute prcc
+	source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
+	prcc <- sensitivity.prcc(config = params$config,
+													 # target_value_fname = params$files$target_value_fname,
+													 functions_fname = params$file$functions_fname,
+													 target_value = params$target_value,
+													 i_time = params$i_time,
+													 s_time = params$s_time,
+													 f_time = params$f_time,
+													 out_fname = params$out_fname,
+													 out_dir = params$out_dir,
+													 parallel_processors = params$parallel_processors)
+	# Plot PRCC
+	# Get the parameter names and the total number of parameters
+	prcc_frame = prcc$PRCC %>% gather(-Time,key = "Param", value = "PRCC") %>% na.omit()
+	# names_param= names(prcc$PRCC)
+	# n_params = length(names_param)
+	# Setup time
+	# time <- seq(from = params$i_time, to = params$f_time, by = params$s_time)
+	# Modify the prcc data structure to ease the plotting
+	# prcc_frame <- lapply(c(1:n_params),function(x){
+	#     return(data.frame(PRCC = matrix(prcc$PRCC[,x], ncol = 1),
+	#                       Param = matrix(rep(names_param[x],length(prcc$PRCC[,x])), ncol = 1),
+	#                       Time = matrix(time, ncol = 1)))
+	#     })
+	# prcc_frame <- do.call("rbind",prcc_frame)
+	plt <- ggplot(prcc_frame)+
+		geom_line(aes(x=Time,y=PRCC,group=Param,col=Param)) +
+		ylim(-1,1) +
+		xlab("Time")+
+		ylab("PRCC")+
+		theme_bw() +
+		geom_rect(
+			mapping=aes(xmin=-Inf, xmax=Inf, ymin=-.2, ymax=.2),
+			alpha=0.001961,
+			fill="yellow")
+	ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
+	# Get final time
+	save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
 }

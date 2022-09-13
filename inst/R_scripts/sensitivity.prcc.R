@@ -144,9 +144,9 @@ sensitivity.prcc<-function(config,
     tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
-    #tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
+    # tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
     # tval <- tval[-1,]
-    names(tval)[1] <- "Time"
+    # names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
     PRCC.info<-lapply(X = tvalMerged$Time,
                       FUN = function(X, config, data){
@@ -158,15 +158,14 @@ sensitivity.prcc<-function(config,
                       config = parms,
                       data = tvalMerged)
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-lapply(1:length(tvalMerged$Time),function(x) PRCC.info[[x]]$prcc )
+    PRCC<-lapply(1:length(tvalMerged$Time),function(x) data.frame(Time = tvalMerged$Time[x], PRCC.info[[x]]$prcc) )
     # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     PRCC <- do.call("rbind", PRCC)
-    PRCC <- as.data.frame(PRCC)
-    names(PRCC) <- pnames.unique
-    P.values<-lapply(1:length(tvalMerged$Time),function(x) PRCC.info[[x]]$p.value )
+    #PRCC <- as.data.frame(PRCC)
+    P.values<-lapply(1:length(tvalMerged$Time),function(x) data.frame(Time = tvalMerged$Time[x], PRCC.info[[x]]$p.value ) )
     P.values <- do.call("rbind", P.values)
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
-    P.values <- as.data.frame(P.values)
-    names(P.values) <- pnames.unique
+    # P.values <- as.data.frame(P.values)
+    names(P.values) <- colnames(PRCC) <- c("Time", pnames.unique )
     return(list(PRCC=PRCC,P.values=P.values))
 }
