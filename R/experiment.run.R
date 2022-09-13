@@ -140,8 +140,8 @@ experiment.run <- function(id, cmd,
 			print(paste0("[experiment.run] replacement <INIT> ", init))
 			cmd.iter <- gsub(x = cmd.iter, pattern = "<INIT>", replacement = init)
 			### DEBUG ###
-			print(paste0("[experiment.run] cat ", init, "..."))
-			system(paste("cat", init))
+			#print(paste0("[experiment.run] cat ", init, "..."))
+			#system(paste("cat", init))
 			### DEBUG ###
 		}
 		### DEBUG ###
