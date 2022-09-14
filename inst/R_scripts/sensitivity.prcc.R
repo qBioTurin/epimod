@@ -111,13 +111,13 @@ sensitivity.prcc<-function(config,
     pos<- sapply(1:length(parms[1,]), function(k){
         if(length(unique(parms[,k]))==1) return(FALSE) else return(TRUE)})
     pnames <- names(parms)[pos]
-    parms <- parms[,pos]
+    parms <- as.data.frame(parms[,pos])
     pnames.unique <- unique(gsub(x=pnames, pattern="(-[0-9]+-){1}", replacement = "-"))
     print("[sensitivity.prcc] Done filtering Variables!")
     print(paste0("[sensitivity.prcc] Computing PRCC using ",
     						 length(pnames.unique), " variables and ",
     						 n_config," model realizations.") )
-    # names(parms)<-pnames
+    names(parms)<-pnames
     print("[sensitivity.prcc] Extracting target variable...")
 
     # source(target_value_fname)
