@@ -3,6 +3,7 @@
 #'   Check if the passed parameters are well defined to execute the specified function, verifying
 #'   the existence of the resource path, the length of the array, the value of solver type etc.
 #'
+#' @param folder_trace Folder in which are stored the traces file that are considered to calculate the PRCC analysis.
 #' @param net_fname .PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.
 #' @param solver_fname .solver file (generated in with the function model_generation).
 #' @param i_time Initial solution time.
@@ -43,253 +44,243 @@
 #' @param seed .RData file that can be used to initialize the internal random generator.
 #' @param out_fname Prefix to the output file name
 #' @param user_files Vector of user files to copy inside the docker directory
+#' @param FVA Flag to enable the flux variability analysis
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
 #'
 #' @author Paolo Castagno, Daniele Baccega, Luca Rosso
 
-common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL, target_value = NULL, ini_v, lb_v, ub_v,
-                        solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
-                        solver_type = "LSODA", n_run = 1, distance_measure = NULL, n_config = 1, out_fname = NULL,
-                        timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
-                        max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
+common_test <- function(folder_trace,
+												net_fname, functions_fname = NULL, reference_data = NULL, target_value = NULL, ini_v, lb_v, ub_v,
+												solver_fname, i_time, f_time, s_time, parameters_fname = NULL, volume = getwd(), parallel_processors = 1,
+												solver_type = "LSODA", n_run = 1, distance_measure = NULL, n_config = 1, out_fname = NULL,
+												timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
+												max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
+												fba_fname = NULL, FVA=F,
 												caller_function){
 
 	# saving the functions of the environment
 	listFun = lsf.str(envir = .GlobalEnv)
 
-  if(!missing(functions_fname) && !is.null(functions_fname)){
-    if(!file.exists(functions_fname)){
-      suggested_files = list.files(path = getwd(),
-                                   pattern = ifelse(caller_function == "generation", "*.cpp$", "*.R$"),
-                                   recursive = TRUE)
-      return(paste("File", functions_fname, "of functions_fname parameter not exists, list of",
-                   ifelse(caller_function == "generation", ".cpp", ".R"), "files found:\n\t",
-                   paste(unlist(suggested_files), collapse = "\n\t")))
-    }
-  	else{
-      if(caller_function != "generation")
-        source(functions_fname)
-    }
-  }
-
-
-  if(caller_function == "generation"){
-    if(missing(net_fname) || is.null(net_fname))
-      return("net_fname parameter is missing! Abort")
-    else{
-      if(!file.exists(net_fname)){
-        pnpro_files = list.files(path = getwd(), pattern = "*.PNPRO$", recursive = TRUE)
-        return(paste("File", net_fname, "of net_fname parameter not exists, list of .PNPRO files found:\n\t",
-                   paste(unlist(pnpro_files), collapse = "\n\t")))
-      }
-    }
-
-  	if(length(Filter(function(file) any(grepl("type=\"GEN\"", readLines(file, warn = FALSE))), net_fname)) != 0 &&
-  		 is.null(functions_fname)){
-  		return(paste0("There is at least one generic transition in ", net_fname, ". Provide a function_fame! Abort"))
-  	}
-  }
-
-
-
-	# if(caller_function == "sensitivity"){
-	#   # if((missing(reference_data) || is.null(reference_data)) && (!missing(target_value) && !is.null(target_value)))
-	#   #   return("target_value need the reference_data parameter!")
-	# }
-
-	# if(caller_function %in% c("sensitivity", "calibration")){
-	#   if((missing(reference_data) || is.null(reference_data)) && (!missing(distance_measure) && !is.null(distance_measure)))
-	#     return("distance_measure need the reference_data parameter!")
-	#
-	# 	# Maybe it's necessary to use a default distance_measure.
-	# 	if((!missing(reference_data) && !is.null(reference_data)) && (missing(distance_measure) || is.null(distance_measure)))
-	# 		return("reference_data need the distance_measure parameter!")
-	# }
-
-
-
-	if(caller_function %in% c("sensitivity", "calibration")){
-		if(!missing(reference_data) && !is.null(reference_data)){
-	    if(!file.exists(reference_data)){
-	      R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
-	      return(paste("File",reference_data,"of reference_data parameter not exists,",
-	                   "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
-	    }
+	if(!missing(functions_fname) && !is.null(functions_fname)){
+		if(!file.exists(functions_fname)){
+			suggested_files = list.files(path = getwd(),
+																	 pattern = ifelse("generation" %in% caller_function, "*.cpp$", "*.R$"),
+																	 recursive = TRUE)
+			return(paste("File", functions_fname, "of functions_fname parameter not exists, list of",
+									 ifelse("generation" %in% caller_function, ".cpp", ".R"), "files found:\n\t",
+									 paste(unlist(suggested_files), collapse = "\n\t")))
 		}
-
-    if(!missing(distance_measure) && !is.null(distance_measure)){
-    	if(length(grep(distance_measure, readLines(functions_fname), value = FALSE)) == 0)
-    		return(paste("File", functions_fname, "must contain a function named", distance_measure))
-    }
-
-		# if(!is.null(reference_data) && !is.null(distance_measure)){
-		# 		return(paste("File", functions_fname,
-		# 								 "must contain a both the distance_measure and reference_data. "))
-		# }
+		else{
+			if( "generation" %in% caller_function)
+				source(functions_fname)
+		}
 	}
 
-	if(caller_function == "sensitivity"){
+	if("sensitivity" %in% caller_function && folder_trace != -1){
+			if( !is.null(folder_trace) && dir.exists(folder_trace) ){
+				if(length(list.files(folder_trace,pattern = ".trace$")) == 0)
+					return(paste("The folder", folder_trace, "must contain files .trace"))
+			}
+		if(FVA){
+			if(length(list.files(folder_trace,pattern = ".flux$")) == 0)
+				return(paste("The folder", folder_trace, "must contain files .flux"))
+			else
+			{
+				fl = list.files(folder_trace,pattern = ".flux$")[1]
+				flux <- read.csv(file = paste0(folder_trace,fl), sep = "", header = TRUE)
+				col = colnames(flux)
+				col = gsub(col, pattern = "(min)")
+			}
+
+		}
+	}
+
+	if("generation" %in% caller_function ){
+		if(missing(net_fname) || is.null(net_fname))
+			return("net_fname parameter is missing! Abort")
+		else{
+			if(!file.exists(net_fname)){
+				pnpro_files = list.files(path = getwd(), pattern = "*.PNPRO$", recursive = TRUE)
+				return(paste("File", net_fname, "of net_fname parameter not exists, list of .PNPRO files found:\n\t",
+										 paste(unlist(pnpro_files), collapse = "\n\t")))
+			}
+		}
+
+		if(length(Filter(function(file) any(grepl("type=\"GEN\"", readLines(file, warn = FALSE))), net_fname)) != 0 &&
+			 is.null(functions_fname)){
+			return(paste0("There is at least one generic transition in ", net_fname, ". Provide a function_fame! Abort"))
+		}
+	}
+
+	if( TRUE %in% (caller_function %in% c("sensitivity", "calibration")) ){
+		if(!missing(reference_data) && !is.null(reference_data)){
+			if(!file.exists(reference_data)){
+				R_files = list.files(path = getwd(), pattern = "*.csv$", recursive = TRUE)
+				return(paste("File",reference_data,"of reference_data parameter not exists,",
+										 "list of .csv files found:\n\t",paste(unlist(R_files),collapse = "\n\t")))
+			}
+		}
+
+		if(!missing(distance_measure) && !is.null(distance_measure)){
+			if(length(grep(distance_measure, readLines(functions_fname), value = FALSE)) == 0)
+				return(paste("File", functions_fname, "must contain a function named", distance_measure))
+		}
+	}
+
+	if("sensitivity" %in% caller_function ){
 		if(!missing(target_value) && !is.null(target_value)){
 			if(length(grep(target_value, readLines(functions_fname), value = FALSE)) == 0)
 				return(paste("File", functions_fname, "must contain a function named", target_value))
 		}
 	}
 
-
-
-  if(caller_function %in% c("calibration", "analysis")){
-      possibilities = c('ODE-E','ODE-RKF', 'ODE45', 'LSODA', 'SSA', 'TAUG', 'HLSODA', '(H)SDE', 'HODE')
-      if(!solver_type %in% possibilities)
-        return("Value of solver_type must be one of the following: ODE-E, ODE-RKF, ODE45,
+	if( TRUE %in% (caller_function %in% c("analysis", "calibration")) )
+	{
+		possibilities = c('ODE-E','ODE-RKF', 'ODE45', 'LSODA', 'SSA', 'TAUG', 'HLSODA', '(H)SDE', 'HODE')
+		if(!solver_type %in% possibilities)
+			return("Value of solver_type must be one of the following: ODE-E, ODE-RKF, ODE45,
            LSODA, SSA, TAUG, HLSODA, (H)SDE, HODE")
 
 
-    if(!missing(n_run)){
-      if(n_run <= 0)
-        return("n_run must be greater than zero!")
-      if(!is.numeric(n_run))
-      	return("n_run must be a number!")
-    }
-  }
+		if(!missing(n_run)){
+			if(n_run <= 0)
+				return("n_run must be greater than zero!")
+			if(!is.numeric(n_run))
+				return("n_run must be a number!")
+		}
+	}
 
 
 
-  if(caller_function == "calibration"){
-    if(missing(ini_v) || missing(lb_v) || missing(ub_v))
-      return("One or more of these parameters ini_v , lb_v or ub_v was not specified! Abort")
-    else{
-      if(!is.numeric(ini_v) || !is.numeric(lb_v) || !is.numeric(ub_v))
-      	return("ini_v, lb_v and ub_v must be numbers")
+	if( "calibration" %in% caller_function ){
+		if(missing(ini_v) || missing(lb_v) || missing(ub_v))
+			return("One or more of these parameters ini_v , lb_v or ub_v was not specified! Abort")
+		else{
+			if(!is.numeric(ini_v) || !is.numeric(lb_v) || !is.numeric(ub_v))
+				return("ini_v, lb_v and ub_v must be numbers")
 
-      if(length(ini_v) != length(lb_v) || length(ini_v) != length(ub_v) || length(lb_v) != length(ub_v)){
-        return("ini_v , lb_v and ub_v must have the same number of elements")
-      }else{
-        if(!all(ini_v >= lb_v, TRUE))
-          return("Some element of ini_v is less than the corresponding element of lb_v")
-        if(!all(ini_v <= ub_v, TRUE))
-          return("Some element of ini_v is greather than the corresponding element of ub_v")
-      }
-    }
-  }
+			if(length(ini_v) != length(lb_v) || length(ini_v) != length(ub_v) || length(lb_v) != length(ub_v)){
+				return("ini_v , lb_v and ub_v must have the same number of elements")
+			}else{
+				if(!all(ini_v >= lb_v, TRUE))
+					return("Some element of ini_v is less than the corresponding element of lb_v")
+				if(!all(ini_v <= ub_v, TRUE))
+					return("Some element of ini_v is greather than the corresponding element of ub_v")
+			}
+		}
+	}
 
+	if( "analysis" %in% caller_function ){
+		if(missing(ini_v))
+			return("WARNING: ini_v parameter is missing!")
 
+		if(!is.null(ini_v) & !is.numeric(ini_v))
+			return("ini_v must be numeric")
 
-  if(caller_function == "analysis"){
-    if(missing(ini_v))
-      return("WARNING: ini_v parameter is missing!")
+		if(taueps < 0 || taueps > 1)
+			return("taueps must be in range [0, 1]! Abort")
+	}
 
-  	if(!is.null(ini_v) & !is.numeric(ini_v))
-  		return("ini_v must be numeric")
+	if(TRUE %in% (caller_function %in% c("analysis", "calibration")) ){
+		if(missing(solver_fname) || is.null(solver_fname))
+			return("solver_fname parameter is missing! Abort")
+		else{
+			if(!file.exists(solver_fname)){
+				solver_files = list.files(path = getwd(), pattern = "*.solver$", recursive = TRUE)
+				return(paste("File", solver_fname, "of solver_fname parameter not exists, list of .solver files found:\n\t",
+										 paste(unlist(solver_files), collapse = "\n\t")))
+			}
+		}
 
-  	if(taueps < 0 || taueps > 1)
-  		return("taueps must be in range [0, 1]! Abort")
-  }
+		if(missing(f_time))
+			return("f_time parameter is missing! Abort")
+		else{
+			if(f_time <= 0)
+				return("f_time must be greater than zero!")
+			if(!is.numeric(f_time))
+				return("f_time must be a number!")
+		}
 
+		if(missing(s_time))
+			return("s_time parameter is missing! Abort")
+		else{
+			if(s_time <= 0)
+				return("s_time must be greater than zero!")
+			if(!is.numeric(s_time))
+				return("s_time must be a number!")
+		}
 
-
-  if(caller_function %in% c("sensitivity", "calibration", "analysis")){
-    if(missing(solver_fname) || is.null(solver_fname))
-      return("solver_fname parameter is missing! Abort")
-    else{
-      if(!file.exists(solver_fname)){
-        solver_files = list.files(path = getwd(), pattern = "*.solver$", recursive = TRUE)
-        return(paste("File", solver_fname, "of solver_fname parameter not exists, list of .solver files found:\n\t",
-                     paste(unlist(solver_files), collapse = "\n\t")))
-      }
-    }
-
-    if(missing(f_time))
-      return("f_time parameter is missing! Abort")
-    else{
-      if(f_time <= 0)
-        return("f_time must be greater than zero!")
-      if(!is.numeric(f_time))
-      	return("f_time must be a number!")
-    }
-
-    if(missing(s_time))
-      return("s_time parameter is missing! Abort")
-    else{
-      if(s_time <= 0)
-        return("s_time must be greater than zero!")
-  	  if(!is.numeric(s_time))
-  			return("s_time must be a number!")
-    }
-
-  	if(missing(i_time))
-  		return("i_time parameter is missing! Abort")
-  	else{
-  		if(i_time < 0)
-  			return("i_time must be greater than or equal to zero!")
-  		if(!is.numeric(i_time))
-  			return("i_time must be a number!")
-  	}
+		if(missing(i_time))
+			return("i_time parameter is missing! Abort")
+		else{
+			if(i_time < 0)
+				return("i_time must be greater than or equal to zero!")
+			if(!is.numeric(i_time))
+				return("i_time must be a number!")
+		}
 
 		if(i_time >= f_time)
 			return("f_time must be greater than i_time!")
 
-  	if(s_time >= f_time - i_time)
-  		return("s_time is too large! It must be smaller than f_time - i_time!")
+		if(s_time >= f_time - i_time)
+			return("s_time is too large! It must be smaller than f_time - i_time!")
 
-  	# if((f_time - i_time) %% s_time != 0)
-  	# 	return("f_time - i_time must be divisible by s_time!")
+		# if((f_time - i_time) %% s_time != 0)
+		# 	return("f_time - i_time must be divisible by s_time!")
 
 		# If not specified, a runtime error is generated
-	  if(!missing(parameters_fname) && !is.null(parameters_fname)){
-	    if(!file.exists(parameters_fname)){
-	      return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
-	    }
-	    else{
-	      if(grepl("unix", .Platform$OS.type))
-	        if(!grepl("ASCII text", system(paste("file", parameters_fname), intern = TRUE)))
-	          return("parameters_fname must be a textual file! Abort")
+		if(!missing(parameters_fname) && !is.null(parameters_fname)){
+			if(!file.exists(parameters_fname)){
+				return(paste("File", parameters_fname, "of parameters_fname parameter does not exist!"))
+			}
+			else{
+				if(grepl("unix", .Platform$OS.type))
+					if(!grepl("ASCII text", system(paste("file", parameters_fname), intern = TRUE)))
+						return("parameters_fname must be a textual file! Abort")
 
-	      file = file(parameters_fname, "r")
-	      while(TRUE){
-	        line = readLines(file, n=1)
-	        if(length(line) != 0 && length(grep(pattern = "(^#){1}", x = gsub(pattern = " ", replacement = "", line))) == 0){
-	          fname = unlist(strsplit(gsub(" ", "", line), ";"))[3]
-	          if(!(exists(fname) || length(find(fname, numeric = TRUE)) >= 1 ||
-	               !suppressWarnings(is.na(as.numeric(fname))))){
-	            close(file)
-	            return(paste(fname, "defined in", basename(parameters_fname), "does not exist! Abort"))
-	          }
-	        }
-	        else
-	          break
-	      }
-	      close(file)
-	    }
-	  }
+				file = file(parameters_fname, "r")
+				while(TRUE){
+					line = readLines(file, n=1)
+					if(length(line) != 0 && length(grep(pattern = "(^#){1}", x = gsub(pattern = " ", replacement = "", line))) == 0){
+						fname = unlist(strsplit(gsub(" ", "", line), ";"))[3]
+						if(!(exists(fname) || length(find(fname, numeric = TRUE)) >= 1 ||
+								 !suppressWarnings(is.na(as.numeric(fname))))){
+							close(file)
+							return(paste(fname, "defined in", basename(parameters_fname), "does not exist! Abort"))
+						}
+					}
+					else
+						break
+				}
+				close(file)
+			}
+		}
 
 		if(!missing(parallel_processors)){
-	    if(parallel_processors <= 0)
-	      return("parallel_processors must be greater than zero!")
-		  if(!is.numeric(parallel_processors))
-		  	return("parallel_processors must be a number!")
+			if(parallel_processors <= 0)
+				return("parallel_processors must be greater than zero!")
+			if(!is.numeric(parallel_processors))
+				return("parallel_processors must be a number!")
 		}
-  }
+	}
 
-
-  if(!missing(volume))
+	if(!missing(volume))
 		if(!dir.exists(volume))
-	  	return(paste("The folder", volume, "of volume parameter does not exist!"))
+			return(paste("The folder", volume, "of volume parameter does not exist!"))
 
-  if(caller_function %in% c("sensitivity", "analysis")){
-    #Mandatory for sensitivity analysis?
-    if(!missing(n_config)){
-      if(n_config <= 0)
-      	return("n_config must be greater than zero!")
-  	  if(!is.numeric(n_config))
-  			return("n_config must be a number!")
-    }
-  }
+	if(TRUE %in% (caller_function %in% c("analysis", "sensitivity")) ){
+		#Mandatory for sensitivity analysis?
+		if(!missing(n_config)){
+			if(n_config <= 0)
+				return("n_config must be greater than zero!")
+			if(!is.numeric(n_config))
+				return("n_config must be a number!")
+		}
+	}
 
-
-
-  if(((missing(event_times) || is.null(event_times)) && (!missing(event_function) && !is.null(event_function))) ||
-  	 ((missing(event_function) || is.null(event_function)) && (!missing(event_times) && !is.null(event_times))))
-  	return("event_times and event_function must both be specified!")
+	if(((missing(event_times) || is.null(event_times)) && (!missing(event_function) && !is.null(event_function))) ||
+		 ((missing(event_function) || is.null(event_function)) && (!missing(event_times) && !is.null(event_times))))
+		return("event_times and event_function must both be specified!")
 
 	if(!missing(event_times) && !is.null(event_times)){
 		if(!is.vector(event_times))
@@ -307,14 +298,12 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 			return(paste("File", functions_fname, "must contain a function named", event_function))
 	}
 
-
-
 	if(extend){
-		if(caller_function %in% c("sensitivity"))
+		if("sensitivity" %in% caller_function )
 			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")))
 				return(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/", "directory not found!"))
 
-		if(caller_function %in% c("analysis"))
+		if( "analysis" %in% caller_function )
 			if(!file.exists(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/")))
 				return(paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis/", "directory not found!"))
 	}
@@ -349,5 +338,5 @@ common_test <- function(net_fname, functions_fname = NULL, reference_data = NULL
 	if(!missing(functions_fname) && !is.null(functions_fname))
 		rm(list= lsf.str(envir = .GlobalEnv)[!lsf.str(envir = .GlobalEnv) %in% listFun], envir = .GlobalEnv)
 
-  return(TRUE)
+	return(TRUE)
 }

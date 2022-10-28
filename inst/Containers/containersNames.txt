@@ -1,5 +1,5 @@
          'names'
 'sensitivity' qbioturin/epimod-sensitivity:1.0.0
-'generation' qbioturin/epimod-generation:1.0.0
+'generation' qbioturin/epimod-generation:2.0.0
 'analysis' qbioturin/epimod-analysis:1.0.0
 'calibration' qbioturin/epimod-calibration:1.0.0

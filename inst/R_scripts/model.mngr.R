@@ -138,6 +138,7 @@ parLapply( cl = cl,
 					 							event_function = params$event_function,
 					 							files = params$files,
 					 							config = params$config,
+					 							FVA = params$FVA,
 					 							parallel_processors = parallel_processors)
 					 },
 					 params = params,

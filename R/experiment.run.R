@@ -13,6 +13,7 @@
 #' @param event_function, specifies the rule to update the marking
 #' @param timeout, string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax
 #' @param out_fname, output filename prefix
+#' @param FVA Flag to enable the flux variability analysis
 #' @return the name of the trace file
 #' @author Paolo Castagno, Simone Pernice
 #'
@@ -30,7 +31,8 @@ experiment.run <- function(id, cmd,
 													 atol,rtol,
 													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
-													 out_fname)
+													 out_fname,
+													 FVA)
 {
 	# Run's output file name
 	fnm <- paste0(out_fname, "-", id, ".trace")
@@ -69,22 +71,22 @@ experiment.run <- function(id, cmd,
 			# Fix command template:
 			# 1) Add init file, if not present
 			if(length(grep(x = cmd,
-						   pattern = "<INIT>")) != 1)
+										 pattern = "<INIT>")) != 1)
 			{
 				cmd = paste0(cmd, " -init <INIT>")
 			}
 			# Disable commandline parameters
 			print(system("echo [experiment.run] files in $PWD; ls"));
 			if(length(grep(x = cmd,
-						   pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
+										 pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
 			{
 				cmd <- gsub(x = cmd,
-								pattern = "cmdln_params",
-								replacement = "cmdln_exp")
+										pattern = "cmdln_params",
+										replacement = "cmdln_exp")
 			} else {
 				cmd <- gsub(x = cmd,
-							pattern = "-parm cmdln_params",
-							replacement = "")
+										pattern = "-parm cmdln_params",
+										replacement = "")
 			}
 			# Generate the init filename for the current iteration
 			init <- paste0("init_iter-", i)
@@ -94,21 +96,21 @@ experiment.run <- function(id, cmd,
 
 			# Read the last line of the trace file, which is the marking at the last time point
 			last_m <- read.table(text = system(paste0("sed -n -e '1p;$p' ",fnm),
-											   intern = TRUE),
-								 header = TRUE)
+																				 intern = TRUE),
+													 header = TRUE)
 			# The first column of the file is the time and we remove it
 			last_m <- last_m[,-1]
 			# Generate the new marking by invoking the provided function
 			new_m <- do.call(event_function,
-							 list(marking = last_m,
-							 	 time = i_time))
+											 list(marking = last_m,
+											 		 time = i_time))
 			#################
 			new_m[new_m < 0] <- 0
 			write.table(x = as.matrix(new_m,nrow = 1),
-						file = init ,
-						col.names = FALSE,
-						row.names = FALSE,
-						sep = " ")
+									file = init ,
+									col.names = FALSE,
+									row.names = FALSE,
+									sep = " ")
 		}
 		# Set the final time to either the next event's time or to the simulation's end time
 		if (i <= iterations)
@@ -144,6 +146,9 @@ experiment.run <- function(id, cmd,
 			#system(paste("cat", init))
 			### DEBUG ###
 		}
+		# Enabled the FVA
+		if(FVA) cmd = paste0(cmd, " -FVA")
+		#
 		### DEBUG ###
 		print(paste0("[experiment.run] launching\n\t", cmd.iter))
 		### DEBUG ###

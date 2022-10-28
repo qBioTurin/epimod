@@ -6,8 +6,8 @@
 #' of simulations is returned in according to the distance of each solution with
 #' respect to the reference one.
 #'
-#' @param solver_fname .solver file (generated with the function
-#'   *model_generation*).
+#' @param folder_trace Folder in which are stored the traces file that are considered to calculate the PRCC analysis.
+#' @param solver_fname .solver file (generated with the function *model_generation*).
 #' @param i_time Initial solution time.
 #' @param f_time Final solution time.
 #' @param s_time Time step defining the frequency at which explicit estimates
@@ -65,6 +65,7 @@
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+#' @param FVA Flag to enable the flux variability analysis
 #' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
@@ -108,166 +109,195 @@
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 #' @export
 
-model.sensitivity <- function(# Parameters to control the simulation
-                              solver_fname,
-                              i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
-                              # User defined simulation's parameters
-                              n_config, parameters_fname = NULL, functions_fname = NULL,
-                              # Parameters to manage the simulations' execution
-                              volume = getwd(), timeout = '1d', parallel_processors = 1,
-                              # Parameters to control the ranking
-                              reference_data = NULL, distance_measure = NULL,
-                              # Parameters to control PRCC
-                              target_value = NULL,
-                              # List of discrete events
-                              event_times = NULL, event_function = NULL,
-                              # Mange reproducibility and extend previous experiments
-                              extend = FALSE, seed = NULL,
-                              # Directories
-                              out_fname = NULL,
-                              #Vector of user files to copy inside the docker directory
-                              user_files = NULL,
-                              #Flag to enable logging activity
-                              debug = FALSE,
-                              fba_fname = NULL
-                             ){
+model.sensitivity <- function(# folder storing the trace files
+	folder_trace=NULL,
+	# Parameters to control the simulation
+	solver_fname=NULL,
+	i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
+	# User defined simulation's parameters
+	n_config, parameters_fname = NULL, functions_fname = NULL,
+	# Parameters to manage the simulations' execution
+	volume = getwd(), timeout = '1d', parallel_processors = 1,
+	# Parameters to control the ranking
+	reference_data = NULL, distance_measure = NULL,
+	# Parameters to control PRCC
+	target_value = NULL,
+	# List of discrete events
+	event_times = NULL, event_function = NULL,
+	# Mange reproducibility and extend previous experiments
+	extend = FALSE, seed = NULL,
+	# Directories
+	out_fname = NULL,
+	#Vector of user files to copy inside the docker directory
+	user_files = NULL,
+	#Flag to enable logging activity
+	debug = FALSE,
+	# FBA parameters
+	fba_fname = NULL,
+	# Flag to enable the flux variability analysis
+	FVA  = FALSE
+){
 
-    # This function receives all the parameters that will be tested for sensitivity_analysis function
-		ret = common_test(n_config = n_config,
-											parameters_fname = parameters_fname,
-											functions_fname = functions_fname,
-											solver_fname = solver_fname,
-											target_valu = target_value,
-											parallel_processors = parallel_processors,
-											reference_data = reference_data,
-											distance_measure = distance_measure,
-											i_time = i_time,
-											f_time = f_time,
-											s_time = s_time,
-											volume = volume,
-											seed = seed,
-											extend = extend,
-											event_times = event_times,
-											event_function = event_function,
-											user_files = user_files,
-											caller_function = "sensitivity")
+	# This function receives all the parameters that will be tested for sensitivity or model analysis functions
 
+	if(!missing(folder_trace)){
+		caller = "sensitivity"
+	}else{
+		folder_trace = -1
+		caller = c("analysis","sensitivity")
+	}
 
-    if(ret != TRUE)
-        stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
+	ret = common_test(folder_trace,
+										n_config = n_config,
+										parameters_fname = parameters_fname,
+										functions_fname = functions_fname,
+										solver_fname = solver_fname,
+										target_valu = target_value,
+										parallel_processors = parallel_processors,
+										reference_data = reference_data,
+										distance_measure = distance_measure,
+										i_time = i_time,
+										f_time = f_time,
+										s_time = s_time,
+										volume = volume,
+										seed = seed,
+										extend = extend,
+										event_times = event_times,
+										event_function = event_function,
+										user_files = user_files,
+										fba_fname = fba_fname,
+										FVA = FVA,
+										caller_function = caller)
 
-    results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
+	if(ret != TRUE)
+		stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
-    chk_dir <- function(path){
-        pwd <- basename(path)
-        return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
-    }
-    files <- list()
-    if(!is.null(solver_fname)){
-        solver_fname <- tools::file_path_as_absolute(solver_fname)
-        files[["solver_fname"]] <- solver_fname
-    }
-    # Fix input parameter out_fname
-    if(is.null(out_fname))
-    {
-        out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "-sensitivity")
-    }
-    # Fix input parameters path
-    if (!is.null(parameters_fname))
-    {
-        parameters_fname <- tools::file_path_as_absolute(parameters_fname)
-        files[["parameters_fname"]] <- parameters_fname
-    }
-    if (!is.null(functions_fname))
-    {
-        functions_fname <- tools::file_path_as_absolute(functions_fname)
-        files[["functions_fname"]] <- functions_fname
-    }
-    if (!is.null(reference_data))
-    {
-        reference_data <- tools::file_path_as_absolute(reference_data)
-        files[["reference_data"]] <- reference_data
-    }
-    if(!is.null(fba_fname)){
-    	fba_fname <- tools::file_path_as_absolute(fba_fname)
-    	files[["fba_fname"]] <- fba_fname
-    }
-    # if (!is.null(distance_measure_fname))
-    # {
-    #     distance_measure_fname <- tools::file_path_as_absolute(distance_measure_fname)
-    #     files[["distance_measure_fname"]] <- distance_measure_fname
-    # }
-    # if (!is.null(target_value_fname))
-    # {
-    #     target_value_fname <- tools::file_path_as_absolute(target_value_fname)
-    #     files[["target_value_fname"]] <- target_value_fname
-    # }
-    if (!is.null(target_value) && target_value == "targetExtr")
-    {
-      stop("The target_value must be different from the string: target ")
-    }
-    if(!is.null(seed))
-    {
-    	seed <- tools::file_path_as_absolute(seed)
-    	files[["seed"]] <- seed
-    }
-    if(!is.null(user_files)){
-    	for(file in user_files){
-    		files[[file]] <- tools::file_path_as_absolute(file)
-    	}
-    }
+	if(!is.null(folder_trace))
+		results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
+	else
+		results_dir_name <- folder_trace
 
-    # Global parameters used to manage the dockerized environment
-    parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
-    parms <- list(n_config = n_config,
-                  run_dir = chk_dir("/home/docker/scratch/"),
-                  out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
-                  out_fname = out_fname,
-                  solver_type = "LSODA",
-                  i_time = i_time,
-                  f_time = f_time,
-                  s_time = s_time,
-    							atol = atol,
-    							rtol = rtol,
-                  parallel_processors = parallel_processors,
-                  volume = volume,
-                  extend = extend,
-                  timeout = timeout,
-                  files = files,
-    							distance_measure = distance_measure,
-    							target_value = target_value,
-                  event_times = event_times,
-                  event_function = event_function)
+	chk_dir <- function(path){
+		pwd <- basename(path)
+		return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+	}
+	files <- list()
+	if(!is.null(solver_fname)){
+		solver_fname <- tools::file_path_as_absolute(solver_fname)
+		files[["solver_fname"]] <- solver_fname
+	}
+	# Fix input parameter out_fname
+	if(is.null(out_fname))
+	{
+		out_fname <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "-sensitivity")
+	}
+	# Fix input parameters path
+	if (!is.null(parameters_fname))
+	{
+		parameters_fname <- tools::file_path_as_absolute(parameters_fname)
+		files[["parameters_fname"]] <- parameters_fname
+	}
+	if (!is.null(functions_fname))
+	{
+		functions_fname <- tools::file_path_as_absolute(functions_fname)
+		files[["functions_fname"]] <- functions_fname
+	}
+	if (!is.null(reference_data))
+	{
+		reference_data <- tools::file_path_as_absolute(reference_data)
+		files[["reference_data"]] <- reference_data
+	}
+	if(!is.null(fba_fname))
+	{
+		fba_fname <- tools::file_path_as_absolute(fba_fname)
+		files[["fba_fname"]] <- fba_fname
+	}
+	if (!is.null(target_value) && target_value == "targetExtr")
+	{
+		stop("The target_value must be different from the string: target ")
+	}
+	if(!is.null(seed))
+	{
+		seed <- tools::file_path_as_absolute(seed)
+		files[["seed"]] <- seed
+	}
+	if(!is.null(user_files))
+	{
+		for(file in user_files){
+			files[[file]] <- tools::file_path_as_absolute(file)
+		}
+	}
 
-    volume <- tools::file_path_as_absolute(volume)
-    # Create the folder to store results
-   	res_dir <- paste0(chk_dir(volume), results_dir_name)
-    if(!extend & file.exists(res_dir)){
-			unlink(res_dir, recursive = TRUE)
-    }
-    dir.create(res_dir, showWarnings = FALSE, recursive = TRUE)
-    # Copy all the files to the directory docker will mount to the image's file system
-    experiment.env_setup(files = files, dest_dir = res_dir)
-    # Change path to the new files' location
-    if (length(files) > 0)
-    {
-        parms$files <- lapply(files, function(x){
-            return(paste0(parms$out_dir, basename(x)))
-        })
-    }
+	# Global parameters used to manage the dockerized environment
+	parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
+	parms <- list(n_config = n_config,
+								run_dir = chk_dir("/home/docker/scratch/"),
+								out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
+								out_fname = out_fname,
+								solver_type = "LSODA",
+								i_time = i_time,
+								f_time = f_time,
+								s_time = s_time,
+								atol = atol,
+								rtol = rtol,
+								parallel_processors = parallel_processors,
+								volume = volume,
+								extend = extend,
+								timeout = timeout,
+								files = files,
+								distance_measure = distance_measure,
+								target_value = target_value,
+								event_times = event_times,
+								event_function = event_function)
 
-    # Manage experiments reproducibility
-    if(!is.null(seed)){
-			parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
-    }
+	volume <- tools::file_path_as_absolute(volume)
+	# Create the folder to store results
+	res_dir <- paste0(chk_dir(volume), results_dir_name)
+	if(!extend & file.exists(res_dir)){
+		unlink(res_dir, recursive = TRUE)
+	}
+	dir.create(res_dir, showWarnings = FALSE, recursive = TRUE)
+	# Copy all the files to the directory docker will mount to the image's file system
+	experiment.env_setup(files = files, dest_dir = res_dir)
+	# Change path to the new files' location
+	if (length(files) > 0)
+	{
+		parms$files <- lapply(files, function(x){
+			return(paste0(parms$out_dir, basename(x)))
+		})
+	}
 
-    # Save all the parameters to file, in a location accessible from inside the dockerized environment
-    p_fname <- paste0(res_dir, parms_fname, ".RDS")
-    # Use version = 2 for compatibility issue
-    saveRDS(parms, file = p_fname, version = 2)
-    p_fname <- paste0( parms$out_dir, parms_fname, ".RDS") # location on the docker image file system
-    # Run the docker image
-    containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
-    containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
-    docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
-}
+	# Manage experiments reproducibility
+	if(!is.null(seed)){
+		parms$seed <- paste0(parms$out_dir, "seeds-", out_fname, ".RData")
+	}
+
+	# Save all the parameters to file, in a location accessible from inside the dockerized environment
+	p_fname <- paste0(res_dir, parms_fname, ".RDS")
+	# Use version = 2 for compatibility issue
+	saveRDS(parms, file = p_fname, version = 2)
+	p_fname <- paste0( parms$out_dir, parms_fname, ".RDS") # location on the docker image file system
+
+	# Run the docker image
+	containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+	containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
+	# Firstly it runs the model.analysis if it is necessary
+	 if(length(caller) != 1)
+	 {
+	 	print("[Running] Model simulation")
+	 	docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+	 }
+	# Secondly it runs the sensitivity if it is necessary
+	if(...)
+	{
+		print("[Running] Model sensitivity")
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
+	}
+	# Finally it runs the FVA if it is necessary
+	if(FVA)
+	{
+		print("[Running] Flux Variability Analysis")
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
+	}
+
+	}

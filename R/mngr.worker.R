@@ -5,7 +5,7 @@ mngr.worker <- function(id,
 												i_time, f_time, s_time,	atol, rtol, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times = NULL, event_function,
-												files, config = NULL,
+												files, config = NULL, FVA,
 												parallel_processors)
 {
 	# set.seed(kind = "Mersenne-Twister", seed = seed+id)
@@ -19,6 +19,8 @@ mngr.worker <- function(id,
 	print(paste0("[mngr.worker] - atol ", atol))
 	print(paste0("[mngr.worker] - rtol ", rtol))
 	print(paste0("[mngr.worker] - parallel_processors ", parallel_processors))
+	if(FVA) print("[mngr.worker] - FVA enabled")
+
 	if (!is.null(config))
 	{
 		print(paste0("[mngr.worker] - config ", config))
@@ -85,7 +87,8 @@ mngr.worker <- function(id,
 										 											 seed = seed + (X-1)*(length(params$event_times)+1),
 										 											 event_times = event_times,
 										 											 event_function = event_function,
-										 											 out_fname = paste0(out_fname,"-", id))
+										 											 out_fname = paste0(out_fname,"-", id),
+										 											 FVA = FVA)
 										 	print(paste0("[mngr.worker] Simulation ", id, "-", X, " done!"))
 										 	setwd(pwd)
 										 	return(file.path(X,fn))
