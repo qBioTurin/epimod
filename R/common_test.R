@@ -71,7 +71,7 @@ common_test <- function(folder_trace,
 									 paste(unlist(suggested_files), collapse = "\n\t")))
 		}
 		else{
-			if( "generation" %in% caller_function)
+			if( ! "generation" %in% caller_function)
 				source(functions_fname)
 		}
 	}
