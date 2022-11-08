@@ -141,7 +141,8 @@ mngr.worker <- function(id,
 													seed = seed + id,
 													event_times = event_times,
 													event_function = event_function,
-													out_fname = out_fname)
+													out_fname = out_fname,
+													FVA = FVA)
 		print(paste0("[mngr.worker] Simulation ", id, " done!"))
 	}
 	# cat("\n\n",id,": Execution time ODEs:",elapsed, "sec.\n")

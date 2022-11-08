@@ -112,6 +112,7 @@ model.generation <-function(out_fname = NULL,
         file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+        #file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         unlink(out_dir, recursive = TRUE)
     }
 }

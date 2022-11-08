@@ -32,7 +32,7 @@ experiment.run <- function(id, cmd,
 													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
 													 out_fname,
-													 FVA)
+													 FVA = F)
 {
 	# Run's output file name
 	fnm <- paste0(out_fname, "-", id, ".trace")
