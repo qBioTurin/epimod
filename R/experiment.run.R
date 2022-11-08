@@ -197,7 +197,6 @@ experiment.run <- function(id, cmd,
 
 		##  MERGING FBA FILES
 		fbafiles = list.files(
-			path = "./Ec_corePN_analysis/",
 			pattern = paste0(out_fname, "-", id, "-", i, "(-[0-9]+)+(.flux){1}")
 		)
 		if(length(fbafiles)>0){
