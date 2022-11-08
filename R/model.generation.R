@@ -95,8 +95,10 @@ model.generation <-function(out_fname = NULL,
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
 
-    if(!is.null(fba_fname))
+    if(!is.null(fba_fname)){
+    	fba_fname <- basename(fba_fname)
     	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
+    }
 
     err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )

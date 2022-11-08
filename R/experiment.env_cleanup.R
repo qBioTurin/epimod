@@ -29,17 +29,27 @@ experiment.env_cleanup <- function(id, run_dir,
 	),
 	to = out_dir)
 	# If FBA was used
-	print(paste0("[experimen.env_cleanup] Saving flux file ",
-							 list.files(path = r_dir,
-							 					 pattern = paste0(out_fname, "(-[0-9]+)+(.flux){1}"))))
-	file.copy(from = paste0(r_dir,
-													.Platform$file.sep,
-													list.files(path = r_dir,
-																		 pattern = paste0(out_fname,
-																		 								 "(-[0-9]+)+(.flux){1}")
-													)
-	),
-	to = out_dir)
+	fbafiles = list.files(
+		path = r_dir,
+		pattern = paste0(out_fname, "(-[0-9]+)+(.flux){1}")
+	)
+	if(length(fbafiles)>0){
+		print(
+			paste0(
+				"[experimen.env_cleanup] Saving flux file ",
+				fbafiles
+			)
+		)
+		file.copy(
+			from = paste0(
+				r_dir,
+				.Platform$file.sep,
+				fbafiles
+			),
+			to = out_dir
+		)
+	}
+
 	##
 	print(paste0("[experimen.env_cleanup] Removing directory ", r_dir))
 	unlink(r_dir,

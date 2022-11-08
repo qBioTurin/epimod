@@ -195,6 +195,44 @@ experiment.run <- function(id, cmd,
 			file.remove(init)
 		}
 
+		##  MERGING FBA FILES
+		fbafiles = list.files(
+			path = "./Ec_corePN_analysis/",
+			pattern = paste0(out_fname, "-", id, "-", i, "(-[0-9]+)+(.flux){1}")
+		)
+		if(length(fbafiles)>0){
+			fbafiles = unique(gsub(fbafiles,
+														 pattern = paste0("(",out_fname, "-", id, "-", i,"-)|(.flux)"),
+														 replacement = ""))
+			for(f in fbafiles){
+				fbanm <- paste0(out_fname, "-", id,"-", f, ".flux")
+				curr_fbanm <- paste0(out_fname, "-", id, "-", i, "-", f, ".flux")
+				####### PATCH ########
+				system(paste0("sed -i 's/  / /g' ", curr_fbanm))
+				system(paste0("sed -i 's/ $//g' ", curr_fbanm))
+				##### END PATCH ######
+				## Append the current .flux file to the simulation's one
+				if (!file.exists(fbanm))
+				{
+					file.rename(from = curr_fbanm, to = fbanm)
+				}
+				else{
+					# Remove last line from the output file
+					### DEBUG ###
+					print(paste0("head -n-1 ", fbanm))
+					system(paste0("head -n-1 ", fbanm))
+					### DEBUG ###
+					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					# Remove first line from the current output file and append to the output file
+					### DEBUG ###
+					print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
+					### DEBUG ###
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm, " >> ", fbanm))
+					file.remove(curr_fbanm)
+				}
+			}
+		}
 	}
 	return(fnm)
 }
