@@ -6,6 +6,7 @@ chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
+
 # Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
