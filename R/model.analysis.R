@@ -141,7 +141,7 @@ model.analysis <- function(
     	}
     }
     if(!is.null(fba_fname)){
-    	fba_fname <- tools::file_path_as_absolute(fba_fname)
+    	fba_fname <- sapply(fba_fname,tools::file_path_as_absolute)
     	files[["fba_fname"]] <- fba_fname
     }
 
