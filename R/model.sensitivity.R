@@ -140,11 +140,29 @@ model.sensitivity <- function(# folder storing the trace files
 
 	# This function receives all the parameters that will be tested for sensitivity or model analysis functions
 
-	if(!missing(folder_trace)){
-		caller = "sensitivity"
-	}else{
-		folder_trace = -1
-		caller = c("analysis","sensitivity")
+	if(missing(folder_trace)){
+		model.analysis(n_config = n_config,
+									 parameters_fname = parameters_fname,
+									 functions_fname = functions_fname,
+									 solver_fname = solver_fname,
+									 parallel_processors = parallel_processors,
+									 i_time = i_time,
+									 f_time = f_time,
+									 s_time = s_time,
+									 volume = volume,
+									 seed = seed,
+									 event_times = event_times,
+									 n_run = n_run,
+									 atol = atol,
+									 rtol = rtol,
+									 solver_type = solver_type,
+									 taueps = taueps,
+									 ini_v = ini_v,
+									 event_function = event_function,
+									 user_files = user_files,
+									 fba_fname = fba_fname,
+									 FVA = FVA)
+		folder_trace = paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis")
 	}
 
 	ret = common_test(folder_trace,
@@ -152,7 +170,7 @@ model.sensitivity <- function(# folder storing the trace files
 										parameters_fname = parameters_fname,
 										functions_fname = functions_fname,
 										solver_fname = solver_fname,
-										target_valu = target_value,
+										target_value = target_value,
 										parallel_processors = parallel_processors,
 										reference_data = reference_data,
 										distance_measure = distance_measure,
@@ -167,21 +185,19 @@ model.sensitivity <- function(# folder storing the trace files
 										user_files = user_files,
 										fba_fname = fba_fname,
 										FVA = FVA,
-										caller_function = caller)
+										caller_function = "sensitivity")
 
 	if(ret != TRUE)
 		stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
-	if(!is.null(folder_trace))
-		results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
-	else
-		results_dir_name <- folder_trace
+	results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
 
 	chk_dir <- function(path){
 		pwd <- basename(path)
 		return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 	}
 	files <- list()
+
 	if(!is.null(solver_fname)){
 		solver_fname <- tools::file_path_as_absolute(solver_fname)
 		files[["solver_fname"]] <- solver_fname
@@ -231,6 +247,7 @@ model.sensitivity <- function(# folder storing the trace files
 	# Global parameters used to manage the dockerized environment
 	parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
 	parms <- list(n_config = n_config,
+								folder_trace = folder_trace,
 								run_dir = chk_dir("/home/docker/scratch/"),
 								out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
 								out_fname = out_fname,
@@ -281,13 +298,8 @@ model.sensitivity <- function(# folder storing the trace files
 	# Run the docker image
 	containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
 	containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
-	# Firstly it runs the model.analysis if it is necessary
-	 if(length(caller) != 1)
-	 {
-	 	print("[Running] Model simulation")
-	 	docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", containers.names["analysis",1]," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
-	 }
-	# Secondly it runs the sensitivity if it is necessary
+
+	#  it runs the sensitivity if it is necessary
 	if(...)
 	{
 		print("[Running] Model sensitivity")

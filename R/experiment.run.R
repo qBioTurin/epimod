@@ -147,7 +147,7 @@ experiment.run <- function(id, cmd,
 			### DEBUG ###
 		}
 		# Enabled the FVA
-		if(FVA) cmd = paste0(cmd, " -var")
+		if(FVA) cmd.iter = paste0(cmd.iter, " -var")
 		#
 		### DEBUG ###
 		print(paste0("[experiment.run] launching\n\t", cmd.iter))
