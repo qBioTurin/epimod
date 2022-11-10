@@ -104,8 +104,6 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 	# Load external function to compute prcc
 	source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
 
-	source("~/Desktop/GIT/VariabilityBranch/epimod/inst/R_scripts/sensitivity.prcc.R")
-
 	prcc <- sensitivity.prcc(config = params$config,
 													 # target_value_fname = params$files$target_value_fname,
 													 functions_fname = params$file$functions_fname,

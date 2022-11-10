@@ -303,9 +303,9 @@ model.sensitivity <- function(# folder storing the trace files
 	}
 
 	# Save all the parameters to file, in a location accessible from inside the dockerized environment
-	p_fname <- paste0(res_dir, parms_fname, ".RDS")
+	p_fname <- paste0(parms$out_dir, parms_fname, ".RDS")
 	# Use version = 2 for compatibility issue
-	saveRDS(parms, file = p_fname, version = 2)
+	saveRDS(parms, file = paste0(res_dir, parms_fname, ".RDS"), version = 2)
 
 	# Run the docker image
 	containers.file = paste(path.package(package = "epimod"),
