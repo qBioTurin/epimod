@@ -237,11 +237,11 @@ model.sensitivity <- function(# folder storing the trace files
 		reference_data <- tools::file_path_as_absolute(reference_data)
 		files[["reference_data"]] <- reference_data
 	}
-	# if(!is.null(fba_fname))
-	# {
-	# 	fba_fname <- tools::file_path_as_absolute(fba_fname)
-	# 	files[["fba_fname"]] <- fba_fname
-	# }
+	if(!is.null(fba_fname))
+	{
+		fba_fname <- tools::file_path_as_absolute(fba_fname)
+		files[["fba_fname"]] <- fba_fname
+	}
 	if (!is.null(target_value) && target_value == "targetExtr")
 	{
 		stop("The target_value must be different from the string: target ")
