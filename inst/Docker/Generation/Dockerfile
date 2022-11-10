@@ -100,7 +100,7 @@ RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
 # Create data directory
 RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 
-RUN wget https://github.com/qBioTurin/epimod/blob/variabilityFBA/inst/R_scripts/fva.mgr.R
+RUN wget https://raw.githubusercontent.com/qBioTurin/epimod/variabilityFBA/inst/R_scripts/fva.mgr.R
 RUN mv fva.mgr.R /home
 
 
