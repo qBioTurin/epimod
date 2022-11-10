@@ -11,10 +11,6 @@ param_fname <- args[1]
 
 # Load parameters
 params <- readRDS(param_fname)
-params$seed = "Ec_corePN_analysis/seeds-Ec_corePN-analysis.RData"
-params$files$parameters_fname = "Ec_corePN_analysis/CarbonAdmin.csv"
-params$files$functions_fname = "Ec_corePN_analysis/Functions.R"
-params$out_dir = "Model_sensitivity/"
 
 # Load seed and previous configuration, if required.
 
