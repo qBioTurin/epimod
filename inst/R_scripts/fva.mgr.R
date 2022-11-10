@@ -62,7 +62,11 @@ write(params$flux_fname,
 			file = flux_fname_file,
 			ncolumns = 1)
 
-fls = list.files(folder_trace,pattern = ".flux$",path = T)
+fls = list.files(folder_trace,pattern = ".flux$")
+
+fva_name = gsub(fls,pattern = ".flux$",replacement = "")
+fva_name = gsub(fva_name,pattern = "analysis",replacement = "fva")
+fva_name = paste0(fva_name,"-")
 
 for(fl in fls){
 	system(
@@ -72,7 +76,7 @@ for(fl in fls){
 			fl,
 			flux_fname_file,
 			params$fva_gamma,
-			"FVA_"
+			fva_name,
 		),
 		wait = T
 	)
