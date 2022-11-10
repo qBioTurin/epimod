@@ -3,6 +3,8 @@ sensitivity.prcc<-function(config,
 													 functions_fname, target_value,
                            i_time, s_time, f_time,
                            out_fname, out_dir,
+													 folder_trace,
+													 out_fname_analysis,
                            parallel_processors
 ){
     flatten <- function(x, name)
@@ -42,13 +44,13 @@ sensitivity.prcc<-function(config,
     	return(ret)
     }
     # Extracts the target value from the simulations' trace
-    targetExtr <- function(id, functions_fname, target_value, out_fname, out_dir){
+    targetExtr <- function(id, functions_fname, target_value, folder_trace, out_fname_analysis){
         # Read the output and compute the distance from reference data
     		print(paste0("[sensitivity.prcc.target] Reading trace ",
-    								 out_dir,
-    								 out_fname,"-",
+    								 folder_trace,
+    								 out_fname_analysis,"-",
     								 id,".trace") )
-        trace <- read.csv(file = paste0(out_dir,out_fname,"-", id,".trace"), sep = "", header = TRUE)
+        trace <- read.csv(file = paste0(folder_trace,out_fname_analysis,"-", id,".trace"), sep = "", header = TRUE)
         # Load distance definition
         source(functions_fname)
         # Read target fields and return a single column data serie
@@ -60,6 +62,7 @@ sensitivity.prcc<-function(config,
         return(tgt)
     }
     compute_prcc <- function(time,config,data){
+    	print(names(config))
         # Dataframe containing the configuration generated and, as last column, the corresponding model output
     		config.table <- table(gsub(x=names(config), pattern="(-[0-9]+-){1}", replacement = "-"))
     		config.names <- names(config.table)
@@ -102,12 +105,16 @@ sensitivity.prcc<-function(config,
     print("[sensitivity.prcc] Filtering constant variables.")
     for(i in c(1:length(config)))
     {
+    	#print(unique(config[[i]]))
         if(dim(unique(config[[i]]))[1] > 1)
             if(is.null(parms))
                 parms <- config[[i]]
             else
                 parms <- cbind(parms,config[[i]])
     }
+    if(is.null(parms))
+    	stop("No parameters configurations are found, the parameters should change.")
+
     pos<- sapply(1:length(parms[1,]), function(k){
         if(length(unique(parms[,k]))==1) return(FALSE) else return(TRUE)})
     pnames <- names(parms)[pos]
@@ -135,8 +142,8 @@ sensitivity.prcc<-function(config,
     								targetExtr,
     								functions_fname = functions_fname,
     								target_value = target_value,
-    								out_fname = out_fname,
-    								out_dir = out_dir)
+    								out_fname_analysis = out_fname_analysis,
+    								folder_trace = folder_trace)
     # parallel::stopCluster(cl)
     print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame

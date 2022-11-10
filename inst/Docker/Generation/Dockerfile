@@ -88,11 +88,18 @@ FROM deploy_base
 COPY --from=updater /usr/local/GreatSPN /usr/local/GreatSPN
 COPY --from=updater /usr/local/lib /usr/local/lib
 RUN rm -rf /usr/local/lib/*.a /usr/local/lib/*.la
-RUN sudo dnf -y install glpk-devel
-
+RUN sudo dnf -y install glpk-devel wget R
+RUN wget https://github.com/qBioTurin/epimod/blob/variabilityFBA/inst/R_scripts/fva.mgr.R
 # add library & binary paths
 RUN echo '/usr/local/lib' > /etc/ld.so.conf.d/greatspn.conf ; ldconfig
 ENV PATH="$PATH:/usr/local/GreatSPN/scripts"
+
+# Create scratch directory
+RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
+
+# Create data directory
+RUN mkdir /home/docker/data; chmod 777 /home/docker/data
+
 
 
 

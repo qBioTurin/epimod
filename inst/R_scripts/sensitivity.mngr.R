@@ -13,11 +13,12 @@ chk_dir <- function(path){
 args <- commandArgs(TRUE)
 cat(args)
 param_fname <- args[1]
+
 # Load parameters
 params <- readRDS(param_fname)
 
 # Load seed and previous configuration, if required.
-config <- list()
+
 if(is.null(params$seed)){
 	# Save initial seed value
 	params$seed <- paste0(params$out_dir, "seeds-", params$out_fname, ".RData")
@@ -46,16 +47,8 @@ if(!params$extend){
 	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
-# Generate configuration
-params$config <-experiment.configurations(n_config = params$n_config,
-																					parm_fname = params$files$functions_fname,
-																					parm_list = params$files$parameters_fname,
-																					out_dir = chk_dir(params$out_dir),
-																					out_fname = params$out_fname,
-																					extend = params$extend,
-																					config = config)
-saveRDS(params,  file = paste0(param_fname), version = 2)
 
+folder_trace = paste0("/home/docker/data/",basename(params$folder_trace) )
 # Save final seed
 extend_seed <- .Random.seed
 ### NEW ###
@@ -72,33 +65,35 @@ if(params$n_config >= params$parallel_processors)
 	run_processors <- 1
 }
 
-# Create a cluster
-cl <- makeCluster(config_processors,
-									type = "FORK",
-									# outfile = paste0(params$out_fname,".log"),
-									port = 11000)
-# Save session's info
-clusterEvalQ(cl, sessionInfo())
-
 # List all the traces in the output directory
 # if(!is.null(params$files$distance_measure_fname))
 if(!is.null(params$distance_measure) && !is.null(param_fname))
 {
+	# Create a cluster
+	cl <- makeCluster(config_processors,
+										type = "FORK",
+										# outfile = paste0(params$out_fname,".log"),
+										port = 11000)
+	# Save session's info
+	clusterEvalQ(cl, sessionInfo())
 	rank <- parLapply(cl,
-										list.files(path = params$folder_trace,
-															 pattern = paste0(params$out_fname, "(-[0-9]+)+.trace")),
+										list.files(
+											path = folder_trace,
+											pattern =  "(-[0-9]+)+.trace"
+										),
 										tool.distance,
 										out_dir = params$out_dir,
 										# distance_measure_f_name = params$files$distance_measure_fname,
 										distance_measure = params$distance_measure,
 										reference_data = params$files$reference_data,
-										function_fname = params$file$functions_fname)
+										function_fname = params$file$functions_fname )
+	stopCluster(cl)
 	# Sort the rank ascending, according to the distance computed above.
 	rank <- do.call("rbind", rank)
 	rank <- rank[order(rank$measure),]
 	save(rank, file = paste0(params$out_dir,"ranking_",params$out_fname,".RData"))
 }
-stopCluster(cl)
+
 ### NEW ###
 n <- n + params$n_config
 save(init_seed, extend_seed, n, file = params$seed)
@@ -108,6 +103,9 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 {
 	# Load external function to compute prcc
 	source("/usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.prcc.R")
+
+	source("~/Desktop/GIT/VariabilityBranch/epimod/inst/R_scripts/sensitivity.prcc.R")
+
 	prcc <- sensitivity.prcc(config = params$config,
 													 # target_value_fname = params$files$target_value_fname,
 													 functions_fname = params$file$functions_fname,
@@ -117,6 +115,8 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 													 f_time = params$f_time,
 													 out_fname = params$out_fname,
 													 out_dir = params$out_dir,
+													 folder_trace = params$folder_trace,
+													 out_fname_analysis =  params$out_fname_analysis,
 													 parallel_processors = params$parallel_processors)
 	# Plot PRCC
 	# Get the parameter names and the total number of parameters

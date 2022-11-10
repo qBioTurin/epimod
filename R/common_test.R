@@ -45,6 +45,7 @@
 #' @param out_fname Prefix to the output file name
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param FVA Flag to enable the flux variability analysis
+#' @param flux_fname vector of fluxes id to compute the FVA
 #' @param caller_function a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)
 #'
 #' @author Paolo Castagno, Daniele Baccega, Luca Rosso
@@ -55,7 +56,7 @@ common_test <- function(folder_trace,
 												solver_type = "LSODA", n_run = 1, distance_measure = NULL, n_config = 1, out_fname = NULL,
 												timeout = "1d", extend = FALSE, seed = NULL, ini_vector_mod = FALSE, threshold.stop = NULL,
 												max.call = 1e+07, max.time = NULL, taueps = 0.01, user_files = NULL, event_times = NULL, event_function = NULL,
-												fba_fname = NULL, FVA=F,
+												fba_fname = NULL, FVA=F, flux_fname = NULL, fva_gamma,
 												caller_function){
 
 	# saving the functions of the environment
@@ -76,20 +77,49 @@ common_test <- function(folder_trace,
 		}
 	}
 
-	if("sensitivity" %in% caller_function && folder_trace != -1){
+	if("sensitivity" %in% caller_function){
 			if( !is.null(folder_trace) && dir.exists(folder_trace) ){
 				if(length(list.files(folder_trace,pattern = ".trace$")) == 0)
 					return(paste("The folder", folder_trace, "must contain files .trace"))
+				params_fname_tmp = list.files(path = folder_trace,
+																			pattern = "^params_.*\\.RDS")
+
+				if( length(params_fname_tmp) != 1 ){
+					return("The folder ",folder_trace," must contain only one params RDS file generated from the model.analysis function!")
+				}
 			}
 		if(FVA){
 			if(length(list.files(folder_trace,pattern = ".flux$")) == 0)
 				return(paste("The folder", folder_trace, "must contain files .flux"))
 			else
 			{
-				fl = list.files(folder_trace,pattern = ".flux$")[1]
-				flux <- read.csv(file = paste0(folder_trace,fl), sep = "", header = TRUE)
-				col = colnames(flux)
-				col = gsub(col, pattern = "(min)")
+				fls = list.files(folder_trace,pattern = ".flux$")
+				checkFluxf= lapply(fls,function(fl){
+					flux <- read.csv(file = paste0(folder_trace,fl), sep = "", header = F)
+					flID = flux[1,]
+					flID_indexes = grep(flID, pattern = "(_Lb)|(_Ub)")
+					if(length(flID_indexes)==0)
+						return(paste0("To run the FVA, the flux balance file (",fl,") has to contain the up and lower bound for each reaction.
+													The correspondind columns should be named as (ReactionName)_(Ub|Lb).") )
+
+					if(is.null(flux_fname) || length(flux_fname) == 0)
+						return("To run the FVA, a vector of fluxes id is necessary!")
+
+					fluxes_not_contained = flux_fname[! flux_fname %in% flID ]
+
+					if(length(fluxes_not_contained)!=0)
+						return(paste0("The following fluxes id are not contained in the fluxes file: ",fluxes_not_contained) )
+
+					if(fva_gamma <= 0 || fva_gamma > 1)
+						return("The fva_gamma parameter must be <= 1 and > 0!" )
+
+					return(NULL)
+
+				})
+				if(!all(sapply(checkFluxf,is.null))){
+					checkFluxf = do.call(rbind,checkFluxf)
+					return(paste0(checkFluxf,collapse=" ; ") )
+				}
 			}
 
 		}

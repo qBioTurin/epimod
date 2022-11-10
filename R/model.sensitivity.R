@@ -66,6 +66,8 @@
 #' @param debug If TRUE enables logging activity.
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
 #' @param FVA Flag to enable the flux variability analysis
+#' @param flux_fname vector of fluxes id to compute the FVA
+#' @param fva_gamma parameter, which controls whether the analysis is done w.r.t. suboptimal network states (0 $\le$ fva_gamma < 1) or to the optimal state (fva_gamma = 1)
 #' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
@@ -115,7 +117,7 @@ model.sensitivity <- function(# folder storing the trace files
 	solver_fname=NULL,
 	i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
 	# User defined simulation's parameters
-	n_config, parameters_fname = NULL, functions_fname = NULL,
+	n_config=1, parameters_fname = NULL, functions_fname = NULL,
 	# Parameters to manage the simulations' execution
 	volume = getwd(), timeout = '1d', parallel_processors = 1,
 	# Parameters to control the ranking
@@ -135,7 +137,7 @@ model.sensitivity <- function(# folder storing the trace files
 	# FBA parameters
 	fba_fname = NULL,
 	# Flag to enable the flux variability analysis
-	FVA  = FALSE
+	FVA  = FALSE, flux_fname = NULL, fva_gamma = .9
 ){
 
 	# This function receives all the parameters that will be tested for sensitivity or model analysis functions
@@ -185,12 +187,23 @@ model.sensitivity <- function(# folder storing the trace files
 										user_files = user_files,
 										fba_fname = fba_fname,
 										FVA = FVA,
+										flux_fname = flux_fname,
+										fva_gamma = fva_gamma,
 										caller_function = "sensitivity")
 
 	if(ret != TRUE)
 		stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
-	results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
+	params_RDS = list.files(path = folder_trace,
+																pattern = "^params_.*\\.RDS")
+
+	if(length(basename(tools::file_path_sans_ext(solver_fname))) == 0 ){
+		results_dir_name <- "Model_sensitivity/"
+		if(is.null(out_fname))
+			out_fname <- "Model_sensitivity"
+		}
+	else
+		results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
 
 	chk_dir <- function(path){
 		pwd <- basename(path)
@@ -198,10 +211,11 @@ model.sensitivity <- function(# folder storing the trace files
 	}
 	files <- list()
 
-	if(!is.null(solver_fname)){
-		solver_fname <- tools::file_path_as_absolute(solver_fname)
-		files[["solver_fname"]] <- solver_fname
-	}
+	# if(!is.null(solver_fname)){
+	# 	solver_fname <- tools::file_path_as_absolute(solver_fname)
+	# 	files[["solver_fname"]] <- solver_fname
+	# }
+
 	# Fix input parameter out_fname
 	if(is.null(out_fname))
 	{
@@ -223,11 +237,11 @@ model.sensitivity <- function(# folder storing the trace files
 		reference_data <- tools::file_path_as_absolute(reference_data)
 		files[["reference_data"]] <- reference_data
 	}
-	if(!is.null(fba_fname))
-	{
-		fba_fname <- tools::file_path_as_absolute(fba_fname)
-		files[["fba_fname"]] <- fba_fname
-	}
+	# if(!is.null(fba_fname))
+	# {
+	# 	fba_fname <- tools::file_path_as_absolute(fba_fname)
+	# 	files[["fba_fname"]] <- fba_fname
+	# }
 	if (!is.null(target_value) && target_value == "targetExtr")
 	{
 		stop("The target_value must be different from the string: target ")
@@ -244,28 +258,27 @@ model.sensitivity <- function(# folder storing the trace files
 		}
 	}
 
+	#### laod params e updating the one for the sensitivity analysis!!!!
+	parms_analysis = readRDS(tools::file_path_as_absolute(paste0(folder_trace,"/",params_RDS)))
+	parms_analysis[["out_fname_analysis"]] = parms_analysis$out_fname
+
 	# Global parameters used to manage the dockerized environment
 	parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
-	parms <- list(n_config = n_config,
+	parms <- list(
 								folder_trace = folder_trace,
 								run_dir = chk_dir("/home/docker/scratch/"),
 								out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
 								out_fname = out_fname,
-								solver_type = "LSODA",
-								i_time = i_time,
-								f_time = f_time,
-								s_time = s_time,
-								atol = atol,
-								rtol = rtol,
 								parallel_processors = parallel_processors,
 								volume = volume,
-								extend = extend,
-								timeout = timeout,
-								files = files,
 								distance_measure = distance_measure,
 								target_value = target_value,
-								event_times = event_times,
-								event_function = event_function)
+								flux_fname = flux_fname,
+								fva_gamma = fva_gamma
+								)
+
+	parms_analysis_filtered = parms_analysis[! names(parms_analysis) %in% names(parms) ]
+	parms <- c(parms,parms_analysis_filtered)
 
 	volume <- tools::file_path_as_absolute(volume)
 	# Create the folder to store results
@@ -293,23 +306,24 @@ model.sensitivity <- function(# folder storing the trace files
 	p_fname <- paste0(res_dir, parms_fname, ".RDS")
 	# Use version = 2 for compatibility issue
 	saveRDS(parms, file = p_fname, version = 2)
-	p_fname <- paste0( parms$out_dir, parms_fname, ".RDS") # location on the docker image file system
 
 	# Run the docker image
-	containers.file = paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+	containers.file = paste(path.package(package = "epimod"),
+													"Containers/containersNames.txt", sep = "/")
 	containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
 
-	#  it runs the sensitivity if it is necessary
-	if(...)
+	#  it runs the PRCC or ranking
+	if(!is.null(target_value) | (!is.null(reference_data)))
 	{
 		print("[Running] Model sensitivity")
 		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
 	}
+
 	# Finally it runs the FVA if it is necessary
 	if(FVA)
 	{
 		print("[Running] Flux Variability Analysis")
-		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
-	}
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["generation", 1], " Rscript fva.mngr.R ", p_fname), debug = debug)
 
+	}
 	}
