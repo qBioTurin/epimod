@@ -323,7 +323,7 @@ model.sensitivity <- function(# folder storing the trace files
 	if(FVA)
 	{
 		print("[Running] Flux Variability Analysis")
-		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["generation", 1], " Rscript fva.mngr.R ", p_fname), debug = debug)
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["generation", 1], " Rscript /home/fva.mgr.R ", p_fname), debug = debug)
 
 	}
 	}

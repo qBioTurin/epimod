@@ -7,7 +7,7 @@ chk_dir <- function(path){
 # Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
-param_fname <- "Model_sensitivity/params_Model_sensitivity.RDS" # args[1]
+param_fname <- args[1]
 
 # Load parameters
 params <- readRDS(param_fname)
