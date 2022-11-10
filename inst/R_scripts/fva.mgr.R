@@ -1,6 +1,3 @@
-library(parallel)
-library(tidyr)
-library(dplyr)
 
 # Utility function
 chk_dir <- function(path){
@@ -49,13 +46,11 @@ if(!params$extend){
 	set.seed(kind = "Mersenne-Twister", seed = init_seed)
 }
 
-setwd("/home/")
+# setwd("/home/")
 # folder_trace = paste0("/home/",basename(params$folder_trace) )
-# Save final seed
-extend_seed <- .Random.seed
 
-folder_trace = paste0("/home/data/",basename(params$folder_trace) )
-folder_sensitivity = paste0("/home/data/",basename(params$out_dir) )
+folder_trace = paste0("/home/docker/data/",basename(params$folder_trace) )
+folder_sensitivity = paste0("/home/docker/data/",basename(params$out_dir) )
 flux_fname_file = paste0(folder_sensitivity,"/flux_fname")
 
 write(params$flux_fname,
@@ -67,16 +62,20 @@ fls = list.files(folder_trace,pattern = ".flux$")
 fva_name = gsub(fls,pattern = ".flux$",replacement = "")
 fva_name = gsub(fva_name,pattern = "analysis",replacement = "fva")
 fva_name = paste0(fva_name,"-")
+names(fva_name) = fls
 
+setwd(folder_sensitivity)
+
+params$files$fba_fname = ""
 for(fl in fls){
 	system(
 		paste(
 			"VARIABILITY.sh",
 			params$files$fba_fname,
-			fl,
+			paste0(folder_trace,"/",fl),
 			flux_fname_file,
 			params$fva_gamma,
-			fva_name,
+			fva_name[fl],sep = " "
 		),
 		wait = T
 	)

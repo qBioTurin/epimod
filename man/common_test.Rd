@@ -5,6 +5,7 @@
 \title{Test correctness of the parameters before execute a function}
 \usage{
 common_test(
+  folder_trace,
   net_fname,
   functions_fname = NULL,
   reference_data = NULL,
@@ -35,10 +36,16 @@ common_test(
   user_files = NULL,
   event_times = NULL,
   event_function = NULL,
+  fba_fname = NULL,
+  FVA = F,
+  flux_fname = NULL,
+  fva_gamma,
   caller_function
 )
 }
 \arguments{
+\item{folder_trace}{Folder in which are stored the traces file that are considered to calculate the PRCC analysis.}
+
 \item{net_fname}{.PNPRO file storing the Petri Net (and all its generalizations) model. In case there are multiple nets defined within the PNPRO file, the first one in the list is the will be automatically selected.}
 
 \item{functions_fname}{R file storing the user defined functions to generate instances of the parameters summarized in the parameters_fname file.}
@@ -104,6 +111,10 @@ simulate a discrete event that modifies the marking of the net given a specific 
 \item{event_function}{String reporting the function, implemented in *functions_fname*, to exploit for modifying the total marking at a specific time point.
 Such function takes in input: 1) a vector representing the marking of the net (called *marking*), and 2) the time point at which the simulation has stopped (called *time*).
 In particular, *time* takes values from *event_times*.}
+
+\item{FVA}{Flag to enable the flux variability analysis}
+
+\item{flux_fname}{vector of fluxes id to compute the FVA}
 
 \item{caller_function}{a string defining which function will be executed with the specified parameters (generation, sensitivity, calibration, analysis)}
 }

@@ -5,13 +5,14 @@
 \title{Run sensitivity analysis}
 \usage{
 model.sensitivity(
-  solver_fname,
+  folder_trace = NULL,
+  solver_fname = NULL,
   i_time = 0,
   f_time,
   s_time,
   atol = 1e-06,
   rtol = 1e-06,
-  n_config,
+  n_config = 1,
   parameters_fname = NULL,
   functions_fname = NULL,
   volume = getwd(),
@@ -27,12 +28,16 @@ model.sensitivity(
   out_fname = NULL,
   user_files = NULL,
   debug = FALSE,
-  fba_fname = NULL
+  fba_fname = NULL,
+  FVA = FALSE,
+  flux_fname = NULL,
+  fva_gamma = 0.9
 )
 }
 \arguments{
-\item{solver_fname}{.solver file (generated with the function
-*model_generation*).}
+\item{folder_trace}{Folder in which are stored the traces file that are considered to calculate the PRCC analysis.}
+
+\item{solver_fname}{.solver file (generated with the function *model_generation*).}
 
 \item{i_time}{Initial solution time.}
 
@@ -101,7 +106,13 @@ generator.}
 
 \item{debug}{If TRUE enables logging activity.}
 
-\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).}
+
+\item{FVA}{Flag to enable the flux variability analysis}
+
+\item{flux_fname}{vector of fluxes id to compute the FVA}
+
+\item{fva_gamma}{parameter, which controls whether the analysis is done w.r.t. suboptimal network states (0 $\le$ fva_gamma < 1) or to the optimal state (fva_gamma = 1)
 It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)}
 
 \item{target_value_fname}{String reporting the distance function, implemented
