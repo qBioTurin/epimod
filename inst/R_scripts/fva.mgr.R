@@ -62,7 +62,6 @@ names(fva_name) = fls
 
 setwd(folder_sensitivity)
 
-params$files$fba_fname = ""
 for(fl in fls){
 	system(
 		paste(
