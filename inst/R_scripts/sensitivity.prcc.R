@@ -138,14 +138,14 @@ sensitivity.prcc<-function(config,
     # 														 target_value = target_value,
     # 														 out_fname = out_fname,
     # 														 out_dir = out_dir)
-    folder_trace = paste0("/home/docker/data/",basename(folder_trace) )
-    folder_sensitivity = paste0("/home/docker/data/",basename(out_fname_analysis) )
+    folder_trace = paste0("/home/docker/data/",basename(folder_trace),"/" )
+    folder_sensitivity = paste0("/home/docker/data/",basename(out_fname) )
 
     tval <- lapply( c(1:n_config),
     								targetExtr,
     								functions_fname = functions_fname,
     								target_value = target_value,
-    								out_fname_analysis = folder_sensitivity,
+    								out_fname_analysis = out_fname_analysis,
     								folder_trace = folder_trace)
     # parallel::stopCluster(cl)
     print("[sensitivity.prcc] Done extracting target variable!")
