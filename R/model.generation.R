@@ -96,7 +96,7 @@ model.generation <-function(out_fname = NULL,
     }
 
     if(!is.null(fba_fname)){
-    	fba_fname <- paste0(sapply(fba_fname,basename),collapse = " ")
+    	fba_fname <- sapply(fba_fname,basename)
     	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
     }
 

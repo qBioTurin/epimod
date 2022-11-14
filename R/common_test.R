@@ -62,6 +62,23 @@ common_test <- function(folder_trace,
 	# saving the functions of the environment
 	listFun = lsf.str(envir = .GlobalEnv)
 
+	if("sensitivity" %in% caller_function){
+		if( !is.null(folder_trace) && dir.exists(folder_trace) ){
+			if(length(list.files(folder_trace,pattern = ".trace$")) == 0)
+				return(paste("The folder", folder_trace, "must contain files .trace"))
+			params_fname_tmp = list.files(path = folder_trace,
+																		pattern = "^params_.*\\.RDS")
+
+			if( length(params_fname_tmp) != 1 ){
+				return("The folder ",folder_trace," must contain only one params RDS file generated from the model.analysis function!")
+			}
+			params = readRDS(paste0(folder_trace,"/",params_fname_tmp))
+			params$solver_type -> solver_type
+			params$n_run -> n_run
+			params$n_config -> n_config
+		}
+	}
+
 	if(!missing(functions_fname) && !is.null(functions_fname)){
 		if(!file.exists(functions_fname)){
 			suggested_files = list.files(path = getwd(),
@@ -78,16 +95,6 @@ common_test <- function(folder_trace,
 	}
 
 	if("sensitivity" %in% caller_function){
-			if( !is.null(folder_trace) && dir.exists(folder_trace) ){
-				if(length(list.files(folder_trace,pattern = ".trace$")) == 0)
-					return(paste("The folder", folder_trace, "must contain files .trace"))
-				params_fname_tmp = list.files(path = folder_trace,
-																			pattern = "^params_.*\\.RDS")
-
-				if( length(params_fname_tmp) != 1 ){
-					return("The folder ",folder_trace," must contain only one params RDS file generated from the model.analysis function!")
-				}
-			}
 		if(FVA){
 			if(length(list.files(folder_trace,pattern = ".flux$")) == 0)
 				return(paste("The folder", folder_trace, "must contain files .flux"))

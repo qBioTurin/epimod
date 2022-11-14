@@ -67,7 +67,7 @@
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
 #' @param FVA Flag to enable the flux variability analysis
 #' @param flux_fname vector of fluxes id to compute the FVA
-#' @param fva_gamma parameter, which controls whether the analysis is done w.r.t. suboptimal network states (0 $\le$ fva_gamma < 1) or to the optimal state (fva_gamma = 1)
+#' @param fva_gamma parameter, which controls whether the analysis is done w.r.t. suboptimal network states (0 <= fva_gamma < 1) or to the optimal state (fva_gamma = 1)
 #' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
@@ -115,6 +115,7 @@ model.sensitivity <- function(# folder storing the trace files
 	folder_trace=NULL,
 	# Parameters to control the simulation
 	solver_fname=NULL,
+	ini_v = NULL,
 	i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
 	# User defined simulation's parameters
 	n_config=1, parameters_fname = NULL, functions_fname = NULL,
@@ -154,11 +155,10 @@ model.sensitivity <- function(# folder storing the trace files
 									 volume = volume,
 									 seed = seed,
 									 event_times = event_times,
-									 n_run = n_run,
+									 n_run = 1,
 									 atol = atol,
 									 rtol = rtol,
-									 solver_type = solver_type,
-									 taueps = taueps,
+									 solver_type = "LSODA",
 									 ini_v = ini_v,
 									 event_function = event_function,
 									 user_files = user_files,
@@ -167,41 +167,43 @@ model.sensitivity <- function(# folder storing the trace files
 		folder_trace = paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis")
 	}
 
-	ret = common_test(folder_trace,
-										n_config = n_config,
-										parameters_fname = parameters_fname,
-										functions_fname = functions_fname,
-										solver_fname = solver_fname,
-										target_value = target_value,
-										parallel_processors = parallel_processors,
-										reference_data = reference_data,
-										distance_measure = distance_measure,
-										i_time = i_time,
-										f_time = f_time,
-										s_time = s_time,
-										volume = volume,
-										seed = seed,
-										extend = extend,
-										event_times = event_times,
-										event_function = event_function,
-										user_files = user_files,
-										fba_fname = fba_fname,
-										FVA = FVA,
-										flux_fname = flux_fname,
-										fva_gamma = fva_gamma,
-										caller_function = "sensitivity")
+	ret = common_test(
+		folder_trace,
+		n_config = n_config,
+		parameters_fname = parameters_fname,
+		functions_fname = functions_fname,
+		solver_fname = solver_fname,
+		target_value = target_value,
+		parallel_processors = parallel_processors,
+		reference_data = reference_data,
+		distance_measure = distance_measure,
+		i_time = i_time,
+		f_time = f_time,
+		s_time = s_time,
+		volume = volume,
+		seed = seed,
+		extend = extend,
+		event_times = event_times,
+		event_function = event_function,
+		user_files = user_files,
+		fba_fname = fba_fname,
+		FVA = FVA,
+		flux_fname = flux_fname,
+		fva_gamma = fva_gamma,
+		caller_function = "sensitivity"
+	)
 
 	if(ret != TRUE)
 		stop(paste("sensitivity_analysis_test error:", ret, sep = "\n"))
 
 	params_RDS = list.files(path = folder_trace,
-																pattern = "^params_.*\\.RDS")
+													pattern = "^params_.*\\.RDS")
 
 	if(length(basename(tools::file_path_sans_ext(solver_fname))) == 0 ){
 		results_dir_name <- "Model_sensitivity/"
 		if(is.null(out_fname))
 			out_fname <- "Model_sensitivity"
-		}
+	}
 	else
 		results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_sensitivity/")
 
@@ -265,17 +267,17 @@ model.sensitivity <- function(# folder storing the trace files
 	# Global parameters used to manage the dockerized environment
 	parms_fname <- file.path(paste0("params_", out_fname), fsep = .Platform$file.sep)
 	parms <- list(
-								folder_trace = folder_trace,
-								run_dir = chk_dir("/home/docker/scratch/"),
-								out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
-								out_fname = out_fname,
-								parallel_processors = parallel_processors,
-								volume = volume,
-								distance_measure = distance_measure,
-								target_value = target_value,
-								flux_fname = flux_fname,
-								fva_gamma = fva_gamma
-								)
+		folder_trace = folder_trace,
+		run_dir = chk_dir("/home/docker/scratch/"),
+		out_dir = chk_dir(paste0("/home/docker/data/", results_dir_name)),
+		out_fname = out_fname,
+		parallel_processors = parallel_processors,
+		volume = volume,
+		distance_measure = distance_measure,
+		target_value = target_value,
+		flux_fname = flux_fname,
+		fva_gamma = fva_gamma
+	)
 
 	parms_analysis_filtered = parms_analysis[! names(parms_analysis) %in% names(parms) ]
 	parms <- c(parms,parms_analysis_filtered)
@@ -326,4 +328,4 @@ model.sensitivity <- function(# folder storing the trace files
 		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["generation", 1], " Rscript /home/fva.mgr.R ", p_fname), debug = debug)
 
 	}
-	}
+}

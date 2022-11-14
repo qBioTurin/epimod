@@ -49,10 +49,6 @@ folder_trace = paste0("/home/docker/data/",basename(params$folder_trace) )
 folder_sensitivity = paste0("/home/docker/data/",basename(params$out_dir) )
 flux_fname_file = paste0(folder_sensitivity,"/flux_fname")
 
-write(params$flux_fname,
-			file = flux_fname_file,
-			ncolumns = 1)
-
 fls = list.files(folder_trace,pattern = ".flux$")
 
 fva_name = gsub(fls,pattern = ".flux$",replacement = "")
@@ -62,11 +58,27 @@ names(fva_name) = fls
 
 setwd(folder_sensitivity)
 
+####### ATTENZIONE
+## Per piu' problemi di FBA, bisogna leggere il rispettivo file e
+## filtrare le colonne in base ai flussi presenti nei fbafile, questo perche'
+## VARIABILITY.sh funziona solo su singolo fbafile!!!!
+
 for(fl in fls){
+	# the fbafile index +1 since it starts from 0!
+	fba_files_index = 1 + as.numeric(gsub(fl,pattern = paste0("(",params$out_fname_analysis,"-[0-9]-)|(.flux)"),replacement = ""))
+
+	flux <- read.csv(file = paste0(folder_trace,"/",fl), sep = "", header = F)
+	flID = flux[1,]
+	flux_fname =  params$flux_fname[params$flux_fname %in% flID]
+
+	write(flux_fname,
+				file = flux_fname_file,
+				ncolumns = 1)
+
 	system(
 		paste(
 			"VARIABILITY.sh",
-			params$files$fba_fname,
+			params$files$fba_fname[fba_files_index],
 			paste0(folder_trace,"/",fl),
 			flux_fname_file,
 			params$fva_gamma,
