@@ -86,5 +86,23 @@ for(fl in fls){
 		),
 		wait = T
 	)
+
+	for(t in c("MAX","MIN") ){
+		dfList = lapply(flux_fname,function(f){
+			df = read.table( paste0(fva_name[fl],f,"_",t),sep = " ",header = T )
+			colnames(df) = c("Time",f)
+			return(df)
+		})
+		Reduce(merge,dfList) -> df
+
+		# removing all the files
+		system(paste0("rm ", paste0( fva_name[fl],flux_fname,"_",t,collapse = " ")) )
+		# writing the new file storing all the fluxes merged
+		write.csv(x = as.data.frame(df),
+							file = paste0(fva_name[fl],t,".csv"),quote = F,row.names = F
+		)
+	}
+
+
 }
 
