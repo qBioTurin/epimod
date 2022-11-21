@@ -82,7 +82,9 @@ for(fl in fls){
 			paste0(folder_trace,"/",fl),
 			flux_fname_file,
 			params$fva_gamma,
-			fva_name[fl],sep = " "
+			fva_name[fl],
+			params$parallel_processors,
+			sep = " "
 		),
 		wait = T
 	)
