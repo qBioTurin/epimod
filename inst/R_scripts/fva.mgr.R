@@ -75,17 +75,20 @@ for(fl in fls){
 				file = flux_fname_file,
 				ncolumns = 1)
 
-	system(
-		paste(
-			"VARIABILITY.sh",
-			params$files$fba_fname[fba_files_index],
-			paste0(folder_trace,"/",fl),
-			flux_fname_file,
-			params$fva_gamma,
-			fva_name[fl],
-			params$parallel_processors,
-			sep = " "
-		),
+	cmd = paste(
+		"VARIABILITY.sh",
+		params$files$fba_fname[fba_files_index],
+		paste0(folder_trace,"/",fl),
+		flux_fname_file,
+		params$fva_gamma,
+		fva_name[fl],
+		params$parallel_processors,
+		sep = " "
+	)
+
+	print(cmd)
+
+	system( cmd,
 		wait = T
 	)
 

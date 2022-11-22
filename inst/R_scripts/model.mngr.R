@@ -49,7 +49,7 @@ if(is.null(params$files$parameters_fname)
    && is.null(params$ini_v))
 {
     params$config = NULL
-} else {
+}else{
     # Generate configuration
     params$config <- experiment.configurations(n_config = params$n_config,
                                               parm_fname = params$files$functions_fname,
@@ -145,6 +145,7 @@ parLapply( cl = cl,
 					 params = params,
 					 seed = init_seed,
 					 parallel_processors = run_processors)
+
 # Print all the output to the stdout
 # system(paste0("cat ", params$out_fname,".log >&2"))
 # unlink(x = paste0(params$out_fname,".log"), force = TRUE)

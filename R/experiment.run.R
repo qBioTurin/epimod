@@ -25,7 +25,6 @@
 #'
 #' }
 
-library(parallel)
 experiment.run <- function(id, cmd,
 													 i_time, f_time, s_time,
 													 atol,rtol,
