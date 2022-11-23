@@ -82,7 +82,7 @@ for(fl in fls){
 		flux_fname_file,
 		params$fva_gamma,
 		fva_name[fl],
-		#params$parallel_processors,
+		params$parallel_processors,
 		sep = " "
 	)
 
