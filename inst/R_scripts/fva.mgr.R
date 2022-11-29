@@ -97,10 +97,9 @@ for(fl in fls){
 		dfList = lapply(flux_fname,function(f){
 			initFile = paste0(fva_name[fl],f,"_",t)
 			df = read.table( initFile,sep = " ",header = T )
-			final_fname = gsub(pattern = "\\(|\\)|\\[|\\]| ",replacement = "_",initFile)
+			finalFile = gsub(pattern = "\\(|\\)|\\[|\\]| ",replacement = "_",initFile)
 			file.rename(from = initFile,
 									to = finalFile)
-
 			colnames(df) = c("Time",f)
 			return(df)
 		})
