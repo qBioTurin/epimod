@@ -47,8 +47,7 @@ RUN mkdir ~/GreatSPN ;\
 
     cd ~/GreatSPN ;\
 
-    #git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
-    git clone https://github.com/IreneTerrone/SOURCESC-readFromFile.git SOURCES ;\
+    git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
     cd ~/GreatSPN/SOURCES ;\
 	  git pull ;\
     make ${MAKE_ARGS} -k derived_objects ;\
