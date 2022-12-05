@@ -177,8 +177,8 @@ experiment.run <- function(id, cmd,
 			### DEBUG ###
 			# Remove last line from the output file
 			### DEBUG ###
-			print(paste0("head -n-1 ", fnm))
-			system(paste0("head -n-1 ", fnm))
+			#print(paste0("head -n-1 ", fnm))
+			#system(paste0("head -n-1 ", fnm))
 			### DEBUG ###
 			system(paste0("head -n-1 ", fnm, " > ", paste0(fnm,"_tmp"),"; mv ", paste0(fnm,"_tmp")," ", fnm))
 			# Remove first line from the current output file and append to the output file
@@ -187,8 +187,8 @@ experiment.run <- function(id, cmd,
 			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
 			### DEBUG ###
 			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
-			print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
-			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
+			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
 			### DEBUG ###
 			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
@@ -222,8 +222,8 @@ experiment.run <- function(id, cmd,
 				else{
 					# Remove last line from the output file
 					### DEBUG ###
-					print(paste0("head -n-1 ", fbanm))
-					system(paste0("head -n-1 ", fbanm))
+					#print(paste0("head -n-1 ", fbanm))
+					#system(paste0("head -n-1 ", fbanm))
 					### DEBUG ###
 					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
 					# Remove first line from the current output file and append to the output file
@@ -232,10 +232,11 @@ experiment.run <- function(id, cmd,
 					# system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
 					# ### DEBUG ###
 					# system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm, " >> ", fbanm))
-					print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
-					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
+					#print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
+					#system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
 					### DEBUG ###
-					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm, " >> ", fbanm))
+
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1 )) ", curr_fbanm, " >> ", fbanm))
 					file.remove(curr_fbanm)
 				}
 			}
