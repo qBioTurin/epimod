@@ -44,12 +44,12 @@ RUN wget https://datacloud.di.unito.it/index.php/s/cx9oJ5wjsgEjKcs/download/lp_s
 
 # Install GreatSPN
 RUN mkdir ~/GreatSPN ;\
-
     cd ~/GreatSPN ;\
-
     git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
     cd ~/GreatSPN/SOURCES ;\
 	  git pull ;\
+	  make clean;\
+	  make distclean;\
     make ${MAKE_ARGS} -k derived_objects ;\
     make ${MAKE_ARGS} ;\
     make ;\

@@ -220,12 +220,14 @@ experiment.run <- function(id, cmd,
 					file.rename(from = curr_fbanm, to = fbanm)
 				}
 				else{
-					# Remove last line from the output file
+					# Remove last line from the previous and already merged output file
 					### DEBUG ###
 					#print(paste0("head -n-1 ", fbanm))
 					#system(paste0("head -n-1 ", fbanm))
 					### DEBUG ###
-					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					# system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					system(paste0( "mv ", fbanm, " ", fbanm))
+
 					# Remove first line from the current output file and append to the output file
 					### DEBUG ###
 					# print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
@@ -235,8 +237,7 @@ experiment.run <- function(id, cmd,
 					#print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
 					#system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
 					### DEBUG ###
-
-					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1 )) ", curr_fbanm, " >> ", fbanm))
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm, " >> ", fbanm))
 					file.remove(curr_fbanm)
 				}
 			}
