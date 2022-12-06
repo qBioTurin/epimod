@@ -185,7 +185,7 @@ experiment.run <- function(id, cmd,
 			# Remove first line from the current output file and append to the output file
 			### DEBUG ###
 			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
-			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
 			### DEBUG ###
 			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
 			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
@@ -226,7 +226,7 @@ experiment.run <- function(id, cmd,
 					#print(paste0("head -n-1 ", fbanm))
 					#system(paste0("head -n-1 ", fbanm))
 					### DEBUG ###
-					# system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
 
 					# Remove first line from the current output file and append to the output file
 					### DEBUG ###
