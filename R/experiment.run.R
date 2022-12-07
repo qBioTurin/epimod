@@ -105,8 +105,13 @@ experiment.run <- function(id, cmd,
 											 		 time = i_time))
 			#################
 			new_m[new_m < 0] <- 0
+			# write.table(x = as.matrix(new_m,nrow = 1),
+			# 						file = init ,
+			# 						col.names = FALSE,
+			# 						row.names = FALSE,
+			# 						sep = " ")
 
-			write.table(x = format(new_m,digits = 16,scientific = F),
+			write.table(x = format(as.matrix(new_m,nrow = 1),digits = 16,scientific = F),
 									file = init,
 									col.names = FALSE,
 									row.names = FALSE,
