@@ -105,11 +105,14 @@ experiment.run <- function(id, cmd,
 											 		 time = i_time))
 			#################
 			new_m[new_m < 0] <- 0
-			write.table(x = as.matrix(new_m,nrow = 1),
-									file = init ,
+
+			write.table(x = format(new_m,digits = 16,scientific = F),
+									file = "init" ,
 									col.names = FALSE,
 									row.names = FALSE,
-									sep = " ")
+									sep = " ",
+									quote = F)
+
 		}
 		# Set the final time to either the next event's time or to the simulation's end time
 		if (i <= iterations)
@@ -226,7 +229,7 @@ experiment.run <- function(id, cmd,
 					#print(paste0("head -n-1 ", fbanm))
 					#system(paste0("head -n-1 ", fbanm))
 					### DEBUG ###
-					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					# system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
 
 					# Remove first line from the current output file and append to the output file
 					### DEBUG ###
