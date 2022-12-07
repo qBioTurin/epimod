@@ -107,7 +107,7 @@ experiment.run <- function(id, cmd,
 			new_m[new_m < 0] <- 0
 
 			write.table(x = format(new_m,digits = 16,scientific = F),
-									file = "init" ,
+									file = init,
 									col.names = FALSE,
 									row.names = FALSE,
 									sep = " ",
