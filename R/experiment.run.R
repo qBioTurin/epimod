@@ -234,7 +234,7 @@ experiment.run <- function(id, cmd,
 					#print(paste0("head -n-1 ", fbanm))
 					#system(paste0("head -n-1 ", fbanm))
 					### DEBUG ###
-					# system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
 
 					# Remove first line from the current output file and append to the output file
 					### DEBUG ###
