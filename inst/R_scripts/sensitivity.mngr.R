@@ -79,7 +79,8 @@ if(!is.null(params$distance_measure) && !is.null(param_fname))
 	rank <- parLapply(cl,
 										list.files(
 											path = folder_trace,
-											pattern =  "(-[0-9]+)+.trace"
+											pattern =  "(-[0-9]+)+.trace",
+											full.names = T
 										),
 										tool.distance,
 										out_dir = params$out_dir,

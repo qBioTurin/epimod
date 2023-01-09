@@ -26,5 +26,5 @@ tool.distance <- function(id,
 	measure <- do.call(distance_measure, list(reference, trace))
 	setwd(pwd)
 	print("[tool.distance] Done computing distance")
-	return(data.frame(measure=measure, id=id))
+	return(data.frame(measure=measure, id=basename(id)) )
 }
