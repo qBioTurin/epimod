@@ -143,7 +143,7 @@ common_test <- function(folder_trace,
 			}
 		}
 
-		if(length(Filter(function(file) any(grepl("type=\"GEN\"", readLines(file, warn = FALSE))), net_fname)) != 0 &&
+		if(length(Filter(function(file) any(grepl("Call\\[", readLines(file, warn = FALSE))), net_fname)) != 0 &&
 			 is.null(functions_fname)){
 			return(paste0("There is at least one generic transition in ", net_fname, ". Provide a function_fame! Abort"))
 		}
