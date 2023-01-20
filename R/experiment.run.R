@@ -106,14 +106,14 @@ experiment.run <- function(id, cmd,
 			#################
 			new_m[new_m < 0] <- 0
 
-			# write.table(x = format(as.matrix(new_m,nrow = 1),digits = 16,scientific = F),
-			# 						file = init,
-			# 						col.names = FALSE,
-			# 						row.names = FALSE,
-			# 						sep = " ",
-			# 						quote = F)
+			write.table(x = format(as.matrix(new_m,nrow = 1),digits = 16,scientific = F),
+									file = init,
+									col.names = FALSE,
+									row.names = FALSE,
+									sep = " ",
+									quote = F)
 
-			system(paste0("tail -n 1 ",fnm," | cut -f 2- -d ' ' >> ",init) )
+			#system(paste0("tail -n 1 ",fnm," | cut -f 2- -d ' ' >> ",init) )
 
 		}
 		# Set the final time to either the next event's time or to the simulation's end time
