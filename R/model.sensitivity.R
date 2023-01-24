@@ -163,7 +163,8 @@ model.sensitivity <- function(# folder storing the trace files
 									 event_function = event_function,
 									 user_files = user_files,
 									 fba_fname = fba_fname,
-									 FVA = FVA)
+									 FVA = FVA,
+									 debug = debug)
 		folder_trace = paste0(basename(tools::file_path_sans_ext(solver_fname)), "_analysis")
 	}
 
