@@ -151,7 +151,8 @@ sensitivity.prcc<-function(config,
     print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
     #tval <- do.call("cbind",tval)
-    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
+    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time",all = T), tval)
+
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
     # tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
@@ -162,7 +163,8 @@ sensitivity.prcc<-function(config,
                       FUN = function(X, config, data){
                       	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
                       					error = function(e){
-                      						return(list(prcc=rep(NA, length(pnames.unique)), p.values=rep(NA, length(pnames.unique))))
+                      						return(list(prcc=rep(NA, length(pnames.unique)),
+                      												p.values=rep(NA, length(pnames.unique))))
                       					})
                       },
                       config = parms,
