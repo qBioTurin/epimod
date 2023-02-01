@@ -43,6 +43,8 @@ sensitivity.prcc<-function(config,
     	}
     	return(ret)
     }
+    # Load distance definition
+    source(functions_fname)
     # Extracts the target value from the simulations' trace
     targetExtr <- function(id, functions_fname, target_value, folder_trace, out_fname_analysis){
         # Read the output and compute the distance from reference data
@@ -51,8 +53,7 @@ sensitivity.prcc<-function(config,
     								 out_fname_analysis,"-",
     								 id,".trace") )
         trace <- read.csv(file = paste0(folder_trace,out_fname_analysis,"-", id,".trace"), sep = "", header = TRUE)
-        # Load distance definition
-        source(functions_fname)
+
         # Read target fields and return a single column data serie
         print("[sensitivity.prcc.target] computing target ...")
         tgt <- do.call(target_value, list(trace))
@@ -83,7 +84,10 @@ sensitivity.prcc<-function(config,
         return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
     n_var <- length(config)
-    n_config <- length(config[[1]])
+    traces <- list.files(path = folder_trace,pattern = ".trace$")
+    n_config <- length(traces)
+    traces.id = as.numeric(gsub(pattern = paste0("(",out_fname_analysis,"-)|(.trace)"),replacement = "",x = traces)
+)
     print(paste0("[sensitivity.prcc] Computing PRCC using ",
     						 n_var, " variables and ",
     						 n_config," model realizations.") )
@@ -141,7 +145,7 @@ sensitivity.prcc<-function(config,
     folder_trace = paste0("/home/docker/data/",basename(folder_trace),"/" )
     folder_sensitivity = paste0("/home/docker/data/",basename(out_fname) )
 
-    tval <- lapply( c(1:n_config),
+    tval <- lapply( traces.id,
     								targetExtr,
     								functions_fname = functions_fname,
     								target_value = target_value,
