@@ -84,10 +84,13 @@ sensitivity.prcc<-function(config,
         return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
     n_var <- length(config)
-    traces <- list.files(path = folder_trace,pattern = ".trace$")
+    traces <- list.files(path = folder_trace,
+    										 pattern = ".trace$")
+    print(traces[1])
+    print(folder_trace)
     n_config <- length(traces)
-    traces.id = as.numeric(gsub(pattern = paste0("(",out_fname_analysis,"-)|(.trace)"),replacement = "",x = traces)
-)
+    traces.id = as.numeric(gsub(pattern = paste0("(",out_fname_analysis,"-)|(.trace)"),
+    														replacement = "",x = traces))
     print(paste0("[sensitivity.prcc] Computing PRCC using ",
     						 n_var, " variables and ",
     						 n_config," model realizations.") )
