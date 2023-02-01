@@ -52,7 +52,8 @@ sensitivity.prcc<-function(config,
     								 folder_trace,
     								 out_fname_analysis,"-",
     								 id,".trace") )
-        trace <- read.csv(file = paste0(folder_trace,out_fname_analysis,"-", id,".trace"), sep = "", header = TRUE)
+        trace <- read.csv(file = paste0(folder_trace,out_fname_analysis,"-", id,".trace"),
+        									sep = "", header = TRUE)
 
         # Read target fields and return a single column data serie
         print("[sensitivity.prcc.target] computing target ...")
@@ -83,11 +84,13 @@ sensitivity.prcc<-function(config,
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
+
+    folder_trace = paste0("/home/docker/data/",basename(folder_trace),"/" )
+    folder_sensitivity = paste0("/home/docker/data/",basename(out_fname) )
+
     n_var <- length(config)
     traces <- list.files(path = folder_trace,
     										 pattern = ".trace$")
-    print(traces[1])
-    print(folder_trace)
     n_config <- length(traces)
     traces.id = as.numeric(gsub(pattern = paste0("(",out_fname_analysis,"-)|(.trace)"),
     														replacement = "",x = traces))
@@ -145,8 +148,6 @@ sensitivity.prcc<-function(config,
     # 														 target_value = target_value,
     # 														 out_fname = out_fname,
     # 														 out_dir = out_dir)
-    folder_trace = paste0("/home/docker/data/",basename(folder_trace),"/" )
-    folder_sensitivity = paste0("/home/docker/data/",basename(out_fname) )
 
     tval <- lapply( traces.id,
     								targetExtr,
