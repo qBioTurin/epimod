@@ -159,7 +159,7 @@ sensitivity.prcc<-function(config,
     print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
     #tval <- do.call("cbind",tval)
-    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time",all = T), tval)
+    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
 
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
