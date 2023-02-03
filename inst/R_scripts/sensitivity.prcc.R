@@ -72,15 +72,17 @@ sensitivity.prcc<-function(config,
     																					 replacement = paste0("-", time, "-"),
     																					 x = config.names[config.table > 1])
     		config <- config[,which(names(config) %in% config.names)]
-    		dat<-cbind(config,t(data[which(data$Time==time),][-1]))
-        dat<- lapply(1:length(dat[1,]),
-        			 function(x){
-        			 	unlist(dat[,x])
-        			 })
-        dat<-do.call("cbind",dat)
-        dat <- as.data.frame(dat)
+    		dt = t(data[which(data$Time==time),][-1])
+    		dat = data.frame(config =rownames(dt), Output = c(dt) )
+    		dat<-merge(config,dat) %>% select(-config)
+        # dat<- lapply(1:length(dat[1,]),
+        # 			 function(x){
+        # 			 	unlist(dat[,x])
+        # 			 })
+        # dat<-do.call("cbind",dat)
+        # dat <- as.data.frame(dat)
         # names(dat) <- c(names(config)[!is.na(names(config))],"Output")
-        names(dat) <- c(config.names,"Output")
+        # names(dat) <- c(config.names,"Output")
         prcc<-epiR::epi.prcc(dat)
         return(list( prcc= prcc$est, p.value=prcc$p.value ) )
     }
@@ -135,6 +137,7 @@ sensitivity.prcc<-function(config,
     						 length(pnames.unique), " variables and ",
     						 n_config," model realizations.") )
     names(parms)<-pnames
+    parms$config = paste0("Target",1:n_config)
     print("[sensitivity.prcc] Extracting target variable...")
 
     # source(target_value_fname)
@@ -160,7 +163,6 @@ sensitivity.prcc<-function(config,
     # Make it a data.frame
     #tval <- do.call("cbind",tval)
     tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
-
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
     # tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
@@ -178,11 +180,13 @@ sensitivity.prcc<-function(config,
                       config = parms,
                       data = tvalMerged)
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$prcc),nrow = 1 ) )
+    PRCC<-lapply(1:length(tvalMerged$Time),
+    						 function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$prcc),nrow = 1 ) )
     # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
     PRCC <- do.call("rbind", PRCC)
     PRCC <- as.data.frame(PRCC)
-    P.values<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$p.value),nrow = 1 ) )
+    P.values<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x],
+    																																PRCC.info[[x]]$p.value),nrow = 1 ) )
     P.values <- do.call("rbind", P.values)
     # p.values <- as.data.frame(t(as.data.frame(P.values)))
     P.values <- as.data.frame(P.values)
