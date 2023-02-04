@@ -164,12 +164,13 @@ common_test <- function(folder_trace,
 		}
 	}
 
-	if("sensitivity" %in% caller_function ){
-		if(!missing(target_value) && !is.null(target_value)){
-			if(length(grep(target_value, readLines(functions_fname), value = FALSE)) == 0)
-				return(paste("File", functions_fname, "must contain a function named", target_value))
-		}
-	}
+	# if("sensitivity" %in% caller_function ){
+	# 	if(!missing(target_value) && !is.null(target_value)){
+	# 		# To add the test if place names are used
+	# 		if(length(grep(target_value, readLines(functions_fname), value = FALSE)) == 0)
+	# 			return(paste("File", functions_fname, "must contain a function named", target_value))
+	# 	}
+	# }
 
 	if( TRUE %in% (caller_function %in% c("analysis", "calibration")) )
 	{
