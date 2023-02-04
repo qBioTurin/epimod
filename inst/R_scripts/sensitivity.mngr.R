@@ -119,7 +119,7 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 													 parallel_processors = params$parallel_processors)
 	# Plot PRCC
 	# Get the parameter names and the total number of parameters
-	prcc_frame = prcc$PRCC %>% gather(-Time,key = "Param", value = "PRCC") %>% na.omit()
+	# prcc_frame = prcc$PRCC %>% gather(-Time,key = "Param", value = "PRCC") %>% na.omit()
 	# names_param= names(prcc$PRCC)
 	# n_params = length(names_param)
 	# Setup time
@@ -131,8 +131,8 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 	#                       Time = matrix(time, ncol = 1)))
 	#     })
 	# prcc_frame <- do.call("rbind",prcc_frame)
-	plt <- ggplot(prcc_frame)+
-		geom_line(aes(x=Time,y=PRCC,group=Param,col=Param)) +
+	plt <- ggplot(prcc)+
+		geom_line(aes(x=Time,y=prcc,group=Param,col=Param)) +
 		ylim(-1,1) +
 		xlab("Time")+
 		ylab("PRCC")+
@@ -140,8 +140,10 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 		geom_rect(
 			mapping=aes(xmin=-Inf, xmax=Inf, ymin=-.2, ymax=.2),
 			alpha=0.001961,
-			fill="yellow")
-	ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),dpi = 760)
+			fill="yellow") +
+		facet_wrap(~Type,ncol = 1)
+	ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),
+				 width = 8,height = 4*length(unique(prcc$Type)))
 	# Get final time
 	save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
 }
