@@ -56,15 +56,28 @@ sensitivity.prcc<-function(config,
         									sep = "", header = TRUE)
 
         # Read target fields and return a single column data serie
-        print("[sensitivity.prcc.target] computing target ...")
-        tgt <- do.call(target_value, list(trace))
-        tgt <- data.frame(Time = trace$Time, Target = tgt)
-        colnames(tgt) = c("Time",paste0("Target",id))
-        print("[sensitivity.prcc.target] Done!")
-        return(tgt)
+        print("[sensitivity.prcc.target] computing targets ...")
+        tgt = lapply(target_value, function(t){
+        	test =   tryCatch(is.function(eval(parse(text = t))),
+        										error = function(e){
+        											FALSE
+        										})
+        	if(test)
+        		tgt <- do.call(t, list(trace))
+        	else if(t %in% colnames(trace))
+        		tgt <- trace[,t]
+        	else
+        		stop(paste0("Target ", t, " not found!!!!!") )
+        	tgt <- data.frame(Time = trace$Time, Target = tgt, Type = t)
+        	colnames(tgt) = c("Time",paste0("Target",id),"Type")
+        	return(tgt)
+        })
+
+				print("[sensitivity.prcc.target] Done!")
+        return( do.call("rbind",tgt) )
     }
     compute_prcc <- function(time,config,data){
-    	print(names(config))
+    	# print(names(config))
         # Dataframe containing the configuration generated and, as last column, the corresponding model output
     		config.table <- table(gsub(x=names(config), pattern="(-[0-9]+-){1}", replacement = "-"))
     		config.names <- names(config.table)
@@ -84,7 +97,11 @@ sensitivity.prcc<-function(config,
         # names(dat) <- c(names(config)[!is.na(names(config))],"Output")
         # names(dat) <- c(config.names,"Output")
         prcc<-epiR::epi.prcc(dat)
-        return(list( prcc= prcc$est, p.value=prcc$p.value ) )
+        p.value = data.frame(p.value = prcc$p.value, Param = head(colnames(dat),-1))
+        prcc =  data.frame(prcc = prcc$est, Param = head(colnames(dat),-1))
+        prcc = merge(prcc,p.value)
+        prcc$Time = time
+        return(prcc)
     }
 
     folder_trace = paste0("/home/docker/data/",basename(folder_trace),"/" )
@@ -162,34 +179,34 @@ sensitivity.prcc<-function(config,
     print("[sensitivity.prcc] Done extracting target variable!")
     # Make it a data.frame
     #tval <- do.call("cbind",tval)
-    tvalMerged = Reduce(function(x, y) merge(x, y, by="Time"), tval)
+    tvalMerged = Reduce(function(x, y) merge(x, y, by=c("Time","Type")), tval)
     # Add a column for the time
     # Check next line, it could be wrong: different number of rows
     # tval <- as.data.frame(cbind(seq(from = i_time, to = f_time, by = s_time), tval))
     # tval <- tval[-1,]
     # names(tval)[1] <- "Time"
     print("[sensitivity.prcc] Computing PRCC...")
-    PRCC.info<-lapply(X = tvalMerged$Time,
-                      FUN = function(X, config, data){
-                      	tryCatch(expr = compute_prcc(time = X,config = config, data = data),
-                      					error = function(e){
-                      						return(list(prcc=rep(NA, length(pnames.unique)),
-                      												p.values=rep(NA, length(pnames.unique))))
-                      					})
-                      },
-                      config = parms,
-                      data = tvalMerged)
+    PRCC.info = lapply(target_value,function(tv,parms,tvalMerged){
+    	tvalMerged_sub = tvalMerged %>% filter(Type == tv) %>% select(-Type)
+
+    	PRCC.info<-lapply(X = tvalMerged_sub$Time,
+    										FUN = function(X, config, data){
+    											tryCatch(expr = compute_prcc(time = X,config = config, data = data),
+    															 error = function(e){
+    															 	return(list(prcc=rep(NA, length(pnames.unique)),
+    															 							p.values=rep(NA, length(pnames.unique))))
+    															 })
+    										},
+    										config = parms,
+    										data = tvalMerged_sub)
+    	prcc = do.call("rbind",PRCC.info)
+    	prcc$Type = tv
+    	return(prcc)
+    },
+    parms = parms,
+    tvalMerged = tvalMerged)
+
     print("[sensitivity.prcc] Done computing PRCC!")
-    PRCC<-lapply(1:length(tvalMerged$Time),
-    						 function(x) matrix(c(tvalMerged$Time[x], PRCC.info[[x]]$prcc),nrow = 1 ) )
-    # PRCC <- as.data.frame(t(as.data.frame(PRCC)))
-    PRCC <- do.call("rbind", PRCC)
-    PRCC <- as.data.frame(PRCC)
-    P.values<-lapply(1:length(tvalMerged$Time),function(x) matrix(c(tvalMerged$Time[x],
-    																																PRCC.info[[x]]$p.value),nrow = 1 ) )
-    P.values <- do.call("rbind", P.values)
-    # p.values <- as.data.frame(t(as.data.frame(P.values)))
-    P.values <- as.data.frame(P.values)
-    names(P.values) <- colnames(PRCC) <- c("Time", pnames.unique )
-    return(list(PRCC=PRCC,P.values=P.values))
+    PRCC<-do.call("rbind",PRCC.info)
+    return(PRCC)
 }
