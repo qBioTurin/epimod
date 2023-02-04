@@ -198,7 +198,7 @@ sensitivity.prcc<-function(config,
 																 		data.frame(Param = pnames.unique,
 																 							 prcc = rep(NA, length(pnames.unique)),
 																 							 p.value=rep(NA, length(pnames.unique)),
-																 							 Time = rep(time, length(pnames.unique))
+																 							 Time = rep(X, length(pnames.unique))
 																 		)
 																 	)
 																 })
