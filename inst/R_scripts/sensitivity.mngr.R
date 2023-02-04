@@ -143,7 +143,7 @@ if(!is.null(params$target_value)  && !is.null(param_fname) )
 			fill="yellow") +
 		facet_wrap(~Type,ncol = 1)
 	ggsave(plot = plt,filename = paste0(params$out_dir,"prcc_",params$out_fname,".pdf"),
-				 width = 8,height = 4*length(unique(prcc$Type)))
+				 width = 8,height = 4*length(unique(prcc$Type)),limitsize = FALSE)
 	# Get final time
 	save(prcc, plt, file = paste0(params$out_dir,"prcc_",params$out_fname,".RData"))
 }
