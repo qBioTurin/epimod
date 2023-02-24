@@ -5,7 +5,7 @@ mngr.worker <- function(id,
 												i_time, f_time, s_time,	atol, rtol, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times = NULL, event_function,
-												files, config = NULL, FVA,
+												files, config = NULL, FVA=F,
 												parallel_processors)
 {
 	# set.seed(kind = "Mersenne-Twister", seed = seed+id)
