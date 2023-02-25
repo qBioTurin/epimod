@@ -196,7 +196,9 @@ experiment.run <- function(id, cmd,
 			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
 			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
 			### DEBUG ###
-			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm, " >> ", fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm, " >> ", fnm))
+			# new change
+			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
 		}
 
