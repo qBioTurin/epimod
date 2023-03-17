@@ -90,7 +90,7 @@ model.generation <-function(out_fname = NULL,
         stop()
     }
 
-    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
+    cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -M")
     if (!is.null(transitions_fname)){
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
