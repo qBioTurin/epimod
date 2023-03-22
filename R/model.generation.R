@@ -79,7 +79,9 @@ model.generation <-function(out_fname = NULL,
     setwd(out_dir)
 
     cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
+    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+    											debug = debug,
+    											changeUID=TRUE)
 
     if ( err_code != 0 )
     {
@@ -100,7 +102,10 @@ model.generation <-function(out_fname = NULL,
     	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
     }
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
+    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+    											 debug = debug,
+    											 changeUID=TRUE)
+
     if ( err_code != 0 )
     {
         log_file <- list.files(pattern = "\\.log$")[1]
@@ -110,11 +115,19 @@ model.generation <-function(out_fname = NULL,
         stop()
     } else {
         setwd(pwd)
+    		file.rename(from = paste0(basename(netname), "_unf.solver"),to = paste0(basename(netname), ".solver"))
         file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+        file.rename(from = paste0(basename(netname), "_unf.net"),to = paste0(basename(netname), ".net"))
         file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+        file.rename(from = paste0(basename(netname), "_unf.def"),to = paste0(basename(netname), ".def"))
         file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+        file.rename(from = paste0(basename(netname), "_unf.PlaceTransition"),to = paste0(basename(netname), ".PlaceTransition"))
         file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         #file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         unlink(out_dir, recursive = TRUE)
     }
 }
+
+
+
+
