@@ -81,7 +81,7 @@ model.generation <-function(out_fname = NULL,
 	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
 	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
 												debug = debug,
-												changeUID=TRUE)
+												changeUID=F)
 
 	if ( err_code != 0 )
 	{
@@ -104,7 +104,7 @@ model.generation <-function(out_fname = NULL,
 
 	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
 												 debug = debug,
-												 changeUID=TRUE)
+												 changeUID=F)
 
 	if ( err_code != 0 )
 	{
