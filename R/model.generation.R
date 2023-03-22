@@ -28,104 +28,105 @@
 #' @export
 
 model.generation <-function(out_fname = NULL,
-                            net_fname,
-                            transitions_fname = NULL,
+														net_fname,
+														transitions_fname = NULL,
 														fba_fname = NULL,
-                            volume = getwd(),
+														volume = getwd(),
 														#Flag to enable logging activity
 														debug = FALSE){
 
 
-    # This function receives all the parameters that will be tested for model_generation function
-    ret = common_test(net_fname = net_fname,
-    									functions_fname = transitions_fname,
-    									volume = volume,
-                      caller_function = "generation")
+	# This function receives all the parameters that will be tested for model_generation function
+	ret = common_test(net_fname = net_fname,
+										functions_fname = transitions_fname,
+										volume = volume,
+										caller_function = "generation")
 
-    if(ret != TRUE)
-        stop(paste("model_generation_test error:", ret, sep = "\n"))
+	if(ret != TRUE)
+		stop(paste("model_generation_test error:", ret, sep = "\n"))
 
-    chk_dir<- function(path){
-        pwd <- basename(path)
-        return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
-    }
+	chk_dir<- function(path){
+		pwd <- basename(path)
+		return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+	}
 
-    volume <- tools::file_path_as_absolute(volume)
-    # Create temp files and directories
-    out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
-    if(file.exists(out_dir))
-    {
-        unlink(out_dir, recursive = TRUE)
-    }
-    dir.create(path = out_dir, showWarnings = FALSE)
-    if(!is.null(out_fname)){
-        # Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
-        netname <- file.path(out_dir, paste0(out_fname, ".PNPRO"), fsep = .Platform$file.sep)
-        file.copy(from = net_fname, to = netname)
-        netname <- tools::file_path_sans_ext(netname)
-    } else {
-        file.copy(from = net_fname, to = out_dir)
-        netname <- tools::file_path_sans_ext(basename(net_fname))
+	volume <- tools::file_path_as_absolute(volume)
+	# Create temp files and directories
+	out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
+	if(file.exists(out_dir))
+	{
+		unlink(out_dir, recursive = TRUE)
+	}
+	dir.create(path = out_dir, showWarnings = FALSE)
+	if(!is.null(out_fname)){
+		# Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
+		netname <- file.path(out_dir, paste0(out_fname, ".PNPRO"), fsep = .Platform$file.sep)
+		file.copy(from = net_fname, to = netname)
+		netname <- tools::file_path_sans_ext(netname)
+	} else {
+		file.copy(from = net_fname, to = out_dir)
+		netname <- tools::file_path_sans_ext(basename(net_fname))
 
-    }
-    file.copy(from = transitions_fname, to = out_dir)
-    # Set command line to unfold the PN
+	}
+	file.copy(from = transitions_fname, to = out_dir)
+	# Set command line to unfold the PN
 
-    # Reading docker image names
-    containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
-    containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
+	# Reading docker image names
+	containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+	containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
 
-    pwd <- getwd()
-    setwd(out_dir)
+	pwd <- getwd()
+	setwd(out_dir)
 
-    cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
-    err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
-    											debug = debug,
-    											changeUID=TRUE)
+	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
+	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+												debug = debug,
+												changeUID=TRUE)
 
-    if ( err_code != 0 )
-    {
-        log_file <- list.files(pattern = "\\.log$")[1]
-        setwd(pwd)
-        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), pwd)
-        cat("Scratch folder:", out_dir, "\n")
-        stop()
-    }
+	if ( err_code != 0 )
+	{
+		log_file <- list.files(pattern = "\\.log$")[1]
+		setwd(pwd)
+		file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), pwd)
+		cat("Scratch folder:", out_dir, "\n")
+		stop()
+	}
 
-    cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -M")
-    if (!is.null(transitions_fname)){
-        cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
-    }
+	cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -M")
+	if (!is.null(transitions_fname)){
+		cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
+	}
 
-    if(!is.null(fba_fname)){
-    	fba_fname <- sapply(fba_fname,basename)
-    	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
-    }
+	if(!is.null(fba_fname)){
+		fba_fname <- sapply(fba_fname,basename)
+		cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
+	}
 
-    err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
-    											 debug = debug,
-    											 changeUID=TRUE)
+	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+												 debug = debug,
+												 changeUID=TRUE)
 
-    if ( err_code != 0 )
-    {
-        log_file <- list.files(pattern = "\\.log$")[1]
-        setwd(pwd)
-        file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), chk_dir(dirname(tools::file_path_as_absolute(net_fname))))
-        cat("Check ", out_dir, " for logs\n")
-        stop()
-    } else {
-        setwd(pwd)
-    		file.rename(from = paste0(basename(netname), "_unf.solver"),to = paste0(basename(netname), ".solver"))
-        file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-        file.rename(from = paste0(basename(netname), "_unf.net"),to = paste0(basename(netname), ".net"))
-        file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-        file.rename(from = paste0(basename(netname), "_unf.def"),to = paste0(basename(netname), ".def"))
-        file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-        file.rename(from = paste0(basename(netname), "_unf.PlaceTransition"),to = paste0(basename(netname), ".PlaceTransition"))
-        file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-        #file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-        unlink(out_dir, recursive = TRUE)
-    }
+	if ( err_code != 0 )
+	{
+		log_file <- list.files(pattern = "\\.log$")[1]
+		setwd(pwd)
+		file.copy(file.path(out_dir, log_file, fsep = .Platform$file.sep), chk_dir(dirname(tools::file_path_as_absolute(net_fname))))
+		cat("Check ", out_dir, " for logs\n")
+		stop()
+	} else {
+		file.rename(from = paste0(basename(netname), "_unf.solver"),to = paste0(basename(netname), ".solver"))
+		file.rename(from = paste0(basename(netname), "_unf.net"),to = paste0(basename(netname), ".net"))
+		file.rename(from = paste0(basename(netname), "_unf.PlaceTransition"),to = paste0(basename(netname), ".PlaceTransition"))
+		file.rename(from = paste0(basename(netname), "_unf.def"),to = paste0(basename(netname), ".def"))
+
+		setwd(pwd)
+		file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		unlink(out_dir, recursive = TRUE)
+	}
 }
 
 
