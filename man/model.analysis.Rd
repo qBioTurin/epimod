@@ -29,7 +29,8 @@ model.analysis(
   out_fname = NULL,
   user_files = NULL,
   debug = FALSE,
-  fba_fname = NULL
+  fba_fname = NULL,
+  FVA = FALSE
 )
 }
 \arguments{
@@ -94,7 +95,9 @@ In particular, *time* takes values from *event_times*.}
 
 \item{debug}{If TRUE enables logging activity.}
 
-\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+\item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).}
+
+\item{FVA}{Flag to enable the flux variability analysis
 It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)}
 }
 \description{

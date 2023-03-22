@@ -13,6 +13,7 @@
 #' @param event_function, specifies the rule to update the marking
 #' @param timeout, string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax
 #' @param out_fname, output filename prefix
+#' @param FVA Flag to enable the flux variability analysis
 #' @return the name of the trace file
 #' @author Paolo Castagno, Simone Pernice
 #'
@@ -24,13 +25,13 @@
 #'
 #' }
 
-library(parallel)
 experiment.run <- function(id, cmd,
 													 i_time, f_time, s_time,
 													 atol,rtol,
 													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
-													 out_fname)
+													 out_fname,
+													 FVA = F)
 {
 	# Run's output file name
 	fnm <- paste0(out_fname, "-", id, ".trace")
@@ -69,22 +70,22 @@ experiment.run <- function(id, cmd,
 			# Fix command template:
 			# 1) Add init file, if not present
 			if(length(grep(x = cmd,
-						   pattern = "<INIT>")) != 1)
+										 pattern = "<INIT>")) != 1)
 			{
 				cmd = paste0(cmd, " -init <INIT>")
 			}
 			# Disable commandline parameters
 			print(system("echo [experiment.run] files in $PWD; ls"));
 			if(length(grep(x = cmd,
-						   pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
+										 pattern = "cmdln_params")) == 1 && file.exists("cmdln_exp"))
 			{
 				cmd <- gsub(x = cmd,
-								pattern = "cmdln_params",
-								replacement = "cmdln_exp")
+										pattern = "cmdln_params",
+										replacement = "cmdln_exp")
 			} else {
 				cmd <- gsub(x = cmd,
-							pattern = "-parm cmdln_params",
-							replacement = "")
+										pattern = "-parm cmdln_params",
+										replacement = "")
 			}
 			# Generate the init filename for the current iteration
 			init <- paste0("init_iter-", i)
@@ -94,21 +95,26 @@ experiment.run <- function(id, cmd,
 
 			# Read the last line of the trace file, which is the marking at the last time point
 			last_m <- read.table(text = system(paste0("sed -n -e '1p;$p' ",fnm),
-											   intern = TRUE),
-								 header = TRUE)
+																				 intern = TRUE),
+													 header = TRUE)
 			# The first column of the file is the time and we remove it
 			last_m <- last_m[,-1]
 			# Generate the new marking by invoking the provided function
 			new_m <- do.call(event_function,
-							 list(marking = last_m,
-							 	 time = i_time))
+											 list(marking = last_m,
+											 		 time = i_time))
 			#################
 			new_m[new_m < 0] <- 0
-			write.table(x = as.matrix(new_m,nrow = 1),
-						file = init ,
-						col.names = FALSE,
-						row.names = FALSE,
-						sep = " ")
+
+			write.table(x = format(as.matrix(new_m,nrow = 1),digits = 16,scientific = F),
+									file = init,
+									col.names = FALSE,
+									row.names = FALSE,
+									sep = " ",
+									quote = F)
+
+			#system(paste0("tail -n 1 ",fnm," | cut -f 2- -d ' ' >> ",init) )
+
 		}
 		# Set the final time to either the next event's time or to the simulation's end time
 		if (i <= iterations)
@@ -144,6 +150,9 @@ experiment.run <- function(id, cmd,
 			#system(paste("cat", init))
 			### DEBUG ###
 		}
+		# Enabled the FVA
+		if(FVA) cmd.iter = paste0(cmd.iter, " -var")
+		#
 		### DEBUG ###
 		print(paste0("[experiment.run] launching\n\t", cmd.iter))
 		### DEBUG ###
@@ -173,23 +182,73 @@ experiment.run <- function(id, cmd,
 			### DEBUG ###
 			# Remove last line from the output file
 			### DEBUG ###
-			print(paste0("head -n-1 ", fnm))
-			system(paste0("head -n-1 ", fnm))
+			#print(paste0("head -n-1 ", fnm))
+			#system(paste0("head -n-1 ", fnm))
 			### DEBUG ###
 			system(paste0("head -n-1 ", fnm, " > ", paste0(fnm,"_tmp"),"; mv ", paste0(fnm,"_tmp")," ", fnm))
+
 			# Remove first line from the current output file and append to the output file
 			### DEBUG ###
-			print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
-			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
+			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm))
 			### DEBUG ###
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
+			#print(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm))
+			### DEBUG ###
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm, " >> ", fnm))
+			# new change
 			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
 			file.remove(curr_fnm)
 		}
+
 		if (init != "init")
 		{
 			file.remove(init)
 		}
 
+		##  MERGING FBA FILES
+		fbafiles = list.files(
+			pattern = paste0(out_fname, "-", id, "-", i, "(-[0-9]+)+(.flux){1}")
+		)
+		if(length(fbafiles)>0){
+			fbafiles = unique(gsub(fbafiles,
+														 pattern = paste0("(",out_fname, "-", id, "-", i,"-)|(.flux)"),
+														 replacement = ""))
+			for(f in fbafiles){
+				fbanm <- paste0(out_fname, "-", id,"-", f, ".flux")
+				curr_fbanm <- paste0(out_fname, "-", id, "-", i, "-", f, ".flux")
+				####### PATCH ########
+				system(paste0("sed -i 's/  / /g' ", curr_fbanm))
+				system(paste0("sed -i 's/ $//g' ", curr_fbanm))
+				##### END PATCH ######
+				## Append the current .flux file to the simulation's one
+				if (!file.exists(fbanm))
+				{
+					file.rename(from = curr_fbanm, to = fbanm)
+				}
+				else{
+					# Remove last line from the previous and already merged output file
+					### DEBUG ###
+					#print(paste0("head -n-1 ", fbanm))
+					#system(paste0("head -n-1 ", fbanm))
+					### DEBUG ###
+					system(paste0("head -n-1 ", fbanm, " > ", paste0(fbanm,"_tmp"),"; mv ", paste0(fbanm,"_tmp")," ", fbanm))
+
+					# Remove first line from the current output file and append to the output file
+					### DEBUG ###
+					# print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
+					# system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm))
+					# ### DEBUG ###
+					# system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm, " >> ", fbanm))
+					#print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
+					#system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
+					### DEBUG ###
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm, " >> ", fbanm))
+					file.remove(curr_fbanm)
+				}
+			}
+		}
 	}
 	return(fnm)
 }

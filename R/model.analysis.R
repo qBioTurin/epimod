@@ -44,6 +44,7 @@
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
+#' @param FVA Flag to enable the flux variability analysis
 #' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
 #' @details
@@ -70,7 +71,9 @@ model.analysis <- function(
     user_files = NULL,
     #Flag to enable logging activity
     debug = FALSE,
-    fba_fname = NULL
+    fba_fname = NULL,
+    # Flag to enable the flux variability analysis
+    FVA  = FALSE
 ){
 
     # This function receives all the parameters that will be tested for model_analysis function
@@ -138,10 +141,9 @@ model.analysis <- function(
     	}
     }
     if(!is.null(fba_fname)){
-    	fba_fname <- tools::file_path_as_absolute(fba_fname)
+    	fba_fname <- sapply(fba_fname,tools::file_path_as_absolute)
     	files[["fba_fname"]] <- fba_fname
     }
-
 
     # Global parameters used to manage the environment within the docker container
     parms_fname <- file.path(paste0("params_",out_fname), fsep = .Platform$file.sep)
@@ -164,7 +166,8 @@ model.analysis <- function(
                   ini_v = ini_v,
                   ini_vector_mod = ini_vector_mod,
     							extend = extend,event_times = event_times,
-    							event_function = event_function)
+    							event_function = event_function,
+    							FVA = FVA)
     # Create the folder to store results
     res_dir <- paste0(chk_dir(volume), results_dir_name)
     if(!extend & file.exists(res_dir)){

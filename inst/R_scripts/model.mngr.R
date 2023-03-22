@@ -6,6 +6,7 @@ chk_dir <- function(path){
     pwd <- basename(path)
     return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
+
 # Read commandline arguments
 args <- commandArgs(TRUE)
 cat(args)
@@ -48,7 +49,7 @@ if(is.null(params$files$parameters_fname)
    && is.null(params$ini_v))
 {
     params$config = NULL
-} else {
+}else{
     # Generate configuration
     params$config <- experiment.configurations(n_config = params$n_config,
                                               parm_fname = params$files$functions_fname,
@@ -138,11 +139,13 @@ parLapply( cl = cl,
 					 							event_function = params$event_function,
 					 							files = params$files,
 					 							config = params$config,
+					 							FVA = params$FVA,
 					 							parallel_processors = parallel_processors)
 					 },
 					 params = params,
 					 seed = init_seed,
 					 parallel_processors = run_processors)
+
 # Print all the output to the stdout
 # system(paste0("cat ", params$out_fname,".log >&2"))
 # unlink(x = paste0(params$out_fname,".log"), force = TRUE)

@@ -90,13 +90,15 @@ model.generation <-function(out_fname = NULL,
         stop()
     }
 
-    cmd = paste0("PN2ODE.sh /home/", basename(netname), " -M")
+    cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -M")
     if (!is.null(transitions_fname)){
         cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
     }
 
-    if(!is.null(fba_fname))
+    if(!is.null(fba_fname)){
+    	fba_fname <- sapply(fba_fname,basename)
     	cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
+    }
 
     err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd), debug = debug, changeUID=FALSE)
     if ( err_code != 0 )
@@ -112,6 +114,7 @@ model.generation <-function(out_fname = NULL,
         file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+        #file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
         unlink(out_dir, recursive = TRUE)
     }
 }
