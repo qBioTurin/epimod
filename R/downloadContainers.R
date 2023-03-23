@@ -42,6 +42,8 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
                                  replacement = tag,
                                  x = containers$names)
     }
+    userid=system("id -u", intern = TRUE)
+    username=system("id -un", intern = TRUE)
     for (i in dim(containers)[1]:1)
     {
         status <- system(paste("docker pull ",containers[i,1],
@@ -50,6 +52,12 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
         {
             containers <- containers[-i]
         }
+	command=c(paste("FROM", containers[i,1]),
+        paste("RUN /usr/sbin/adduser -u", userid, username))
+    	writeLines(command,"./dockerfile")
+    	status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",userid," .",
+                           sep = ""))
+    	containers[i,1]=paste(containers[i,1], "_",userid"",sep = "")
     }
     write.table(containers,
                 paste(path.package(package = "epimod"),"Containers/containersNames.txt",
