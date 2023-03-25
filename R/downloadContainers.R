@@ -62,6 +62,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
       	    if (status){
         	print("Error in building container", paste(containers[i,1], "_",userid,sep = ""))
       	    }
+	}
     }	
     write.table(containers,
                 paste(path.package(package = "epimod"),"Containers/containersNames.txt",
