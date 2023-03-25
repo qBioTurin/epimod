@@ -67,4 +67,5 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
     write.table(containers,
                 paste(path.package(package = "epimod"),"Containers/containersNames.txt",
                       sep = "/"))
+    system("rm ./dockerfile")	
 }
