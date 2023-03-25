@@ -81,9 +81,9 @@ model.generation <-function(out_fname = NULL,
 	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
 	
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
-	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
 												debug = debug,
-												changeUID=F)
+												changeUID=T)
 
 	if ( err_code != 0 )
 	{
@@ -104,9 +104,9 @@ model.generation <-function(out_fname = NULL,
 		cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
 	}
 
-	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", containers.names["generation", 1], " ", cmd),
+	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
 												 debug = debug,
-												 changeUID=F)
+												 changeUID=T)
 
 	if ( err_code != 0 )
 	{
