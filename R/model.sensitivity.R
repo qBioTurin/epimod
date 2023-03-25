@@ -314,19 +314,19 @@ model.sensitivity <- function(# folder storing the trace files
 	containers.file = paste(path.package(package = "epimod"),
 													"Containers/containersNames.txt", sep = "/")
 	containers.names = read.table(containers.file, header = T, stringsAsFactors = F)
-
+	id_container=paste(containers.names["sensitivity", 1],system("id -un", intern = TRUE),sep="_")
 	#  it runs the PRCC or ranking
 	if(!is.null(target_value) | (!is.null(reference_data)))
 	{
 		print("[Running] Model sensitivity")
-		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["sensitivity", 1], " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", id_container, " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R ", p_fname), debug = debug)
 	}
 
 	# Finally it runs the FVA if it is necessary
 	if(FVA)
 	{
 		print("[Running] Flux Variability Analysis")
-		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", containers.names["generation", 1], " Rscript /home/fva.mgr.R ", p_fname), debug = debug)
+		docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(parms$out_dir), " -d ", id_container, " Rscript /home/fva.mgr.R ", p_fname), debug = debug)
 
 	}
 }
