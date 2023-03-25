@@ -57,7 +57,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
       	    command=c(paste("FROM", containers[i,1]),
       	    paste("RUN /usr/sbin/adduser -u", userid, username))
             writeLines(command,"./dockerfile")
-            status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",userid," .",
+            status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
                            sep = ""))
       	    if (status){
         	print("Error in building container", paste(containers[i,1], "_",userid,sep = ""))
