@@ -55,7 +55,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
 	else
     	{
       	    command=NULL
-	    if (grep("generation",containers[i,1]))
+	    if (grepl("generation",containers[i,1],fixed=TRUE)==1)
 		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username))
 	    else
       	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username))
