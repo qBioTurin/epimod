@@ -55,7 +55,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
 	else
     	{
       	    command=c(paste("FROM", containers[i,1]),
-      	    paste("RUN /usr/sbin/adduser -u", userid, username))
+      	    paste("RUN /usr/bin/sudo /usr/sbin/adduser -u", userid, username))
             writeLines(command,"./dockerfile")
             status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
                            sep = ""))
