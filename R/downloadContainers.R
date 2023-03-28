@@ -54,11 +54,11 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
         }
 	else
     	{
-      	    command=c(paste("FROM", containers[i,1]),
+      	    command=NULL
 	    if (grep("generation",containers[i,1]))
-		paste("RUN sudo /usr/sbin/adduser -u", userid, username))
+		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username))
 	    else
-      	    	paste("RUN /usr/sbin/adduser -u", userid, username))
+      	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username))
             writeLines(command,"./dockerfile")
             status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
                            sep = ""))
