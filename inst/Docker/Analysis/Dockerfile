@@ -21,10 +21,6 @@ RUN R -e "devtools::install_github('qBioTurin/epimod', ref='variabilityFBA',depe
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
 
-RUN /usr/sbin/adduser docker sudo
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-USER docker
-WORKDIR /home/docker
 
 # Define default command.
 CMD ["bash"]
