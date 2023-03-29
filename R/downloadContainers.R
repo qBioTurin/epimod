@@ -56,7 +56,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
     	{
       	    command=NULL
 	    if (grepl("generation",containers[i,1],fixed=TRUE)==1)
-		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username), , "WORKDIR /home")
+		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username), "WORKDIR /home")
 	    else
       	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
             writeLines(command,"./dockerfile")
