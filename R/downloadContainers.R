@@ -58,7 +58,7 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
 	    if (grepl("generation",containers[i,1],fixed=TRUE)==1)
 		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username))
 	    else
-      	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username))
+      	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
             writeLines(command,"./dockerfile")
             status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
                            sep = ""))
@@ -66,9 +66,9 @@ downloadContainers <- function(containers.file=NULL, tag = NULL){
         	print("Error in building container", paste(containers[i,1], "_",userid,sep = ""))
       	    }
 	}
-    }	
+    }
     write.table(containers,
                 paste(path.package(package = "epimod"),"Containers/containersNames.txt",
                       sep = "/"))
-    system("rm ./dockerfile")	
+    system("rm ./dockerfile")
 }

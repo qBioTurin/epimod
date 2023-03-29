@@ -45,10 +45,10 @@ RUN git clone https://github.com/ogdf/ogdf ;\
 RUN wget https://datacloud.di.unito.it/index.php/s/JFsJwyHfJ9FNWZJ/download/lp_solve_5.5.2.11_source.tar.gz ;\
     wget https://raw.githubusercontent.com/greatspn/SOURCES/master/contrib/build_lpsolve.sh ;\
     tar xzf lp_solve_5.5.2.11_source.tar.gz ;\
-    /bin/bash ./build_lpsolve.sh 
+    /bin/bash ./build_lpsolve.sh
 
 # Install GreatSPN
-RUN mkdir ~/GreatSPN ;\
+RUN mkdir ~/GreatSPN;\
     cd ~/GreatSPN ;\
     git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
     cd ~/GreatSPN/SOURCES ;\
