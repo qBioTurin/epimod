@@ -10,6 +10,7 @@
 #'
 #' }
 #' @export
+
 downloadContainers <- function(containers.file=NULL, tag = "latest"){
 	if (is.null(containers.file))
 	{
@@ -22,6 +23,7 @@ downloadContainers <- function(containers.file=NULL, tag = "latest"){
 														 header = TRUE,
 														 row.names = 1)
 	}
+
 	if(is.null(tag))
 	{
 
