@@ -10,65 +10,65 @@
 #'
 #' }
 #' @export
-downloadContainers <- function(containers.file=NULL, tag = NULL){
-    if (is.null(containers.file))
-    {
-        containers.file = paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
-        containers <- read.table(containers.file,
-                                 header = TRUE,
-                                 row.names = 1)
-    } else {
-        containers <- read.table(containers.file,
-                                 header = TRUE,
-                                 row.names = 1)
-    }
-    if(is.null(tag))
-    {
-
-    		tag <- packageVersion("epimod")
-	    	curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
-	    									 replacement = "",
-	    									 x = containers$names)
-	    	curr.tag <- unique(curr.tag)
-	    	containers$names <- gsub(pattern = curr.tag,
-	    													 replacement = tag,
-	    													 x = containers$names)
-    } else {
-        curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
-                         replacement = "",
-                         x = containers$names)
-        curr.tag <- unique(curr.tag)
-        containers$names <- gsub(pattern = curr.tag,
-                                 replacement = tag,
-                                 x = containers$names)
-    }
-    userid=system("id -u", intern = TRUE)
-    username=system("id -un", intern = TRUE)
-    for (i in dim(containers)[1]:1)
-    {
-        status <- system(paste("docker pull ",containers[i,1],
-                               sep = ""))
-        if (status)
-        {
-            containers <- containers[-i]
-        }
-	else
-    	{
-      	    command=NULL
-	    if (grepl("generation",containers[i,1],fixed=TRUE)==1)
-		command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username))
-	    else
-      	    	command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
-            writeLines(command,"./dockerfile")
-            status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
-                           sep = ""))
-      	    if (status){
-        	print("Error in building container", paste(containers[i,1], "_",userid,sep = ""))
-      	    }
+downloadContainers <- function(containers.file=NULL, tag = "latest"){
+	if (is.null(containers.file))
+	{
+		containers.file = paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
+		containers <- read.table(containers.file,
+														 header = TRUE,
+														 row.names = 1)
+	} else {
+		containers <- read.table(containers.file,
+														 header = TRUE,
+														 row.names = 1)
 	}
-    }
-    write.table(containers,
-                paste(path.package(package = "epimod"),"Containers/containersNames.txt",
-                      sep = "/"))
-    system("rm ./dockerfile")
+	if(is.null(tag))
+	{
+
+		tag <- packageVersion("epimod")
+		curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
+										 replacement = "",
+										 x = containers$names)
+		curr.tag <- unique(curr.tag)
+		containers$names <- gsub(pattern = curr.tag,
+														 replacement = tag,
+														 x = containers$names)
+	} else {
+		curr.tag <- gsub(pattern = "([[:alpha:]]+){1}(/epimod){1}(-[[:alpha:]]+:){1}",
+										 replacement = "",
+										 x = containers$names)
+		curr.tag <- unique(curr.tag)
+		containers$names <- gsub(pattern = curr.tag,
+														 replacement = tag,
+														 x = containers$names)
+	}
+	userid=system("id -u", intern = TRUE)
+	username=system("id -un", intern = TRUE)
+	for (i in dim(containers)[1]:1)
+	{
+		status <- system(paste("docker pull ",containers[i,1],
+													 sep = ""))
+		if (status)
+		{
+			containers <- containers[-i]
+		}
+		else
+		{
+			command=NULL
+			if (grepl("generation",containers[i,1],fixed=TRUE)==1)
+				command=c(paste("FROM", containers[i,1]),paste("RUN sudo /usr/sbin/adduser -u", userid, username))
+			else
+				command=c(paste("FROM", containers[i,1]),paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
+			writeLines(command,"./dockerfile")
+			status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
+														 sep = ""))
+			if (status){
+				print("Error in building container", paste(containers[i,1], "_",userid,sep = ""))
+			}
+		}
+	}
+	write.table(containers,
+							paste(path.package(package = "epimod"),"Containers/containersNames.txt",
+										sep = "/"))
+	system("rm ./dockerfile")
 }

@@ -16,11 +16,12 @@ RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 
 # date > marker
 COPY marker /dev/null
-RUN R -e "devtools::install_github('qBioTurin/epimod', ref='variabilityFBA',dependencies=TRUE)"
+RUN R -e "devtools::install_github('qBioTurin/epimod', ref='master',dependencies=TRUE)"
 
 # Dump all packages installed with it's version
 RUN dpkg -l > /PKG_LIST
 
+RUN apt-get install -y sudo adduser apt-utils
 
 # Define default command.
 CMD ["bash"]

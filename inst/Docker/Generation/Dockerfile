@@ -48,6 +48,7 @@ RUN wget https://datacloud.di.unito.it/index.php/s/JFsJwyHfJ9FNWZJ/download/lp_s
     /bin/bash ./build_lpsolve.sh
 
 # Install GreatSPN
+COPY marker /dev/null
 RUN mkdir ~/GreatSPN;\
     cd ~/GreatSPN ;\
     git clone https://github.com/greatspn/SOURCES.git SOURCES ;\
