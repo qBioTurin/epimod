@@ -58,9 +58,9 @@ downloadContainers <- function(containers.file=NULL, tag = "latest"){
 		{
 			command=NULL
 			if (grepl("generation",containers[i,1],fixed=TRUE)==1)
-				command=c(paste("FROM", containers[i,1]),"RUN sudo usermod -u 2005 docker && sudo groupmod -g 2005 docker", paste("RUN sudo /usr/sbin/adduser -u", userid, username))
+				command=c(paste("FROM", containers[i,1]),"RUN sudo groupmod -g 2005 docker &&vsudo usermod -u 2005 docker ", paste("RUN sudo /usr/sbin/adduser -u", userid, username))
 			else
-				command=c(paste("FROM", containers[i,1]),"RUN sudo usermod -u 2005 docker && sudo groupmod -g 2005 docker",paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
+				command=c(paste("FROM", containers[i,1]),"RUN sudo groupmod -g 2005 docker && sudo usermod -u 2005 docker ",paste("RUN /usr/sbin/adduser -u", userid, username), "WORKDIR /home" )
 			writeLines(command,"./dockerfile")
 			status <- system(paste("docker build -f ./dockerfile -t ",containers[i,1], "_",username," .",
 														 sep = ""))
