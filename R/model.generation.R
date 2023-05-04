@@ -78,7 +78,7 @@ model.generation <-function(out_fname = NULL,
 	pwd <- getwd()
 	setwd(out_dir)
 
-	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names")
+	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names -out-pnpro")
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
 	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),

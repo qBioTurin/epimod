@@ -1,4 +1,6 @@
+#'
 #' @title Run docker container
+#'
 #' @description This is an internal function executing a docker container. Not to be used by users.
 #' @param params, a character string containing all parameters needed to run the docker container.
 #' @return 0 if success, 1 if parameters are missing, 2 if dockerid file is present, 3 if docker execution fails.
