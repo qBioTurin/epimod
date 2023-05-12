@@ -1,5 +1,6 @@
 library(GenSA)
 library(epimod)
+library(dplyr)
 
 objfn <- function(x, params, seed) {
 	# Generate a new configuration using the configuration provided by the optimization engine
@@ -11,7 +12,7 @@ objfn <- function(x, params, seed) {
 																			out_fname = params$out_fname,
 																			ini_vector = x)
 	# Solve n_run instances of the model
-	print("[objfn] Calling calibration.worer")
+	print("[objfn] Calling calibration.worker")
 	curr_seed <- seed + counter
 
 	print(paste0("[objfn] Parameter n_run ", params$n_run))
@@ -37,15 +38,25 @@ objfn <- function(x, params, seed) {
 	traces_name <- file.path(params$out_dir, traces_name)
 	print(paste0("[objfn] Counter ", counter))
 	print(paste0("[objfn] File ", traces_name))
-	print(paste0("[objfn] Renaming output file in ", gsub(pattern = "(-0.trace)",
-																								 replacement = paste0("-", (counter-1), ".trace"),
-																								 x = traces_name)))
+	print(paste0("[objfn] Renaming output file in ",
+							 gsub(pattern = "(-0.trace)",
+							 		 replacement = paste0("-", (counter-1), ".trace"),
+							 		 x = traces_name)))
 	file.rename(traces_name, gsub(pattern = "(-0.trace)",
 																replacement = paste0("-", (counter-1), ".trace"),
 																x = traces_name))
 	traces_name <- gsub(pattern = "(-0.trace)",
 											replacement = paste0("-", (counter-1), ".trace"),
 											x = traces_name)
+
+	### ADMIRE project ####
+	if(file.exists(paste0(params$out_dir, "/TimePlaces/timedPlace.trace") )){
+		file.copy(from = paste0(params$out_dir, "/TimePlaces/timedPlace.trace"),
+							to = paste0(params$out_dir, "/timedPlace-", (counter-1),".trace") )
+		system(paste0("rm ",params$out_dir, "/TimePlaces -r") )
+	}
+	####
+
 	print("[objfn] Done calibration.worer")
 	# Append all the solutions in one single data.frame
 	print(paste0("[objfn] Settling files...", traces_name))
@@ -86,8 +97,8 @@ objfn <- function(x, params, seed) {
 
 # Utility function
 chk_dir <- function(path){
-    pwd <- basename(path)
-    return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
+	pwd <- basename(path)
+	return(paste0(file.path(dirname(path),pwd, fsep = .Platform$file.sep), .Platform$file.sep))
 }
 # Read commandline arguments
 args <- commandArgs(TRUE)
@@ -118,20 +129,20 @@ counter <- 1
 
 # Copy files to the run directory
 experiment.env_setup(files = params$files,
-                     dest_dir = params$run_dir)
+										 dest_dir = params$run_dir)
 # Call GenSA with init_vector as initial condition, upper_vector and lower_vector as boundaries conditions.
 ctl <- list()
 if(!is.null(params$max.call))
 {
-    ctl$max.call <- params$max.call
+	ctl$max.call <- params$max.call
 }
 if(!is.null(params$threshold.stop))
 {
-    ctl$threshold.stop <- params$threshold.stop
+	ctl$threshold.stop <- params$threshold.stop
 }
 if(!is.null(params$max.time))
 {
-    ctl$max.time <- params$max.time
+	ctl$max.time <- params$max.time
 }
 ctl$seed <- init_seed + counter
 counter <- counter + 1

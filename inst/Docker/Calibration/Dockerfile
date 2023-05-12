@@ -8,6 +8,7 @@ RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev l
 RUN R -e "install.packages('devtools')"
 RUN R -e "install.packages('fdatest')"
 RUN R -e "install.packages('GenSA')"
+RUN R -e "install.packages('dplyr')"
 
 # Create scratch directory
 RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
