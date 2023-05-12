@@ -52,7 +52,7 @@ objfn <- function(x, params, seed) {
 	### ADMIRE project ####
 	if(file.exists(paste0(params$out_dir, "/TimePlaces/timedPlace.trace") )){
 		file.copy(from = paste0(params$out_dir, "/TimePlaces/timedPlace.trace"),
-							to = paste0(params$out_dir, "/timedPlace-", (counter-1),".trace") )
+							to = paste0(params$out_dir, "/timedPlace.trace") )
 		system(paste0("rm ",params$out_dir, "/TimePlaces -r") )
 	}
 	####
@@ -76,6 +76,15 @@ objfn <- function(x, params, seed) {
 													 distance_measure = params$distance_measure,
 													 reference_data = params$files$reference_data,
 													 function_fname = params$files$functions_fname))
+
+
+	### ADMIRE project ####
+	if(file.exists(paste0(params$out_dir, "/timedPlace.trace") )){
+		file.rename(from = paste0(params$out_dir, "/timedPlace.trace"),
+							to = paste0(params$out_dir, "/timedPlace-", (counter-1),".trace") )
+	}
+	####
+
 	# Write header to the file
 	optim_trace_fname <- paste0(params$out_dir,params$out_fname,"_optim-config.csv")
 	if(!file.exists(optim_trace_fname)) {
