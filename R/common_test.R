@@ -260,7 +260,7 @@ common_test <- function(folder_trace,
 		if(i_time >= f_time)
 			return("f_time must be greater than i_time!")
 
-		if(s_time >= f_time - i_time)
+		if(s_time = f_time - i_time)
 			return("s_time is too large! It must be smaller than f_time - i_time!")
 
 		# if((f_time - i_time) %% s_time != 0)
