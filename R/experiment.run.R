@@ -2,7 +2,6 @@
 #' @description This is an internal function generating the command line to run the solver with the appropriate configuration
 #' @param id, a numeric identifier used to format the output's file name
 #' @param solver_fname, the name of the solver executable file
-#' @param solver_type, a string definig what solver to apply (LSODA, HLSODA, ..)
 #' @param s_time, step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)
 #' @param f_time, simulation's final time
 #' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
@@ -185,7 +184,7 @@ experiment.run <- function(id, cmd,
 			#print(paste0("head -n-1 ", fnm))
 			#system(paste0("head -n-1 ", fnm))
 			### DEBUG ###
-			system(paste0("head -n-1 ", fnm, " > ", paste0(fnm,"_tmp"),"; mv ", paste0(fnm,"_tmp")," ", fnm))
+			#system(paste0("head -n-1 ", fnm, " > ", paste0(fnm,"_tmp"),"; mv ", paste0(fnm,"_tmp")," ", fnm))
 
 			# Remove first line from the current output file and append to the output file
 			### DEBUG ###
@@ -198,7 +197,16 @@ experiment.run <- function(id, cmd,
 			### DEBUG ###
 			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') )) ", curr_fnm, " >> ", fnm))
 			# new change
-			system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
+			#system(paste0("tail -n-$(($(wc -l ", curr_fnm, " | cut -f1 -d' ') - 1)) ", curr_fnm, " >> ", fnm))
+
+
+			# Remove last line from the output file
+			trace_past=read.csv(fnm, sep = "")
+			trace_past = trace_past[-length(trace_past[,1]),]
+			trace=read.csv(curr_fnm, sep = "")
+			trace = rbind(trace_past, trace)
+
+			write.table(trace, file = fnm, row.names = F,col.names = T)
 			file.remove(curr_fnm)
 		}
 
@@ -244,7 +252,8 @@ experiment.run <- function(id, cmd,
 					#print(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
 					#system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm))
 					### DEBUG ###
-					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm, " >> ", fbanm))
+					system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') - 1)) ", curr_fbanm, " >> ", fbanm))
+					#system(paste0("tail -n-$(($(wc -l ", curr_fbanm, " | cut -f1 -d' ') )) ", curr_fbanm, " >> ", fbanm))
 					file.remove(curr_fbanm)
 				}
 			}
