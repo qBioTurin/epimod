@@ -22,7 +22,7 @@ ENV MAKE_ARGS=-j4
 RUN git clone  https://github.com/asminer/meddly.git meddly ;\
     cd meddly ;\
     ./autogen.sh ;\
-    ./configure --prefix=/usr/local ;\
+    ./configure --prefix=/usr/local/include ;\
     make ${MAKE_ARGS} ;\
     sudo make install
 

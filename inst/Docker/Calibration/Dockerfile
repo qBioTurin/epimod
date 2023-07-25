@@ -9,6 +9,7 @@ RUN R -e "install.packages('devtools')"
 RUN R -e "install.packages('fdatest')"
 RUN R -e "install.packages('GenSA')"
 RUN R -e "install.packages('dplyr')"
+RUN R -e "install.packages('tidyr')"
 
 # Create scratch directory
 RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
