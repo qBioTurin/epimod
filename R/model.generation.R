@@ -8,6 +8,7 @@
 #' @param transitions_fname C++ file defining the functions managing the behaviour of general transitions, mandatory if Extended versions of Petri Nets (i.e., ESPN or ESSN) are used.
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)
 #' @param volume The folder to mount within the Docker image providing all the necessary files.
+#' @param policy M for mass action  and I for Infinity Servers
 #' @param debug If TRUE enables logging activity.
 
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
@@ -32,6 +33,7 @@ model.generation <-function(out_fname = NULL,
 														transitions_fname = NULL,
 														fba_fname = NULL,
 														volume = getwd(),
+			    											policy = "M"
 														#Flag to enable logging activity
 														debug = FALSE){
 
@@ -94,7 +96,7 @@ model.generation <-function(out_fname = NULL,
 		stop()
 	}
 
-	cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -M -N")
+	cmd = paste0("PN2ODE.sh /home/", basename(netname), "_unf -",policy," -N")
 	if (!is.null(transitions_fname)){
 		cmd= paste0(cmd, " -C ", paste0("/home/", basename(transitions_fname)))
 	}
