@@ -33,7 +33,7 @@ model.generation <-function(out_fname = NULL,
 														transitions_fname = NULL,
 														fba_fname = NULL,
 														volume = getwd(),
-			    											policy = "M"
+			    											policy = "M",
 														#Flag to enable logging activity
 														debug = FALSE){
 
