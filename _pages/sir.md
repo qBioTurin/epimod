@@ -17,7 +17,7 @@ toc_icon: "cog"
 
 # Introduction
 
-In this document we describe how to use the R library *epimod*. In
+In this document, we describe how to use the R library *epimod*. In
 details, *epimod* implements a new general modeling framework to study
 epidemiological systems, whose novelties and strengths are:
 
@@ -31,9 +31,9 @@ epidemiological systems, whose novelties and strengths are:
     containerization (Veiga Leprevost et al. 2017) of all analysis
     techniques implemented in the framework;
 5.  a well-defined schema and related infrastructure to allow users to
-    easily integrate their own analysis workflow in the framework.
+    easily integrate their analysis workflow into the framework.
 
-The effectiveness of this framework is showed through the wellknown and
+The effectiveness of this framework is showed through the well-known and
 simple SIR model.
 
 # How to start
@@ -47,7 +47,7 @@ it can be installed following the steps showed therein. Then, the user
 must have docker installed on its computer for exploiting the *epimod*’s
 docker images (for more information on the docker installation see:
 [link to install docker](https://docs.docker.com/engine/installation/)),
-and to have authorization to execute docker commands reported in the
+and to have the authorization to execute docker commands reported in the
 command page of function install docker. To do this the following
 commands must be executed.
 
@@ -66,6 +66,7 @@ commands must be executed.
 The R package *devtools* has to be installed to run *epimod*:
 
     install.packages("devtools")
+    install.packages("fdatest")
     library(devtools)
     install_github("qBioTurin/epimod", dependencies=TRUE)
 
@@ -88,7 +89,7 @@ All the *epimod* functions print the following information:
 
 # Cases of study
 
-In this section we show the steps necessary to model, study and analyze
+In this section, we show the steps necessary to model, study and analyze
 a simple case study. To this aim, we choose to study the diffusion of a
 disease following the SIR dynamics. We refer to (Keeling and Rohani
 2011) for all the details.
@@ -96,21 +97,21 @@ disease following the SIR dynamics. We refer to (Keeling and Rohani
 ### SIR model
 
 The S-I-R models the diffusion of an infection in a population assuming
-three possible states (or compartments) in which any invidual in the
-population may move. Specifically, (1) *Susceptible*, individuals
+three possible states (or compartments) in which any individual in the
+the population may move. Specifically, (1) *Susceptible*, individuals
 unexposed to the disease, (2) *Infected*, individuals currently infected
 by the disease, and (3) *Recovered*, individuals which were successfully
-recovered by the infection. To consider the simplest case, we ignore the
+recovered from the infection. To consider the simplest case, we ignore the
 population demography (i.e., births and deaths of individuals are
 omitted), thus we consider only two possible events: the infection
 (passage from *Susceptible* to *Infected*), and the recovery (passage
 from *Infected* to *Recovered*). We are also assuming to neglect complex
-pattern of contacts, by considering an homogeneous mixing. From a
+pattern of contacts, by considering a homogeneous mixing. From a
 mathematical point of view, the system behaviors can be investigated by
 exploiting the deterministic approach (Kurtz 1970) which approximates
 its dynamics through a system of ordinary differential equations (ODEs):
 
-<img src="../assets/images/SIR/equation1.png" width="295" style="display: block; margin: auto;" />
+<img src="./Images/equation1.png" width="295" style="display: block; margin: auto;" />
 
 where:
 
@@ -121,26 +122,37 @@ where:
 -   *γ* is the recovery rate, which determines the mean infectious
     period.
 
-### Model generation
+### Model Generation
 
 The first step is the model construction. Starting with the GreatSPN
 editor tool it is possible to draw the model using the PN formalism and
 its generalizations. We recall that the Petri Nets are bipartite graphs
-in which we have two type of nodes, places and transitions. Graphically,
+in which we have two types of nodes, places and transitions. Graphically,
 places are represented as circles and those are the variables of our
 systems. On the other hand, transitions are depicted as rectangles and
 are the possible events happening in the system. Variables and events
 (i.e., places and transitions) are connected through arcs, showing what
-variable(s) is (are) affected by a specific event. For more details we
+variable(s) is (are) affected by a specific event. For more details, we
 refer to (Marsan et al. 1995).
 
-Therefore, as represented in figure , we add one place for each variable
+To define the rate of the transition there are different way that differentiate transitions into two groups. 
+
+
+
+
+
+#### Standard Transition
+
+As represented in the figure, we add one place for each variable
 of the system (i.e., S, I, and R represent the susceptible, infected,
 and recovered individuals respectively), and one transition for each
-possible event (i.e., *Infection* and *Recovery*). Finally, we save the
-PN model as a file with extension *.PNPRO* .
+possible event (i.e., *Infection* and *Recovery*). Each transition is associated
+a negative exponential distribution which represents the firing rate of the transition, and
+its rate is expressed with the Mass Action law. 
+The rate of the Mass Action can be written directly inside the GUI as shown in the figure.
+Finally, we save the PN model as a file with extension *.PNPRO* .
 
-<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
+<img src="./Images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
 <p class="caption">
 Petri Net representation of the SIR model.
 </p>
@@ -158,28 +170,117 @@ derives the processes.
 The binary file *SIR.solver* is generated in which the derived processes
 and the library used for their simulation are packaged.
 
-Notice that *model.generation()* might take as input parameter a C++
-file defining the functions characterizing the behavior of general
-transitions (Pernice et al. 2019), namely *transitions\_fname*. For
-instance, if we want to define the transition *Infection* as a general
-transition then we have to set the transition as *General* and name the
-corresponding rate name as **FN:NameGeneralFN**, where in this case the
-*NameGeneralFN* is **InfectionFunction**. As showed in figure , where
-the transition type is set to *General* and the delay (i.e., the rate)
-to **FN:InfectionFunction**.
+#### More complex transition
 
-<img src="../assets/images/SIR/SIRPNPRO_FNen.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+There are other features to define the rate of a transition, apart of the Mass Action.
+
+It is possible to write directly in the GUI simple expression so that the rate of the exponential 
+distribution will be defined by the general function. These will be general transitions (Pernice et al. 2019).
+The functionalities allow one to read a constant from a file
+where the numbers are written in list or matrix form and to directly use the marking of the places.
+Specifically, the available features are:
+
+
+-    *#*:  This function allows one to use the marking value of a place.
+
+          #S * #I * #R
+
+
+
+-   *FromList*: This function allows to extract a single constant from a list
+of real numbers separated by a newline and written on a file. It takes as parameters 1) a string which
+ represents the name of the file and 2) an integer representing
+the index of the position of the constant in the file.
+
+        SIRFile:
+        3
+        5
+        16
+        8
+        9
+        1
+
+        FromList["SIRFile", 1] = 5
+
+
+-   *FromTable*: This function allows to extract a single constant from a
+real number matrix written on a file where each number is separated
+by a comma and each row is separated by a newline. It takes as
+parameters 1) a string which represents the name of the file 2) an integer, the index of the row where
+the number is located, 3) a second integer that is the index of the column.
+
+
+        SIRFile:
+        3,9,13
+        5,56,7		
+        16,0,1		
+        8,90,23	
+        1,44,88	
+
+        FromTable["SIRFile", 3,2] = 23
+
+    
+-    *FromTimeTable*: This function is similar to FromTable, but it works
+on a file which contains a numeric matrix where the first column symbolize
+a list of time steps as a list of numbers sorting in ascending order. The
+function takes as parameters 1) a string which represents the name
+of the file 2) An integer representing the index of the
+column of the matrix. The index of the row will be automatically calculated using
+the time step of the current execution. The exact value of time
+may not be present in the first column so the index of the row is
+selected as the position of the first value lower.
+
+            SIRFile:
+            3,9,13
+            5,56,7		
+            8,0,1		
+            16,90,23	
+            33,44,88	
+
+            FromTimeTable["SIRFile", 1]
+
+            
+            If the time of the execution has value 1 then FromTimeTable["SIRFile", 1] = 13
+            If the time of the execution has value 10 then FromTimeTable["SIRFile",1] = 1	
+            If the time of the execution has value 50 then FromTimeTable["SIRFile",1] = 88
+
+<img src="./Images/SIR_FromFile_place.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
+<p class="caption">
+Petri Net with Infection's rate defined with FromList and the marking of the place S.
+</p>
+
+The file is written inside the docker and the name and the values inside it are defined and written using the .csv in input and
+the R functions. This will be better explained in the next sessions.
+
+
+
+
+
+Notice that *model.generation()* might take as input parameter a C++
+file defining the functions characterizing the behavior of general transitions, namely *transitions\_fname*. For
+instance, if we want to define the transition *Infection* with an external function
+then we have to set as the rate of the transition the
+instruction **Call**. This function allows one to call an external function
+written by the user on a file. It takes as parameters:
+<ol>
+  <li>A string which is the name of the function.</li>
+  <li>A set of real numbers; they will be passed to the function as its parameters.
+      in the same order they are written, and the user can write as many values he needs</li>
+</ol> 
+
+As showed in figure, where the delay (i.e., the rate) is set as **Call["InfectionFunction"]**
+
+
+<img src="./Images/SIR_Call_FromList.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
 <p class="caption">
 Petri Net representation of the SIR model, modelling the Infection
-transition as a general transition.
+transition with an external function and the additional parameter as FromList.
 </p>
 
 Then, we have to properly define a C++ function implementing the
 specific behavior of the transition and save it, for instance in a file
-named *transition.cpp*, which has to be structured as follow:
+named *transition.cpp*, which has to be structured as follows:
 
-
-    static double Infection_rate = 1.428;
 
     double InfectionFunction(double *Value,
                              map <string,int>& NumTrans,
@@ -187,11 +288,12 @@ named *transition.cpp*, which has to be structured as follow:
                              const vector<string> & NameTrans,
                              const struct InfTr* Trans,
                              const int T,
-                             const double& time)
+                             const double& time,
+                             double Infection_rate)
     {
 
         // Definition of the function exploited to calculate the rate,
-        // in this case for semplicity we define it throught the Mass Action  law
+        // in this case for simplicity we define it through the Mass Action  law
      
         double intensity = 1.0;
         
@@ -216,20 +318,22 @@ where the fixed input parameters are:
 -   **const vector<string> & NameTrans**: transition names;
 -   **const struct InfTr\* Trans**: array of *InfTr* structures
     (implemented in GreatSPN) which is indexed using the transition
-    index. The structure *InfTr* has the following fileds: (1)
+    index. The structure *InfTr* has the following fields: (1)
     *InPlaces*: the input places to a transition, which is characterized
     by the input place index position in the *Value* vector
     (*Trans\[T\].InPlaces\[k\].Id*) and the arc (linking the *k* place
-    with the *T* transition) molteplicity
+    with the *T* transition) multiplicity
     (*Trans\[T\].InPlaces\[k\].Card*). (2) ….
 -   **const int T**: index of the firing transition;
 -   **const double& time** : time.
+-   Any **additional parameters** must be added at the end of these standards, in the same order as written within the call (in the example the double Infection_rate)
 
-Notice that the function name has to correspond to the rate name
-associated with the general transition, in this case
+Notice that the function name has to correspond to the function name
+passed inside the **Call**, in this case
 *InfectionFunction*.
 
-Finally, the process can be derived be the *model.generation()* function
+
+Finally, the process can be derived by the *model.generation()* function
 as follow.
 
 
@@ -263,21 +367,21 @@ In details, the function *model.sensitivity()* takes in input
     be set to 1 day;
 5.  **parameters\_fname**: a textual file in which the parameters to be
     studied are listed associated with their range of variability. This
-    file is defined by three mandatory columns (*which must separeted
+    file is defined by three mandatory columns (*which must separated
     using ;*): (1) a tag representing the parameter type: *i* for the
     complete initial marking (or condition), *m* for the initial marking
     of a specific place, *c* for a single constant rate, and *g* for a
     rate associated with general transitions (Pernice et al. 2019) (the
     user must define a file name coherently with the one used in the
     general transitions file); (2) the name of the transition which is
-    varying (this must correspond to name used in the PN draw in
+    varying (this must correspond to the name used in the PN draw-in
     GreatSPN editor), if the complete initial marking is considered
     (i.e., with tag *i*) then by default the name *init* is used; (3)
     the function used for sampling the value of the variable considered,
-    it could be either a R function or an user-defined function (in this
+    it could be either an R function or a user-defined function (in this
     case it has to be implemented into the R script passed through the
     *functions\_fname* input parameter). Let us note that the output of
-    this function must have size equal to the length of the varying
+    this function must have a size equal to the length of the varying
     parameter, that is 1 when tags *m*, *c* or *g* are used, and the
     size of the marking (number of places) when *i* is used. The
     remaining columns represent the input parameters needed by the
@@ -309,7 +413,7 @@ decide to vary the initial marking using the following function
     #> 4   c   Recovery    runif        n=1    min = 0    max=0.1
     #> 5   c  Infection    runif        n=1    min = 0    max=0.1
 
-1.  **functions\_fname**: an R file storing: 1) the user defined
+1.  **functions\_fname**: an R file storing: 1) the user-defined
     functions to generate instances of the parameters summarized in the
     *parameters\_fname* file, and 2) the functions to compute the
     distance (or error) between the model output and the reference
@@ -319,7 +423,7 @@ decide to vary the initial marking using the following function
     example is given by *FunctionSensitivity.R*, where three functions
     are implemented: *init\_generation*, *target*, and *mse*.
     *init\_generation* introduced in *FunctionsSensitivity\_list.csv*
-    file is defined in order to sample the initial number of susceptible
+    file is defined to sample the initial number of susceptible
     between *min\_init* and *max\_init*, and fixing the number of
     infected and recovered to 1 and 0 respectively.
 
@@ -328,20 +432,20 @@ decide to vary the initial marking using the following function
     init_generation<-function(min_init , max_init, n)
     {
         S=runif(n=1,min=min_init,max=max_init)
-    # It returns a vector of lenght equal to 3 since the marking is 
+    # It returns a vector of length equal to 3 since the marking is 
     # defined by the three places: S, I, and R.
         return( c(S, 1,0) )
     }
 
 Differently, *target* is the function to obtain the place or a
-combination of places from which the PRCCs over the time have to be
+combination of places from which the PRCCs over time have to be
 calculated. In details, the function takes in input a *data.frame*,
-namely *output*, defined by a number of columns equal to the number of
-places plus one corresponding to the time, and number of rows equals to
-number of time steps defined previously. Finally, it must return the
+namely *output*, defined by several columns equal to the number of
+places plus one corresponding to the time, and the number of rows equal to
+the number of time steps defined previously. Finally, it must return the
 column (or a combination of columns) corresponding to the place (or
 combination of places) for which the PRCCs have to be calculated for
-each time step. In the example the PRCCs are calculated with respect to
+each time step. In the example, the PRCCs are calculated with respect to
 place *I* (infected individuals):
 
     target<-function(output)
@@ -386,10 +490,10 @@ Thus, an example of this function can be as follows:
 2.  **reference\_data**: a csv file storing the data to be compared with
     the simulations’ result. In *reference\_data.csv* we report the SIR
     evolution starting with 100 susceptible, one infected and zero
-    recovered, with a recovery and infection rates equals to 0.04 and
+    recovered, with recovery and infection rates equal to 0.04 and
     0.004 respectively. Notice that the **reference\_data**’s rows must
     correspond to the time serie variables (in our example: Susceptible,
-    Infected and Recovered) , and so the columns the corresponding
+    Infected and Recovered), and so the columns with the corresponding
     values at a specific time.
 
 <!-- -->
@@ -407,7 +511,7 @@ Thus, an example of this function can be as follows:
     ranking the simulations, which is implemented in *functions\_fname*;
 
 Let us observe that: (i) *model.sensitivity* exploits also the parallel
-processing capabilities, and (ii) if the user is not interested on the
+processing capabilities, and (ii) if the user is not interested in the
 ranking calculation then the **distance\_measure** and
 **reference\_data** are not necessary and can be omitted.
 
@@ -425,9 +529,7 @@ ranking calculation then the **distance\_measure** and
                                    s_time = 1, # days  
                                    parallel_processors = 2
     )
-
-    #> [1] "[experiment.env_setup] Setting up environment"
-    #> [1] "[experiment.env_setup] Done setting up environment"
+t] Setting up environment"    #> [1] "[experiment.env_setup] Done setting up environment"
     #> docker run --privileged=true  --user=501:20 --cidfile=dockerID --volume /Users/simonepernice/Desktop/GIT/Modelli_GreatMod/SIR:/home/docker/data -d qbioturin/epimod-sensitivity:1.0.0 Rscript /usr/local/lib/R/site-library/epimod/R_scripts/sensitivity.mngr.R /home/docker/data/SIR_sensitivity/params_SIR-sensitivity.RDS
     #> 
     #> 
@@ -442,46 +544,46 @@ Hence, considering the SIR model we can run the *model.sensitivity*
 varying the *Infection* and *Recovery* transitions rates in order to
 characterized their effect on the number of infected individuals.
 
-<img src="../assets/images/SIR/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
 <p class="caption">
 The 200 trajectories considering the I place obtained from different
 parameters configurations.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
 <p class="caption">
 The 200 trajectories considering the S place obtained from different
 parameters configurations.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
 <p class="caption">
 The 200 trajectories considering the R place obtained from different
 parameters configuration.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
 <p class="caption">
 Scatter plot showing the squared error between the reference data and
 simulated number of infected. The dark blue points represent the
 parameters configuration with minimum error.
 </p>
 
-From the figures , , and , it is possible to observe the different
+From the figures, , and , it is possible to observe the different
 trajectories obtained by solving the system of ODEs, represented by eq.
-, with different parameters configurations, sampled by exploiting the
-function passed through **parameters\_fname**. In figure the distance
+, with different parameter configurations, sampled by exploiting the
+function passed through **parameters\_fname**. In the figure the distance
 values, obtained using the measure definition described before, are
 plotted varying the *Recovery* parameter (on the x-axis) and *Infection*
 parameter (on the y-axis). Each point is colored according to a
 nonlinear gradient function starting from color dark blue (i.e., lower
 value) and moving to color light blue (i.e., higher values). From this
-plot we can observe that lower squared errors are obtained when
+plot, we can observe that lower squared errors are obtained when
 *Recovery* is around 0.025 and *Infection* around 0.002, thus we can
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
+<img src="./Images/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
 <p class="caption">
 PRCC for the I place over time.
 </p>
@@ -492,7 +594,7 @@ both meaningful, especially in the first part of the simulation,
 corresponding to the transient part where the parameters affect mostly
 the output. Differently, this effect decreases after the fifth week
 where all the deterministic trajectories obtained with different
-parameters configurations converge to the same states, see figure .
+parameters configurations converge to the same states, see figure.
 
 Other possible examples of how to use this function are reported
 hereafter:
@@ -539,14 +641,14 @@ hereafter:
 #### Sensitivity analysis with general transitions
 
 Let us consider the example of the SIR model where the *Infection*
-transition is defined as general transition, with the porpoise to
+transition is defined as general transition, with the purpose to
 varying the *Infection\_rate* constant of the corresponding Mass Action
 law. Generally, in order to define the rate of a transition it is
 required to provide some inputs and, hence, we need to define an R
 function (in the **functions\_fname** file) which provides all the input
 parameters necessary to the C++ function.
 
-Therefore, we have to modify the *Functions\_list* csv as follow in
+Therefore, we have to modify the *Functions\_list* csv as follows in
 order to associate with the general transition *Infection* the R
 function, *InfectionValuesGeneration*, which generates the values
 exploited by the respective function defined in the C++ file, called
@@ -554,7 +656,7 @@ exploited by the respective function defined in the C++ file, called
 
     #>   Tag       Name                   Function Parameter1 Parameter2 Parameter3
     #> 1   c   Recovery                      runif        n=1    min = 0      max=1
-    #> 2   g  Infection  InfectionValuesGeneration    min = 0      max=1
+    #> 2   g  InfectionFile  InfectionValuesGeneration    min = 0      max=1
 
 Successively, we have to define the *InfectionValuesGeneration* in
 *Functions.R*.
@@ -569,82 +671,12 @@ Successively, we have to define the *InfectionValuesGeneration* in
 
 Notice that the value (or values) generated are temporarily saved in a
 file named as the corresponding name in the *Functions\_list*, in this
-case *Infection*. Hence, the file *transition.cpp* has to be modified in
-order to read and use the value generated from the R function
-*InfectionValuesGeneration*. An example of implementation is the
-following, where two functions are defined: (1) *read\_constant()* in
-order to read the generated value, which is associated with the right
-variable, and (2) *init\_data\_structures()* in order to read the file
-only the first time that the function is called.
+case *InfectionFile*.
 
-
-    static double Flag = -1; 
-    static double Infection_rate = 1.428;
-
-    void read_constant(string fname, double& Infection_rate)
-    {
-        ifstream f (fname);
-        string line;
-        if(f.is_open())
-        {
-            int i = 1;
-            while (getline(f,line))
-            {
-                switch(i)
-                {
-                    case 1:
-                        Infection_rate = stod(line);
-                        //cout << "p" << i << ": " << line << "\t" << p1 << endl;
-                        break;
-                }
-                ++i;
-            }
-            f.close();
-        }
-        else
-        {
-            std::cerr<<"\nUnable to open " << fname << 
-                    ": file do not exists\": file do not exists\n";
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    void init_data_structures()
-    {
-        read_constant("./Infection", Infection_rate);
-        Flag = 1; 
-
-    }
-
-    double InfectionFunction(double *Value,
-                             map <string,int>& NumTrans,
-                             map <string,int>& NumPlaces,
-                             const vector<string> & NameTrans,
-                             const struct InfTr* Trans,
-                             const int T,
-                             const double& time)
-    {
-
-        // Definition of the function exploited to calculate the rate,
-        // in this case for semplicity we define it throught the Mass Action  law
-     
-        if( Flag == -1)   init_data_structures();
-     
-        double intensity = 1.0;
-        
-        for (unsigned int k=0; k<Trans[T].InPlaces.size(); k++)
-        {
-            intensity *= pow(Value[Trans[T].InPlaces[k].Id],Trans[T].InPlaces[k].Card);
-        }
-        
-        double rate = Infection_rate * intensity;
-
-        return(rate);
-    }
 
 ### Calibration analysis
 
-The aim of this phase is to optimize the fit of the simulated behavior
+This phase aims to optimize the fit of the simulated behavior
 to the reference data by adjusting the parameters associated with both
 Recovery and Infection transitions. This step is performed by the
 function *model.calibration()*, characterized by the solution of an
@@ -684,21 +716,21 @@ distance provided by the user (**distance\_fname**).
     function, that is *SIR.solver*;
 2.  **parameters\_fname**: a textual file in which the parameters to be
     studied are listed associated with their range of variability. This
-    file is defined by three mandatory columns (*which must separeted
+    file is defined by three mandatory columns (*which must separated
     using ;*): (1) a tag representing the parameter type: *i* for the
     complete initial marking (or condition), *m* for the initial marking
     of a specific place, *c* for a single constant rate, and *g* for a
     rate associated with general transitions (Pernice et al. 2019) (the
     user must define a file name coherently with the one used in the
     general transitions file); (2) the name of the transition which is
-    varying (this must correspond to name used in the PN draw in
+    varying (this must correspond to the name used in the PN draw-in
     GreatSPN editor), if the complete initial marking is considered
     (i.e., with tag *i*) then by default the name *init* is used; (3)
     the function used for sampling the value of the variable considered,
-    it could be either a R function or an user-defined function (in this
+    it could be either an R function or a user-defined function (in this
     case it has to be implemented into the R script passed through the
     *functions\_fname* input parameter). Let us note that the output of
-    this function must have size equal to the length of the varying
+    this function must have a size equal to the length of the varying
     parameter, that is 1 when tags *m*, *c* or *g* are used, and the
     size of the marking (number of places) when *i* is used. The
     remaining columns represent the input parameters needed by the
@@ -707,7 +739,7 @@ distance provided by the user (**distance\_fname**).
 
 <!-- -->
 
-    #>   Tag       Name Function or fixed parameter NA
+    #>   Tag       Name Function or fixed-parameter NA
     #> 1   m          S                         100 NA
     #> 2   m          I                           1 NA
     #> 3   m          R                           0 NA
@@ -717,7 +749,7 @@ distance provided by the user (**distance\_fname**).
 where the rates of the *Recovery* and *Infection* transitions can be
 calibrated by using the R functions stored in the R script
 *functions\_fname*; 3. **functions\_fname**: an R file storing: 1) the
-user defined functions to generate instances of the parameters
+user-defined functions to generate instances of the parameters
 summarized in the *parameters\_fname* file, and 2) the function to
 compute the distance (or error) between the model output and the
 reference dataset itself. An example is given by
@@ -726,7 +758,7 @@ reference dataset itself. An example is given by
 in *Functions\_list\_Calibration.csv* file, and they are defined in
 order to return the value (or a linear transformation) of the vector of
 the unknown parameters generated from the optimization algorithm, namely
-**optim\_v**, whose size is equal to number of parameters in
+**optim\_v**, whose size is equal to the number of parameters in
 *parameters\_fname*. Let us note that the output of these functions must
 return a value for each input parameter. For instance, to calibrate the
 transition rates associated with *Recovery* and *Infection*, the
@@ -780,10 +812,10 @@ Thus, these three functions are defined as follows:
 1.  **reference\_data**: a csv file storing the data to be compared with
     the simulations’ result. In *reference\_data.csv* we report the SIR
     evolution starting with 100 susceptible, one infected and zero
-    recovered, with a recovery and infection rates equals to 0.04 and
+    recovered, with a recovery and infection rates equal to 0.04 and
     0.004 respectively. Notice that the **reference\_data**’s rows must
     correspond to the time serie variables (in our example: Susceptible,
-    Infected and Recovered) , and so the columns the corresponding
+    Infected and Recovered), and so the columns with the corresponding
     values at a specific time.
 
 <!-- -->
@@ -802,7 +834,7 @@ Thus, these three functions are defined as follows:
 2.  **f\_time**: the final solution time, for instance 10 weeks (70
     days);
 3.  **s\_time**: the time step defining the frequency at which explicit
-    estimates for the system values are desired, in this case it could
+    estimates for the system values are desired, in this case, it could
     be set to 1 day;
 4.  **ini\_v**: Initial values for the parameters to be optimized.
 5.  **lb\_v, ub\_v**: Vectors with length equal to the number of
@@ -821,17 +853,17 @@ Thus, these three functions are defined as follows:
     plots$plI
     plots$plR
 
-<img src="../assets/images/SIR/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
 <p class="caption">
 Trajectories considering the S place.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
 <p class="caption">
 Trajectories considering the I place.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
 <p class="caption">
 Trajectories considering the R place.
 </p>
@@ -890,18 +922,18 @@ the diffusion process.
     be set to 1 day.
 5.  **parameters\_fname**: a textual file in which the parameters to be
     studied are listed associated with their range of variability. This
-    file is defined by three mandatory columns (*which must separeted
+    file is defined by three mandatory columns (*which must separated
     using ;*): (1) a tag representing the parameter type: *i* for the
     complete initial marking (or condition), *m* for the initial marking
     of a specific place, *c* for a single constant rate, and *g* for a
     rate associated with general transitions (Pernice et al. 2019) (the
     user must define a file name coherently with the one used in the
     general transitions file); (2) the name of the transition which is
-    varying (this must correspond to name used in the PN draw in
+    varying (this must correspond to the name used in the PN draw-in
     GreatSPN editor), if the complete initial marking is considered
     (i.e., with tag *i*) then by default the name *init* is used; (3)
     the function used for sampling the value of the variable considered,
-    it could be either a R function or an user-defined function (in this
+    it could be either an R function or a user-defined function (in this
     case it has to be implemented into the R script passed through the
     *functions\_fname* input parameter). Let us note that the output of
     this function must have size equal to the length of the varying
@@ -931,7 +963,7 @@ the diffusion process.
                                      print=F)
     AnalysisPlot$plAll
 
-<img src="../assets/images/SIR/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  />
 <p class="caption">
 Deterministic Trajectory considering all places
 </p>
@@ -970,12 +1002,12 @@ behavior can be described by the Master equations.
     AnalysisPlot$plAll
     AnalysisPlot$plAllMean
 
-<img src="../assets/images/SIR/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  />
 <p class="caption">
 Stochastic Trajectories considering the S place.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  />
+<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  />
 <p class="caption">
 Stochastic Trajectories considering the I place.
 </p>
