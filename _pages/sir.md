@@ -111,8 +111,7 @@ mathematical point of view, the system behaviors can be investigated by
 exploiting the deterministic approach (Kurtz 1970) which approximates
 its dynamics through a system of ordinary differential equations (ODEs):
 
-<img src="../assets/images/SIR/SIR_Call_FromList.png" />
-
+<img src="../assets/images/SIR/equation1.png" width="295" style="display: block; margin: auto;" />
 where:
 
 -   *S*, *I*, *R* are the number of susceptible, infected, and recovered
@@ -152,8 +151,7 @@ its rate is expressed with the Mass Action law.
 The rate of the Mass Action can be written directly inside the GUI as shown in the figure.
 Finally, we save the PN model as a file with extension *.PNPRO* .
 
-<img src="./Images/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
-<p class="caption">
+<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" /><p class="caption">
 Petri Net representation of the SIR model.
 </p>
 
@@ -244,8 +242,7 @@ selected as the position of the first value lower.
             If the time of the execution has value 10 then FromTimeTable["SIRFile",1] = 1	
             If the time of the execution has value 50 then FromTimeTable["SIRFile",1] = 88
 
-<img src="./Images/SIR_FromFile_place.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
-<p class="caption">
+<img src="../assets/images/SIR/SIR_FromFile_place.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" /><p class="caption">
 Petri Net with Infection's rate defined with FromList and the marking of the place S.
 </p>
 
@@ -271,7 +268,7 @@ written by the user on a file. It takes as parameters:
 As showed in figure, where the delay (i.e., the rate) is set as **Call["InfectionFunction"]**
 
 
-<img src="./Images/SIR_Call_FromList.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+<img src="../assets/images/SIR/SIR_Call_FromList.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
 <p class="caption">
 Petri Net representation of the SIR model, modelling the Infection
 transition with an external function and the additional parameter as FromList.
@@ -544,25 +541,22 @@ Hence, considering the SIR model we can run the *model.sensitivity*
 varying the *Infection* and *Recovery* transitions rates in order to
 characterized their effect on the number of infected individuals.
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  /><p class="caption">
 The 200 trajectories considering the I place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  /><p class="caption">
 The 200 trajectories considering the S place obtained from different
 parameters configurations.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  /><p class="caption">
 The 200 trajectories considering the R place obtained from different
 parameters configuration.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
+<img src="../assets/images/SIR/unnamed-chunk-22-4.png" alt="\label{fig:ScatterPlot} Scatter plot showing the squared error between the reference data and simulated number of infected. The dark blue points represent the parameters configuration with minimum error."  />
 <p class="caption">
 Scatter plot showing the squared error between the reference data and
 simulated number of infected. The dark blue points represent the
@@ -583,8 +577,7 @@ plot, we can observe that lower squared errors are obtained when
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="./Images/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
-<p class="caption">
+<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" /><p class="caption">
 PRCC for the I place over time.
 </p>
 
@@ -853,17 +846,17 @@ Thus, these three functions are defined as follows:
     plots$plI
     plots$plR
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal}Trajectories considering the S place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-1.png" alt="\label{fig:S_traces_cal} Trajectories considering the S place."  />
 <p class="caption">
 Trajectories considering the S place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal} Trajectories considering the I place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-2.png" alt="\label{fig:I_traces_cal}  Trajectories considering the I place."  />
 <p class="caption">
 Trajectories considering the I place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal} Trajectories considering the R place."  />
+<img src="../assets/images/SIR/unnamed-chunk-34-3.png" alt="\label{fig:R_traces_cal}  Trajectories considering the R place."  />
 <p class="caption">
 Trajectories considering the R place.
 </p>
@@ -963,8 +956,7 @@ the diffusion process.
                                      print=F)
     AnalysisPlot$plAll
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-41-1.png" alt=" Deterministic Trajectory considering all places"  /><p class="caption">
 Deterministic Trajectory considering all places
 </p>
 
@@ -1002,13 +994,11 @@ behavior can be described by the Master equations.
     AnalysisPlot$plAll
     AnalysisPlot$plAllMean
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-45-1.png" alt=" Stochastic Trajectories considering the S place."  /><p class="caption">
 Stochastic Trajectories considering the S place.
 </p>
 
-<img src="ReadME_files/figure-markdown_strict/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  />
-<p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-45-2.png" alt=" Stochastic Trajectories considering the I place."  /><p class="caption">
 Stochastic Trajectories considering the I place.
 </p>
 
