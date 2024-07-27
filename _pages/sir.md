@@ -151,7 +151,8 @@ its rate is expressed with the Mass Action law.
 The rate of the Mass Action can be written directly inside the GUI as shown in the figure.
 Finally, we save the PN model as a file with extension *.PNPRO* .
 
-<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" /><p class="caption">
+<img src="../assets/images/SIR/SIRPNPRO.png" alt="\label{fig:SIR_PN} Petri Net representation of the SIR model." width="1327" />
+<p class="caption">
 Petri Net representation of the SIR model.
 </p>
 
@@ -242,7 +243,8 @@ selected as the position of the first value lower.
             If the time of the execution has value 10 then FromTimeTable["SIRFile",1] = 1	
             If the time of the execution has value 50 then FromTimeTable["SIRFile",1] = 88
 
-<img src="../assets/images/SIR/SIR_FromFile_place.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" /><p class="caption">
+<img src="../assets/images/SIR/SIR_FromFile_place.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+<p class="caption">
 Petri Net with Infection's rate defined with FromList and the marking of the place S.
 </p>
 
@@ -336,6 +338,41 @@ as follow.
 
     model.generation(net_fname = "./Net/SIR_generalFN.PNPRO",
                      transitions_fname = "./Cpp/transition.cpp")
+
+
+#### General transition
+
+With the new expansion of the GreatMod modeling framework it is now possible to associate the firing delay
+of the transitions not only to the exponential distribution, but also to general distribution. An example
+can be seen in the image below.
+
+<img src="../assets/images/SIR/SIR_general_example.png" alt="\label{fig:SIR_PN_general} Petri Net representation of the SIR model, modelling the Infection transition as a general transition." width="1625" />
+<p class="caption">
+Petri Net representation of the SIR model, modelling the Infection
+transition as a general transition using a general distribution
+</p>
+
+To define a transition as *general* simply place it in the gui and select the type general from the drop-down menu.
+Now you must associate a general distribution from the ones avaiable in the tool, that are:
+
+- Uniform (representated inside the GUI like Uniform[a,b])
+- Binomial (representated inside the GUI like Binomial[a,b])
+- Gamma (representated inside the GUI like Earlang[a,b]) 
+- Dirac (representated inside the GUI like I[a])
+- Truncated exponential (representated inside the GUI like TruncatedExp[a])
+
+The only solver that can handle, for now, the non exponential general transition is the Stochastic Simulation Alghoritm (SSA),
+using the model analysis as follows (having generated the proper solver file):
+
+    model.analysis(solver_fname = "./SIR_generalFN.solver",
+                   solver_type = "SSA",
+                   n_run = 500,
+                   parallel_processors = 2,
+                   f_time = 7*10, # weeks
+                   s_time = 1
+    )
+
+
 
 ### Sensitivity analysis
 
@@ -541,17 +578,20 @@ Hence, considering the SIR model we can run the *model.sensitivity*
 varying the *Infection* and *Recovery* transitions rates in order to
 characterized their effect on the number of infected individuals.
 
-<img src="../assets/images/SIR/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  /><p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-1.png" alt="\label{fig:I_traces} The 200 trajectories considering the I place obtained from different parameters configurations."  />
+<p class="caption">
 The 200 trajectories considering the I place obtained from different
 parameters configurations.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  /><p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-2.png" alt="\label{fig:S_traces}  The 200 trajectories considering the S place obtained from different parameters configurations."  />
+<p class="caption">
 The 200 trajectories considering the S place obtained from different
 parameters configurations.
 </p>
 
-<img src="../assets/images/SIR/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  /><p class="caption">
+<img src="../assets/images/SIR/unnamed-chunk-22-3.png" alt="\label{fig:R_traces}  The 200 trajectories considering the R place obtained from different parameters configuration."  />
+<p class="caption">
 The 200 trajectories considering the R place obtained from different
 parameters configuration.
 </p>
@@ -577,7 +617,8 @@ plot, we can observe that lower squared errors are obtained when
 reduce the search space associated with the two parameters around these
 two values.
 
-<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" /><p class="caption">
+<img src="../assets/images/SIR/prcc_SIR-sensitivity.png" alt="\label{fig:prcc} PRCC for the I place over time." width="949" />
+<p class="caption">
 PRCC for the I place over time.
 </p>
 
