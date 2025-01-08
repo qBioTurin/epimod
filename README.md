@@ -8,7 +8,7 @@ To install **epimod** you can use use **devtools**:
 ```
 install.packages("devtools")
 library(devtools)
-install_github("https://github.com/qBioTurin/epimod", ref="master")
+install_github("https://github.com/qBioTurin/epimod", ref="epimod_pFBA")
 ```
 
 #### Download Containers
