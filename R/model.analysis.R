@@ -198,9 +198,9 @@ model.analysis <- function(
     #docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
 docker.run(params = paste0("--cidfile=dockerID ",
                            "--volume ", volume, ":", dirname(parms$out_dir),
-                           " -d ", id_container,
+                           id_container,
                            " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname,
-                           " > /home/docker/data/debug.log 2>&1"),  # Reindirizza i log
+                           " > ", volume, "/debug.log 2>&1"),  
            debug = debug)
 
 
