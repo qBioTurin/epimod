@@ -195,6 +195,13 @@ model.analysis <- function(
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
     id_container=paste(containers.names["analysis", 1],system("id -un", intern = TRUE),sep="_")
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+    #docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+docker.run(params = paste0("--cidfile=dockerID ",
+                           "--volume ", volume, ":", dirname(parms$out_dir),
+                           " -d ", id_container,
+                           " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname,
+                           " > /home/docker/data/debug.log 2>&1"),  # Reindirizza i log
+           debug = debug)
+
 
 }
