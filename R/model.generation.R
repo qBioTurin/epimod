@@ -81,6 +81,10 @@ model.generation <-function(out_fname = NULL,
 	setwd(out_dir)
 
 	cmd = paste0("unfolding2 /home/", basename(netname), " -long-names -out-pnpro")
+	
+	if (!is.null(fba_fname)) {
+  	cmd = paste0(cmd, " -flux")
+	}
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
 	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
@@ -122,12 +126,17 @@ model.generation <-function(out_fname = NULL,
 		file.rename(from = paste0(basename(netname), "_unf.net"),to = paste0(basename(netname), ".net"))
 		file.rename(from = paste0(basename(netname), "_unf.PlaceTransition"),to = paste0(basename(netname), ".PlaceTransition"))
 		file.rename(from = paste0(basename(netname), "_unf.def"),to = paste0(basename(netname), ".def"))
-
+		if (file.exists(paste0(basename(netname), "_unf.fbaInfo"))) {
+			file.rename(from = paste0(basename(netname), "_unf.fbaInfo"), to = paste0(basename(netname), ".fbaInfo"))
+		}
 		setwd(pwd)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		if (file.exists(file.path(out_dir, paste0(basename(netname), ".fbaInfo"), fsep = .Platform$file.sep))) {
+			file.copy(file.path(out_dir, paste0(basename(netname), ".fbaInfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		}
 		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		unlink(out_dir, recursive = TRUE)
 	}
