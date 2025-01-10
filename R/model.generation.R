@@ -126,16 +126,16 @@ model.generation <-function(out_fname = NULL,
 		file.rename(from = paste0(basename(netname), "_unf.net"),to = paste0(basename(netname), ".net"))
 		file.rename(from = paste0(basename(netname), "_unf.PlaceTransition"),to = paste0(basename(netname), ".PlaceTransition"))
 		file.rename(from = paste0(basename(netname), "_unf.def"),to = paste0(basename(netname), ".def"))
-		if (file.exists(paste0(basename(netname), "_unf.fbaInfo"))) {
-			file.rename(from = paste0(basename(netname), "_unf.fbaInfo"), to = paste0(basename(netname), ".fbaInfo"))
+		if (file.exists(paste0(basename(netname), "_unf.fbainfo"))) {
+			file.rename(from = paste0(basename(netname), "_unf.fbainfo"), to = paste0(basename(netname), ".fbainfo"))
 		}
 		setwd(pwd)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".solver"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".net"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".def"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		file.copy(file.path(out_dir, paste0(basename(netname), ".PlaceTransition"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-		if (file.exists(file.path(out_dir, paste0(basename(netname), ".fbaInfo"), fsep = .Platform$file.sep))) {
-			file.copy(file.path(out_dir, paste0(basename(netname), ".fbaInfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		if (file.exists(file.path(out_dir, paste0(basename(netname), ".fbainfo"), fsep = .Platform$file.sep))) {
+			file.copy(file.path(out_dir, paste0(basename(netname), ".fbainfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		}
 		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		unlink(out_dir, recursive = TRUE)
