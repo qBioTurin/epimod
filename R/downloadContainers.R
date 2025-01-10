@@ -11,7 +11,7 @@
 #' }
 #' @export
 
-downloadContainers <- function(containers.file=NULL, tag = "latest"){
+downloadContainers <- function(containers.file=NULL, tag = "latest-epimod_pFBA"){
 	if (is.null(containers.file))
 	{
 		containers.file = paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
