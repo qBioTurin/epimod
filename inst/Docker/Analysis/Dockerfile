@@ -14,14 +14,14 @@ RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
 # Create data directory
 RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 
-# date > marker
-COPY marker /dev/null
+# Install epimod from GitHub
 RUN R -e "devtools::install_github('qBioTurin/epimod', ref='epimod_pFBA',dependencies=TRUE)"
 
-# Dump all packages installed with it's version
+# Dump all packages installed with their versions
 RUN dpkg -l > /PKG_LIST
 
 RUN apt-get install -y sudo adduser apt-utils
 
 # Define default command.
 CMD ["bash"]
+

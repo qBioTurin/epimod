@@ -18,7 +18,6 @@ RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
 RUN mkdir /home/docker/data; chmod 777 /home/docker/data
 
 # date > marker
-COPY marker /dev/null
 RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='epimod_pFBA',dependencies=TRUE)"
 
 # Dump all packages installed with it's version

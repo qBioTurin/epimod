@@ -1,5 +1,5 @@
          'names'
-'sensitivity' qbioturin/epimod-sensitivity:latest
-'generation' qbioturin/epimod-generation:latest
-'analysis' qbioturin/epimod-analysis:latest
-'calibration' qbioturin/epimod-calibration:latest
+'sensitivity' qbioturin/epimod-sensitivity:latest-epimod_pFBA
+'generation' qbioturin/epimod-generation:latest-epimod_pFBA
+'analysis'    qbioturin/epimod-analysis:latest-epimod_pFBA
+'calibration' qbioturin/epimod-calibration:latest-epimod_pFBA
