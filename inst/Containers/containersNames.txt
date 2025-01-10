@@ -1,5 +1,5 @@
          'names'
-'sensitivity' localhost:5000/epimod-sensitivity:latest-epimod_pFBA
-'generation' localhost:5000/epimod-generation:latest-epimod_pFBA
-'analysis'    localhost:5000/epimod-analysis:latest-epimod_pFBA
-'calibration' localhost:5000/epimod-calibration:latest-epimod_pFBA
+'sensitivity' localhost:5000/epimod-sensitivity:latest
+'generation' localhost:5000/epimod-generation:latest
+'analysis' localhost:5000/epimod-analysis:latest
+'calibration' localhost:5000/epimod-calibration:latest
