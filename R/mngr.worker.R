@@ -127,6 +127,16 @@ mngr.worker <- function(id,
 						 force = TRUE)
 		},
 		outname = fnm)
+		print("[mngr.worker] Checking and copying .flux files...")
+		flux_files <- list.files(pattern = "\\.flux$", full.names = TRUE)
+		if (length(flux_files) > 0) {
+			lapply(flux_files, function(file) {
+				file.copy(from = file, to = out_dir, overwrite = TRUE)
+			})
+			print("[mngr.worker] .flux files copied successfully.")
+		} else {
+			print("[mngr.worker] No .flux files found.")
+		}
 		print("[mngr.worker] Done merging files")
 	} else {
 		print(paste0("[mngr.worker] Running simulation ", id, "..."))

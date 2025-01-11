@@ -174,7 +174,7 @@ model.analysis <- function(
     	unlink(res_dir, recursive = TRUE)
     }
     dir.create(res_dir, showWarnings = FALSE)
-    Sys.chmod(res_dir, mode = "777", use_umask = FALSE)
+
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
@@ -196,6 +196,9 @@ model.analysis <- function(
     containers.file=paste(path.package(package="epimod"),"Containers/containersNames.txt",sep="/")
     containers.names=read.table(containers.file,header=T,stringsAsFactors = F)
     id_container=paste(containers.names["analysis", 1],system("id -un", intern = TRUE),sep="_")
-    docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+   # docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+   # tmp solution:
+		docker.run(params = paste0("--cidfile=dockerID ","--volume ", volume,":", dirname(parms$out_dir), " -d ", id_container," Rscript /usr/local/lib/R/site-library/epimod/R_scripts/model.mngr.R ", p_fname), debug = debug)
+
 
 }
