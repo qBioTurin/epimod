@@ -174,6 +174,7 @@ model.analysis <- function(
     	unlink(res_dir, recursive = TRUE)
     }
     dir.create(res_dir, showWarnings = FALSE)
+    Sys.chmod(res_dir, mode = "777", use_umask = FALSE)
     # Copy all the files to the directory docker will mount to the image's file system
     experiment.env_setup(files = files, dest_dir = res_dir)
     # Change path to the new files' location
