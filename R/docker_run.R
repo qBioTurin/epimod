@@ -32,21 +32,16 @@ docker.run <- function(params = NULL, changeUID = TRUE, debug = FALSE) {
     if (changeUID) {
         userid <- system("id -u", intern = TRUE)
         groupid <- system("id -g", intern = TRUE)
-        cat(paste("docker run --user=", userid, ":", groupid, " ", params, "\n\n", sep = ""))
-        system(paste("docker run --user=", userid, ":", groupid, " ", params, sep = ""))
+        cat(paste("docker run --privileged  --user=", userid, ":", groupid, " ", params, "\n\n", sep = ""))
+        system(paste("docker run --privileged --user=", userid, ":", groupid, " ", params, sep = ""))
     } else {
-        cat(paste("docker run ", params, "\n\n", sep = ""))
-        system(paste("docker run ", params, sep = ""))
+        cat(paste("docker run --privileged ", params, "\n\n", sep = ""))
+        system(paste("docker run --privileged ", params, sep = ""))
     }
 
     # Recupera il Docker ID dal file
     dockerid <- readLines("dockerID", warn = FALSE)
     cat("\nDocker ID is:\n", substr(dockerid, 1, 12), "\n")
-
-    ## Esegui un comando per correggere i permessi nella directory montata
-    cat("\nAdjusting permissions in the container...\n")
-    system(paste0("docker exec ", substr(dockerid, 1, 12), " chmod -R 777 /home/docker/data"))
-    cat("\nPermissions adjusted successfully.\n")
 
     ## Controlla lo stato del container
     dockerStatus <- system(paste("docker inspect -f {{.State.Running}}", dockerid), intern = TRUE)
