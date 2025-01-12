@@ -80,46 +80,89 @@
 
 # TEST
 
+#downloadContainers <- function(containers.file = NULL, tag = "latest") {
+#  if (is.null(containers.file)) {
+#    containers.file <- paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
+#  }
+#  containers <- read.table(containers.file, header = TRUE, row.names = 1)
+  
+  # Forza il tag corretto
+#  containers$names <- gsub("latest", tag, containers$names, ignore.case = TRUE)
+  
+#  userid <- system("id -u", intern = TRUE)
+#  username <- system("id -un", intern = TRUE)
+  
+#  for (i in seq_len(nrow(containers))) {
+#    container_name <- containers[i, "names"]
+#    if (grepl("generation", container_name, fixed = TRUE)) {
+#      command <- c(
+#        paste("FROM", container_name),
+#        "RUN sudo groupmod -g 2005 docker && sudo usermod -u 2005 docker",
+#        paste("RUN sudo /usr/sbin/adduser --allow-bad-names -u", userid, username),
+#        "WORKDIR /home"
+#      )
+#    } else {
+#      command <- c(
+#        paste("FROM", container_name),
+#        "RUN sudo groupmod -g 2005 docker && sudo usermod -u 2005 docker",
+#        paste("RUN sudo /usr/sbin/adduser --allow-bad-names -u", userid, username),
+#        "WORKDIR /home"
+#      )
+#    }
+#    writeLines(command, "./dockerfile")
+    
+    # Usa build invece di pull
+#    status <- system(paste("docker build -f ./dockerfile -t ", container_name, "_", username, " .", sep = ""))
+#    if (status != 0) {
+#      print(paste("Error in building container", container_name, sep = " "))
+#    }
+#  }
+  
+  
+  
+  # Salva il file aggiornato
+#  write.table(containers, paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/"))
+#  system("rm ./dockerfile")
+#}
+
+
+# TMP downloadContainers().
+
 downloadContainers <- function(containers.file = NULL, tag = "latest") {
   if (is.null(containers.file)) {
     containers.file <- paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
   }
+  
+  # Leggi il file dei container
   containers <- read.table(containers.file, header = TRUE, row.names = 1)
   
-  # Forza il tag corretto
+  # Applica il tag specificato
   containers$names <- gsub("latest", tag, containers$names, ignore.case = TRUE)
   
-  userid <- system("id -u", intern = TRUE)
-  username <- system("id -un", intern = TRUE)
-  
+  # Itera su ogni container e scaricalo
   for (i in seq_len(nrow(containers))) {
     container_name <- containers[i, "names"]
-    if (grepl("generation", container_name, fixed = TRUE)) {
-      command <- c(
-        paste("FROM", container_name),
-        "RUN sudo groupmod -g 2005 docker && sudo usermod -u 2005 docker",
-        paste("RUN sudo /usr/sbin/adduser --allow-bad-names -u", userid, username),
-        "WORKDIR /home"
-      )
-    } else {
-      command <- c(
-        paste("FROM", container_name),
-        "RUN sudo groupmod -g 2005 docker && sudo usermod -u 2005 docker",
-        paste("RUN sudo /usr/sbin/adduser --allow-bad-names -u", userid, username),
-        "WORKDIR /home"
-      )
-    }
-    writeLines(command, "./dockerfile")
     
-    # Usa build invece di pull
-    status <- system(paste("docker build -f ./dockerfile -t ", container_name, "_", username, " .", sep = ""))
+    # Prova a scaricare l'immagine dal repository remoto
+    message(paste("Pulling container:", container_name))
+    status <- system(paste("docker pull", container_name))
+    
+    # Gestione degli errori nel pull
     if (status != 0) {
-      print(paste("Error in building container", container_name, sep = " "))
+      warning(paste("Failed to pull container:", container_name))
+    } else {
+      message(paste("Successfully pulled:", container_name))
     }
   }
   
-  # Salva il file aggiornato
-  write.table(containers, paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/"))
-  system("rm ./dockerfile")
+  # Salva l'elenco aggiornato
+  write.table(
+    containers,
+    paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/"),
+    row.names = TRUE,
+    col.names = TRUE,
+    quote = FALSE
+  )
 }
+
 
