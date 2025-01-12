@@ -133,11 +133,15 @@ downloadContainers <- function(containers.file = NULL, tag = "latest") {
     containers.file <- paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
   }
   
+  # Ottieni l'ID e il nome utente corrente del sistema
+  userid <- system("id -u", intern = TRUE)
+  username <- system("id -un", intern = TRUE)
+
   # Leggi il file dei container
   containers <- read.table(containers.file, header = TRUE, row.names = 1)
   
-  # Applica il tag specificato
-  containers$names <- gsub("latest", tag, containers$names, ignore.case = TRUE)
+  # Applica il tag specificato e aggiungi il nome utente
+  containers$names <- gsub("latest", paste0(tag, "_", username), containers$names, ignore.case = TRUE)
   
   # Itera su ogni container e scaricalo
   for (i in seq_len(nrow(containers))) {
