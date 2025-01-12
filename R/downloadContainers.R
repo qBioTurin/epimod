@@ -133,33 +133,32 @@ downloadContainers <- function(containers.file = NULL, tag = "latest") {
     containers.file <- paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
   }
   
-  # Ottieni l'ID e il nome utente corrente del sistema
-  userid <- system("id -u", intern = TRUE)
   username <- system("id -un", intern = TRUE)
 
-  # Leggi il file dei container
   containers <- read.table(containers.file, header = TRUE, row.names = 1)
   
-  # Applica il tag specificato e aggiungi il nome utente
-  containers$names <- gsub("latest", paste0(tag, "_", username), containers$names, ignore.case = TRUE)
-  
-  # Itera su ogni container e scaricalo
   for (i in seq_len(nrow(containers))) {
-    container_name <- containers[i, "names"]
+    original_container_name <- containers[i, "names"]
+    modified_container_name <- gsub("latest", paste0(tag, "_", username), original_container_name, ignore.case = TRUE)
     
-    # Prova a scaricare l'immagine dal repository remoto
-    message(paste("Pulling container:", container_name))
-    status <- system(paste("docker pull", container_name))
+    message(paste("Pulling container:", original_container_name))
+    status_pull <- system(paste("docker pull", original_container_name))
     
-    # Gestione degli errori nel pull
-    if (status != 0) {
-      warning(paste("Failed to pull container:", container_name))
+    if (status_pull != 0) {
+      warning(paste("Failed to pull container:", original_container_name))
     } else {
-      message(paste("Successfully pulled:", container_name))
+      message(paste("Successfully pulled:", original_container_name))
+      
+      message(paste("Renaming container from", original_container_name, "to", modified_container_name))
+      status_tag <- system(paste("docker tag", original_container_name, modified_container_name))
+      if (status_tag != 0) {
+        warning(paste("Failed to tag container:", original_container_name, "as", modified_container_name))
+      } else {
+        message(paste("Successfully renamed:", modified_container_name))
+      }
     }
   }
   
-  # Salva l'elenco aggiornato
   write.table(
     containers,
     paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/"),
