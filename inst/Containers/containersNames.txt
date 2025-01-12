@@ -1,5 +1,5 @@
          'names'
-'sensitivity' localhost:5000/epimod-sensitivity:latest
-'generation' localhost:5000/epimod-generation:latest
-'analysis' localhost:5000/epimod-analysis:latest
-'calibration' localhost:5000/epimod-calibration:latest
+'sensitivity' mandringo02/epimod-sensitivity:latest
+'generation' mandringo02/epimod-generation:latest
+'analysis' mandringo02/epimod-analysis:latest
+'calibration' mandringo02/epimod-calibration:latest
