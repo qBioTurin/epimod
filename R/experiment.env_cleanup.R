@@ -51,6 +51,30 @@ experiment.env_cleanup <- function(id, run_dir,
 			to = out_dir
 		)
 	}
+	
+  # -- New block for .upperbounds
+  ubfiles = list.files(
+    path = r_dir,
+    pattern = "\\.upperbounds$"
+  )
+
+  if (length(ubfiles) > 0){
+    print(
+      paste0(
+        "[experimen.env_cleanup] Saving upperbounds file ",
+        ubfiles
+      )
+    )
+    file.copy(
+      from = paste0(
+        r_dir,
+        .Platform$file.sep,
+        ubfiles
+      ),
+      to = out_dir
+    )
+  }
+  # -- end new block.
 
 	##
 	print(paste0("[experimen.env_cleanup] Removing directory ", r_dir))
