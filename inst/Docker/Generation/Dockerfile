@@ -69,13 +69,15 @@ RUN wget -O lp_solve_5.5.2.11_source.tar.gz "https://downloads.sourceforge.net/p
 
 
 # Install GreatSPN
+# Install GreatSPN
 RUN mkdir ~/GreatSPN && \
     cd ~/GreatSPN && \
-    git clone https://github.com/LorenzoChiabrando/SOURCES.git SOURCES && \
+    for i in {1..5}; do git clone https://github.com/LorenzoChiabrando/SOURCES.git SOURCES && break || sleep 5; done && \
     cd ~/GreatSPN/SOURCES && \
     make ${MAKE_ARGS} -k derived_objects && \
     make ${MAKE_ARGS} && \
     sudo make install
+
 
 #================================================================================
 # Stage 2: prepare the deployment image with the non-devel packages
