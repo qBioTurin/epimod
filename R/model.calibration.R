@@ -72,7 +72,7 @@
 
 model.calibration <- function(# Parameters to control the simulation
 															solver_fname,
-															i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
+															i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6, achn = -1, rchn = 0,
 															solver_type = "LSODA", taueps = 0.01, n_run = 1,
 													    # User defined simulation's parameters
 													    parameters_fname = NULL, functions_fname = NULL,
@@ -186,6 +186,8 @@ model.calibration <- function(# Parameters to control the simulation
                    s_time = s_time,
                    atol = atol,
                    rtol = rtol,
+                   achn = achn,
+                   rchn = rchn,
                    n_run = n_run,
                    volume = volume,
                    timeout = timeout,

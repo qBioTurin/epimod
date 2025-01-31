@@ -2,7 +2,7 @@
 #'
 mngr.worker <- function(id,
 												solver_fname, solver_type, taueps,
-												i_time, f_time, s_time,	atol, rtol, n_run,
+												i_time, f_time, s_time,	atol, rtol, achn, rchn, n_run,
 												timeout, run_dir, out_fname, out_dir, seed,
 												event_times = NULL, event_function,
 												files, config = NULL, FVA=F,
@@ -18,6 +18,8 @@ mngr.worker <- function(id,
 	print(paste0("[mngr.worker] - s_time ", s_time))
 	print(paste0("[mngr.worker] - atol ", atol))
 	print(paste0("[mngr.worker] - rtol ", rtol))
+	print(paste0("[mngr.worker] - achn ", achn))
+	print(paste0("[mngr.worker] - rchn ", rchn))
 	print(paste0("[mngr.worker] - parallel_processors ", parallel_processors))
 	if(FVA) print("[mngr.worker] - FVA enabled")
 
@@ -70,7 +72,7 @@ mngr.worker <- function(id,
 											port = 11000+id)
 		# Launch simulations
 		res <- parLapply(cl = cs,
-										 fun = function(X, cmd, i_time, f_time, s_time, atol, rtol, event_times, event_function, out_fname, id){
+										 fun = function(X, cmd, i_time, f_time, s_time, atol, rtol, achn, rchn, event_times, event_function, out_fname, id){
 										 	pwd <- getwd()
 										 	setwd(paste0(X))
 										 	print(paste0("[mngr.worker] Running simulation ", id, "-", X, "..."))
@@ -81,6 +83,8 @@ mngr.worker <- function(id,
 										 											 s_time = s_time,
 										 											 atol = atol,
 										 											 rtol = rtol,
+										 											 achn = achn,
+										 											 rchn = rchn,
 										 											 n_run = 1,
 										 											 # seed = seed + (id-1)*n_run+X,
 										 											 # seed = seed + (X-1)*length(params$event_times),
@@ -101,6 +105,8 @@ mngr.worker <- function(id,
 										 s_time = s_time,
 										 atol = atol,
 										 rtol = rtol,
+										 achn = achn,
+										 rchn = rchn,
 										 event_times = event_times,
 										 event_function = event_function,
 										 out_fname = out_fname)
@@ -137,6 +143,8 @@ mngr.worker <- function(id,
 													s_time = s_time,
 													atol = atol,
 													rtol = rtol,
+													achn = achn,
+													rchn = rchn,
 													n_run = n_run,
 													seed = seed + id,
 													event_times = event_times,

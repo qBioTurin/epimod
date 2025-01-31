@@ -116,7 +116,7 @@ model.sensitivity <- function(# folder storing the trace files
 	# Parameters to control the simulation
 	solver_fname=NULL,
 	ini_v = NULL,
-	i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6,
+	i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6, achn = -1, rchn = 0,
 	# User defined simulation's parameters
 	n_config=1, parameters_fname = NULL, functions_fname = NULL,
 	# Parameters to manage the simulations' execution
@@ -158,6 +158,8 @@ model.sensitivity <- function(# folder storing the trace files
 									 n_run = 1,
 									 atol = atol,
 									 rtol = rtol,
+									 achn = achn,
+									 rchn = rchn,
 									 solver_type = "LSODA",
 									 ini_v = ini_v,
 									 event_function = event_function,

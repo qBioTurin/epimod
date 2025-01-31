@@ -56,7 +56,7 @@
 
 model.analysis <- function(
     # Parameters to control the simulation
-    solver_fname, i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01,
+    solver_fname, i_time = 0, f_time, s_time, atol = 1e-6, rtol = 1e-6, n_config = 1, n_run = 1, solver_type = "LSODA", taueps = 0.01, achn = -1, rchn = 0,
     # User defined simulation's parameters
     parameters_fname = NULL, functions_fname = NULL, ini_v = NULL, ini_vector_mod = FALSE,
     # Parameters to manage the simulations' execution
@@ -159,6 +159,8 @@ model.analysis <- function(
                   s_time = s_time,
     							atol = atol,
     							rtol = rtol,
+    							achn = achn,
+       						rchn = rchn,
                   parallel_processors = parallel_processors,
                   volume = volume,
                   timeout = timeout,

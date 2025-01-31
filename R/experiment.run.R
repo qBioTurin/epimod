@@ -26,7 +26,7 @@
 
 experiment.run <- function(id, cmd,
 													 i_time, f_time, s_time,
-													 atol,rtol,
+													 atol,rtol, achn, rchn,
 													 n_run = 1, seed,
 													 event_times = NULL, event_function = NULL,
 													 out_fname,
@@ -139,6 +139,10 @@ experiment.run <- function(id, cmd,
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<ATOL>", replacement = atol)
 		print(paste0("[experiment.run] replacement <RTOL> ", rtol))
 		cmd.iter <- gsub(x = cmd.iter, pattern = "<RTOL>", replacement = rtol)
+		print(paste0("[experiment.run] replacement <ACHN> ", achn))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<ACHN>", replacement = achn)
+		print(paste0("[experiment.run] replacement <RCHN> ", rchn))
+		cmd.iter <- gsub(x = cmd.iter, pattern = "<RCHN>", replacement = rchn)
 
 		if (file.exists(init))
 		{

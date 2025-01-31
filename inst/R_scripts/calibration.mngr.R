@@ -23,7 +23,7 @@ objfn <- function(x, params, seed) {
 														 i_time = params$i_time,
 														 f_time = params$f_time,
 														 s_time = params$s_time,
-														 atol = params$atol, rtol = params$rtol,
+														 atol = params$atol, rtol = params$rtol, achn = params$achn, rchn = params$rchn,
 														 n_run = params$n_run,
 														 timeout = params$timeout,
 														 run_dir = params$run_dir,
