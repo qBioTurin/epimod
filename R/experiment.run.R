@@ -6,6 +6,8 @@
 #' @param f_time, simulation's final time
 #' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
 #' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
+#' @param achn Absolute change tolerance for triggering an FBA update (absolute value).
+#' @param rchn Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).
 #' @param n_run, when performing stochastic simulations this parameters controls the number of runs per each set of input parameters
 #' @param taueps, controls the step of the approximation introduced by the tau-leap algorithm
 #' @param event_times, controls the time at which the simulation is stopped to update the marking

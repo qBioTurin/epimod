@@ -9,6 +9,8 @@
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
 #' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
 #' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
+#' @param achn Absolute change tolerance for triggering an FBA update (absolute value).
+#' @param rchn Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).
 #' @param n_config Integer for the number of configurations to generate, to use only if some parameters are generated from a stochastic distribution, which has to be encoded in the functions defined in *functions_fname* or in *parameters_fname*.
 #' @param n_run Integer for the number of stochastic simulations to run. If n_run is greater than 1 when the deterministic process is analyzed (solver_type is *Deterministic*), then n_run identical simulation are generated.
 #' @param solver_type

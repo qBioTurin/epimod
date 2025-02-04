@@ -42,13 +42,13 @@ ENV C_INCLUDE_PATH="/usr/local/include:$C_INCLUDE_PATH"
 ENV LIBRARY_PATH="/usr/local/lib:$LIBRARY_PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
-# Install SPOT
-RUN wget http://www.lrde.epita.fr/dload/spot/spot-2.9.6.tar.gz && \
-    tar xzf spot-2.9.6.tar.gz && \
-    cd spot-2.9.6 && \
-    ./configure --disable-python --disable-debug && \
-    make ${MAKE_ARGS} && \
-    sudo make install
+# Install SPOT for now no
+#RUN wget http://www.lrde.epita.fr/dload/spot/spot-2.9.6.tar.gz && \
+#    tar xzf spot-2.9.6.tar.gz && \
+#    cd spot-2.9.6 && \
+#    ./configure --disable-python --disable-debug && \
+#    make ${MAKE_ARGS} && \
+#    sudo make install
 
 # Install OGDF
 RUN for i in 1 2 3; do \

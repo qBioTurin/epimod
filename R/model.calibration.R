@@ -8,6 +8,8 @@
 #' @param s_time Time step defining the frequency at which explicit estimates for the system values are desired.
 #' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
 #' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
+#' @param achn Absolute change tolerance for triggering an FBA update (absolute value).
+#' @param rchn Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).
 #' @param solver_type
 #'  \itemize{
 #'    \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
