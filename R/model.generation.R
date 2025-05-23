@@ -54,25 +54,12 @@ model.generation <-function(out_fname = NULL,
 
 	volume <- tools::file_path_as_absolute(volume)
 	# Create temp files and directories
-		out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
-
-		# -------------------------------------------------------------
-		uid <- system("id -u", intern = TRUE)
-		gid <- system("id -g", intern = TRUE)
-		user_flag <- sprintf("--user=%s:%s ", uid, gid)
-
-		# 1. ci riappropriamo SEMPRE della cartella (anche se esiste già)
-		system(sprintf(
-			"docker run --rm -v %s:/t busybox chown -R %s:%s /t",
-			shQuote(out_dir), uid, gid))
-
-		# 2. la cancelliamo senza temere permessi
-		if (dir.exists(out_dir))
-			unlink(out_dir, recursive = TRUE, force = TRUE)
-
-		dir.create(out_dir, showWarnings = FALSE)
-		# -------------------------------------------------------------
-
+	out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
+	if(file.exists(out_dir))
+	{
+		unlink(out_dir, recursive = TRUE)
+	}
+	dir.create(path = out_dir, showWarnings = FALSE)
 	if(!is.null(out_fname)){
 		# Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
 		netname <- file.path(out_dir, paste0(out_fname, ".PNPRO"), fsep = .Platform$file.sep)
@@ -99,12 +86,10 @@ model.generation <-function(out_fname = NULL,
   	cmd = paste0(cmd, " -flux")
 	}
 
-
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
-	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
-												 debug = debug,
-												 changeUID=T)
-
+	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
+												debug = debug,
+												changeUID=T)
 
 	if ( err_code != 0 )
 	{
@@ -153,7 +138,6 @@ model.generation <-function(out_fname = NULL,
 			file.copy(file.path(out_dir, paste0(basename(netname), ".fbainfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		}
 		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-		#system(sprintf("sudo rm -rf %s", shQuote(out_dir)))
 		unlink(out_dir, recursive = TRUE)
 	}
 }
