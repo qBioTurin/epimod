@@ -91,10 +91,13 @@ user_flag <- paste0("--user=", uid, ":", gid, " ")   # << NUOVA
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
 	err_code <- docker.run(
-		  params  = paste0("--user=", uid, ":", gid, " …"),
-		  debug   = debug,
-		  changeUID = FALSE)   
-
+		params = paste0(
+		          user_flag,                           # << SOSTITUZIONE
+		          "--cidfile=dockerID ",
+		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
+		          "--volume ", out_dir, ":/home/ -d ",
+		          id_container, " ", cmd),
+		debug  = debug)
 
 	if ( err_code != 0 )
 	{
@@ -116,9 +119,13 @@ user_flag <- paste0("--user=", uid, ":", gid, " ")   # << NUOVA
 	}
 
 	err_code <- docker.run(
-		  params  = paste0("--user=", uid, ":", gid, " …"),
-		  debug   = debug,
-		  changeUID = FALSE)   
+		params = paste0(
+		          user_flag,                           # << SOSTITUZIONE
+		          "--cidfile=dockerID ",
+		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
+		          "--volume ", out_dir, ":/home/ -d ",
+		          id_container, " ", cmd),
+		debug  = debug)
 
 
 	if ( err_code != 0 )
