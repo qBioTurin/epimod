@@ -29,19 +29,19 @@ docker.run <- function( params=NULL, changeUID=TRUE, debug=FALSE){
     }
 
     ## to execute docker
-		if (changeUID) {
-				## usa i veri UID/GID dell'utente
-				userid  <- system("id -u", intern = TRUE)
-				groupid <- system("id -g", intern = TRUE)
-
-				cmd <- sprintf("docker run --user=%s:%s %s", userid, groupid, params)
-				cat(cmd, "\n\n")
-				system(cmd)
-		} else {
-				cmd <- sprintf("docker run %s", params)
-				cat(cmd, "\n\n")
-				system(cmd)
-		}
+    if(changeUID)
+    { 	
+    		#tmp solution 
+    		userid <- "0"
+			  groupid <- "0"
+        #userid=system("id -u", intern = TRUE)
+        #groupid=system("id -g", intern = TRUE)
+        cat(paste("docker run  --user=",userid,":",groupid," ",params,"\n\n", sep=""))
+        system(paste("docker run  --user=",userid,":",groupid," ",params, sep=""))
+    } else {
+        cat(paste("docker run  ",params,"\n\n", sep=""))
+    		system(paste("docker run  ",params, sep=""))
+    }
 
     ## Get the Docker ID from file
     dockerid=readLines("dockerID", warn = FALSE)
