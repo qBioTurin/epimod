@@ -101,15 +101,29 @@ model.generation <-function(out_fname = NULL,
 
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
-	err_code <- docker.run(
-		  params = paste0(
-		      user_flag,
-		      "--cidfile=dockerID ",
-		      "-v ", out_dir, ":/home/ -d ",
-		      id_container,
-		      " sh -c 'mkdir -p /home/.java/.userPrefs && ", cmd, "'"),
-		  debug     = debug,
-		  changeUID = FALSE) 
+err_code <- docker.run(
+  params = sprintf(
+    "%s--cidfile=dockerID "
+      ## PATH completo per gli script GreatSPN e gli eseguibili di sistema
+      ## (aggiungilo sempre, o dentro al container non troverà /usr/local/GreatSPN/scripts)
+      --env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" \
+      ## directory di lavoro esplicita
+      -w /home \
+      ## bind-mount della tua cartella temporanea
+      -v %s:/home/ \
+      ## modalità detached
+      -d %s \
+      ## pre-hook: crea la dir delle preferenze Java, poi esegui il comando vero e proprio
+      sh -c 'mkdir -p /home/.java/.userPrefs && %s'",
+    user_flag,                          # es. "--user=1000:1000 "
+    shQuote(out_dir),                  # path sicuro con spazi
+    id_container,                      # nome/immagine del container
+    cmd                                # "unfolding2 …" oppure "PN2ODE.sh …"
+  ),
+  debug     = debug,
+  changeUID = FALSE    # ← importantissimo: evita di aggiungere un 2º --user
+)
+
 
 
 	if ( err_code != 0 )
@@ -131,15 +145,29 @@ model.generation <-function(out_fname = NULL,
 		cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
 	}
 
-	err_code <- docker.run(
-		  params = paste0(
-		      user_flag,
-		      "--cidfile=dockerID ",
-		      "-v ", out_dir, ":/home/ -d ",
-		      id_container,
-		      " sh -c 'mkdir -p /home/.java/.userPrefs && ", cmd, "'"),
-		  debug     = debug,
-		  changeUID = FALSE) 
+err_code <- docker.run(
+  params = sprintf(
+    "%s--cidfile=dockerID "
+      ## PATH completo per gli script GreatSPN e gli eseguibili di sistema
+      ## (aggiungilo sempre, o dentro al container non troverà /usr/local/GreatSPN/scripts)
+      --env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" \
+      ## directory di lavoro esplicita
+      -w /home \
+      ## bind-mount della tua cartella temporanea
+      -v %s:/home/ \
+      ## modalità detached
+      -d %s \
+      ## pre-hook: crea la dir delle preferenze Java, poi esegui il comando vero e proprio
+      sh -c 'mkdir -p /home/.java/.userPrefs && %s'",
+    user_flag,                          # es. "--user=1000:1000 "
+    shQuote(out_dir),                  # path sicuro con spazi
+    id_container,                      # nome/immagine del container
+    cmd                                # "unfolding2 …" oppure "PN2ODE.sh …"
+  ),
+  debug     = debug,
+  changeUID = FALSE    # ← importantissimo: evita di aggiungere un 2º --user
+)
+
 
 
 	if ( err_code != 0 )
