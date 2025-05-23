@@ -54,7 +54,23 @@ model.generation <-function(out_fname = NULL,
 
 	volume <- tools::file_path_as_absolute(volume)
 	# Create temp files and directories
-	out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
+		out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
+
+		### ⬇⬇ AGGIUNGI SUBITO QUI  ⬇⬇ ########################################
+		uid <- system("id -u", intern = TRUE)
+		gid <- system("id -g", intern = TRUE)
+
+		# se la dir esiste ma non è scrivibile → ce ne riappropriamo
+		if (dir.exists(out_dir) && file.access(out_dir, 2) != 0) {
+			system(sprintf(
+				"docker run --rm -v %s:/t busybox chown -R %s:%s /t",
+				shQuote(out_dir), uid, gid))
+		}
+
+		# costruiamo il flag --user UNA sola volta
+		user_flag <- paste0("--user=", uid, ":", gid, " ")
+		########################################################################
+
 	if(file.exists(out_dir))
 	{
 		unlink(out_dir, recursive = TRUE)
@@ -85,19 +101,19 @@ model.generation <-function(out_fname = NULL,
 	if (!is.null(fba_fname)) {
   	cmd = paste0(cmd, " -flux")
 	}
-uid <- system("id -u", intern = TRUE)          # << NUOVA
-gid <- system("id -g", intern = TRUE)          # << NUOVA
-user_flag <- paste0("--user=", uid, ":", gid, " ")   # << NUOVA
+
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
 	err_code <- docker.run(
-		params = paste0(
-		          user_flag,                           # << SOSTITUZIONE
-		          "--cidfile=dockerID ",
-		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
-		          "--volume ", out_dir, ":/home/ -d ",
-		          id_container, " ", cmd),
-		debug  = debug)
+		  params = paste0(
+		      user_flag,
+		      "--cidfile=dockerID ",
+		      "-v ", out_dir, ":/home/ -d ",
+		      id_container,
+		      " sh -c 'mkdir -p /home/.java/.userPrefs && ", cmd, "'"),
+		  debug     = debug,
+		  changeUID = FALSE) 
+
 
 	if ( err_code != 0 )
 	{
@@ -119,13 +135,14 @@ user_flag <- paste0("--user=", uid, ":", gid, " ")   # << NUOVA
 	}
 
 	err_code <- docker.run(
-		params = paste0(
-		          user_flag,                           # << SOSTITUZIONE
-		          "--cidfile=dockerID ",
-		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
-		          "--volume ", out_dir, ":/home/ -d ",
-		          id_container, " ", cmd),
-		debug  = debug)
+		  params = paste0(
+		      user_flag,
+		      "--cidfile=dockerID ",
+		      "-v ", out_dir, ":/home/ -d ",
+		      id_container,
+		      " sh -c 'mkdir -p /home/.java/.userPrefs && ", cmd, "'"),
+		  debug     = debug,
+		  changeUID = FALSE) 
 
 
 	if ( err_code != 0 )
