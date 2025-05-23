@@ -1,29 +1,33 @@
-# epimod-sensitivity
-FROM r-base
+# ---------- epimod-sensitivity (testing only) ----------
+FROM r-base:4.2.2
 
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt update && apt install -y libcurl4-openssl-dev libssl-dev libssh2-1-dev libxml2-dev libglpk-dev libharfbuzz-dev libfribidi-dev libfontconfig1-dev libc6-dev libglib2.0-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev libudunits2-dev libgdal-dev libcairo2-dev
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install all required R packages
-RUN R -e "install.packages('devtools')"
-RUN R -e "install.packages('fdatest')"
-RUN R -e "install.packages('ggplot2')"
-RUN R -e "install.packages('epiR')"
-RUN R -e "install.packages('tidyr')"
+# 2) System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libcurl4-openssl-dev  libssl-dev        libssh2-1-dev  libxml2-dev \
+        libglpk-dev           libharfbuzz-dev   libfribidi-dev libfontconfig1-dev \
+        libc6-dev             libglib2.0-dev    libfreetype6-dev libpng-dev \
+        libtiff5-dev          libjpeg-dev       libudunits2-dev libgdal-dev \
+        libcairo2-dev         sudo              adduser         apt-utils && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Create scratch directory
-RUN mkdir /home/docker/scratch; chmod 777 /home/docker/scratch
+# 3) R packages
+RUN R -e "install.packages(c('devtools','fdatest','ggplot2','epiR','tidyr'), \
+             repos='https://cloud.r-project.org')"
 
-# Create data directory
-RUN mkdir /home/docker/data; chmod 777 /home/docker/data
+# 4) Runtime directories
+RUN mkdir -p /home/docker/{scratch,data} && chmod -R 777 /home/docker
 
-# date > marker
-RUN R -e "library(devtools);install_github('qBioTurin/epimod', ref='epimod_pFBA',dependencies=TRUE)"
+# Installa il pacchetto 'epimod' da GitHub utilizzando remotes
+RUN R -e "remotes::install_github('qBioTurin/epimod', ref='epimod_pFBA', dependencies=TRUE)"
 
-# Dump all packages installed with it's version
+# Salva l'elenco dei pacchetti installati (utile per il debug)
 RUN dpkg -l > /PKG_LIST
 
-RUN apt-get install -y sudo adduser apt-utils
+# Installa ulteriori utilità
+RUN apt-get update && apt-get install -y --no-install-recommends sudo adduser apt-utils && \
+    rm -rf /var/lib/apt/lists/*
 
-# Define default command.
 CMD ["bash"]
+

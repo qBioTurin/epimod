@@ -138,6 +138,7 @@ model.generation <-function(out_fname = NULL,
 			file.copy(file.path(out_dir, paste0(basename(netname), ".fbainfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		}
 		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
+		system(sprintf("sudo rm -rf %s", shQuote(out_dir)))
 		unlink(out_dir, recursive = TRUE)
 	}
 }
