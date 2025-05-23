@@ -56,26 +56,23 @@ model.generation <-function(out_fname = NULL,
 	# Create temp files and directories
 		out_dir <- file.path(volume, "generation", fsep = .Platform$file.sep)
 
-		### ⬇⬇ AGGIUNGI SUBITO QUI  ⬇⬇ ########################################
+		# -------------------------------------------------------------
 		uid <- system("id -u", intern = TRUE)
 		gid <- system("id -g", intern = TRUE)
+		user_flag <- sprintf("--user=%s:%s ", uid, gid)
 
-		# se la dir esiste ma non è scrivibile → ce ne riappropriamo
-		if (dir.exists(out_dir) && file.access(out_dir, 2) != 0) {
-			system(sprintf(
-				"docker run --rm -v %s:/t busybox chown -R %s:%s /t",
-				shQuote(out_dir), uid, gid))
-		}
+		# 1. ci riappropriamo SEMPRE della cartella (anche se esiste già)
+		system(sprintf(
+			"docker run --rm -v %s:/t busybox chown -R %s:%s /t",
+			shQuote(out_dir), uid, gid))
 
-		# costruiamo il flag --user UNA sola volta
-		user_flag <- paste0("--user=", uid, ":", gid, " ")
-		########################################################################
+		# 2. la cancelliamo senza temere permessi
+		if (dir.exists(out_dir))
+			unlink(out_dir, recursive = TRUE, force = TRUE)
 
-	if(file.exists(out_dir))
-	{
-		unlink(out_dir, recursive = TRUE)
-	}
-	dir.create(path = out_dir, showWarnings = FALSE)
+		dir.create(out_dir, showWarnings = FALSE)
+		# -------------------------------------------------------------
+
 	if(!is.null(out_fname)){
 		# Rename the .PNPRO file so that the generated output files will match the out_fname specified by the user
 		netname <- file.path(out_dir, paste0(out_fname, ".PNPRO"), fsep = .Platform$file.sep)
