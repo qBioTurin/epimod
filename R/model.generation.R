@@ -85,11 +85,20 @@ model.generation <-function(out_fname = NULL,
 	if (!is.null(fba_fname)) {
   	cmd = paste0(cmd, " -flux")
 	}
+uid <- system("id -u", intern = TRUE)          # << NUOVA
+gid <- system("id -g", intern = TRUE)          # << NUOVA
+user_flag <- paste0("--user=", uid, ":", gid, " ")   # << NUOVA
 
 	id_container=paste(containers.names["generation", 1],system("id -un", intern = TRUE),sep="_")
-	err_code = docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
-												debug = debug,
-												changeUID=T)
+	err_code <- docker.run(
+		params = paste0(
+		          user_flag,                           # << SOSTITUZIONE
+		          "--cidfile=dockerID ",
+		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
+		          "--volume ", out_dir, ":/home/ -d ",
+		          id_container, " ", cmd),
+		debug  = debug)
+
 
 	if ( err_code != 0 )
 	{
@@ -110,9 +119,15 @@ model.generation <-function(out_fname = NULL,
 		cmd= paste0(cmd,paste0(" -H ",fba_fname,collapse = "") )
 	}
 
-	err_code <- docker.run(params = paste0("--cidfile=dockerID ", "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" --volume ", out_dir, ":/home/ -d ", id_container, " ", cmd),
-												 debug = debug,
-												 changeUID=T)
+	err_code <- docker.run(
+		params = paste0(
+		          user_flag,                           # << SOSTITUZIONE
+		          "--cidfile=dockerID ",
+		          "--env PATH=\"$PATH:/usr/local/GreatSPN/scripts:/bin:/sbin\" ",
+		          "--volume ", out_dir, ":/home/ -d ",
+		          id_container, " ", cmd),
+		debug  = debug)
+
 
 	if ( err_code != 0 )
 	{
@@ -138,7 +153,7 @@ model.generation <-function(out_fname = NULL,
 			file.copy(file.path(out_dir, paste0(basename(netname), ".fbainfo"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
 		}
 		#file.copy(file.path(out_dir, paste0(basename(netname), ".cpp"), fsep = .Platform$file.sep), chk_dir(volume), overwrite = TRUE)
-		system(sprintf("sudo rm -rf %s", shQuote(out_dir)))
+		#system(sprintf("sudo rm -rf %s", shQuote(out_dir)))
 		unlink(out_dir, recursive = TRUE)
 	}
 }
