@@ -18,6 +18,13 @@ feature_rowEasy:
     excerpt: "The Lotka–Volterra equations, also known as the predator–prey equations, are a pair of first-order nonlinear differential equations, frequently used to describe the dynamics of biological systems in which two species interact, one as a predator and the other as prey. "
     url: "/Lotka/"
     btn_label: "Read More"
+    btn_class: "btn--primary"
+  - image_path: /assets/images/SIR.png
+    alt: "placeholder image 2"
+    title: "Schlogl model"
+    excerpt: "The Schlogl model was conceived for modeling and simulation of biochemical systems. The Schlogl model depends exclusively on the chemical species X1 with a peculiar features such as bistability and first order phase transition (energy-assisted jumps between states), and front propagation in spatially extended systems."
+    url: "/schlogl/"
+    btn_label: "Read More"
     btn_class: "btn--primary"  
 feature_rowComplex1:
   - image_path: /assets/images/COVID/COVIDmodel.png
