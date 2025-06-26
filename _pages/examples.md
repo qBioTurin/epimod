@@ -19,7 +19,7 @@ feature_rowEasy:
     url: "/Lotka/"
     btn_label: "Read More"
     btn_class: "btn--primary"
-  - image_path: /assets/images/SIR.png
+  - image_path: /assets/images/Schlogl/Schlogl.png
     alt: "placeholder image 2"
     title: "Schlogl model"
     excerpt: "The Schlogl model was conceived for modeling and simulation of biochemical systems. The Schlogl model depends exclusively on the chemical species X1 with a peculiar features such as bistability and first order phase transition (energy-assisted jumps between states), and front propagation in spatially extended systems."
