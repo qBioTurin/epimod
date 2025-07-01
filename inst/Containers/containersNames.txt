@@ -1,5 +1,5 @@
          'names'
 'sensitivity' mandringo02/epimod-sensitivity:latest
-'generation' mandringo02/epimod-generation:latest
+'generation' mandringo02/epimod-generation:latest_mandringo02
 'analysis' mandringo02/epimod-analysis:latest
 'calibration' mandringo02/epimod-calibration:latest
