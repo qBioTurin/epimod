@@ -92,7 +92,7 @@ USER docker
 WORKDIR /home/docker
 
 ###############################################################################
-# Stage 3 ─ updater (opzionale, se vuoi il pull recente)
+# Stage 3 ─ updater 
 ###############################################################################
 FROM builder AS updater
 ARG UPDATE_VERSION
@@ -115,7 +115,6 @@ COPY --from=updater --chown=1000:1000 /usr/local/lib       /usr/local/lib
 USER root
 RUN mkdir -p /home && chown -R 1000:1000 /home
 
-# 🔧 rimuovi i .a/.la da root
 RUN find /usr/local/lib -name '*.a' -o -name '*.la' -delete
 
 WORKDIR /home
