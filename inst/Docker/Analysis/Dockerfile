@@ -1,5 +1,5 @@
 # Usa l'immagine ufficiale di R come base
-FROM r-base
+FROM r-base:4.2.2
 
 # Imposta la modalità non interattiva per evitare prompt durante la build
 ENV DEBIAN_FRONTEND=noninteractive
@@ -53,6 +53,7 @@ RUN R -e "\
 "
 
 # Crea le cartelle necessarie con i permessi adeguati
+RUN chmod 777 /home/docker
 RUN mkdir -p /home/docker/scratch && chmod 777 /home/docker/scratch
 RUN mkdir -p /home/docker/data && chmod 777 /home/docker/data
 

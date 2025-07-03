@@ -1,5 +1,5 @@
-# ---------- epimod-sensitivity (testing only) ----------
-FROM r-base:4.2.2
+# ---------- epimod-sensitivity ----------
+FROM r-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -13,14 +13,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 3) R packages
-RUN R -e "install.packages(c('devtools','fdatest','ggplot2','epiR','tidyr'), \
-             repos='https://cloud.r-project.org')"
+# Installa il pacchetto 'epimod' da GitHub utilizzando remotes
+
+RUN R -e "\
+  install.packages(c('remotes','fdatest','ggplot2','epiR','tidyr'), \
+             repos='https://cloud.r-project.org');\
+  cat('\n-- Check remotes install: --\n');\
+  cat('remotes path:', system.file(package='remotes'), '\\n');\
+  remotes::install_github('qBioTurin/epimod', ref='epimod_pFBA', dependencies=TRUE);\
+"
 
 # 4) Runtime directories
 RUN mkdir -p /home/docker/{scratch,data} && chmod -R 777 /home/docker
 
-# Installa il pacchetto 'epimod' da GitHub utilizzando remotes
-RUN R -e "remotes::install_github('qBioTurin/epimod', ref='epimod_pFBA', dependencies=TRUE)"
 
 # Salva l'elenco dei pacchetti installati (utile per il debug)
 RUN dpkg -l > /PKG_LIST
@@ -29,5 +34,9 @@ RUN dpkg -l > /PKG_LIST
 RUN apt-get update && apt-get install -y --no-install-recommends sudo adduser apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["bash"]
+RUN apt-get update && apt-get install -y libabsl-dev
 
+RUN R -e "install.packages('epiR');\
+  cat('remotes path:', system.file(package='epiR'), '\\n')"
+
+CMD ["bash"]
