@@ -51,14 +51,14 @@ RUN for n in {1..3}; do \
 # -------- lp_solve ----------------------------------------------------------
 RUN wget -O lp_solve.tar.gz \
       https://downloads.sourceforge.net/project/lpsolve/lpsolve/5.5.2.11/lp_solve_5.5.2.11_source.tar.gz && \
-    wget https://raw.githubusercontent.com/LorenzoChiabrando/SOURCES/master/contrib/build_lpsolve.sh && \
+    wget https://raw.githubusercontent.com/qBioTurin/SOURCESgreatspn/master/contrib/build_lpsolve.sh && \
     tar xzf lp_solve.tar.gz && \
     chmod +x build_lpsolve.sh && ./build_lpsolve.sh
 
 # -------- GreatSPN ----------------------------------------------------------
 RUN mkdir -p ~/GreatSPN && cd ~/GreatSPN && \
     for n in {1..5}; do \
-      git clone https://github.com/LorenzoChiabrando/SOURCES.git SOURCES && break || sleep 10; \
+      git clone https://github.com/qBioTurin/SOURCESgreatspn.git SOURCES && break || sleep 10; \
     done && \
     cd SOURCES && \
     make ${MAKE_ARGS} -k derived_objects && \
@@ -92,7 +92,7 @@ USER docker
 WORKDIR /home/docker
 
 ###############################################################################
-# Stage 3 ─ updater 
+# Stage 3 ─ updater
 ###############################################################################
 FROM builder AS updater
 ARG UPDATE_VERSION

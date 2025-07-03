@@ -22,7 +22,7 @@ BRANCH=${3:-main}  # Default branch
 echo "Building Docker images for branch: $BRANCH"
 
 # Checkout del branch specifico
-git checkout $BRANCH || { echo "Failed to checkout branch $BRANCH"; exit 1; }
+# git checkout $BRANCH || { echo "Failed to checkout branch $BRANCH"; exit 1; }
 
 for I in ${IMAGES[@]}; do
   IMG=$(echo $I | tr '[:upper:]' '[:lower:]' | tr -d '[:punct:]')
@@ -36,7 +36,7 @@ for I in ${IMAGES[@]}; do
         bash $DIR/do.sh build
       else
         echo -e "\tExecuting docker build -t qbioturin/epimod-$IMG:$TAG-$BRANCH ."
-        docker build -t qbioturin/epimod-$IMG:$TAG-$BRANCH .
+        docker build -t qbioturin/epimod-$IMG:$TAG .
         if [[ $? -ne 0 ]]; then
           echo "Failed to build $IMG"
           exit 1
@@ -44,8 +44,8 @@ for I in ${IMAGES[@]}; do
       fi
       rm marker
       echo "Uploading $IMG"
-      echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG-$BRANCH"
-      docker push qbioturin/epimod-$IMG:$TAG-$BRANCH
+      echo -e "\tExecuting docker push qbioturin/epimod-$IMG:$TAG"
+      docker push qbioturin/epimod-$IMG:$TAG
       if [[ $? -ne 0 ]]; then
         echo "Failed to push $IMG"
         exit 1
