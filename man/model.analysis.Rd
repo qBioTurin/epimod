@@ -15,6 +15,8 @@ model.analysis(
   n_run = 1,
   solver_type = "LSODA",
   taueps = 0.01,
+  achn = -1,
+  rchn = 0,
   parameters_fname = NULL,
   functions_fname = NULL,
   ini_v = NULL,
@@ -57,6 +59,10 @@ model.analysis(
 } Default is LSODA.}
 
 \item{taueps}{The error control parameter from the tau-leaping approach.}
+
+\item{achn}{Absolute change tolerance for triggering an FBA update (absolute value).}
+
+\item{rchn}{Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).}
 
 \item{parameters_fname}{a textual file in which the  parameters to be studied are listed associated with their range of variability.
 This file is defined by three mandatory columns (*which must separeted using ;*):
@@ -103,9 +109,6 @@ It must be the same files vector passed to the function *model_generation* for g
 \description{
 Solves the system given a specific parameters configuration simulating the behavior of the developed model.
   Furthermore, by changing the input parameters, it is possible to perform a what-if analysis or forecasting the evolution of the diffusion process.
-}
-\details{
-
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele

@@ -53,7 +53,8 @@
 #' In particular, *time* takes values from *event_times*.
 #' @param extend If TRUE the actual configuration is extended including n_config new configurations.
 #' @param seed .RData file that can be used to initialize the internal random generator.
-#' @param out_fname Prefix to the output file name
+#' @param out_fname Prefix to the output trace file name
+#' @param out_foldername Prefix to the output folder name
 #' @param user_files Vector of user files to copy inside the docker directory
 #' @param debug If TRUE enables logging activity.
 #' @param fba_fname vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*).
@@ -92,7 +93,7 @@ model.calibration <- function(# Parameters to control the simulation
 													    # Mange reproducibility
 													    seed = NULL,
 													    # Directories
-													    out_fname = NULL,
+													    out_fname = NULL, out_foldername = NULL,
 															#Vector of user files to copy inside the docker directory
 															user_files = NULL,
 													    #Flag to enable logging activity
@@ -124,7 +125,11 @@ model.calibration <- function(# Parameters to control the simulation
     if(ret != TRUE)
         stop(paste("model_calibration_test error:", ret, sep = "\n"))
 
-    results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_calibration/")
+    if(is.null(out_foldername) )
+	    results_dir_name <- paste0(basename(tools::file_path_sans_ext(solver_fname)), "_calibration/")
+	   else
+	   	results_dir_name <- out_foldername
+
     chk_dir <- function(path){
         pwd <- basename(path)
         return(paste0(file.path(dirname(path), pwd, fsep = .Platform$file.sep), .Platform$file.sep))
@@ -232,6 +237,6 @@ model.calibration <- function(# Parameters to control the simulation
     # Run the docker image
     containers.file=paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
     containers.names=read.table(containers.file, header=T, stringsAsFactors = F)
-    id_container=paste(containers.names["calibration", 1],system("id -un", intern = TRUE),sep="_")	
+    id_container=paste(containers.names["calibration", 1],system("id -un", intern = TRUE),sep="_")
     docker.run(params = paste0("--cidfile=dockerID ", "--volume ", volume, ":", dirname(params$out_dir), " -d ",  id_container, " Rscript /usr/local/lib/R/site-library/epimod/R_scripts/calibration.mngr.R ", parms_fname), debug = debug)
 }

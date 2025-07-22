@@ -12,7 +12,7 @@ display_data(volume = getwd(), port = 80)
 \item{port}{The port shyiny app will listen for requests}
 }
 \description{
-
+Run display data
 }
 \examples{
 \dontrun{

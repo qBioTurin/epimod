@@ -10,6 +10,7 @@ model.generation(
   transitions_fname = NULL,
   fba_fname = NULL,
   volume = getwd(),
+  policy = "M",
   debug = FALSE
 )
 }
@@ -23,6 +24,8 @@ model.generation(
 \item{fba_fname}{vector of .txt files encoding different flux balance analysis problems, which as to be included in the general transitions (*transitions_fname*). (default is NULL)}
 
 \item{volume}{The folder to mount within the Docker image providing all the necessary files.}
+
+\item{policy}{M for mass action  and I for Infinity Servers}
 
 \item{debug}{If TRUE enables logging activity.}
 }

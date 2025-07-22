@@ -12,6 +12,8 @@ experiment.run(
   s_time,
   atol,
   rtol,
+  achn,
+  rchn,
   n_run = 1,
   seed,
   event_times = NULL,
@@ -31,6 +33,10 @@ experiment.run(
 
 \item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
 
+\item{achn}{Absolute change tolerance for triggering an FBA update (absolute value).}
+
+\item{rchn}{Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).}
+
 \item{n_run, }{when performing stochastic simulations this parameters controls the number of runs per each set of input parameters}
 
 \item{event_times, }{controls the time at which the simulation is stopped to update the marking}
@@ -42,8 +48,6 @@ experiment.run(
 \item{FVA}{Flag to enable the flux variability analysis}
 
 \item{solver_fname, }{the name of the solver executable file}
-
-\item{solver_type, }{a string definig what solver to apply (LSODA, HLSODA, ..)}
 
 \item{taueps, }{controls the step of the approximation introduced by the tau-leap algorithm}
 

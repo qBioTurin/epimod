@@ -11,6 +11,8 @@ model.calibration(
   s_time,
   atol = 1e-06,
   rtol = 1e-06,
+  achn = -1,
+  rchn = 0,
   solver_type = "LSODA",
   taueps = 0.01,
   n_run = 1,
@@ -32,6 +34,7 @@ model.calibration(
   event_function = NULL,
   seed = NULL,
   out_fname = NULL,
+  out_foldername = NULL,
   user_files = NULL,
   debug = FALSE,
   fba_fname = NULL
@@ -49,6 +52,10 @@ model.calibration(
 \item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
 
 \item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
+
+\item{achn}{Absolute change tolerance for triggering an FBA update (absolute value).}
+
+\item{rchn}{Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).}
 
 \item{solver_type}{\itemize{
   \item Deterministic: three explicit methods which can be efficiently used  for systems without stiffness: Runge-Kutta 5th order integration, Dormand-Prince method, and Kutta-Merson method (ODE-E, ODE-RKF, ODE45). Instead for systems with stiffness we provided a Backward Differentiation Formula (LSODA);
@@ -107,7 +114,9 @@ In particular, *time* takes values from *event_times*.}
 
 \item{seed}{.RData file that can be used to initialize the internal random generator.}
 
-\item{out_fname}{Prefix to the output file name}
+\item{out_fname}{Prefix to the output trace file name}
+
+\item{out_foldername}{Prefix to the output folder name}
 
 \item{user_files}{Vector of user files to copy inside the docker directory}
 

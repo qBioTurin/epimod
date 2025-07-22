@@ -13,6 +13,8 @@ model.sensitivity(
   s_time,
   atol = 1e-06,
   rtol = 1e-06,
+  achn = -1,
+  rchn = 0,
   n_config = 1,
   parameters_fname = NULL,
   functions_fname = NULL,
@@ -50,6 +52,10 @@ for the system values are desired.}
 \item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
 
 \item{rtol}{Relative error tolerance that determine the error control performed by the LSODA solver.}
+
+\item{achn}{Absolute change tolerance for triggering an FBA update (absolute value).}
+
+\item{rchn}{Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).}
 
 \item{n_config}{Number of configurations to generate, to use only if some
 parameters are generated from a stochastic distribution, which has to be
