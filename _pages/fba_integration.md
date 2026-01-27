@@ -108,7 +108,7 @@ This approach allows you to:
     <img src="/assets/images/FBA/Cdifficile/Schema.png" alt="C. difficile Model">
     <div class="fba-card-content">
       <p>Study of metabolic reprogramming during <em>Clostridium difficile</em> infection, including the acquisition of antibiotic-resistant phenotypes through heme supplementation.</p>
-      <a href="/Cdifficile/" class="btn">View Example</a>
+      <a href="/epimod/Cdifficile/" class="btn">View Example</a>
     </div>
   </div>
   
@@ -117,7 +117,7 @@ This approach allows you to:
     <img src="/assets/images/Framework.png" alt="E. coli Model">
     <div class="fba-card-content">
       <p>Integration of transcriptional data onto <em>Escherichia coli</em> genome-scale metabolic model (iML1515) growing on different regimes of carbon feeding.</p>
-      <a href="/ecoli_modeling/" class="btn">View Example</a>
+      <a href="/epimod/ecoli_modeling/" class="btn">View Example</a>
     </div>
   </div>
 </div>
