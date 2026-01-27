@@ -75,7 +75,7 @@ intro:
     <img src="/assets/images/FBA/Cdifficile/Schema.png" alt="FBA Integration">
     <div class="functionality-card-content">
       <p><strong>Multi-Scale Modeling:</strong> Seamlessly couple dynamic Petri Net models with genome-scale metabolic networks. Analyze host-pathogen interfaces and metabolic reprogramming at multiple biological scales.</p>
-      <a href="/fba_integration/" class="btn">View Examples</a>
+      <a href="/epimod/fba_integration/" class="btn">View Examples</a>
     </div>
   </div>
   
