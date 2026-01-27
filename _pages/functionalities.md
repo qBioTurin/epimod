@@ -1,5 +1,5 @@
 ---
-title: "GreatMod - Core Functionalities"
+title: "GreatMod - Functionalities"
 permalink: /functionalities/
 layout: splash
 intro: 
