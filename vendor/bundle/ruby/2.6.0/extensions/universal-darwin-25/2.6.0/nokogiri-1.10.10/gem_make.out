@@ -1,0 +1,116 @@
+current directory: /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/ext/nokogiri
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /Library/Ruby/Site/2.6.0 -r ./siteconf20260127-22001-1q1yvzn.rb extconf.rb
+checking if the C compiler accepts  -I /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/libxml2... yes
+checking if the C compiler accepts -Wno-error=unused-command-line-argument-hard-error-in-future... no
+Building nokogiri using packaged libraries.
+Using mini_portile version 2.4.0
+checking for iconv.h... yes
+checking for gzdopen() in -lz... yes
+checking for iconv... yes
+************************************************************************
+IMPORTANT NOTICE:
+
+Building Nokogiri with a packaged version of libxml2-2.9.10
+with the following patches applied:
+	- 0001-Revert-Do-not-URI-escape-in-server-side-includes.patch
+	- 0002-Remove-script-macro-support.patch
+	- 0003-Update-entities-to-remove-handling-of-ssi.patch
+	- 0004-libxml2.la-is-in-top_builddir.patch
+	- 0005-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch
+
+Team Nokogiri will keep on doing their best to provide security
+updates in a timely manner, but if this is a concern for you and want
+to use the system library instead; abort this installation process and
+reinstall nokogiri as follows:
+
+    gem install nokogiri -- --use-system-libraries
+        [--with-xml2-config=/path/to/xml2-config]
+        [--with-xslt-config=/path/to/xslt-config]
+
+If you are using Bundler, tell it to use the option:
+
+    bundle config build.nokogiri --use-system-libraries
+    bundle install
+
+Note, however, that nokogiri is not fully compatible with arbitrary
+versions of libxml2 provided by OS/package vendors.
+************************************************************************
+Extracting libxml2-2.9.10.tar.gz into tmp/aarch64-apple-darwin25/ports/libxml2/2.9.10... OK
+Running git apply with /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/patches/libxml2/0001-Revert-Do-not-URI-escape-in-server-side-includes.patch... OK
+Running git apply with /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/patches/libxml2/0002-Remove-script-macro-support.patch... OK
+Running git apply with /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/patches/libxml2/0003-Update-entities-to-remove-handling-of-ssi.patch... OK
+Running git apply with /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/patches/libxml2/0004-libxml2.la-is-in-top_builddir.patch... OK
+Running git apply with /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/patches/libxml2/0005-Fix-infinite-loop-in-xmlStringLenDecodeEntities.patch... OK
+Running 'configure' for libxml2 2.9.10... OK
+Running 'compile' for libxml2 2.9.10... ERROR, review '/Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/ext/nokogiri/tmp/aarch64-apple-darwin25/ports/libxml2/2.9.10/compile.log' to see what happened. Last lines are:
+========================================================================
+  CC       xmlmodule.lo
+  CC       schematron.lo
+  CC       xzlib.lo
+  CCLD     libxml2.la
+  CCLD     xmllint
+ld: warning: ignoring file '/usr/local/Cellar/xz/5.8.1/lib/liblzma.dylib': found architecture 'x86_64', required architecture 'arm64'
+Undefined symbols for architecture arm64:
+  "_lzma_auto_decoder", referenced from:
+      _xz_head in libxml2.a[45](xzlib.o)
+  "_lzma_code", referenced from:
+      _xz_decomp in libxml2.a[45](xzlib.o)
+  "_lzma_end", referenced from:
+      ___libxml2_xzclose in libxml2.a[45](xzlib.o)
+  "_lzma_properties_decode", referenced from:
+      _is_format_lzma in libxml2.a[45](xzlib.o)
+ld: symbol(s) not found for architecture arm64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make[2]: *** [xmllint] Error 1
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+========================================================================
+*** extconf.rb failed ***
+Could not create Makefile due to some reason, probably lack of necessary
+libraries and/or headers.  Check the mkmf.log file for more details.  You may
+need configuration options.
+
+Provided configuration options:
+	--with-opt-dir
+	--without-opt-dir
+	--with-opt-include
+	--without-opt-include=${opt-dir}/include
+	--with-opt-lib
+	--without-opt-lib=${opt-dir}/lib
+	--with-make-prog
+	--without-make-prog
+	--srcdir=.
+	--curdir
+	--ruby=/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/$(RUBY_BASE_NAME)
+	--help
+	--clean
+	--use-system-libraries
+	--enable-static
+	--disable-static
+	--with-zlib-dir
+	--without-zlib-dir
+	--with-zlib-include
+	--without-zlib-include=${zlib-dir}/include
+	--with-zlib-lib
+	--without-zlib-lib=${zlib-dir}/lib
+	--enable-cross-build
+	--disable-cross-build
+/Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.4.0/lib/mini_portile2/mini_portile.rb:402:in `block in execute': Failed to complete compile task (RuntimeError)
+	from /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.4.0/lib/mini_portile2/mini_portile.rb:373:in `chdir'
+	from /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.4.0/lib/mini_portile2/mini_portile.rb:373:in `execute'
+	from /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.4.0/lib/mini_portile2/mini_portile.rb:115:in `compile'
+	from /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/mini_portile2-2.4.0/lib/mini_portile2/mini_portile.rb:154:in `cook'
+	from extconf.rb:365:in `block (2 levels) in process_recipe'
+	from extconf.rb:257:in `block in chdir_for_build'
+	from extconf.rb:256:in `chdir'
+	from extconf.rb:256:in `chdir_for_build'
+	from extconf.rb:364:in `block in process_recipe'
+	from extconf.rb:262:in `tap'
+	from extconf.rb:262:in `process_recipe'
+	from extconf.rb:557:in `<main>'
+
+To see why this extension failed to compile, please check the mkmf.log which can be found here:
+
+  /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/extensions/universal-darwin-25/2.6.0/nokogiri-1.10.10/mkmf.log
+
+extconf failed, exit code 1

@@ -1,0 +1,16 @@
+current directory: /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/racc-1.8.1/ext/racc/cparse
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /Library/Ruby/Site/2.6.0 -r ./siteconf20260127-29680-1j16d5u.rb extconf.rb
+creating Makefile
+
+current directory: /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR=" clean
+
+current directory: /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR="
+compiling cparse.c
+linking shared-object racc/cparse.bundle
+ld: warning: search path '/AppleInternal/Library/BuildRoots/4~B6shugC-pBw2FFwMVaDEXpw0Mr2FHeLtgpupfQ8/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.Internal.sdk/usr/local/lib' not found
+
+current directory: /Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/racc-1.8.1/ext/racc/cparse
+make "DESTDIR=" install
+/usr/bin/install -c -m 0755 cparse.bundle ./.gem.20260127-29680-1sk7g15/racc

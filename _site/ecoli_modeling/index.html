@@ -1,0 +1,484 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>E. coli Metabolic Modeling -</title>
+<meta name="description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+  <meta name="author" content="q-Bio Group">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="E. coli Metabolic Modeling">
+<meta property="og:url" content="http://localhost:4000/ecoli_modeling/">
+
+
+  <meta property="og:description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/FBA/Cdifficile/Schema.png">
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/ecoli_modeling/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "qbioGroup",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logoGreatMod.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          
+          <span class="site-subtitle"></span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/HowInstall/">How to install</a>
+            </li><li class="masthead__menu-item">
+              <a href="/examples/">Applications</a>
+            </li><li class="masthead__menu-item">
+              <a href="/functionalities/">Functionalities</a>
+            </li><li class="masthead__menu-item">
+              <a href="/group/">Team</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collaboration/">Collaborations</a>
+            </li><li class="masthead__menu-item">
+              <a href="/references/">References</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/FBA/Cdifficile/Schema.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          E. coli Metabolic Modeling
+
+        
+      </h1>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/qbioGroup.jpg" alt="q-Bio Group" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">q-Bio Group</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>The Quantitative Biology (q-Bio) group.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Turin</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="pernice@di.unito.it" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+          
+            <li><a href="https://www.cs.unito.it/do/gruppi.pl/Show?_id=lxu3" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="E. coli Metabolic Modeling">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Index</h4></header>
+              <ul class="toc__menu"><li><a href="#using-unifiedgreatmod-to-integrate-transcriptional-data-onto-escherichia-coli-genome-scale-metabolic-model-iml1515-growing-on-different-regimes-of-carbon-feeding">Using UnifiedGreatMod to integrate transcriptional data onto Escherichia coli genome-scale metabolic model (iML1515) growing on different regimes of carbon feeding</a><ul><li><a href="#overview">Overview</a></li><li><a href="#petri-net-based-model-of-e-coli-strain-k-12">Petri Net-based model of E. coli strain K-12</a><ul><li><a href="#background">Background</a></li><li><a href="#methods">Methods</a></li><li><a href="#results">Results</a></li></ul></li><li><a href="#carbon-source-feeding-scenarios">Carbon Source Feeding Scenarios</a></li><li><a href="#gene-expression-integration">Gene Expression Integration</a></li><li><a href="#model-metrics">Model Metrics</a></li><li><a href="#repository">Repository</a></li><li><a href="#timing-performance">Timing Performance</a></li></ul></li></ul>
+
+            </nav>
+          </aside>
+        
+        <h1 id="using-unifiedgreatmod-to-integrate-transcriptional-data-onto-escherichia-coli-genome-scale-metabolic-model-iml1515-growing-on-different-regimes-of-carbon-feeding">Using UnifiedGreatMod to integrate transcriptional data onto <em>Escherichia coli</em> genome-scale metabolic model (iML1515) growing on different regimes of carbon feeding</h1>
+
+<h2 id="overview">Overview</h2>
+
+<p>This example demonstrates GreatMod’s capability to integrate <strong>Flux Balance Analysis (FBA)</strong> with <strong>Petri Net dynamical models</strong> to simulate multi-state metabolic systems. The framework mechanistically simulates the metabolic output of <em>E. coli</em> growing under various transcriptional programs and environmental nutrient perturbations.</p>
+
+<h2 id="petri-net-based-model-of-e-coli-strain-k-12">Petri Net-based model of <em>E. coli</em> strain K-12</h2>
+
+<h3 id="background">Background</h3>
+
+<p><strong>Epimod</strong> is an analysis tool that integrates Flux Balance Analysis (FBA) and Petri Net dynamical models based on Ordinary Differential Equations (ODEs) into a general and unified modeling framework. This repository contains a working example introducing the framework’s ability to simulate multi-state systems. The FBA optimization problem is solved along with constraints on the rate of change of metabolite levels at specific time instants.</p>
+
+<p>We have shown that Epimod can mechanistically simulate the metabolic output of <em>E. coli</em> growing under various transcriptional programs and environmental nutrient perturbations. Therefore, Epimod provides a framework for analyzing the transience of metabolism due to metabolic reprogramming and obtaining insights for the design of metabolic networks.</p>
+
+<h3 id="methods">Methods</h3>
+
+<p>FBA has become an established constraint-based method approach to studying metabolic networks. However, mechanism-based modeling approaches are the best option to model biological systems with finer-grained detail-up perturbations. Indeed, systems of ODEs can not only account for the steady-state analysis of the metabolic network but even the dynamics of medium culture metabolites concentration over time given an initial state.</p>
+
+<p>The so-implemented time-dependent analysis depends on an input metabolic network. At each time, the values of external metabolite concentrations are updated by solving ODEs and values are then translated into constraints for FBA. In turn, FBA solutions are recycled as kinetic parameters for the ODEs. In doing so, the flow of metabolites through the <em>E. coli</em> metabolic network was calculated given specific media enriched with various carbon regimes supporting growth.</p>
+
+<p>Simulations were performed using the genome-scale metabolic COBRA model of <em>E. coli</em> K-12 strain MG1655 while the inclusion of a specific environment is achieved by tuning constraints of the target metabolic model’s boundary reactions.</p>
+
+<h3 id="results">Results</h3>
+
+<p>The model can readily identify different metabolic behaviors depending on environmental and transcriptional status, providing the translation of quantitative values into discrete intervals and allowing flux analyses. It is important to note that FBA makes several assumptions, e.g., steady-state metabolite concentrations (meaning there is no change in metabolite concentrations over time).</p>
+
+<p>Our results point to the steady-state constraint parametrization of fluxes as a determinant of model inaccuracy. To overcome these limitations, expanding the Petri Net model to represent other medium constituents could be a promising route toward more accurate models of metabolic physiology.</p>
+
+<h2 id="carbon-source-feeding-scenarios">Carbon Source Feeding Scenarios</h2>
+
+<p>The following carbon source supplementation scenarios for a fed-batch were simulated:</p>
+
+<ul>
+  <li><strong>Constant feeding</strong>: The feed rate of glucose and lactose is constant throughout the culture.</li>
+  <li><strong>Linear feeding</strong>: The feed rate of glucose and lactose are increased linearly over time to match the growth rate of the cells.</li>
+  <li><strong>Pulsed feeding (60s)</strong>: Glucose and lactose are added in repeated cycles of short duration, followed by a period of no feeding; the same total amount of glucose was fed in repeated 300s (5 min) cycles for 60s.</li>
+  <li><strong>Pulsed feeding (150s)</strong>: Glucose and lactose are added in repeated cycles of short duration, followed by a period of no feeding; the same total amount of glucose was fed in repeated 300s (5 min) cycles for 150s.</li>
+  <li><strong>Blank</strong>: The culture does not have glucose and lactose added to it.</li>
+</ul>
+
+<h2 id="gene-expression-integration">Gene Expression Integration</h2>
+
+<p>Gene expression data integration allows the metabolic model to reflect not just the internal state of the cell but also the external environment in which the cell is growing. Expression data was obtained from <em>E. coli</em> growing in a glucose-enriched minimal medium through the commercial microarray platform Affymetrix GeneChip system.</p>
+
+<p>The dataset is available in the GEO database under the identifier <strong>GSE2037</strong>, which includes samples collected during the mid-log phase from cells exposed to various carbon sources (glucose, glycerol, succinate, L-alanine, acetate, and L-proline).</p>
+
+<h2 id="model-metrics">Model Metrics</h2>
+
+<p>The <em>E. coli</em> str. K-12 substr. metabolic model (iML1515) downloaded from BiGG Models has the following metrics:</p>
+
+<ul>
+  <li><strong>Metabolites</strong>: 1877</li>
+  <li><strong>Reactions</strong>: 2712</li>
+  <li><strong>Genes</strong>: 1516</li>
+</ul>
+
+<h2 id="repository">Repository</h2>
+
+<p>All code, models, and simulation files are available on GitHub:</p>
+
+<p><strong><a href="https://github.com/qBioTurin/Ec_coli_modelling">qBioTurin/Ec_coli_modelling</a></strong></p>
+
+<p>The repository includes:</p>
+<ul>
+  <li>Petri Net model files</li>
+  <li>Metabolic model files (iML1515)</li>
+  <li>Parameter files for different carbon feeding regimes</li>
+  <li>R scripts for simulation and analysis</li>
+  <li>Results and visualization plots</li>
+</ul>
+
+<h2 id="timing-performance">Timing Performance</h2>
+
+<p>Simulation execution times (CPU: Intel i7-3520M @ 3.600GHz):</p>
+<ul>
+  <li><strong>Compiling phase</strong>: ~10 minutes</li>
+  <li><strong>Analysis phase</strong>: ~5 minutes</li>
+</ul>
+
+<hr />
+
+<p><em>For more details on the methodology and results, please visit the <a href="https://github.com/qBioTurin/Ec_coli_modelling">GitHub repository</a>.</em></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 qbioGroup. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

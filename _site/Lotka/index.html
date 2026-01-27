@@ -1,0 +1,680 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>GreatMod -  Lotka Volterra -</title>
+<meta name="description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+  <meta name="author" content="q-Bio Group">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="GreatMod -  Lotka Volterra">
+<meta property="og:url" content="http://localhost:4000/Lotka/">
+
+
+  <meta property="og:description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/LotkaVolterra/preyPredator.png">
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/Lotka/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "qbioGroup",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logoGreatMod.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          
+          <span class="site-subtitle"></span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/HowInstall/">How to install</a>
+            </li><li class="masthead__menu-item">
+              <a href="/examples/">Applications</a>
+            </li><li class="masthead__menu-item">
+              <a href="/functionalities/">Functionalities</a>
+            </li><li class="masthead__menu-item">
+              <a href="/group/">Team</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collaboration/">Collaborations</a>
+            </li><li class="masthead__menu-item">
+              <a href="/references/">References</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/LotkaVolterra/preyPredator.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          GreatMod -  Lotka Volterra
+
+        
+      </h1>
+      
+      
+
+
+      
+      
+        <p>
+        
+          <a href="https://github.com/qBioTurin/Lotka-Volterra" class="btn btn--light-outline btn--large">Github</a>
+        
+      
+    </div>
+  
+  
+</div>
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="GreatMod -  Lotka Volterra">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-cog"></i> Index</h4></header>
+              <ul class="toc__menu"><li><a href="#the-lotkavolterra-model">The Lotka–Volterra model</a></li><li><a href="#first-step-call-the-package">First step: call the package</a></li><li><a href="#second-step-spn-model-generation">Second step: SPN Model generation</a><ul><li><a href="#sensitivity-analysis">Sensitivity analysis</a><ul><li><a href="#prcc-and-ranking">PRCC and ranking</a></li></ul></li><li><a href="#calibration-analysis">Calibration analysis</a></li><li><a href="#whatif-analysis">Whatif Analysis</a></li></ul></li><li><a href="#espn-model-generation">ESPN Model generation</a></li></ul>
+
+            </nav>
+          </aside>
+        
+        <p>In this page we show how the and formalisms can be efficiently used to
+analyse the Lotka-Volterra model, also known as the <em>predator-prey
+model</em>.</p>
+
+<h2 id="the-lotkavolterra-model">The Lotka–Volterra model</h2>
+
+<p>The Lotka-Volterra model is defined by a pair of Ordinary Differential Equations, which describes the
+dynamics of biological systems characterized by two species that may
+interact, one as a predator and the other as prey. From the literature
+it is possible to find several definitions of this model, and in a
+first classification of these models is reported depending on the
+<em>functional response</em>, i.e., the change in the rate of prey consumption
+by a predator when the prey density varied. In details, the functional
+response can be classified in three major types, namely <strong>Holling type
+I, II, III</strong>, whose definitions can be summarize as follows.</p>
+
+<ol>
+  <li><em>Holling type I</em>: the number of prey consumed shows a linear
+relationship with the prey density, the green line in Fig1.</li>
+  <li><em>Holling type II</em>: the gradient of the number of prey consumed
+decreases monotonically with increasing prey density, eventually
+saturating at a constant value of prey consumption, the orange line
+in Fig1. This follows from the assumption that the consumer is
+limited by its capacity to process food. A real example of this
+phenomena was published in considering wolves and caribou. It was
+shown that the proportion of caribou killed per wolf decreases as
+caribou density increases, given that wolves are more easily
+satiated and the total number of caribou kills reaches a plateau.
+Mathematically, this model is equivalent to the model of enzime
+kinetics developed in 1913 by L. Michaelis and M. Menten .</li>
+  <li><em>Holling type III</em>: the gradient of the number of prey consumed
+first increases and then decreases with increasing prey density, the
+blue line in Fig.1. This sigmoidal behaviour has been attributed to
+the existence of ‘learning behaviour’ in the predator population,
+for example predators learning more specialised techniques for
+hunting or prey handling.</li>
+</ol>
+
+<p><img src="/assets/images/LotkaVolterra/FunctionalResponsesGraph.png" alt="" />
+<em>Fig.1 Holling types I, II, III functional responses.</em></p>
+
+<p>Independently by the functional response exploited, a general version of
+the prey-predator model is defined by the following s system.</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation1.png" width="400" /></p>
+
+<p>where:</p>
+
+<ol>
+  <li><em>x</em><sub><em>Prey</em></sub> is the number of preys (e.g., caribou,
+rabbits, etc);</li>
+  <li><em>x</em><sub><em>Predator</em></sub> is the number of predators
+(e.g., wolves, foxes, etc);</li>
+  <li><em>ν</em> represents time;</li>
+  <li><em>f</em>(<em>x</em><sub><em>Prey</em></sub>) is the individual prey growth rate
+in the absence of predators;</li>
+  <li><em>g</em>(<em>x</em><sub><em>Prey</em></sub>, <em>x</em><sub><em>Predator</em></sub>)
+is the functional response of the model;</li>
+  <li><em>ϵ</em> is the efficiency of the predator in converting consumed prey
+into predator offspring;</li>
+  <li><em>γ</em> is the predator mortality rate.</li>
+</ol>
+
+<h2 id="first-step-call-the-package">First step: call the package</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library(epimod)
+</code></pre></div></div>
+
+<p>Download all the docker images used by <em>epimod</em>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>downloadContainers()
+</code></pre></div></div>
+
+<h2 id="second-step-spn-model-generation">Second step: SPN Model generation</h2>
+
+<p>The simplest and more known prey-predator model exploits a functional
+response of type I, in which a predator might interact with all the
+prey, thus the product of the two populations is the obvious outcome.
+This model can be easily represented using the SPN formalism, see Fig.2,
+from which the following ODEs system can be derived:</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation2.png" width="400" /></p>
+
+<p>where:</p>
+
+<ol>
+  <li><em>x</em><sub><em>Prey</em></sub> is the average number of tokens in the
+<em>Prey</em> place, representing the preys;</li>
+  <li><em>x</em><sub><em>Predator</em></sub> is the average number of
+tokens in the <em>Predator</em> place, representing the predators;</li>
+  <li><em>α</em>, <em>β</em>, <em>δ</em>, <em>γ</em> are positive real parameters describing the
+interaction of the two species and defining the rate of the
+<em>BirthPrey</em>, <em>DeathPrey</em>, <em>BirthPredator</em>, <em>DeathPredator</em> transitions,
+respectively.</li>
+</ol>
+
+<p>Let use note that Eq.s 2 can be obtained from Eq.s 1 defining
+<em>g</em>(<em>x</em><sub><em>Prey</em></sub>, <em>x</em><sub><em>Predator</em></sub>) = <em>β</em> <em>x</em><sub><em>Prey</em></sub>,
+<em>f</em>(<em>x</em><sub><em>Prey</em></sub>) = <em>α</em> , and <em>δ</em> = <em>ϵ β</em>.</p>
+
+<p><img src="/assets/images/LotkaVolterra/LotkaVolterraSPN1.png" alt="" />
+<em>Fig.2 The Lotka-Volterra model represented exploiting the SPN formalism.</em></p>
+
+<p>In this model we are assuming that the prey have an unlimited food
+supply and it is able to reproduce exponentially (<em>BirthPrey</em>
+transition), unless subject to predation (<em>DeathPrey</em> transition).
+Differently, the food supply of the predator population depends entirely
+on the size of the prey population. Thus, the predator birth depends
+linearly on the number of prey at a specific time point (<em>BirthPredator</em>
+transition), while the predators death does not depend on it
+(<em>DeathPredator</em> transition). We can denote that all the transitions
+have a velocity rate defined according to Mass Action (MA) law.</p>
+
+<p>Therefore, starting from the the SPN model saved in the
+<em>./Net/Lotka-Volterra.PNPRO</em> we can generate the solver which will be
+used throughtout the analysis.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_generation(net_fname = "./Net/Lotka-Volterra.PNPRO")
+</code></pre></div></div>
+
+<h3 id="sensitivity-analysis">Sensitivity analysis</h3>
+
+<p>The R function <em>sensitivity_analysis()</em> implements the sensitivity
+analysis taking as input</p>
+
+<ol>
+  <li>the file generated by the <em>model_generation</em> function, the total
+number of samplings to be performed,</li>
+  <li>the final solution time,</li>
+  <li>the time step defining the frequency at which explicit estimates for
+the system values are desired,</li>
+  <li>parameters_fname (<em>Functions_list.csv</em>): a textual file in which
+the parameters to be studied are listed associated with their range
+of variability. significato delle colonne, e che serve il ; come
+sep, spazi non nei path An example is given by the following file,
+where</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#&gt;   V1    V2               V3                       V4                     V5
+#&gt; 1  i  init  init_generation  min_init = c(0.9 , 0.8)  max_init = c(1.8 , 2)
+</code></pre></div></div>
+
+<ol>
+  <li>functions_fname (<em>Functions.R</em>): an R file storing all the
+functions that have to be exploited to generate the associated
+paramter from <em>parameters_fname</em>. In this case we want to generate
+the SPN initial marking exploiting the uniform distribution:</li>
+</ol>
+
+<!-- -->
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>init_generation&lt;-function(min_init , max_init)
+{
+    # min/max are vectors = first position interval values for the first place
+    # and second position for the second place.
+
+   i_1=runif(n=1,min=min_init[1],max=max_init[1])
+   i_2=runif(n=1,min=min_init[2],max=max_init[2])
+
+   return( c(i_1,i_2) )
+}
+</code></pre></div></div>
+
+<ol>
+  <li>target_value_fname (<em>Target.R</em>): an R function in which the place,
+w.r.t. the PRCC has to be calculated, must be selected from the
+output data.frame (which represents the output file <em>.trace</em>
+reporting the dynamics of each place).</li>
+</ol>
+
+<p>Assuming the following fixed rates: <em>β</em> = 4/3, <em>δ</em> = 1. Than we change
+the prey and predator initial conditions from 200 to 1800, and the prey
+and predator birth rates <em>α</em>, <em>γ</em> from 0.1 to 2, knowing that we are
+interested to the trajectory generated with the following values:
+<em>x</em>(0) = 1000, <em>y</em>(0) = 500, <em>α</em> = 2/3, <em>γ</em> = 1.</p>
+
+<h4 id="prcc-and-ranking">PRCC and ranking</h4>
+
+<p>This step is necessary if we are interested to calculate the PRCC to
+identify among the input parameters which are the sensitive ones (i.e.,
+those that have a great effect on the model behaviour). This may
+simplify the calibration step reducing (1) the number of variables to be
+estimated and (2) the search space associated with each estimated
+parameter.</p>
+
+<p>In order to run the simulations, the user must provide</p>
+
+<ol>
+  <li>the reference dataset;</li>
+  <li>the definition of a function to compute the distance (or error)
+between the models’ output and the reference dataset itself.</li>
+</ol>
+
+<p>In this case the reference dataset is the trajectory obtained from the
+starting point 1 predator and 1 prey. Similarly to the previouos step,
+we generate different initial conditions for the system but in this
+case.</p>
+
+<p>The function defining the distance takes in inputs only the reference
+data and the simulation’s output (i.e. a trajectory); an example it
+could be the following:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msqd&lt;-function(reference, output)
+{
+    Predator &lt;- output[,"Predator"]
+    Prey &lt;- output[,"Prey"]
+
+    diff.Predator &lt;- sum(( Predator - reference[,2] )^2 )
+    diff.Prey &lt;- sum(( Prey - reference[,1] )^2 )
+
+    return(diff.Predator+diff.Prey)
+}
+</code></pre></div></div>
+
+<p>where the squared error between the Predator and Prey trajectories
+obtaained from the simulation and the corresponding reference
+trajectories are calculated, respectively named <em>diff.Predator</em> and
+<em>diff.Prey</em>. Then, the sum of these errors is returned. Our purpose will
+be to minimize (see next section) this function in order to identify the
+trajectory most similar to the reference data, therefore</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Target&lt;-function(output)
+{
+    ret &lt;- output[,"Predator"]
+    return(as.data.frame(ret))
+}
+</code></pre></div></div>
+
+<p>Let us note that the name of the distance and target function must have
+the same name of the corresponding R file.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sensitivity&lt;-sensitivity_analysis(n_config = 30,
+                                  parameters_fname = "Input/Functions_list.csv",
+                                  functions_fname = "Rfunction/Functions.R",
+                                  solver_fname = "Net/Lotka-Volterra.solver",
+                                  reference_data = "Input/reference_data.csv",
+                                  distance_measure_fname = "Rfunction/msqd.R" ,
+                                  target_value_fname = "Rfunction/Target.R" ,
+                                  parallel_processors = 2,
+                                  f_time = 20,
+                                  s_time = .1)
+</code></pre></div></div>
+
+<p><img src="/assets/images/LotkaVolterra/prcc_Lotka-Volterra-sensitivity.png" alt="" />
+<em>Fig.3 PRCC for the Predator place over time.</em></p>
+
+<p>Running the sensisitivity analysis, we can replicate the results
+reported on Wikipedia,
+<em><a href="https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations" class="uri">https://en.wikipedia.org/wiki/Lotka%E2%80%93Volterra_equations</a></em>.
+Indeed, textual file for each generated parameter combination (i.e. 20)
+containing the system solution is returned. Each file is characterized
+by as many rows as the solution time points (obtained dividing the final
+time point by the time step) and as many columns as the system
+components. We can now generate the phase-space plot, where it is
+possible to see that the predators thrive when there are plentiful prey
+but, ultimately, outstrip their food supply and decline. As the predator
+population is low, the prey population will increase again. These
+dynamics continue in a cycle of growth and decline.</p>
+
+<p>Let us note that it is possible to run the sensitivity analysys without
+PRCC or ranking, in the case that we are intersted only on to have a
+general idea of the simulation’ results.</p>
+
+<p><img src="/assets/images/LotkaVolterra/DynamicsRanking.png" alt="" />
+*Fig.4 *</p>
+
+<h3 id="calibration-analysis">Calibration analysis</h3>
+
+<p>By exploiting the calibration function we want to calibrate our model in
+order to fit the dynamics w.r.t. the reference data, where the fittinf
+is defined by the distance implemented in <em>msqd.R</em>.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_calibration(solver_fname = "Net/Lotka-Volterra.solver",
+                  reference_data = "Input/reference_data.csv",
+                  distance_measure_fname = "Rfunction/msqd.R" ,
+                  f_time = 20,
+                  s_time = .1,
+                  # Vectors to control the optimization
+                  ini_v = c(5,5),
+                  ub_v = c(10, 10),
+                  lb_v = c(0, 0),
+                  max.time = 60 # seconds
+)
+</code></pre></div></div>
+
+<h3 id="whatif-analysis">Whatif Analysis</h3>
+
+<p>Finally, the periodic dynamics of the system can be obatined running the
+model analysis function as follows:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_analysis(solver_fname = "Net/Lotka-Volterra.solver",
+                  parameters_fname = "Input/Paramters_list.csv",
+                  f_time = 50,
+                  s_time = .5
+)
+</code></pre></div></div>
+
+<p>In Fig.5 the Lotka-Volterra dynamics are showed fixing: <em>α</em> = 1.1,
+<em>β</em> = 0.4, <em>γ</em> = 0.1, <em>δ</em> = 0.4, and the initial number of both the
+species equals to 10.</p>
+
+<p><img src="/assets/images/LotkaVolterra/Dynamics.png" alt="" />
+<em>Fig.5 The Lotka-Volterra dynamics.</em></p>
+
+<h2 id="espn-model-generation">ESPN Model generation</h2>
+
+<p>However, most ecological interest in functional responses has to involve
+types II and III. For instance, if it is considered that a single
+predator can feed only until the stomach is full, a saturation function
+is needed to indicate the intake of food, which is modeled using the
+Holling type II term. A simple example of this term is expressed by Eq.
+3, where <em>a</em> is the attack rate at which the consumer encounters food
+items per unit of food density, and <em>h</em> is the average handling time
+spent on processing a food item.</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation3.png" width="400" /></p>
+
+<p>Similarly, type III can be characterized by the Eq.
+2 if the attack constant rate <em>a</em> is defined in function of the number
+of preys , for instance a general form is given by a hyperbolic function
+of <em>x</em><sub><em>Prey</em></sub>:</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation.png" width="100" /></p>
+
+<p>in which <em>b</em>, <em>c</em>, <em>d</em> are constants.
+Thus, we can easily derive a general equation of type III as follows:</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation4.png" width="400" /></p>
+
+<p>Finally, considering the functional response types described in Eq.s 3
+and 4, in terms of SPN they should define the rate of the <em>DeathPrey</em>
+and <em>BirthPredator</em> transitions. Indeed this is not easy using the SPN
+formalism, while it can be achieved easily by exploiting the ESPN
+formalism.</p>
+
+<p>Indeed in the extended formalisms it is possible to integrate in the
+model more complex functional response than the type I by defining the
+<em>DeathPrey</em> (and <em>BirthPredator</em>) transition as a general transition.
+Let us recall that a general transition <em>t</em> ∈ <em>T</em><sub><em>g</em></sub> is
+defined by a function <em>f</em><sub><em>t</em></sub>(<em>x̂</em>(<em>ν</em>), <em>ν</em>), where <em>x̂</em>(<em>ν</em>)
+represents the vector of the average number of tokens for all the
+transition input places at time <em>ν</em>. Hence, the general transition
+velocities of Fig.5 should be defined as follows</p>
+
+<p><img src="../assets/images/LotkaVolterra/equation5.png" width="400" /></p>
+
+<p>with <em>g</em>() equals to <em>g</em><sub><em>II</em></sub>() from Eq. 3 or
+<em>g</em><sub><em>III</em></sub>() from Eq. 4 in order to use a functional
+response of type II or III, respectively.</p>
+
+<p><img src="/assets/images/LotkaVolterra/LotkaVolterraESPN.png" alt="" />
+<em>Fig. 5 The Lotka-Volterra model represented exploiting the formalism,
+in which we used black boxes to highlight the general
+transitions.</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>model_generation(net_fname = "./Net/ESPN_LotkaVolterra.PNPRO",
+                 functions_fname = "Cpp/transitions.cpp")
+</code></pre></div></div>
+
+<h1 id="references">References</h1>
+
+<p>Keeling, Matt J, and Pejman Rohani. 2011. <em>Modeling Infectious Diseases
+in Humans and Animals</em>. Princeton University Press.</p>
+
+<p>Kurtz, T. G. 1970. “Solutions of Ordinary Differential Equations as
+Limits of Pure Jump Markov Processes.” <em>J. Appl. Probab.</em> 1 (7): 49–58.</p>
+
+<p>Marsan, M. Ajmone, G. Balbo, G. Conte, S. Donatelli, and G.
+Franceschinis. 1995. <em>Modelling with Generalized Stochastic Petri Nets</em>.
+New York, NY, USA: J. Wiley.</p>
+
+<p>Pernice, S., M. Pennisi, G. Romano, A. Maglione, S. Cutrupi, F.
+Pappalardo, G. Balbo, M. Beccuti, F. Cordero, and R. A. Calogero. 2019.
+“A Computational Approach Based on the Colored Petri Net Formalism for
+Studying Multiple Sclerosis.” <em>BMC Bioinformatics</em>.</p>
+
+<p>Veiga Leprevost, Felipe da, Björn A Grüning, Saulo Alves Aflitos, Hannes
+L Röst, Julian Uszkoreit, Harald Barsnes, Marc Vaudel, et al. 2017.
+“BioContainers: an open-source and community-driven framework for
+software standardization.” <em>Bioinformatics</em> 33 (16): 2580–2.</p>
+
+<p>Yang Xiang, Sylvain Gubian, Brian Suomela, and Julia Hoeng. 2012.
+“Generalized Simulated Annealing for Efficient Global Optimization: The
+GenSA Package for R.” <em>The R Journal</em>. <a href="http://journal.r-project.org/">http://journal.r-project.org/</a>.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 qbioGroup. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

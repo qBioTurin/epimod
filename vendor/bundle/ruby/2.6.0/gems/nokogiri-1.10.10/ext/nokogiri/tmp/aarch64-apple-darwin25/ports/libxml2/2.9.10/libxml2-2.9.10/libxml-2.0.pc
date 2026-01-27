@@ -1,0 +1,13 @@
+prefix=/Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/ports/aarch64-apple-darwin25/libxml2/2.9.10
+exec_prefix=${prefix}
+libdir=/Users/simonepernice/Desktop/GIT/R_packages_project/gitPage/epimod/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.10/ports/aarch64-apple-darwin25/libxml2/2.9.10/lib
+includedir=${prefix}/include
+modules=1
+
+Name: libXML
+Version: 2.9.10
+Description: libXML library version2.
+Requires:
+Libs: -L${libdir} -lxml2
+Libs.private:  -lpthread -lz -L/usr/local/Cellar/xz/5.8.1/lib -llzma  -liconv -lm  
+Cflags: -I${includedir}/libxml2 

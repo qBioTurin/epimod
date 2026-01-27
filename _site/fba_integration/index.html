@@ -1,0 +1,407 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.21.0 by Michael Rose
+  Copyright 2013-2020 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Flux Balance Analysis Integration -</title>
+<meta name="description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+  <meta name="author" content="q-Bio Group">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="">
+<meta property="og:title" content="Flux Balance Analysis Integration">
+<meta property="og:url" content="http://localhost:4000/fba_integration/">
+
+
+  <meta property="og:description" content="GreatMod integrates Petri Nets, R, and Docker for scalable deterministic and stochastic modeling of complex biological systems.">
+
+
+
+  <meta property="og:image" content="http://localhost:4000/assets/images/FBA/Cdifficile/Schema.png">
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/fba_integration/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "qbioGroup",
+      "url": "http://localhost:4000/"
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title=" Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css">
+
+<!--[if IE]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--splash">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/assets/images/logoGreatMod.png" alt=""></a>
+        
+        <a class="site-title" href="/">
+          
+          <span class="site-subtitle"></span>
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/HowInstall/">How to install</a>
+            </li><li class="masthead__menu-item">
+              <a href="/examples/">Applications</a>
+            </li><li class="masthead__menu-item">
+              <a href="/functionalities/">Functionalities</a>
+            </li><li class="masthead__menu-item">
+              <a href="/group/">Team</a>
+            </li><li class="masthead__menu-item">
+              <a href="/collaboration/">Collaborations</a>
+            </li><li class="masthead__menu-item">
+              <a href="/references/">References</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+  
+
+
+
+
+
+
+
+<div class="page__hero--overlay"
+  style="background-color: #000; background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/FBA/Cdifficile/Schema.png');"
+>
+  
+    <div class="wrapper">
+      <h1 id="page-title" class="page__title" itemprop="headline">
+        
+          Flux Balance Analysis Integration
+
+        
+      </h1>
+      
+      
+
+
+      
+      
+    </div>
+  
+  
+</div>
+
+
+
+<div id="main" role="main">
+  <article class="splash" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Flux Balance Analysis Integration">
+    
+    
+    
+
+    <section class="page__content" itemprop="text">
+      
+<div class="feature__wrapper">
+
+  
+    <div class="feature__item--center">
+      <div class="archive__item">
+        
+
+        <div class="archive__item-body">
+          
+
+          
+            <div class="archive__item-excerpt">
+              <p>GreatMod seamlessly integrates <strong>Flux Balance Analysis (FBA)</strong> with dynamic Petri Net models to enable <strong>multi-scale modeling</strong> of biological systems. This powerful combination allows researchers to couple genome-scale metabolic networks with population-level dynamics.</p>
+
+            </div>
+          
+
+          
+        </div>
+      </div>
+    </div>
+  
+
+</div>
+
+<h2 id="what-is-fba-integration">What is FBA Integration?</h2>
+
+<p>The integration of <strong>Flux Balance Analysis (FBA)</strong> with Petri Net models creates a powerful multi-scale framework that bridges:</p>
+<ul>
+  <li><strong>Genome-scale metabolic networks</strong> (constraint-based modeling via FBA)</li>
+  <li><strong>Dynamic system behavior</strong> (ODEs and stochastic simulations via Petri Nets)</li>
+</ul>
+
+<p>This approach allows you to:</p>
+<ul>
+  <li>Model metabolic reprogramming in response to environmental changes</li>
+  <li>Analyze host-pathogen metabolic interactions</li>
+  <li>Predict phenotypic behavior under different nutritional conditions</li>
+  <li>Couple intracellular metabolism with population dynamics</li>
+</ul>
+
+<hr />
+
+<h2 id="examples">Examples</h2>
+
+<style>
+.fba-cards {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.fba-card {
+  flex: 1;
+  min-width: 300px;
+  max-width: 450px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background: white;
+}
+.fba-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+.fba-card h3 {
+  margin: 0;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 2px solid #e0e0e0;
+}
+.fba-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+.fba-card-content {
+  padding: 1.5rem;
+}
+.fba-card-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+.fba-card .btn {
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  background: #52adc8;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.fba-card .btn:hover {
+  background: #3d8ba8;
+  color: white;
+}
+</style>
+
+<div class="fba-cards">
+  <div class="fba-card">
+    <h3>C. difficile Infection Model</h3>
+    <img src="/assets/images/FBA/Cdifficile/Schema.png" alt="C. difficile Model" />
+    <div class="fba-card-content">
+      <p>Study of metabolic reprogramming during <em>Clostridium difficile</em> infection, including the acquisition of antibiotic-resistant phenotypes through heme supplementation.</p>
+      <a href="/Cdifficile/" class="btn">View Example</a>
+    </div>
+  </div>
+  
+  <div class="fba-card">
+    <h3>E. coli Metabolic Modeling</h3>
+    <img src="/assets/images/Framework.png" alt="E. coli Model" />
+    <div class="fba-card-content">
+      <p>Integration of transcriptional data onto <em>Escherichia coli</em> genome-scale metabolic model (iML1515) growing on different regimes of carbon feeding.</p>
+      <a href="/ecoli_modeling/" class="btn">View Example</a>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<h2 id="epimod_fbafunctions-r-package">epimod_FBAfunctions R Package</h2>
+
+<div class="fba-cards">
+  <div class="fba-card">
+    <h3>epimod_FBAfunctions</h3>
+    <img src="/assets/images/Framework.png" alt="epimod_FBAfunctions Package" />
+    <div class="fba-card-content">
+      <p><strong>COBRA Model Processing:</strong> Read and modify COBRA MAT files, translate metabolic networks for epimod functions based on GLPK solver.</p>
+      <p><strong>Sensitivity Analysis:</strong> Integrate Sobol's variance-based SA to classify reactions based on their impact on model outcomes.</p>
+      <a href="https://github.com/qBioTurin/epimod_FBAfunctions" class="btn" target="_blank">View on GitHub</a>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<h2 id="reference">Reference</h2>
+
+<p>For more details on the FBA integration framework, please refer to our publication:</p>
+
+<p><strong>Riccardo Aucello, Simone Pernice, Dora Tortarolo, Raffaele A Calogero, Celia Herrera-Rincon, Giulia Ronchi, Stefano Geuna, Francesca Cordero, Pietro Lió, Marco Beccuti</strong>
+UnifiedGreatMod: a new holistic modelling paradigm for studying biological systems on a complete and harmonious scale, Bioinformatics, Volume 41, Issue 3, March 2025
+<a href="https://doi.org/10.1093/bioinformatics/btaf103"> https://doi.org/10.1093/bioinformatics/btaf103 </a></p>
+
+<p><strong>Simone P, Laura F, et al.</strong><br />
+Integrating Petri Nets and Flux Balance Methods in Computational Biology Models: a Methodological and Computational Practice. Fundamenta Informaticae. 2019;171(1-4):367-392. doi:10.3233/FI-2020-1888
+<a href="https://journals.sagepub.com/doi/abs/10.3233/FI-2020-1888">https://journals.sagepub.com/doi/abs/10.3233/FI-2020-1888</a></p>
+
+
+    </section>
+  </article>
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/qBioTurin" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 qbioGroup. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
