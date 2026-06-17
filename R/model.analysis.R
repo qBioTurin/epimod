@@ -49,8 +49,6 @@
 #' @param FVA Flag to enable the flux variability analysis
 #' It must be the same files vector passed to the function *model_generation* for generating the *solver_fname*. (default is NULL)
 #'
-#' @details
-#'
 #' @author Beccuti Marco, Castagno Paolo, Pernice Simone, Baccega Daniele
 #'
 #'

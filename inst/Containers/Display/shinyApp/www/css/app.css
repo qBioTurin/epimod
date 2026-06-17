@@ -1,0 +1,134 @@
+/* Custom CSS for ShinyPlotEPIMOD */
+
+/* Container margins and spacing */
+.nav-pills {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.nav-pills>li+li {
+    margin-left: 10px;
+}
+
+/* Sidebar and Card Styling */
+.bslib-sidebar-layout .sidebar {
+    background: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card {
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(5px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06) !important;
+}
+
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    font-weight: 600;
+    color: #593196;
+    padding: 15px 20px !important;
+}
+
+/* Typography and Inputs */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.form-group label {
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.selectize-input {
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 8px 12px !important;
+}
+
+/* Selectize and Bootstrap Select styling */
+.bootstrap-select>.dropdown-toggle {
+    background-color: #fff !important;
+    border: 1px solid #e7eaf1 !important;
+    border-radius: .375rem !important;
+    padding: .375rem .75rem !important;
+    color: #212529 !important;
+    box-shadow: none !important;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.bootstrap-select>.dropdown-toggle:focus,
+.bootstrap-select>.dropdown-toggle:active,
+.bootstrap-select.show>.dropdown-toggle {
+    border-color: #593196 !important;
+    box-shadow: 0 0 0 0.25rem rgba(89, 49, 150, .25) !important;
+    background-color: #fff !important;
+    outline: none !important;
+}
+
+/* Card and container styling */
+.card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 20px;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+/* Plot outputs */
+.shiny-plot-output {
+    background: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* Palette preview row */
+.palette-preview-container {
+    display: flex;
+    align-items: flex-end;
+    height: 55px;
+    margin-bottom: 15px;
+}
+
+/* Manual color inputs list */
+.manual-colors-list {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    background: #fafafa;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #593196;
+    border-color: #593196;
+}
+
+.btn-primary:hover {
+    background-color: #48267a;
+    border-color: #48267a;
+}

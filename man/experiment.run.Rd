@@ -23,11 +23,15 @@ experiment.run(
 )
 }
 \arguments{
-\item{id, }{a numeric identifier used to format the output's file name}
+\item{id}{a numeric identifier used to format the output's file name}
 
-\item{f_time, }{simulation's final time}
+\item{cmd}{the command line string to run the solver}
 
-\item{s_time, }{step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)}
+\item{i_time}{initial solution time}
+
+\item{f_time}{simulation's final time}
+
+\item{s_time}{step time at which the solver is forced to output the current configuration of the model}
 
 \item{atol}{Absolute error tolerance that determine the error control performed by the LSODA solver.}
 
@@ -37,21 +41,17 @@ experiment.run(
 
 \item{rchn}{Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).}
 
-\item{n_run, }{when performing stochastic simulations this parameters controls the number of runs per each set of input parameters}
+\item{n_run}{when performing stochastic simulations this parameter controls the number of runs per each set of input parameters}
 
-\item{event_times, }{controls the time at which the simulation is stopped to update the marking}
+\item{seed}{.RData file that can be used to initialize the internal random generator.}
 
-\item{event_function, }{specifies the rule to update the marking}
+\item{event_times}{controls the time at which the simulation is stopped to update the marking}
 
-\item{out_fname, }{output filename prefix}
+\item{event_function}{specifies the rule to update the marking}
+
+\item{out_fname}{output filename prefix}
 
 \item{FVA}{Flag to enable the flux variability analysis}
-
-\item{solver_fname, }{the name of the solver executable file}
-
-\item{taueps, }{controls the step of the approximation introduced by the tau-leap algorithm}
-
-\item{timeout, }{string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax}
 }
 \value{
 the name of the trace file

@@ -1,18 +1,3 @@
-#' @title Check the results files
-#' @description This function can compare the results obtained by a deterministic model, in this case
-#' the files are compared using the diff unix command, obtained by two different stochastic model
-#' calculating the confidence intervals and do a simple form of functional data analysis using
-#' the fdatest package. Produce a file log with the output of the used functions.
-#' @param fname_st Path to the first file to compare
-#' @param fname_nd Path to the second file to compare
-#' @param fun A string that defines which control algorithm apply (det_check, sto_check, fda_test)
-#' @param furl_st Url of the first file to compare
-#' @param threshold A threshold used to compare the p-values generated in functional data analysis
-#'
-#' @export
-#'
-#' @author Daniele Baccega, Luca Rosso
-
 library(fdatest)
 
 log_it <- function(msg, fun){
@@ -449,6 +434,20 @@ fda_check <- function(fname_st = NULL, fname_nd = NULL, furl_st = NULL, sep = " 
 	log_it("END DATA ANALYSIS...", fun)
 }
 
+#' @title Check the results files
+#' @description This function can compare the results obtained by a deterministic model, in this case
+#' the files are compared using the diff unix command, obtained by two different stochastic model
+#' calculating the confidence intervals and do a simple form of functional data analysis using
+#' the fdatest package. Produce a file log with the output of the used functions.
+#' @param fname_st Path to the first file to compare
+#' @param fname_nd Path to the second file to compare
+#' @param fun A string that defines which control algorithm apply (det_check, sto_check, fda_test)
+#' @param furl_st Url of the first file to compare
+#' @param threshold A threshold used to compare the p-values generated in functional data analysis
+#'
+#' @export
+#'
+#' @author Daniele Baccega, Luca Rosso
 results_check <- function(fname_st = NULL, fname_nd = NULL, furl_st = NULL, fun, threshold = NULL){
 	if(missing(fname_st) & (is.null(furl_st) | missing(furl_st)))
 		stop("Either fname_st or furl_st parameter is missing! Abort")

@@ -4,21 +4,31 @@
 \alias{display_data}
 \title{Run display data}
 \usage{
-display_data(volume = getwd(), port = 80)
+display_data(volume = NULL, port = 3838)
 }
 \arguments{
-\item{volume}{The folder to mount within the Doker image providing all the necessary files}
+\item{volume}{The host folder to mount as the data directory inside the container.
+Accessible via the "Local" tab in the app. If NULL, no volume is mounted and
+only the "Cloud (ZIP)" upload mode will be available.}
 
-\item{port}{The port shyiny app will listen for requests}
+\item{port}{The host port the Shiny app will listen on. Defaults to 3838.}
 }
 \description{
-Run display data
+Launches the EpiMod Plot Viewer Shiny app in a Docker container.
+The app supports two modes: "Local" (mount a results folder from the host)
+and "Cloud" (upload a ZIP archive directly in the browser).
+If a display container is already running it is automatically stopped before
+starting the new one.
 }
 \examples{
 \dontrun{
-display_data(volume = "/some/path/to/the/local/output/directory",
-              port = getOption("shiny.port"))
+# With a local results folder
+display_data(volume = "/some/path/to/the/local/output/directory", port = 3838)
+
+# ZIP-upload only (no local folder needed)
+display_data(port = 3838)
 }
+
 }
 \author{
 Beccuti Marco, Castagno Paolo, Pernice Simone

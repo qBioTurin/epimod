@@ -1,19 +1,19 @@
 #' @title Run an experiment, handling the eventual discrete events
 #' @description This is an internal function generating the command line to run the solver with the appropriate configuration
-#' @param id, a numeric identifier used to format the output's file name
-#' @param solver_fname, the name of the solver executable file
-#' @param s_time, step time at which the sover is forced to output the current configuration of the model (i.e. the number of tocken in each place)
-#' @param f_time, simulation's final time
+#' @param id a numeric identifier used to format the output's file name
+#' @param cmd the command line string to run the solver
+#' @param i_time initial solution time
+#' @param f_time simulation's final time
+#' @param s_time step time at which the solver is forced to output the current configuration of the model
 #' @param atol Absolute error tolerance that determine the error control performed by the LSODA solver.
 #' @param rtol Relative error tolerance that determine the error control performed by the LSODA solver.
 #' @param achn Absolute change tolerance for triggering an FBA update (absolute value).
 #' @param rchn Relative change tolerance for triggering an FBA update (percentage value, e.g., 1%, 50%, 0.001%).
-#' @param n_run, when performing stochastic simulations this parameters controls the number of runs per each set of input parameters
-#' @param taueps, controls the step of the approximation introduced by the tau-leap algorithm
-#' @param event_times, controls the time at which the simulation is stopped to update the marking
-#' @param event_function, specifies the rule to update the marking
-#' @param timeout, string controlling the available time to run n_run simulations. See TIMEOUT(1) to check the syntax
-#' @param out_fname, output filename prefix
+#' @param n_run when performing stochastic simulations this parameter controls the number of runs per each set of input parameters
+#' @param seed .RData file that can be used to initialize the internal random generator.
+#' @param event_times controls the time at which the simulation is stopped to update the marking
+#' @param event_function specifies the rule to update the marking
+#' @param out_fname output filename prefix
 #' @param FVA Flag to enable the flux variability analysis
 #' @return the name of the trace file
 #' @author Paolo Castagno, Simone Pernice

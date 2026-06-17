@@ -133,24 +133,30 @@ downloadContainers <- function(containers.file = NULL, tag = "latest") {
     containers.file <- paste(path.package(package = "epimod"), "Containers/containersNames.txt", sep = "/")
   }
   
-  username <- system("id -un", intern = TRUE)
+  username <- Sys.info()["user"]
 
   containers <- read.table(containers.file, header = TRUE, row.names = 1)
-  
+
   for (i in seq_len(nrow(containers))) {
     original_container_name <- containers[i, "names"]
     modified_container_name <- gsub("latest", paste0(tag, "_", username), original_container_name, ignore.case = TRUE)
-    
+
+    # display and generation only have linux/amd64 manifests; always specify the platform
+    # so Docker does not try to match the host architecture (e.g. arm64 on Apple Silicon)
+    is_amd64_only <- grepl("display|generation", rownames(containers)[i], ignore.case = TRUE)
+    platform_args <- if (is_amd64_only) c("--platform", "linux/amd64") else character(0)
+    pull_args <- c("pull", platform_args, original_container_name)
+
     message(paste("Pulling container:", original_container_name))
-    status_pull <- system(paste("docker pull", original_container_name))
-    
+    status_pull <- system2("docker", pull_args)
+
     if (status_pull != 0) {
       warning(paste("Failed to pull container:", original_container_name))
     } else {
       message(paste("Successfully pulled:", original_container_name))
-      
+
       message(paste("Renaming container from", original_container_name, "to", modified_container_name))
-      status_tag <- system(paste("docker tag", original_container_name, modified_container_name))
+      status_tag <- system2("docker", c("tag", original_container_name, modified_container_name))
       if (status_tag != 0) {
         warning(paste("Failed to tag container:", original_container_name, "as", modified_container_name))
       } else {

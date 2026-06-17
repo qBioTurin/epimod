@@ -19,6 +19,81 @@ library(epimod)
 downloadContainers()
 ```
 
+---
+
+### Building Docker Images
+
+The script `inst/Docker/build_images.sh` builds and pushes all (or selected) epimod Docker images as multi-platform manifests (`linux/amd64` and `linux/arm64`) to Docker Hub.
+
+**Prerequisites**
+- Docker with [buildx](https://docs.docker.com/buildx/working-with-buildx/) support
+- Logged in to Docker Hub (`docker login`)
+
+**Usage**
+
+```bash
+cd inst/Docker
+
+# Build and push all images (Analysis, Calibration, Generation, Sensitivity, Display)
+./build_images.sh <TAGNAME>
+
+# Build and push a single image
+./build_images.sh <TAGNAME> Display
+
+# Build and push a single image with a custom branch label
+./build_images.sh <TAGNAME> Analysis epimod_pFBA
+```
+
+The `Display` image is built from `inst/Containers/Display/` and requires its `shinyApp/` subfolder to contain the app files (`server.R`, `ui.R`, `R/`, `www/`).
+
+> **Note:** The `Generation` and `Display` images only target `linux/amd64` — Generation due to its custom multi-stage build, Display because `rocker/shiny` does not provide an `arm64` variant.
+
+---
+
+### Visualising Results with `display_data()`
+
+The `display_data()` function launches the **EpiMod Plot Viewer** Shiny app inside a Docker container, allowing interactive exploration of simulation outputs (Analysis, Sensitivity, Calibration).
+
+**Start the viewer**
+
+```r
+library(epimod)
+
+# Mount a local results folder (accessible via the "Local" tab)
+display_data(volume = "/path/to/your/results", port = 3838)
+
+# Start without a pre-mounted folder (use the "Cloud (ZIP)" tab to upload results)
+display_data(port = 3838)
+```
+
+The app will be available at **http://localhost:3838/display**.
+
+If a container is already running on the selected port it is automatically stopped and replaced.
+
+**Stop the viewer**
+
+```r
+stop_display()
+```
+
+**Parameters**
+
+| Parameter | Default | Description |
+|-----------|---------|-------------|
+| `volume`  | `NULL`  | Host folder mounted as the data directory inside the container. When provided, the "Local" tab is pre-populated with this path. |
+| `port`    | `3838`  | Host port the Shiny app listens on. |
+
+**Supported experiment types**
+
+| Type | Description |
+|------|-------------|
+| Analysis | Time-series traces from `model.analysis()` |
+| Sensitivity | PRCC / Sobol plots from `model.sensitivity()` |
+| Calibration | Best-fit traces from `model.calibration()` |
+
+---
+
+
 
 ### Requirements
 You need to have docker installed on your machine, for more info see this document:
